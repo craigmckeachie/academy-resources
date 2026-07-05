@@ -1,0 +1,1045 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-07-02T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v8.6.1",
+  "resources": [
+    {
+      "_id": "wrk_tableserve",
+      "parentId": null,
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "TableServe",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base_tableserve",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "https://localhost:7234"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "baseUrl"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": -900,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "Auth",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -800,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_auth",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff/login",
+      "name": "Login",
+      "description": "Run this first. jordan.reyes is Manager + Admin — full access. TableServe.Api has no JWT/token auth planned (the Authorization header is not required or checked) — this just confirms valid credentials and returns the full Staff object.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"jordan.reyes\",\n  \"password\": \"test1234\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is a staff object', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n  insomnia.expect(json).toHaveProperty('username');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_staff",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "Staff",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -600,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_staff_getall",
+      "parentId": "fld_staff",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff",
+      "name": "Get All Staff",
+      "description": "Returns all staff members. Expect a 200 with an array. Run Login first.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is an array', async () => {\n  const json = await response.json();\n  insomnia.expect(Array.isArray(json)).toBe(true);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_staff_getbyid",
+      "parentId": "fld_staff",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff/1",
+      "name": "Get Staff by Id",
+      "description": "Returns a single staff member by ID. Try ID 1 for Jordan Reyes. Expect 404 for an ID that doesn't exist.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_staff_create",
+      "parentId": "fld_staff",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff",
+      "name": "Create Staff",
+      "description": "Creates a new staff member. Expect a 201 with the created staff member, including its new id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"new.staff\",\n  \"password\": \"test1234\",\n  \"firstName\": \"New\",\n  \"lastName\": \"Staff\",\n  \"phone\": \"5551234567\",\n  \"email\": \"new.staff@example.com\",\n  \"isManager\": false,\n  \"isAdmin\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).toBe(201);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_staff_update",
+      "parentId": "fld_staff",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff/1",
+      "name": "Update Staff",
+      "description": "Updates an existing staff member by ID. Try ID 1 for Jordan Reyes. Expect a 200 with the updated staff member.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"username\": \"jordan.reyes\",\n  \"password\": \"test1234\",\n  \"firstName\": \"Jordan\",\n  \"lastName\": \"Reyes\",\n  \"phone\": \"3035558214\",\n  \"email\": \"jordan.reyes@example.com\",\n  \"isManager\": true,\n  \"isAdmin\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_staff_delete",
+      "parentId": "fld_staff",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/staff/1",
+      "name": "Delete Staff",
+      "description": "Deletes a staff member by ID. Expect a 204 with no response body.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 204', () => {\n  insomnia.expect(statusCode).toBe(204);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_categories",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "Categories",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 0,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_categories_getall",
+      "parentId": "fld_categories",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/categories",
+      "name": "Get All Categories",
+      "description": "Returns all categories. Expect a 200 with an array. Run Login first.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is an array', async () => {\n  const json = await response.json();\n  insomnia.expect(Array.isArray(json)).toBe(true);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_categories_getbyid",
+      "parentId": "fld_categories",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/categories/1",
+      "name": "Get Category by Id",
+      "description": "Returns a single category by ID. Try ID 1 for Appetizers. Expect 404 for an ID that doesn't exist.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_categories_create",
+      "parentId": "fld_categories",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/categories",
+      "name": "Create Category",
+      "description": "Creates a new category. Expect a 201 with the created category, including its new id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Specials\",\n  \"sortOrder\": 6\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).toBe(201);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_categories_update",
+      "parentId": "fld_categories",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/categories/1",
+      "name": "Update Category",
+      "description": "Updates an existing category by ID. Try ID 1 for Appetizers. Expect a 200 with the updated category.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"name\": \"Appetizers\",\n  \"sortOrder\": 1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_categories_delete",
+      "parentId": "fld_categories",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/categories/1",
+      "name": "Delete Category",
+      "description": "Deletes a category by ID. Expect a 204 with no response body.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 204', () => {\n  insomnia.expect(statusCode).toBe(204);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_menuitems",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "MenuItems",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 600,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_menuitems_getall",
+      "parentId": "fld_menuitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/menuitems",
+      "name": "Get All Menu Items",
+      "description": "Returns all menu items. Expect a 200 with an array. Run Login first.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is an array', async () => {\n  const json = await response.json();\n  insomnia.expect(Array.isArray(json)).toBe(true);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menuitems_getbyid",
+      "parentId": "fld_menuitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/menuitems/1",
+      "name": "Get Menu Item by Id",
+      "description": "Returns a single menu item by ID. Try ID 1 for Mozzarella Sticks. Expect 404 for an ID that doesn't exist.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menuitems_create",
+      "parentId": "fld_menuitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/menuitems",
+      "name": "Create Menu Item",
+      "description": "Creates a new menu item. Expect a 201 with the created menu item, including its new id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"French Onion Soup\",\n  \"price\": 8.99,\n  \"categoryId\": 1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).toBe(201);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menuitems_update",
+      "parentId": "fld_menuitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/menuitems/1",
+      "name": "Update Menu Item",
+      "description": "Updates an existing menu item by ID. Try ID 1 for Mozzarella Sticks. Expect a 200 with the updated menu item.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"name\": \"Mozzarella Sticks\",\n  \"price\": 9.99,\n  \"categoryId\": 1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menuitems_delete",
+      "parentId": "fld_menuitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/menuitems/1",
+      "name": "Delete Menu Item",
+      "description": "Deletes a menu item by ID. Expect a 204 with no response body.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 204', () => {\n  insomnia.expect(statusCode).toBe(204);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_orders",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "Orders",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1200,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_orders_getall",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders",
+      "name": "Get All Orders",
+      "description": "Returns all orders. Expect a 200 with an array. Run Login first.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is an array', async () => {\n  const json = await response.json();\n  insomnia.expect(Array.isArray(json)).toBe(true);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_getbyid",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1",
+      "name": "Get Order by Id",
+      "description": "Returns a single order by ID. Try ID 1 for a Placed order. Expect 404 for an ID that doesn't exist.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_create",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders",
+      "name": "Create Order",
+      "description": "Creates a new order. Expect a 201 with the created order, including its new id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"tableNumber\": 3,\n  \"notes\": null,\n  \"staffId\": 6\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).toBe(201);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_update",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1",
+      "name": "Update Order",
+      "description": "Updates an existing order by ID. Expect a 200 with the updated order.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"tableNumber\": 4,\n  \"notes\": null,\n  \"status\": \"PLACED\",\n  \"cancellationReason\": null,\n  \"total\": 0,\n  \"orderedAt\": \"2026-07-02T17:15:00\",\n  \"staffId\": 6\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_delete",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1",
+      "name": "Delete Order",
+      "description": "Deletes an order by ID. Expect a 204 with no response body.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 204', () => {\n  insomnia.expect(statusCode).toBe(204);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_startpreparing",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1/startpreparing",
+      "name": "Start Preparing",
+      "description": "Advances order status from PLACED to PREPARING. No body needed.",
+      "method": "PUT",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has a status field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('status');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_markready",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1/markready",
+      "name": "Mark Ready",
+      "description": "Advances order status from PREPARING to READY. No body needed.",
+      "method": "PUT",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 1900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has a status field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('status');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_markserved",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1/markserved",
+      "name": "Mark Served",
+      "description": "Advances order status from READY to SERVED. No body needed.",
+      "method": "PUT",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has a status field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('status');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orders_cancel",
+      "parentId": "fld_orders",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orders/1/cancel",
+      "name": "Cancel Order",
+      "description": "Cancels an order. Body is a JSON-encoded string (not an object) — e.g. \"reason text\" including the quotes. ASP.NET Core's [FromBody] string binding requires Content-Type: application/json even though the payload is just a string; a text/plain body returns 415. Only valid when status is PLACED or PREPARING.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "\"Customer changed mind after ordering\""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has a cancellationReason field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('cancellationReason');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_orderitems",
+      "parentId": "wrk_tableserve",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "name": "OrderItems",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 2200,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_orderitems_getall",
+      "parentId": "fld_orderitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orderitems",
+      "name": "Get All Order Items",
+      "description": "Returns all order items. Expect a 200 with an array. Run Login first.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response is an array', async () => {\n  const json = await response.json();\n  insomnia.expect(Array.isArray(json)).toBe(true);\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orderitems_getbyid",
+      "parentId": "fld_orderitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orderitems/1",
+      "name": "Get Order Item by Id",
+      "description": "Returns a single order item by ID. Try ID 1. Expect 404 for an ID that doesn't exist.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orderitems_create",
+      "parentId": "fld_orderitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orderitems",
+      "name": "Create Order Item",
+      "description": "Creates a new order item on an existing order. Expect a 201 with the created order item, including its new id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"orderId\": 1,\n  \"menuItemId\": 4,\n  \"quantity\": 1,\n  \"notes\": \"no onions\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).toBe(201);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orderitems_update",
+      "parentId": "fld_orderitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orderitems/1",
+      "name": "Update Order Item",
+      "description": "Updates an existing order item by ID. Expect a 200 with the updated order item.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"orderId\": 1,\n  \"menuItemId\": 4,\n  \"quantity\": 2,\n  \"notes\": \"no onions\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).toBe(200);\n});\ninsomnia.test('Response has an id field', async () => {\n  const json = await response.json();\n  insomnia.expect(json).toHaveProperty('id');\n});",
+      "_type": "request"
+    },
+    {
+      "_id": "req_orderitems_delete",
+      "parentId": "fld_orderitems",
+      "modified": 1782950400000,
+      "created": 1782950400000,
+      "url": "{{ _.baseUrl }}/api/orderitems/1",
+      "name": "Delete Order Item",
+      "description": "Deletes an order item by ID. Expect a 204 with no response body.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 2700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "preRequestScript": "",
+      "afterResponseScript": "const statusCode = response.status;\ninsomnia.test('Status is 204', () => {\n  insomnia.expect(statusCode).toBe(204);\n});",
+      "_type": "request"
+    }
+  ]
+}
