@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/max-logo.png" alt="MAX Technical Training — MAX Solutions" width="360">
+</p>
+
 # TQL Software Development Academy — Course Materials
 
 Welcome. These are the lesson materials for the back half of the bootcamp. You'll
