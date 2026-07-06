@@ -34,8 +34,8 @@ Suggested endpoints:
 - `GET /api/reports/orders-per-staff` — order count grouped by the `Staff` member
 
 Return anonymous objects or a small result shape — you don't need a new model.
-This pulls together the `Include` work from Lesson 3 and the totals thinking from
-Lesson 4.
+This pulls together the `Include` work from Lesson 4 and the totals thinking from
+Lesson 5.
 
 **Research:** [Grouping data with LINQ](https://learn.microsoft.com/en-us/dotnet/csharp/linq/standard-query-operators/grouping-data)
 — shows `GroupBy` plus aggregating each group (the `Max`/subquery examples near the

@@ -52,13 +52,13 @@ Add a page for an entity the design doesn't include — **Tables** (the physical
 tables): a card grid plus a shared Create/Edit form, built entirely from patterns you
 already know.
 
-1. `tables.html` — a card grid (Lesson 2) where each card shows a table number, seat
+1. `tables.html` — a card grid (Lesson 4) where each card shows a table number, seat
    count, and a 3-dots Edit/Delete menu.
-2. `table-create.html` / `table-edit.html` — a shared form (Lesson 2) with Table
+2. `table-create.html` / `table-edit.html` — a shared form (Lesson 4) with Table
    Number and Seats number inputs, Cancel/Save buttons.
 3. Add a **Tables** link to a copy of `nav.html`, and add the three pages to
    `vite.config.js`.
-4. Wire the delete modal (Lesson 3) on the list page.
+4. Wire the delete modal (Lesson 5) on the list page.
 
 If you can stand this up without re-reading the guides, you've internalized the
 card-grid + shared-form + modal pipeline you'll run five times on PRS.

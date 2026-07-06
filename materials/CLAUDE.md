@@ -58,7 +58,7 @@ Short blurb: each lab ends with a stretch section; link the standalone
 - Link text in the schedule table should be the topic description, not the
   filename — e.g. `[Project setup, controllers, EF DbContext](lesson-1-guide-...)`,
   not `[lesson-1-guide-project-setup-crud.md](lesson-1-guide-...)`
-- If a lab slot has no file yet (e.g. Lesson 5 API where capstone begins),
+- If a lab slot has no file yet (e.g. Lesson 6 API where capstone begins),
   use plain text in the Lab column, not a broken link
 - Future guide/lab files that don't exist yet should appear as plain text
   in the table (no link) — add the link when the file is created
@@ -113,16 +113,18 @@ the day.
 materials/
   api/
     README.md
-    lesson-1-guide-project-setup-crud.md
-    lesson-1-lab-categories-controller.md
-    lesson-2-guide-full-crud.md
-    lesson-2-lab-menuitems-controller.md
+    lesson-1-guide-web-architecture-http-insomnia.md   # intro/overview — no reference-app build
+    lesson-1-lab-devtools-insomnia-exploration.md
+    lesson-2-guide-project-setup-crud.md
+    lesson-2-lab-categories-controller.md
     ...
     stretch-api-challenges.md          # cross-cutting stretch challenges (sorts last)
   html-css/
     README.md
-    lesson-1-guide-semantic-html-box-model-flexbox.md
-    lesson-1-lab-...
+    lesson-1-guide-semantic-html-box-model.md          # intro/overview — raw HTML/CSS, plain files
+    lesson-1-lab-staff-card.md
+    lesson-2-guide-flexbox.md
+    lesson-2-lab-card-grid-flexbox-froggy.md
     ...
     stretch-html-css-challenges.md
   react/
@@ -131,6 +133,11 @@ materials/
     lesson-1-lab-...
     ...
     stretch-react-challenges.md
+  reference/                           # evergreen cheat sheets + shared images (cross-pass)
+    README.md
+    http-rest-status-codes.md
+    insomnia-quickstart.md
+    images/                            # diagrams/infographics; manifest in images/README.md
 ```
 
 ---
@@ -189,6 +196,40 @@ copy-paste, but close enough structurally that the same pattern applies.
 
 ---
 
+## Intro / overview lessons (before the build)
+
+A pass does **not** have to jump straight into building the TableServe reference app.
+Each pass may open with **1–3 intro / overview / big-picture lessons** that establish
+context and mental models first — architecture, fundamentals, tooling, the big picture —
+before any reference-app code or markup is written. Going straight to the reference app
+is *not* required.
+
+Where each pass currently does this:
+
+- **API** — Lesson 1: web app architecture (SPA/CSR), HTTP, REST/JSON, status codes, and
+  an Insomnia tutorial — taught by observing real traffic before the first controller.
+- **HTML/CSS** — Lessons 1–2: semantic HTML, the box model, and flexbox written **by
+  hand** in plain files, before the Vite scaffold and Bootstrap.
+- **React** — reserve 1–3 intro/overview lessons (component/JSX/tooling orientation and
+  the big picture) as the pass is built out.
+
+Conventions for these lessons:
+
+- They are the deliberate **exception** to "teach from the finished reference
+  implementation" (next section) — there is usually no TableServe reference code or
+  markup for them, so don't force one. State this in the guide so a later regeneration
+  doesn't "correct" them back into building the app.
+- **Verify by observation**, matched to the pass — browser DevTools, Insomnia against a
+  public API, or hand-written throwaway files — rather than against `tableserve/`.
+- They **may still have a lab** (a hands-on exploration or fundamentals exercise) or be
+  guide-only; otherwise they follow the same guide/lab, README, and stretch conventions.
+- They're still **lessons** — same `lesson-{N}-guide/lab-*.md` naming and "lesson"
+  terminology (no "chapter," no day/time references).
+- Supporting reference material (cheat sheets, diagrams) lives in `reference/` and
+  `reference/images/`, linked from the lesson and the folder README.
+
+---
+
 ## Reference implementations and verification
 
 Each pass has a **finished reference implementation** — this is the ground truth for
@@ -210,16 +251,23 @@ real patterns; never invent plausible-but-wrong code, markup, or class names.
   markup to "the analogous page." The real markup lives only in
   `tableserve/TableServe.Design/` — read the specific page you're teaching before
   writing its guide.
+- **Intro/overview lessons are the exception.** The 1–3 big-picture lessons that open a
+  pass (see **Intro / overview lessons** above) have no reference-app code or markup to
+  teach from — they precede the build on purpose. Verify them by observation, not
+  against `tableserve/`.
 
 ## Generating a whole pass (bulk runs)
 
 When asked to generate every guide/lab for a pass at once, **begin by stating the
 per-lesson guide→lab entity mapping** you'll use — which TableServe entity each lab
 builds — and explicitly call out any lab where the curriculum lists **no "We do"**
-(e.g. HTML/CSS Lesson 3, or React worked-example lessons), since you must choose a
+(e.g. HTML/CSS Lesson 5, or React worked-example lessons), since you must choose a
 parallel entity there. Ask before generating only if a mapping is genuinely
 ambiguous; otherwise proceed. This surfaces the biggest judgment call before you
-commit many files to it.
+commit many files to it. Also account for the pass's **intro/overview lessons** (see
+**Intro / overview lessons** above): they don't build a TableServe entity, so they have
+no guide→lab entity mapping — flag them as intro/overview (verified by observation),
+not as a build lesson missing a mapping.
 
 ---
 
@@ -231,7 +279,7 @@ places, and **both are produced as part of the normal guide/lab generation task*
 
 1. **Per-lab section** — every lab that exists ends with a `## Stretch challenges`
    section of 2–4 short bullets tied to that lesson's concept. Lessons with **no
-   lab** (e.g. API Lesson 5 where the capstone begins, or React worked-example-only
+   lab** (e.g. API Lesson 6 where the capstone begins, or React worked-example-only
    lessons) get **no** stretch section.
 2. **One standalone file per concept folder** — `stretch-{pass}-challenges.md`
    (`stretch-api-challenges.md`, `stretch-html-css-challenges.md`,
