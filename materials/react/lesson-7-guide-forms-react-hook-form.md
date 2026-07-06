@@ -1,4 +1,4 @@
-# Lesson 5 Guide — Forms with react-hook-form and the Shared Create/Edit Pattern
+# Lesson 7 Guide — Forms with react-hook-form and the Shared Create/Edit Pattern
 
 **Goal:** by the end of this lesson you have the **Menu Item form** — one component
 that handles both **Create** and **Edit**, built with **react-hook-form**, validating
@@ -52,12 +52,12 @@ const {
 ```
 
 - `{...register("name", …)}` **spreads** the props react-hook-form needs onto the input
-  (name, ref, onChange). This is the spread operator from Lesson 3 doing real work.
+  (name, ref, onChange). This is the spread operator from Lesson 5 doing real work.
 - `{ required: "Name is required" }` — validation rules; the string is the error
   message. Other rules: `maxLength: { value: 50, message: "…" }`, `min`, `pattern`.
 - `errors?.name` is set when the field is invalid → the template literal adds
   Bootstrap's `is-invalid` class → the `invalid-feedback` div shows
-  `errors.name.message`. This is **conditional rendering** (Lesson 4) applied to
+  `errors.name.message`. This is **conditional rendering** (Lesson 6) applied to
   validation.
 
 Number and select fields register the same way; use `valueAsNumber: true` so the value
@@ -99,8 +99,8 @@ const save: SubmitHandler<IMenuItem> = async (menuItem) => {
 - **`if (!menuItem.id)` decides create vs. edit** — no id means a new record (POST);
   an id means an existing one (PUT). One handler, both operations. This is the crux of
   the shared form.
-- On success, `navigate("/menuitems")` (from `useNavigate`, Lesson 6) returns to the
-  list; a toast confirms (Lesson 10 covers toasts — the calls are shown here so the
+- On success, `navigate("/menuitems")` (from `useNavigate`, Lesson 8) returns to the
+  list; a toast confirms (Lesson 12 covers toasts — the calls are shown here so the
   form is complete).
 - `delete menuItem.category` drops the nested nav object before sending — the API wants
   `categoryId`, not the embedded category.

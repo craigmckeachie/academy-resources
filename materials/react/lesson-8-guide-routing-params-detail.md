@@ -1,10 +1,10 @@
-# Lesson 6 Guide — Route Params and the Detail Page
+# Lesson 8 Guide — Route Params and the Detail Page
 
 **Goal:** by the end of this lesson you have the **Order Detail** page — a read-only
 view of one order, reached by its id in the URL (`/orders/detail/5`). You'll learn
 **`useParams`** to read the id from the route, **`useNavigate`** to move between pages
 in code, and the **definition-list** summary layout. This lesson builds the *summary
-only*; the workflow buttons and modals come in Lesson 7.
+only*; the workflow buttons and modals come in Lesson 9.
 
 **The general pattern you're learning:** a **detail page** reads a **route param**
 (`:id`), fetches that one record, and renders its fields — commonly as a **definition
@@ -138,7 +138,7 @@ function OrderHeader({ order, staff }: IOrderHeaderProps) {
 ```
 
 - `<dt>` is the label, `<dd>` the value — semantic and screen-reader friendly.
-- **Status** reuses `getTextBackgroundByStatus` from Lesson 4 — one badge-color source,
+- **Status** reuses `getTextBackgroundByStatus` from Lesson 6 — one badge-color source,
   used on the list *and* the detail page.
 - **Total** is formatted with `Intl.NumberFormat` as USD currency — the standard way to
   render money in this app (you'll reuse it on the items table and the OrderItem form).
@@ -165,9 +165,9 @@ navigate("/orders");                       // go to a path
 navigate(`/orders/detail/${newOrder.id}`); // go to a computed path
 ```
 
-You've already seen it in the form's `save` (Lesson 5) — after POST/PUT it calls
+You've already seen it in the form's `save` (Lesson 7) — after POST/PUT it calls
 `navigate("/menuitems")`. On this detail page the Edit link uses a `Link`
-(`to={/orders/edit/${order.id}}`), while Lesson 7's workflow buttons will `navigate`
+(`to={/orders/edit/${order.id}}`), while Lesson 9's workflow buttons will `navigate`
 after their API calls. **`Link` for what the user clicks to go somewhere; `useNavigate`
 for going somewhere as a result of an action.**
 
@@ -201,7 +201,7 @@ Verify in the **browser**. With your API running and `npm run dev` up:
 - **`useNavigate`** navigates from code (after actions); **`Link`** for user clicks.
 
 On PRS, the **Request Detail** page is this page — `useParams` for the request id, a
-definition-list summary with a status badge, and (Lesson 7) workflow buttons.
+definition-list summary with a status badge, and (Lesson 9) workflow buttons.
 
 ---
 

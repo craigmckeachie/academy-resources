@@ -1,4 +1,4 @@
-# Lesson 4 Guide — Conditional Rendering, Tables, Badges, and Skeletons
+# Lesson 6 Guide — Conditional Rendering, Tables, Badges, and Skeletons
 
 **Goal:** by the end of this lesson you have the **Orders list** — a *table* (not a
 card grid) with **status badges**, a **status filter**, a **3-dots action menu**, and
@@ -19,7 +19,7 @@ becomes a **table**; a list of things you *consider individually* stays a card g
 You met this in the HTML/CSS pass: **card grid** for records you consider on their own
 (Menu Items, Staff, Categories); **table** for records you compare field-by-field
 (Orders — by status, total, time). Orders is the table. The data still comes from a
-`useState` + `useEffect` + fetch (Lesson 2); only the layout differs.
+`useState` + `useEffect` + fetch (Lesson 4); only the layout differs.
 
 ---
 
@@ -253,7 +253,7 @@ import { Link } from "react-router-dom";
 - **Delete** calls the API, then calls the `onRemove` **callback prop** so the parent
   list removes the row from state — the pattern where a child asks the parent to update.
   The parent supplies it: `function removeOrder(order) { setOrders(orders.filter(o => o.id !== order.id)); }`.
-- A `window.confirm(...)` guards the delete for now (Lesson 7 replaces it with a modal).
+- A `window.confirm(...)` guards the delete for now (Lesson 9 replaces it with a modal).
 
 ---
 

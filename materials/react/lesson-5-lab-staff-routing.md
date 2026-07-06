@@ -1,4 +1,4 @@
-# Lesson 3 Lab — Route and Navigate to the Staff Page
+# Lesson 5 Lab — Route and Navigate to the Staff Page
 
 Wire your **Staff** page into the app shell: give it a route, a nav link, and split it
 into a `StaffList` + `StaffCard` using **props** — the same routing and
@@ -19,7 +19,7 @@ tree, `Link`, `Outlet`, and props.
      interface) and renders one card.
 4. In the `.map()`, render `<StaffCard key={staffMember.id} staff={staffMember} />`.
 5. Make `StaffPage` the route target: a heading + an **Add Staff** `<Link
-   to="/staff/create">` button + `<StaffList />` (the create page comes in Lesson 5 —
+   to="/staff/create">` button + `<StaffList />` (the create page comes in Lesson 7 —
    the link can 404 until then).
 
 ---

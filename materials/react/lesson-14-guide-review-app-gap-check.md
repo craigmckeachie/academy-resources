@@ -1,4 +1,4 @@
-# Lesson 12 Guide — Review / Buffer: Full-App Review and PRS Gap-Check
+# Lesson 14 Guide — Review / Buffer: Full-App Review and PRS Gap-Check
 
 **This is a review / buffer lesson — there is no lab.** It's a full read-through of the
 finished TableServe front end and an explicit **gap-check**: for every pattern PRS will
@@ -44,7 +44,7 @@ capstone's blueprint:
 | Requests list | Orders list | **table**, status badges, status **filter** |
 | Request Detail | Order Detail | `useParams`, workflow buttons, **Reject modal** |
 | RequestLine create/edit | Order Item form | **nested**, **derived Amount**, parent total |
-| Toasts + errors everywhere | Lesson 10 | `checkStatus` + `toast` |
+| Toasts + errors everywhere | Lesson 12 | `checkStatus` + `toast` |
 
 **Read the mapping in both directions:** for a PRS page, know its TableServe twin; for a
 TableServe page, know the PRS page it rehearses.
@@ -54,7 +54,7 @@ TableServe page, know the PRS page it rehearses.
 ## 3. The three named exceptions — no TableServe rehearsal
 
 Three PRS patterns have **no TableServe equivalent** and are taught directly on PRS.
-Know now that you'll meet them fresh in the capstone (Lesson 13 covers them in detail):
+Know now that you'll meet them fresh in the capstone (Lesson 15 covers them in detail):
 
 1. **Dual-role FK on Request** — a Request has a submitter (`UserId`) *and* a reviewer
    relationship via `IsReviewer`. Orders had only one staff FK — no rehearsal.

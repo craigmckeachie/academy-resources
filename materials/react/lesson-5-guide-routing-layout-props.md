@@ -1,4 +1,4 @@
-# Lesson 3 Guide — Routing, the App Shell, and Props
+# Lesson 5 Guide — Routing, the App Shell, and Props
 
 **Goal:** by the end of this lesson your app has **multiple pages** you navigate
 between without full reloads, wrapped in a shared **shell** — a `Header` across the top
@@ -30,7 +30,7 @@ react-router `<Link to>` (section 5).
 
 ## 2. Installing and mounting the router
 
-`react-router-dom` is already installed (Lesson 1). You define the routes in
+`react-router-dom` is already installed (Lesson 3). You define the routes in
 `main.tsx` with `createBrowserRouter` and render them with `RouterProvider`:
 
 ```tsx
@@ -135,7 +135,7 @@ Read the route tree top-down:
   adding one `{ path, element }` under `Layout`'s `children` — the shell comes for
   free.
 
-(The Sign In page, Lesson 9, sits *outside* `Layout` so it has no shell — you'll add it
+(The Sign In page, Lesson 11, sits *outside* `Layout` so it has no shell — you'll add it
 as a sibling of the `Layout` route.)
 
 ---
@@ -191,9 +191,50 @@ over from the static pass.)
 
 ## 6. Props — passing data into a component
 
-A **prop** is an argument you pass to a component, written like an HTML attribute. It's
-how a parent hands data to a child. You saw `<Nav.Link to="/orders">` — `to` is a prop.
-Your own components take props too:
+A **prop** is an argument you pass to a component, written like an HTML attribute — how a
+parent hands data to a child. You saw `<Nav.Link to="/orders">`; `to` is a prop. Your own
+components take props too, and *receiving* one is where the **destructuring from Lesson 1**
+finally pays off. Watch a `MenuItemCard` receive its `menuItem` prop in three phases — the
+parent passes it the same way every time:
+
+```tsx
+<MenuItemCard menuItem={item} />
+```
+
+**Phase 1 — the whole `props` object.** A component receives a single argument: an object
+holding all its props. Reach in with dot access:
+
+```tsx
+function MenuItemCard(props) {
+  return (
+    <div className="card p-4">
+      <span className="fs-4 fw-medium">{props.menuItem.name}</span>
+      <span className="fs-5 fw-light">${props.menuItem.price}</span>
+    </div>
+  );
+}
+```
+
+Everything comes through `props.` — repetitive, and it's easy to lose track of what's
+inside.
+
+**Phase 2 — destructure in the body.** Pull `menuItem` out of `props` on the first line
+(the object destructuring from Lesson 1):
+
+```tsx
+function MenuItemCard(props) {
+  const { menuItem } = props;
+  return (
+    <div className="card p-4">
+      <span className="fs-4 fw-medium">{menuItem.name}</span>
+      <span className="fs-5 fw-light">${menuItem.price}</span>
+    </div>
+  );
+}
+```
+
+**Phase 3 — destructure in the parameter list.** Since the argument is just an object, do
+the destructuring right where it arrives. This is the form the whole course uses:
 
 ```tsx
 interface IMenuItemCardProps {
@@ -211,7 +252,8 @@ function MenuItemCard({ menuItem }: IMenuItemCardProps) {
 ```
 
 - The parent passes it: `<MenuItemCard menuItem={item} />`.
-- The child **destructures** it from its single props argument: `({ menuItem })`.
+- The child **destructures** it from its single props argument: `({ menuItem })` — Lesson
+  1's destructuring, now in the parameter list.
 - We type props with an interface (`IMenuItemCardProps`) so the compiler checks the
   parent passes the right shape.
 
@@ -226,7 +268,7 @@ This lets you split a big list component into a `List` (fetches, maps) and a `Ca
 
 Note `key` goes on the element in the `.map()`, and `menuItem` is passed as a prop.
 (Props also carry **callbacks** — e.g. an `onRemove` function a child calls to tell the
-parent to remove an item. You'll use that pattern in Lesson 10's CRUD.)
+parent to remove an item. You'll use that pattern in Lesson 12's CRUD.)
 
 ### The spread operator
 

@@ -1,4 +1,4 @@
-# Lesson 9 Guide — Sign In, localStorage, and Context
+# Lesson 11 Guide — Sign In, localStorage, and Context
 
 **Goal:** by the end of this lesson you have a working **Sign In** page that posts to
 the login endpoint, stores the signed-in **Staff** object in **localStorage**, and
@@ -7,7 +7,7 @@ user, the nav/actions adapt to their role, and the **Cancel Order** button is di
 when the signed-in staff member didn't take the order.
 
 > **This is a worked-example lesson — there is no paired lab.** It pairs conceptually
-> with the Lesson 5 form (Sign In is a small react-hook-form) and completes the auth
+> with the Lesson 7 form (Sign In is a small react-hook-form) and completes the auth
 > flow the whole app depends on. You build it once, here, alongside the instructor.
 
 **The general pattern you're learning:** there is **no JWT/token** in this app. Login
@@ -104,7 +104,7 @@ Sign In sits **outside** the `Layout` (no header/nav) — a route sibling of the
 { path: "signin", element: <SignInPage /> },
 ```
 
-It's a small react-hook-form (Lesson 5 pattern) that logs in on submit:
+It's a small react-hook-form (Lesson 7 pattern) that logs in on submit:
 
 ```tsx
 interface IAccount { username: string; password: string; }

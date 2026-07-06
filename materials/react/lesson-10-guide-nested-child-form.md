@@ -1,4 +1,4 @@
-# Lesson 8 Guide — The Nested Child Form with Derived Fields
+# Lesson 10 Guide — The Nested Child Form with Derived Fields
 
 **Goal:** by the end of this lesson you have the **Order Item** create/edit form — a
 child record created *under* an order, with a Menu Item **FK dropdown**, a **derived
@@ -58,7 +58,7 @@ nested form:
 
 ## 2. The FK dropdown, again
 
-Menu Item is an FK dropdown just like Category on the Menu form (Lesson 5) — options
+Menu Item is an FK dropdown just like Category on the Menu form (Lesson 7) — options
 fetched from another entity:
 
 ```tsx
@@ -196,7 +196,7 @@ side-effect of the POST/PUT/DELETE (the recalculation you built in the API pass)
 running total in the items-table footer. The front end computes Amount *for display*;
 the back end owns the persisted Total.
 
-The items table on the detail page (Lesson 7) shows each line's Amount and the footer
+The items table on the detail page (Lesson 9) shows each line's Amount and the footer
 Total, both with `Intl.NumberFormat` — the same currency formatting used here.
 
 ---

@@ -1,6 +1,6 @@
-# Lesson 2 Lab — Fetch the Staff List
+# Lesson 4 Lab — Fetch the Staff List
 
-Turn the hardcoded Staff list from Lesson 1 into one that **fetches real data** from
+Turn the hardcoded Staff list from Lesson 3 into one that **fetches real data** from
 your Web API — the same `useState` + `useEffect` + `fetch` pattern the guide used for
 Menu Items, on the Staff entity. Refer back to the guide for hook rules and the
 API-module shape.
@@ -19,10 +19,10 @@ API-module shape.
 3. Write an `async loadStaff()` that `await`s `staffAPI.list()` and calls
    `setStaff(data)`, wrapped in `try/catch`.
 4. Call it from `useEffect(() => { loadStaff(); }, [])`.
-5. Render `staff.map(...)` into the cards you built in Lesson 1 — name, username, and
+5. Render `staff.map(...)` into the cards you built in Lesson 3 — name, username, and
    the conditional role badges — each with `key={staffMember.id}`.
 
-> Add the full `IStaff` fields now if you didn't in Lesson 1 (`password`, `phone`,
+> Add the full `IStaff` fields now if you didn't in Lesson 3 (`password`, `phone`,
 > `email`) so the interface matches the API response — but you still only *display*
 > name, username, and role for now.
 
@@ -53,7 +53,7 @@ some research.
 
 - **A loading flag** — [Reinforce] — add a `const [loading, setLoading] = useState(false)`,
   set it around the fetch (`true` before, `false` in a `finally`), and render
-  `{loading && <p>Loading…</p>}`. This is the seed of the skeleton pattern in Lesson 4.
+  `{loading && <p>Loading…</p>}`. This is the seed of the skeleton pattern in Lesson 6.
 - **Count in the heading** — [Reinforce] — show the number of staff next to the
   heading: `Staff ({staff.length})`. Confirm it starts at 0 and updates once the fetch
   resolves — a concrete look at state driving the UI.

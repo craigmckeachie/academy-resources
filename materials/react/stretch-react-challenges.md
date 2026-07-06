@@ -22,7 +22,7 @@ verification tool.
 > **Respect the intentional simplifications.** This app has **no JWT/token auth**, no
 > DTOs, no repository pattern, and wide-open CORS — all deliberate. No stretch challenge
 > should add `[Authorize]`, tokens, or a tighter CORS policy. Auth stays exactly as
-> Lesson 9 built it: a Staff object in localStorage + Context, null-check for signed-in.
+> Lesson 11 built it: a Staff object in localStorage + Context, null-check for signed-in.
 
 ---
 
@@ -105,7 +105,7 @@ header toggle that flips Bootstrap 5.3's `data-bs-theme="dark"` on the `<html>` 
 4. Check your custom `App.css` overrides (the orange brand, the sign-in gradient) still
    look right in dark mode.
 
-This reuses the exact Context + localStorage pattern from Lesson 9 for a different piece
+This reuses the exact Context + localStorage pattern from Lesson 11 for a different piece
 of shared state. Not covered in the guides — research color modes:
 [Bootstrap color modes](https://getbootstrap.com/docs/5.3/customize/color-modes/).
 
@@ -120,7 +120,7 @@ fetched list as you type — no new request.
 2. Before `.map()`, filter: `menuItems.filter(m => m.name.toLowerCase().includes(search.toLowerCase()))`.
 3. Confirm typing narrows the grid live and clearing restores it.
 
-This is `useState` + conditional data + `.map()` — all Lesson 1–4 tools — combined.
+This is `useState` + conditional data + `.map()` — all Lesson 3–6 tools — combined.
 (Contrast it with the Orders **status filter**, which lives in the URL via
 `useSearchParams` and re-fetches; this one filters in memory.)
 
@@ -128,7 +128,7 @@ This is `useState` + conditional data + `.map()` — all Lesson 1–4 tools — 
 
 ## 6. A reusable ConfirmModal component — [Reach]
 
-Lesson 7 built a delete-confirm modal inline on the Order Detail page. Extract a generic
+Lesson 9 built a delete-confirm modal inline on the Order Detail page. Extract a generic
 **`ConfirmModal`** component (props: `show`, `title`, `message`, `onConfirm`,
 `onCancel`) and reuse it for the delete confirmations on your **card/row dropdowns**
 (replacing the `window.confirm` calls).
@@ -139,7 +139,7 @@ Lesson 7 built a delete-confirm modal inline on the Order Detail page. Extract a
 3. Confirm it opens per item, deletes on confirm, and closes on cancel — with a nicer UX
    than the browser `confirm` dialog.
 
-This is props + `show={!!state}` from Lesson 7, generalized. Not covered as a reusable
+This is props + `show={!!state}` from Lesson 9, generalized. Not covered as a reusable
 component in the guides — research composing components with props:
 [Passing props to a component (react.dev)](https://react.dev/learn/passing-props-to-a-component).
 

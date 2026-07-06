@@ -1,4 +1,4 @@
-# Lesson 6 Lab — A Category Detail View
+# Lesson 8 Lab — A Category Detail View
 
 Build a read-only **Category detail** page reached by id (`/categories/detail/:id`),
 following the Order Detail pattern from the guide — **`useParams`** to read the id,
@@ -9,7 +9,7 @@ the `undefined`-initialized state guard, and the `<dl>` layout.
 > **Note:** the finished TableServe app ships Categories as list + create/edit only —
 > there's no Category detail page in the reference. You're building this one as
 > **practice for the detail/params pattern** on a simple entity. Categories CRUD itself
-> is provided starter code (walked through in Lesson 11); here you add just the detail
+> is provided starter code (walked through in Lesson 13); here you add just the detail
 > view.
 
 ---

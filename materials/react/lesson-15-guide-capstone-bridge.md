@@ -1,4 +1,4 @@
-# Lesson 13 Guide — Capstone Bridge: Building the PRS Front End
+# Lesson 15 Guide — Capstone Bridge: Building the PRS Front End
 
 **This is the capstone bridge — there is no lab.** It's the hand-off from TableServe
 (taught) to **PRS** (built independently). Everything you need is a pattern you've
@@ -87,7 +87,7 @@ Build it yourself on the User card.
 
 ## 4. Workflow translation: Cancel → Reject
 
-The Order **Cancel modal** (Lesson 7) is the direct rehearsal for the Request **Reject
+The Order **Cancel modal** (Lesson 9) is the direct rehearsal for the Request **Reject
 modal** — the one workflow piece worth spelling out because the words differ:
 
 | TableServe (Cancel) | PRS (Reject) |
@@ -106,7 +106,7 @@ The other workflow buttons map cleanly too:
 | `APPROVED` / `REJECTED` | *(none — terminal)* | Served / Cancelled |
 
 The **ownership check** — Approve/Reject disabled when `request.userId === currentUser.id`
-— is the Cancel ownership check (Lesson 9) with different fields.
+— is the Cancel ownership check (Lesson 11) with different fields.
 
 ---
 

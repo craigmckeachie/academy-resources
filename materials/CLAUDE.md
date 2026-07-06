@@ -210,8 +210,11 @@ Where each pass currently does this:
   an Insomnia tutorial — taught by observing real traffic before the first controller.
 - **HTML/CSS** — Lessons 1–2: semantic HTML, the box model, and flexbox written **by
   hand** in plain files, before the Vite scaffold and Bootstrap.
-- **React** — reserve 1–3 intro/overview lessons (component/JSX/tooling orientation and
-  the big picture) as the pass is built out.
+- **React** — Lessons 1–2: **JavaScript, then TypeScript, for C# developers** — the
+  language mapped onto what students already know from the API pass (`.map()`/LINQ, arrow
+  functions, destructuring, spread, modules; then the C#→TS type system) — written and run
+  in a throwaway **vanilla-ts Vite scratch project** and verified by observation (browser
+  console / type errors), before the React build starts in Lesson 3.
 
 Conventions for these lessons:
 

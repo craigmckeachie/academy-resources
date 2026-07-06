@@ -1,4 +1,4 @@
-# Lesson 1 Lab — A Hardcoded Staff List
+# Lesson 3 Lab — A Hardcoded Staff List
 
 Build a **Staff** page that renders a hardcoded array of staff members — the same
 component / JSX / interface / `.map()` pattern the guide used for Menu Items, on a
@@ -37,7 +37,7 @@ fundamentals exercise.)
    both).
 
 > **`{flag && <span>…</span>}` is a first taste of conditional rendering** — when
-> `flag` is false, nothing renders. Lesson 4 makes this pattern a first-class concept.
+> `flag` is false, nothing renders. Lesson 6 makes this pattern a first-class concept.
 
 ---
 
@@ -78,7 +78,7 @@ some research.
   `StaffCard` function that takes the staff member as a **prop**
   (`function StaffCard({ staffMember }: { staffMember: IStaff }) { ... }`) and render
   `<StaffCard key={s.id} staffMember={s} />` from the `.map()`. Props are covered
-  properly in Lesson 3 — peek ahead. Reference:
+  properly in Lesson 5 — peek ahead. Reference:
   [Passing props to a component (react.dev)](https://react.dev/learn/passing-props-to-a-component).
 
 Finished these and want more? See

@@ -1,10 +1,10 @@
-# Lesson 11 Guide — Review / Buffer: The Categories CRUD Walkthrough
+# Lesson 13 Guide — Review / Buffer: The Categories CRUD Walkthrough
 
 **This is a review / buffer lesson — there is no lab.** Its job is catch-up time and a
 guided read of the **Categories** feature, which is **provided as finished starter
 code** (not built live). Categories is the simplest full CRUD in the app — a card grid,
 a skeleton, a no-FK shared form — so reading it end to end is the cleanest way to see
-every pattern from Lessons 1–10 working together on one entity.
+every pattern from Lessons 3–12 working together on one entity.
 
 **Goal:** be able to open the `categories/` folder and explain each file's role, tracing
 how the pieces you learned separately combine into a complete feature. If you fell
@@ -40,17 +40,17 @@ now look familiar: it's the pattern from its lesson, on Categories.
 
 ## 2. What to notice while reading
 
-- **`CategoryList`** is Lesson 2 + 4: `useState<ICategory[]>([])`, a `loading` flag, a
+- **`CategoryList`** is Lesson 4 + 6: `useState<ICategory[]>([])`, a `loading` flag, a
   `loadCategories` in `useEffect(…, [])`, skeletons via `{loading && …}`, and a
   `removeCategory` that filters state after a delete.
-- **`CategoryCard`** is Lesson 3 + 4: a `category` **prop**, a react-bootstrap
+- **`CategoryCard`** is Lesson 5 + 6: a `category` **prop**, a react-bootstrap
   `Dropdown` with **Edit** (`as={Link}`) and **Delete** (confirm → `categoryAPI.delete`
   → `onRemove` → success toast).
-- **`CategoryForm`** is Lesson 5 minus the FK dropdown: `useForm<ICategory>`,
+- **`CategoryForm`** is Lesson 7 minus the FK dropdown: `useForm<ICategory>`,
   `defaultValues` returning `emptyCategory` (create) or `categoryAPI.find(id)` (edit),
   `register` on Name (required) and Sort Order (`valueAsNumber`), and a `save` that
   POSTs when `!id` else PUTs, then `navigate("/categories")`.
-- **The pages** are Lesson 5's thin wrappers — a title and `<CategoryForm />`.
+- **The pages** are Lesson 7's thin wrappers — a title and `<CategoryForm />`.
 
 If any of these reads as unfamiliar, that's the lesson to revisit before the capstone.
 
@@ -67,7 +67,7 @@ every other entity:
 { path: "categories/edit/:id", element: <CategoryEditPage /> },
 ```
 
-Plus the **Categories** `Nav.Link` in `AppNav` (already there from Lesson 3).
+Plus the **Categories** `Nav.Link` in `AppNav` (already there from Lesson 5).
 
 ---
 
@@ -107,7 +107,7 @@ Anything unchecked, fix it now — the capstone assumes all of it.
 
 - Every entity is the **same feature folder**: interface, API module, page, list, card
   (or row), skeleton, shared form, thin create/edit wrappers.
-- A new entity introduces **no new concept** — it's the Lessons 1–10 patterns applied
+- A new entity introduces **no new concept** — it's the Lessons 3–12 patterns applied
   again. Reading Categories proves it.
 - The provided Categories code is your **reference implementation** to compare your own
   code against — and the model for PRS's **Vendors**.

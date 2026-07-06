@@ -1,4 +1,4 @@
-# Lesson 5 Lab — The Staff Create/Edit Form
+# Lesson 7 Lab — The Staff Create/Edit Form
 
 Build the shared **Staff** form — one component for create and edit, with
 **react-hook-form** — following the Menu Item form from the guide. Staff has **no FK
@@ -80,7 +80,7 @@ some research.
   double-submitted.
 - **Watch a field live** — [Reach] — use react-hook-form's `watch("firstName")` to show
   a live "Hello, {firstName}" preview above the form as the user types. `watch` is the
-  hook Lesson 8 leans on for derived fields — this is a gentle first look. Reference:
+  hook Lesson 10 leans on for derived fields — this is a gentle first look. Reference:
   [react-hook-form `watch`](https://react-hook-form.com/docs/useform/watch).
 
 Finished these and want more? See

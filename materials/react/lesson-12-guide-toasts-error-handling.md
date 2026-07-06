@@ -1,4 +1,4 @@
-# Lesson 10 Guide — Toasts and Centralized Error Handling
+# Lesson 12 Guide — Toasts and Centralized Error Handling
 
 **Goal:** by the end of this lesson every CRUD action gives the user clear feedback —
 **success and error toasts** via `react-hot-toast` — and your API modules share **one
@@ -18,7 +18,7 @@ polish that makes the app feel finished.
 ## 1. Mounting the Toaster
 
 `react-hot-toast` needs one `<Toaster />` mounted near the app root (you added it in
-Lesson 9's `App.tsx`). It renders whatever toasts you fire from anywhere:
+Lesson 11's `App.tsx`). It renders whatever toasts you fire from anywhere:
 
 ```tsx
 import { Toaster } from "react-hot-toast";
@@ -225,7 +225,7 @@ Requests, and RequestLines.
 
 ## Build Steps
 
-1. Ensure `<Toaster />` is mounted in `App.tsx` (from Lesson 9).
+1. Ensure `<Toaster />` is mounted in `App.tsx` (from Lesson 11).
 2. Create `src/utility/fetchUtilities.ts` with `BASE_URL`, `translateStatusToErrorMessage`,
    `checkStatus` (throws on non-`ok`), and `parseJSON`.
 3. Refactor `MenuItemAPI.ts` so every method chains `.then(checkStatus).then(parseJSON)`

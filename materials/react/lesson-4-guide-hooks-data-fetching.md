@@ -1,4 +1,4 @@
-# Lesson 2 Guide — State, Effects, and Fetching Real Data
+# Lesson 4 Guide — State, Effects, and Fetching Real Data
 
 **Goal:** by the end of this lesson your Menu Items page shows **real data from your
 Web API** instead of a hardcoded array. You'll learn the two hooks every data page
@@ -21,7 +21,7 @@ the app.
 
 ## 1. Why hooks
 
-The hardcoded page from Lesson 1 never changed after it rendered. A real page has to:
+The hardcoded page from Lesson 3 never changed after it rendered. A real page has to:
 load data *after* it appears, store that data somewhere, and re-render when it arrives.
 Plain variables can't do that — reassigning a `const` doesn't tell React to re-render.
 
@@ -83,7 +83,7 @@ useEffect(() => {
 - The **first argument** is the effect function — it runs after render.
 - The **second argument `[]`** is the dependency array. Empty means "run this once,
   after the first render, and never again." (A non-empty array re-runs the effect when
-  one of its values changes — you'll use that in Lesson 4 for the status filter.)
+  one of its values changes — you'll use that in Lesson 6 for the status filter.)
 - Forgetting the `[]` makes the effect run after *every* render — which, if the effect
   sets state, loops forever. The empty array is what makes "fetch on mount" work.
 
@@ -135,7 +135,7 @@ export const menuItemAPI = {
 ```
 
 Now the component calls `menuItemAPI.list()` and doesn't care about the URL or JSON
-parsing. (Lesson 10 hardens this module with shared status-checking and error handling;
+parsing. (Lesson 12 hardens this module with shared status-checking and error handling;
 for now a plain `.then(res => res.json())` is enough.)
 
 ---
@@ -189,7 +189,7 @@ export default MenuItemList;
 Trace the flow: first render → `menuItems` is `[]`, nothing to map → effect runs →
 `loadMenuItems` fetches → `setMenuItems(data)` → **re-render** with real data → cards
 appear. `{loading && <p>Loading…</p>}` shows a message while the fetch is in flight
-(Lesson 4 upgrades this to skeleton cards).
+(Lesson 6 upgrades this to skeleton cards).
 
 `menuItem.category?.name` uses **optional chaining** (`?.`) — if `category` is
 `undefined`, it yields `undefined` instead of crashing. The API includes the nested

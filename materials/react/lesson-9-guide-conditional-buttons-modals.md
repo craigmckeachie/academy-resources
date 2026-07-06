@@ -1,4 +1,4 @@
-# Lesson 7 Guide — Status-Driven Workflow Buttons and Modals
+# Lesson 9 Guide — Status-Driven Workflow Buttons and Modals
 
 **Goal:** by the end of this lesson the **Order Detail** page is fully interactive —
 **workflow buttons that change with the order's status**, a **Cancel modal** with a
@@ -45,7 +45,7 @@ const handleCloseCancelModal = () => setShowCancelModal(false);
 - `show={showCancelModal}` — the boolean state decides visibility. A button sets it
   `true` to open; `onHide` (the ✕ or backdrop) sets it `false`.
 - The modal markup always sits in the page; state is what reveals it. This is
-  conditional rendering (Lesson 4) driving a dialog.
+  conditional rendering (Lesson 6) driving a dialog.
 
 ---
 
@@ -179,7 +179,7 @@ const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
   empty and the `invalid-feedback` shows; the modal stays open.
 - On valid submit, `orderAPI.cancel(id, reason)` PUTs the reason as a **plain string
   body** to `/orders/{id}/cancel`, then the modal closes and the order re-loads (now
-  `CANCELLED`, showing the reason via the `OrderHeader` conditional from Lesson 6).
+  `CANCELLED`, showing the reason via the `OrderHeader` conditional from Lesson 8).
 
 ```ts
 cancel(id: number, cancellationReason: string) {

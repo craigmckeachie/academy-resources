@@ -1,4 +1,4 @@
-# Lesson 1 Guide — Components, JSX, and TypeScript (React Orientation)
+# Lesson 3 Guide — Components, JSX, and TypeScript (React Orientation)
 
 **This is an intro / overview lesson.** It's the big picture: what a React
 single-page app is, how the Vite project is laid out, and the three ideas every
@@ -7,6 +7,11 @@ API and no database yet. You render a **hardcoded** array of menu items so you c
 see components and JSX working on their own, before data fetching, routing, or forms
 enter the picture. You verify everything **by observation in the browser** — not
 against the finished reference app, not in Insomnia.
+
+> **This lesson builds on the JavaScript and TypeScript intro (Lessons 1–2).** `.map()`,
+> `interface`, and `import`/`export` are used here as tools you already met — this lesson
+> is about putting them together into your first React components, not re-teaching the
+> language. If any of those feel shaky, revisit Lessons 1–2 first.
 
 **Goal:** by the end of this lesson you can create a React project with Vite,
 understand how `main.tsx` boots the app, write a **component** that returns **JSX**,
@@ -23,7 +28,7 @@ off these three ideas.
 > **Why hardcoded data here?** This lesson comes *before* the build of the real
 > TableServe front end. Its job is to establish mental models, so it deliberately
 > uses a local array instead of the API. You confirm it works by looking at the page
-> in the browser. Real data fetching arrives in Lesson 2.
+> in the browser. Real data fetching arrives in Lesson 4.
 
 ---
 
@@ -123,7 +128,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 - `<React.StrictMode>` is a development helper that surfaces bugs — leave it.
 
 You rarely touch `main.tsx` in this lesson; it's shown so you know where the app
-starts. (In Lesson 3 you'll add the router here.)
+starts. (In Lesson 5 you'll add the router here.)
 
 ---
 
@@ -142,9 +147,10 @@ export default App;
 
 - The capital `A` in `App` is required — React treats lowercase names as HTML tags
   (`<div>`) and capitalized names as components (`<App />`).
-- `export default App` makes the component importable from other files — this is an
-  **ES module** export. `main.tsx` did `import App from "./App.tsx"` to get it. One
-  default export per file is our convention.
+- `export default App` makes the component importable from other files — the **default
+  export** you met in Lesson 1. `main.tsx` did `import App from "./App.tsx"` to get it.
+  Our convention: components are default exports (one per file); helpers and interfaces
+  are named exports.
 - You **use** a component by writing it as a tag: `<App />`.
 
 Components nest. A page component renders smaller components, which render smaller ones
@@ -199,9 +205,9 @@ straight over.
 
 ## 6. Typing your data with an interface
 
-TypeScript lets you describe the **shape** of your data with an **interface**. This is
-the same idea as the C# model class from the API pass — a named set of properties and
-their types. Create `src/menuItems/IMenuItem.ts`:
+You met **interfaces** in Lesson 2 — a named set of properties and their types, the
+front-end echo of your C# model class. Here you write your first real one. Create
+`src/menuItems/IMenuItem.ts`:
 
 ```ts
 export interface IMenuItem {
@@ -213,24 +219,61 @@ export interface IMenuItem {
 }
 ```
 
-- We prefix interfaces with `I` (`IMenuItem`, `IStaff`, `IOrder`) — a convention that
-  makes them easy to spot.
-- `number | undefined` is a **union type**: the value is a number *or* `undefined`
-  (an id doesn't exist until the server assigns one).
-- `category?: ICategory` — the `?` marks the property **optional**; it may be absent.
-- This mirrors the C# `MenuItem` model exactly (`Id`, `Name`, `Price`, `CategoryId`,
-  `Category` nav property). The interface is how the front end knows what the API
-  returns.
+Quick reminders from Lesson 2, now on real data: the `I` prefix is our convention;
+`number | undefined` is a **union** (an id doesn't exist until the server assigns one);
+`category?` is **optional**. This mirrors the C# `MenuItem` model exactly — the interface
+is how the front end knows what the API returns.
 
 For this lesson, `category` isn't needed — you'll display just `name` and `price` — so
 a minimal `IMenuItem` with `id`, `name`, and `price` is enough to start.
 
 ---
 
-## 7. Rendering a list with `.map()`
+## 7. Rendering a list — from `for` to `.map()`
 
-Real UIs render *lists*. In React you turn an **array of data** into an **array of
-JSX elements** by calling **`.map()`**. Here's the whole page with a hardcoded array:
+Real UIs render *lists*. In Lesson 1 you watched loops evolve from a `for` loop to
+`.map()` for transforming **numbers**. Rendering a list is the **exact same transform** —
+only the output changes: an **array of data** becomes an **array of JSX elements**. Walk
+the same three stages once more, now producing cards from a hardcoded `menuItems:
+IMenuItem[]` array (shown in full at stage 3).
+
+**Stage 1 — a `for` loop.** JSX elements are just values, so you can build an array of
+them by hand and drop it into the return:
+
+```tsx
+function MenuItemsPage() {
+  const cards = [];
+  for (let i = 0; i < menuItems.length; i++) {
+    const menuItem = menuItems[i];
+    cards.push(
+      <div className="card p-4" key={menuItem.id}>
+        <span className="fs-4 fw-medium">{menuItem.name}</span>
+      </div>
+    );
+  }
+  return <section>{cards}</section>;
+}
+```
+
+It works, but it's noisy — a temp array, an index, a manual `push`.
+
+**Stage 2 — `forEach`.** Drops the index; still pushes manually:
+
+```tsx
+const cards = [];
+menuItems.forEach((menuItem) => {
+  cards.push(
+    <div className="card p-4" key={menuItem.id}>
+      <span className="fs-4 fw-medium">{menuItem.name}</span>
+    </div>
+  );
+});
+```
+
+**Stage 3 — `.map()`.** `.map()` *is* "transform each element into a new one," so it hands
+back the array of elements directly — no temp array, no `push`. You embed it right inside
+the JSX with the `{ }` from section 5. **This is how React renders every list.** Here's
+the whole page:
 
 ```tsx
 import { IMenuItem } from "./IMenuItem";
@@ -278,7 +321,7 @@ editor autocompletes `menuItem.name`.
 > **Styling note:** the `card`, `d-flex flex-wrap`, `gap-5`, `badge` classes are the
 > same Bootstrap classes from the HTML/CSS pass. Import Bootstrap's CSS once (in
 > `App.tsx`, shown next lesson) and every class works. This lesson focuses on the
-> React mechanics; the polished `MenuItemCard` component comes in Lesson 4.
+> React mechanics; the polished `MenuItemCard` component comes in Lesson 6.
 
 ---
 
@@ -334,8 +377,8 @@ DevTools**. With `npm run dev` running:
   echo of your C# model.
 - **`.map()`** turns an array of data into a list of elements; each needs a unique
   **`key`**.
-- Everything else in this pass builds on these: Lesson 2 swaps the hardcoded array for
-  a real fetch; Lesson 3 adds routing between pages; Lesson 5 adds forms.
+- Everything else in this pass builds on these: Lesson 4 swaps the hardcoded array for
+  a real fetch; Lesson 5 adds routing between pages; Lesson 7 adds forms.
 
 On PRS you'll write the same three things first — an `IProduct` interface, a
 `ProductsPage` component, and a `.map()` over products — before any data loads.

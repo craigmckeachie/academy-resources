@@ -1,4 +1,4 @@
-# Lesson 4 Lab — Staff Card Grid with Conditional Rendering
+# Lesson 6 Lab — Staff Card Grid with Conditional Rendering
 
 Turn your fetched Staff list into a polished **card grid** — extract a `StaffCard`,
 render **role badges conditionally**, and add **skeleton** loading placeholders. The
@@ -13,7 +13,7 @@ the same conditional-rendering ideas to a *card grid*. Refer back to the guide f
 1. **Card grid tray** — in `StaffList`, wrap the `.map()` in
    `<section className="list d-flex flex-row flex-wrap bg-light gap-5 p-4 rounded-4">`.
 2. **`StaffCard`** — the per-member card (props: `staff`, plus an `onRemove` callback
-   you'll use in Lesson 10; wire the prop now, a `confirm`-based delete is fine). Show
+   you'll use in Lesson 12; wire the prop now, a `confirm`-based delete is fine). Show
    name, username, phone (`formatPhoneNumber`), and email.
 3. **Conditional role badges** — render each badge only when its flag is true:
    ```tsx

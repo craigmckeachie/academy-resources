@@ -1,4 +1,4 @@
-# Lesson 10 Lab — Toasts and Error Handling for Staff CRUD
+# Lesson 12 Lab — Toasts and Error Handling for Staff CRUD
 
 Retrofit your **Staff** CRUD (list, create/edit, delete) with **success/error toasts**
 and the shared **`checkStatus`/`parseJSON`** fetch helpers — the same feedback and
