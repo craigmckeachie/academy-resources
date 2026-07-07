@@ -6,6 +6,13 @@ shell plus the heading row only — no cards, tables, or forms yet (those come i
 Lesson 4). Refer back to the guide (sections 6 and 7) for the shell and heading
 markup.
 
+> **End goal.** You're building the *empty shells* here — header, nav, and a heading
+> row, with nothing below. To see the finished pages these grow into over Lessons 4–5,
+> browse the `screenshots/tableserve/` folder — e.g. the finished
+> [Menu](screenshots/tableserve/menuitems.png) and
+> [Orders](screenshots/tableserve/orders.png) pages. Don't build those yet; just the
+> frame.
+
 ---
 
 ## Pages to skeleton
@@ -83,6 +90,11 @@ needs some research.
   read off the computed `padding`, `margin`, and `border` values the `pb-4 mb-4
   border-bottom border-2` classes produced. Match each number back to a layer of the
   box-model diagram in the guide.
+- **Read Bootstrap's source** — [Reinforce] — open the unminified
+  `node_modules/bootstrap/dist/css/bootstrap.css` and find the rules for three classes
+  you used on the Orders skeleton — `.btn-primary`, `.d-flex`, and `.border-bottom`.
+  Confirm each is ordinary CSS you could have written yourself, exactly as the guide's
+  section 5 says.
 - **A print stylesheet** — [Reach] — the box model and CSS you're learning aren't
   Bootstrap-only. Add a `@media print { ... }` block to a page that hides the nav
   when printed. Not covered in the guide — you'll need to research media queries.

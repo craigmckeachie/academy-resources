@@ -16,6 +16,16 @@ a record that belongs to a parent (an Order Item under an Order).
 
 ---
 
+**End goal — what you're building.** The headline page is **Order Detail**: a summary,
+a nested Order Items table, workflow buttons, and two modals.
+
+![Finished TableServe Order Detail page: a heading with Mark Ready and Cancel Order buttons, a three-column summary with a status badge, and an Order Items card table with a running total in the footer](screenshots/tableserve/order-detail.png)
+
+The **Cancel** and **delete** modals, the **Order Item** form, and the **Sign In** page
+follow in sections 5–7.
+
+---
+
 ## 1. The detail page anatomy
 
 `order-detail.html` shows a single order. It has three stacked pieces inside
@@ -225,6 +235,8 @@ The structure is always the same: `.modal > .modal-dialog > .modal-content`, the
 match the `data-bs-target` on whatever opened it. Every list page you've built
 references a delete modal like this — now you build the modal itself.
 
+![The delete-order-item confirmation modal open over the Order Detail page: a title, a "Are you sure?" question, and Cancel and Delete buttons](screenshots/tableserve/order-detail-deleteOrderItemModal.png)
+
 ### 5b. The reason modal (Cancel Order)
 
 Cancelling an order isn't just a yes/no — it **requires a reason**. So this modal's
@@ -270,6 +282,8 @@ body holds a **form with a required textarea**:
 This is the pattern PRS's **Reject modal** uses exactly — a required
 `rejectionReason` before a status change. Cancel-Order here *is* the rehearsal for
 Reject-Request there.
+
+![The Cancel Order modal open over the Order Detail page: a Cancellation Reason textarea and Cancel and Confirm buttons](screenshots/tableserve/order-detail-cancelModal.png)
 
 ---
 
@@ -342,6 +356,8 @@ depend on the chosen menu item and quantity.
 On PRS this is the **RequestLine** form (Product dropdown, Quantity, derived
 Amount) — minus the Notes field.
 
+![Finished TableServe Order Item form in a card titled "Item": a Menu Item dropdown, a display-only Price, a Quantity input, a Notes input, a display-only Amount, and Cancel and Save buttons](screenshots/tableserve/orderitem-create.png)
+
 ---
 
 ## 7. The Sign In page
@@ -389,6 +405,8 @@ radial gradient from `styles.css`):
 - In the static pass the Sign in button is an `<a>` straight to `/orders.html` — no
   real auth. (In React, Lesson 9, this posts to the login endpoint and stores the
   Staff object in localStorage.)
+
+![Finished TableServe Sign In page: the brand logo above a centered card titled "Sign in" with Username and Password fields, a Forgot It link, and a full-width Sign in button, on an orange gradient background](screenshots/tableserve/signin.png)
 
 ---
 

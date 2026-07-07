@@ -17,6 +17,17 @@ into the same frame.
 
 ---
 
+**End goal — where you're headed.** This is the finished **Orders** page:
+
+![Finished TableServe Orders page: a header bar, a left nav sidebar, an "Orders" heading with a Create Order button, a status filter, and a table of orders with colored status badges and per-row action menus](screenshots/tableserve/orders.png)
+
+In *this* lesson you build only its **frame** — the header, the nav, and the heading
+row — and leave the area below empty. Lesson 4 fills in the filter and table; Lesson 5
+adds the modals. Every page in the app is this same shell wrapped around different
+content.
+
+---
+
 ## 1. Where this lesson fits
 
 In **Lessons 1 and 2** you wrote HTML and CSS **by hand** in plain files — the box
@@ -256,6 +267,31 @@ each end.
 `d-flex` makes `main` a row; `flex-grow-1` on the content lets it expand to fill
 whatever the fixed-width nav doesn't use. That's the whole app frame — the one you
 built by hand in Lesson 2, now assembled from the scaffold's partials.
+
+### Proof: it's just CSS someone wrote for you
+
+The tables above *claim* `d-flex` is only `display: flex`. Don't take it on faith —
+Bootstrap ships its full, **unminified** stylesheet right next to the one you link, at
+`node_modules/bootstrap/dist/css/bootstrap.css` (the `.css`, not the `.min.css`). It's
+plain CSS you can read.
+
+Prove it two ways on your Orders skeleton:
+
+1. **Read the source.** Open `node_modules/bootstrap/dist/css/bootstrap.css` and search
+   (Ctrl-F) for `.d-flex {` — you'll find exactly `display: flex;`. Search
+   `.btn-primary {` and you'll find an ordinary rule (`color`, `background-color`,
+   `border`, `padding`) — no magic. Every class you use is in that file.
+2. **Inspect and toggle in DevTools.** Open `/orders.html`, right-click the **Create
+   Order** button → **Inspect**. The **Styles** pane shows the same `.btn` and
+   `.btn-primary` rules Bootstrap wrote. Now **uncheck** its `background-color` — the
+   button goes transparent live. Re-check it. Unchecking properties one at a time is the
+   fastest way to learn what a class actually does.
+
+This is the whole point of the pass: Bootstrap didn't invent anything you can't read. A
+**utility** is one line of CSS; a **component** class (like the `.card` and `.badge` you
+meet next lesson) is just *several* of those lines bundled under one name. Same CSS, same
+box model from Lesson 1 — you've just stopped typing it yourself. Keep the DevTools Styles
+pane open as you build; when a class's effect isn't obvious, uncheck it and watch.
 
 ---
 

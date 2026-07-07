@@ -15,6 +15,15 @@ the pre-filled values, and the button label differ.
 
 ---
 
+**End goal — what you're building.** Three finished pages come out of this lesson. The
+headline is the **Menu Items** card grid:
+
+![Finished TableServe Menu page: a wrapping grid of menu-item cards, each with a name, price, a category badge, and a three-dots action menu](screenshots/tableserve/menuitems.png)
+
+The **Orders** table and the shared **Menu Item form** follow in sections 5 and 6.
+
+---
+
 ## 1. Cards vs. tables — picking the list layout
 
 Every "list" page shows many records. You have two layouts, and the choice is about
@@ -47,7 +56,75 @@ Here's the Menu Items grid frame:
 - `gap-5` — even spacing between cards, horizontally and vertically.
 - `bg-light rounded-4 p-4` — a soft rounded tray behind the cards.
 
-### One card
+> **Try it in DevTools.** Once you have cards below, inspect this `.list` container and
+> **uncheck `flex-wrap`** in the Styles pane — the cards stop wrapping and spill off the
+> row. Uncheck `d-flex` and they stack vertically. Re-check both. That's why the grid
+> needs `d-flex flex-row flex-wrap`, not `row`/`col`.
+
+### One card — built up class by class
+
+Rather than paste the finished card and move on, build it in four passes and watch each
+layer of classes do its job. **Reload the page after each pass** — the goal is to *see*
+what every class changes, not to memorize the final block.
+
+**Pass 0 — semantic HTML, no classes.** Start with the meaning only:
+
+```html
+<div>
+  <address>
+    <div><!-- 3-dots action menu (section 4) --></div>
+    <span>Loaded Nachos</span><br />
+    <span>$9.99</span><br />
+    <div>Appetizers</div>
+  </address>
+</div>
+```
+
+In the browser this is just black text stacked on white — no border, no card. This is
+the same starting point you hand-styled the long way in Lesson 1. Everything below is CSS
+Bootstrap already wrote, added one class at a time.
+
+**Pass 1 — make it a card.** Add `.card` and pad the content:
+
+```html
+<div class="card" style="width: 23rem">
+  <address class="py-4 px-4">
+    ...
+  </address>
+</div>
+```
+
+Now it has a border, rounded corners, a white surface, and breathing room. `.card` is
+the border / border-radius / shadow you wrote by hand in Lesson 1 — bundled under one
+name (inspect it in DevTools to see those exact rules, the way you did with `.btn-primary`
+in Lesson 3). `py-4 px-4` pads the content off the edges; `width: 23rem` fixes the card's
+size so the grid stays tidy (an inline style — one of the rare cases no utility fits).
+
+**Pass 2 — position the action menu.** Push the `⋮` menu to the top-right corner:
+
+```html
+<div class="d-flex justify-content-end">
+  <!-- 3-dots action menu (section 4) -->
+</div>
+```
+
+`d-flex justify-content-end` is the same right-aligning flex row you built in Lesson 2 —
+here it pins the menu to the card's corner.
+
+**Pass 3 — set the type and the badge.** Give the name, price, and category their weight:
+
+```html
+<span class="fs-4 lh-l fw-medium">Loaded Nachos</span><br />
+<span class="fs-5 fw-light">$9.99</span><br />
+<div class="badge text-secondary bg-primary-subtle mt-5">Appetizers</div>
+```
+
+`fs-4` (font size) + `fw-medium` (weight) make the name prominent; `fs-5 fw-light` makes
+the price smaller and lighter. `.badge` turns the category into a pill;
+`bg-primary-subtle text-secondary` give it the soft look; `mt-5` drops it below the price.
+
+**The finished card** — the four passes together, plus a thin decorative accent bar across
+the top:
 
 ```html
 <div class="card" style="width: 23rem">
@@ -119,6 +196,10 @@ glance:
 | Served | `text-bg-success` | green | done, happy path |
 | Cancelled | `text-bg-danger` | red | stopped / exception |
 
+> **Try it in DevTools.** Inspect a badge, double-click its `class` attribute, and change
+> `text-bg-warning` to `text-bg-danger` — it turns red instantly. Delete the `text-bg-*`
+> class entirely and it falls back to a plain grey pill. The class *is* the color.
+
 ---
 
 ## 4. The 3-dots action menu (dropdown)
@@ -157,6 +238,10 @@ On a card, wrap the dropdown in a right-aligned flex row so it sits in the corne
   <div class="dropdown d-inline"> ... </div>
 </div>
 ```
+
+Opened, the menu looks like this — the same 3-dots menu appears on every card and row:
+
+![A menu-item card with its three-dots action menu open, showing Edit and Delete options](screenshots/tableserve/menuitems-dropdown.png)
 
 ---
 
@@ -243,8 +328,14 @@ input; `flex-column` stacks the label above it.
 - The **last cell** is the 3-dots menu. Orders have three actions — **View**, Edit,
   Delete — because an order has a detail page; menu cards only had Edit/Delete.
 
+> **Try it in DevTools.** Inspect the `<table>` and toggle `table-hover` off — the
+> row-highlight-on-hover disappears. These `table*` classes are the same borders and
+> spacing you'd write by hand for a table, bundled under one name.
+
 Hardcode a handful of orders across the full status range (a Placed, a Preparing, a
 Ready, a Served, a Cancelled) so every badge color appears.
+
+![Finished TableServe Orders table: rows of orders with colored status badges (grey/yellow/blue/green/red), muted wrapping notes, a status filter above, and a three-dots menu per row](screenshots/tableserve/orders.png)
 
 ---
 
@@ -329,6 +420,8 @@ what PRS's Product form needs for its Vendor dropdown.
 The **Cancel** button is an `<a>` back to the list; **Save** is the `type="submit"`
 button (it won't actually submit in the static pass — no backend wired — but the
 markup is correct for React to take over).
+
+![Finished TableServe Menu Item form: Name and Price fields sharing a row, a Category dropdown below, and right-aligned Cancel and Save buttons](screenshots/tableserve/menuitem-create.png)
 
 ---
 

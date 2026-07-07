@@ -5,9 +5,14 @@ Reinforce the form, nested-form, and modal patterns from the guide by building t
 confirmation modals** that your list pages have been pointing at since Lesson 4.
 Refer back to the guide for the form and modal markup.
 
+**End goal.** Build toward the finished pages shown under each part below — work out the
+classes from the guide's patterns; they're not restated here.
+
 ---
 
 ## Part A — `order-create.html` and `order-edit.html`
+
+![Finished TableServe Order form: a Table Number field and a Notes textarea, with right-aligned Cancel and Save buttons](screenshots/tableserve/order-create.png)
 
 The Order form is a simple **shared form** — no FK dropdown, no derived fields. An
 order has just a **Table Number** (required, numeric) and **Notes** (optional).
@@ -25,6 +30,8 @@ order has just a **Table Number** (required, numeric) and **Notes** (optional).
 
 ## Part B — `orderitem-edit.html`
 
+![Finished TableServe Order Item edit form: a Menu Item dropdown, a display-only Price, a Quantity input, a Notes field, and a display-only Amount, with Cancel and Save buttons](screenshots/tableserve/orderitem-edit.png)
+
 The guide built `orderitem-create.html`. Build its **edit** twin — same nested child
 form, pre-filled.
 
@@ -37,6 +44,8 @@ form, pre-filled.
 ---
 
 ## Part C — wire up the delete modals
+
+![A delete-order confirmation modal open over the Orders list: a title, a "Are you sure?" question, and Cancel and Delete buttons](screenshots/tableserve/orders-deleteOrderModal.png)
 
 Your `menuitems.html`, `orders.html`, and `staff.html` pages have Delete links that
 `data-bs-target` a modal — but you never built the modals. Add them now.

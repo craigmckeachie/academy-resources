@@ -5,6 +5,15 @@ the Menu Items patterns from the guide. Staff is a card grid (like Menu Items) b
 its form has **no FK dropdown** — instead it has role **checkboxes**. Refer back to
 the guide for the card, dropdown, and shared-form markup.
 
+**End goal.** Build toward the finished **Staff** page below. Match the layout by hand
+from the guide's card and form patterns — the classes aren't listed here on purpose.
+
+![Finished TableServe Staff page: a wrapping grid of staff cards, each showing a name, username, phone, email, and role badges, with a three-dots action menu](screenshots/tableserve/staff.png)
+
+> The **avatar circle with initials** on each card (e.g. "JR") is the optional
+> [stretch challenge](#stretch-challenges) below — the base lab's cards don't need it.
+> Everything else in the shot is in scope.
+
 ---
 
 ## The Staff record
@@ -33,6 +42,8 @@ both, some neither.
 ---
 
 ## Part B — `staff-create.html` and `staff-edit.html` (shared form)
+
+![Finished TableServe Staff form: First/Last name, Email/Phone, and Username/Password fields paired two per row, inline Manager and Admin role checkboxes, and right-aligned Cancel and Save buttons](screenshots/tableserve/staff-create.png)
 
 4. Create `staff-create.html` with a form (`d-flex flex-wrap w-75 gap-2`) laid out in
    flex rows:
