@@ -91,8 +91,10 @@ useEffect(() => {
 
 ## 4. Fetching with `async/await`
 
-The browser's built-in **`fetch`** makes an HTTP request and returns a Promise. Wrap it
-in an `async` function so you can `await` the response and the JSON:
+You met `async`/`await` in Lesson 2 — **the same keywords as C#**, where a JS async
+function returns a `Promise<T>` (C#'s `Task<T>`). Here they do real work. The browser's
+built-in **`fetch`** makes an HTTP request and returns a Promise. Wrap it in an `async`
+function so you can `await` the response and the JSON:
 
 ```tsx
 async function loadMenuItems() {

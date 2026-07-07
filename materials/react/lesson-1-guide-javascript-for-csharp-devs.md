@@ -65,6 +65,20 @@ npm run dev
 Throughout this lesson, "run it" means: paste into `src/main.ts`, save, read the
 Console. This is the equivalent of the C# console app you used to try language features.
 
+We'll use one small menu throughout this lesson. Put it at the top of `src/main.ts`:
+
+```ts
+const menu = [
+  { id: 1, name: "Nachos", price: 9.99 },
+  { id: 2, name: "Ribeye", price: 24.99 },
+  { id: 3, name: "Mozzarella Sticks", price: 7.5 },
+];
+```
+
+Keep `menu` at the top of the file; for each **▶ Try it** below, replace the code
+*beneath* it and save. That way `menu` stays put and you never declare the same `const`
+twice.
+
 ---
 
 ## 3. Variables — `let`, `const`, and no more `var`
@@ -81,6 +95,10 @@ quantity = 2;           // fine
 
 console.log(price, quantity);
 ```
+
+> **▶ Try it** — paste below `menu` and save, then uncomment `// price = 10;`.
+> **Console:** `9.99 2`. Uncommenting the reassignment turns that line red in the editor:
+> *Cannot assign to 'price' because it is a constant.*
 
 - There's an older keyword, **`var`** — you'll see it in old code. **Don't use it**; its
   scoping rules are surprising. `let`/`const` are block-scoped like C# locals.
@@ -111,6 +129,14 @@ const price = 9.99;               // number
 const onMenu = true;              // boolean
 const tags = ["spicy", "shared"]; // string[]
 ```
+
+> **▶ Try it** — log the values and a couple of their types:
+> ```ts
+> console.log(name, price, onMenu, tags);
+> console.log(typeof price, typeof onMenu);
+> ```
+> **Console:** `Loaded Nachos 9.99 true ['spicy', 'shared']`, then `number boolean` — note
+> `9.99` reports as `number`, not a separate decimal type.
 
 The two-nothings distinction (`null` vs `undefined`) is the one surprise here — a value
 that was never assigned is `undefined`; you use `null` when you deliberately mean "empty."
@@ -143,6 +169,9 @@ const label = `${item} — $${price}`;   // C#: $"{item} — ${price}"
 console.log(label);                    // Nachos — $9.99
 ```
 
+> **▶ Try it** — paste both snippets beneath `menu`. **Console:** `10`, then
+> `Nachos — $9.99`.
+
 ---
 
 ## 6. Objects and destructuring
@@ -169,6 +198,13 @@ Arrays destructure by position:
 const [first, second] = ["a", "b"];  // first = "a", second = "b"
 ```
 
+> **▶ Try it** — destructure the first item from the `menu` in section 2:
+> ```ts
+> const { name, price } = menu[0];
+> console.log(name, price);
+> ```
+> **Console:** `Nachos 9.99`
+
 You'll see destructuring constantly in React — `const [value, setValue] = useState()`,
 and pulling props out of a component's argument. **The payoff lands in Lesson 5**, where
 you'll receive your first component prop and destructure it across three steps until it
@@ -188,6 +224,15 @@ const more = [...base, "popular"];        // ["spicy", "shared", "popular"] — 
 const item = { id: 1, name: "Nachos" };
 const priced = { ...item, price: 9.99 };  // { id, name, price } — a NEW object
 ```
+
+> **▶ Try it** — spread a menu item into a new object, then check the original is untouched:
+> ```ts
+> const special = { ...menu[0], onSpecial: true };
+> console.log(special);
+> console.log(menu[0]);
+> ```
+> **Console:** `{ id: 1, name: 'Nachos', price: 9.99, onSpecial: true }`, then the original
+> `{ id: 1, name: 'Nachos', price: 9.99 }` — spread copied, it didn't mutate.
 
 The key idea: spread makes a **new** value rather than mutating the original — the
 functional style React relies on for state updates. You'll also meet spread in
@@ -210,7 +255,6 @@ const tens = [];
 for (let i = 0; i < numbers.length; i++) {
   tens.push(numbers[i] * 10);
 }
-console.log(tens);                   // [10, 20, 30]
 ```
 
 **Stage 2 — `forEach`.** A method that calls a function once per element — no index to
@@ -225,18 +269,29 @@ numbers.forEach((number) => tens.push(number * 10));
 get back a new array of the results. No temp array, no `push`.
 
 ```ts
-const tens = numbers.map((number) => number * 10);   // [10, 20, 30]
+const tens = numbers.map((number) => number * 10);
 ```
 
-This is exactly **LINQ's `.Select()`** — `numbers.Select(n => n * 10)` in C#. And
-**`.filter()`** is **LINQ's `.Where()`**:
+> **▶ Try it** — run the three stages one at a time (each one replaces the last beneath
+> `menu`). Each logs the same thing:
+> ```ts
+> console.log(tens);
+> ```
+> **Console:** `[10, 20, 30]`
 
-```ts
-const cheap = menuItems.filter((item) => item.price < 10);   // Where(i => i.Price < 10)
-```
+`.map()` is exactly **LINQ's `.Select()`** (`numbers.Select(n => n * 10)` in C#), and
+**`.filter()`** is **LINQ's `.Where()`** — run it on the `menu` from section 2:
 
-Both `.map()` and `.filter()` return a **new** array and don't touch the original —
-same functional spirit as LINQ.
+> **▶ Try it** — paste and save.
+> ```ts
+> const cheap = menu.filter((item) => item.price < 10);
+> console.log(cheap);
+> ```
+> **Console:** two items — `Nachos` ($9.99) and `Mozzarella Sticks` ($7.5); `Ribeye` is
+> filtered out.
+
+Both `.map()` and `.filter()` return a **new** array and don't touch the original — same
+functional spirit as LINQ.
 
 Why does this matter for React? Because rendering a list *is* a transform: an array of
 data mapped into an array of UI. In Lesson 3 you'll write exactly this — and you'll walk
@@ -283,6 +338,15 @@ Rule of thumb we follow: **components are default exports** (one per file), whil
 **helpers, interfaces, and hooks are named exports**. When you see `{ }` in an import,
 it's a named export; no braces means default. This is how every file in the Lesson 3
 project will connect to the others.
+
+> **▶ Try it** — make `src/money.ts` with the named `format` export shown above. Add the
+> import at the **top** of `main.ts`, then log below `menu`:
+> ```ts
+> import { format } from "./money";
+> // ...menu and the rest below...
+> console.log(format(menu[0].price));
+> ```
+> **Console:** `$9.99` — pulled from another file and wired by a named export.
 
 ---
 

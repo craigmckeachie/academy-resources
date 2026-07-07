@@ -153,6 +153,14 @@ export default App;
   are named exports.
 - You **use** a component by writing it as a tag: `<App />`.
 
+> **Default vs named exports (Lesson 1), made concrete.** `App` is a **default** export —
+> imported with no braces, and the importer can name it anything: `import App from "./App"`.
+> The `IMenuItem` interface you write in section 6 is a **named** export — imported in braces
+> that must match its exact name: `import { IMenuItem } from "./IMenuItem"`. That pairing
+> *is* the whole convention: **default exports for components** (one per file), **named
+> exports for helpers, interfaces, and hooks** (`import { useForm } from "react-hook-form"`).
+> The quick tell from Lesson 1 holds: **braces in an import mean a named export.**
+
 Components nest. A page component renders smaller components, which render smaller ones
 still — a tree, rooted at `<App />`.
 

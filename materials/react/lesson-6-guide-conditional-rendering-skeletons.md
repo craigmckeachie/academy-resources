@@ -33,8 +33,10 @@ React has no template `if` — you use JavaScript expressions inside `{ }`:
 {loading && <p>Loading…</p>}
 ```
 
-If `loading` is true, the right side renders; if false, nothing does. Use it for
-"show this only when X."
+If `loading` is true, the right side renders; if false, nothing does. This is
+**truthy/falsy from Lesson 1** doing real work — `&&` yields its right side only when the
+left is truthy, so a `false` flag (or an empty list, since `items.length` is `0` and
+falsy) renders nothing. Use it for "show this only when X."
 
 ### Ternary — choose between two
 
@@ -70,9 +72,11 @@ Then in JSX:
 </span>
 ```
 
-The **status → color** mapping is the same convention from the static pass (grey /
-yellow / blue / green / red). Keeping it in one function means every place that shows a
-status badge stays consistent.
+Those five status values are a **closed set** — exactly the kind of value Lesson 2's
+**literal-string union** describes (`"PLACED" | "PREPARING" | "READY" | "SERVED" |
+"CANCELLED"`). The **status → color** mapping is the same convention from the static pass
+(grey / yellow / blue / green / red). Keeping it in one function means every place that
+shows a status badge stays consistent.
 
 ---
 

@@ -22,7 +22,8 @@ read any typed React file.
 > **Same scratch project.** The `js-ts-playground` from Lesson 1 is already TypeScript
 > (`.ts` files), so keep using it. There's no React or reference app here yet — that
 > starts in Lesson 3. Verify by observation: the editor underlines type errors, and the
-> Vite dev server reports them in the terminal/Console.
+> Vite dev server reports them in the terminal/Console. For each **▶ Try it**, replace the
+> code in `src/main.ts` and save.
 
 ---
 
@@ -45,6 +46,14 @@ interface IStaff { firstName: string; lastName: string; }
 const p = { firstName: "Sam", lastName: "Diaz", extra: 1 };
 const s: IStaff = p;   // ✅ allowed — p has the required shape, name doesn't matter
 ```
+
+> **▶ Try it** — paste it: no error, because `p` has the required shape. Now add an object
+> that's missing a field:
+> ```ts
+> const bad: IStaff = { firstName: "Sam" };
+> ```
+> **You'll see:** *Property 'lastName' is missing in type '{ firstName: string; }' but
+> required in type 'IStaff'.*
 
 If it has the properties the type requires, it fits. That's the mental adjustment; the
 rest is familiar.
@@ -89,6 +98,14 @@ function total(price: number, qty: number): number {
 const format = (n: number): string => `$${n.toFixed(2)}`;   // arrow with types
 ```
 
+> **▶ Try it** — call `total` right, then wrong:
+> ```ts
+> console.log(total(9.99, 2));   // 19.98
+> total("9.99", 2);              // ← the string argument is flagged
+> ```
+> **Console:** `19.98`. **You'll see** on the second line: *Argument of type 'string' is not
+> assignable to parameter of type 'number'.*
+
 Annotate **parameters and return types**; let inference handle obvious locals. If you
 call `total("9.99", 2)`, the compiler stops you — the C# safety you're used to.
 
@@ -113,6 +130,15 @@ const s: IStaff = {
   id: 1, firstName: "Sam", lastName: "Diaz", isManager: true, isAdmin: false,
 };
 ```
+
+> **▶ Try it** — with the interface and `s` above in the file, log a field, then declare one
+> that omits a required property:
+> ```ts
+> console.log(s.firstName);   // Sam
+> const partial: IStaff = { id: 2, firstName: "Ana", lastName: "Cruz", isManager: false };
+> ```
+> **Console:** `Sam`. **You'll see** on the second line: *Property 'isAdmin' is missing in
+> type … but required in type 'IStaff'.*
 
 Compare the C# `Staff` model from the API pass — same properties, same intent. The
 interface is how the front end knows what the API returns and what a form must collect.
@@ -144,6 +170,13 @@ id: number | undefined;         // a number, or not set yet
 status: "Placed" | "Preparing" | "Ready";   // one of these exact strings (like an enum)
 ```
 
+> **▶ Try it** — declare a status with the literal-union type and give it a bad value:
+> ```ts
+> let status: "Placed" | "Preparing" | "Ready" = "Done";
+> ```
+> **You'll see:** *Type '"Done"' is not assignable to type '"Placed" | "Preparing" |
+> "Ready"'.* Change `"Done"` to `"Placed"` and it clears.
+
 That last form — a union of literal strings — is how the course types status values
 without a C# enum. Optional `?` and `| undefined` overlap; you'll see both in the
 reference code.
@@ -165,6 +198,14 @@ const staff: IStaff[] = [];                 // List<Staff>
 const byId: Record<number, IStaff> = {};    // Dictionary<int, Staff>
 ```
 
+> **▶ Try it** — with `IStaff` in the file, build a typed array and push an incomplete item:
+> ```ts
+> const roster: IStaff[] = [];
+> roster.push({ id: 1, firstName: "Sam" });   // ← flagged
+> ```
+> **You'll see:** *Argument … is missing the following properties from type 'IStaff':
+> lastName, isManager, isAdmin.*
+
 ---
 
 ## 7. `any` and `unknown` — the escape hatches
@@ -174,6 +215,14 @@ It's the "trust me" hatch; avoid it, because it discards the safety you came her
 `unknown` is the safe sibling: it holds anything but forces you to narrow the type before
 use. Prefer `unknown` (or a real type) over `any`. You'll rarely need either once your
 interfaces describe the data.
+
+> **▶ Try it** — watch `any` switch type-checking off:
+> ```ts
+> const raw: any = "not a number";
+> console.log(raw * 2);
+> ```
+> **Console:** `NaN` — the compiler let it through with no complaint; that's exactly what
+> `any` costs you.
 
 ---
 
