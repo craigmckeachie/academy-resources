@@ -21,15 +21,15 @@ guide and what you built alongside it as your model.
 
 | Lesson | Guide | Lab |
 |--------|-------|-----|
-| 1 | [JavaScript for C# developers (intro)](lesson-1-guide-javascript-for-csharp-devs.md) | [Translating C# to JavaScript](lesson-1-lab-javascript-for-csharp-devs.md) |
-| 2 | [TypeScript for C# developers (intro)](lesson-2-guide-typescript-for-csharp-devs.md) | [Typing a Menu Item](lesson-2-lab-typescript-for-csharp-devs.md) |
-| 3 | [Components, JSX, and TypeScript (orientation)](lesson-3-guide-components-jsx-typescript.md) | [A hardcoded Staff list](lesson-3-lab-staff-list-hardcoded.md) |
-| 4 | [State, effects, and fetching real data](lesson-4-guide-hooks-data-fetching.md) | [Fetch the Staff list](lesson-4-lab-staff-list-fetch.md) |
-| 5 | [Routing, the app shell, and props](lesson-5-guide-routing-layout-props.md) | [Route and navigate to the Staff page](lesson-5-lab-staff-routing.md) |
-| 6 | [Conditional rendering, tables, badges, skeletons](lesson-6-guide-conditional-rendering-skeletons.md) | [Staff card grid with conditional rendering](lesson-6-lab-staff-card-grid.md) |
-| 7 | [Forms with react-hook-form, shared create/edit](lesson-7-guide-forms-react-hook-form.md) | [The Staff create/edit form](lesson-7-lab-staff-form.md) |
-| 8 | [Route params and the detail page](lesson-8-guide-routing-params-detail.md) | [A Category detail view](lesson-8-lab-category-detail.md) |
-| 9 | [Status-driven workflow buttons and modals](lesson-9-guide-conditional-buttons-modals.md) | *Worked example — no lab* |
+| 1 | [JavaScript for C# developers (intro)](lesson-01-guide-javascript-for-csharp-devs.md) | [Translating C# to JavaScript](lesson-01-lab-javascript-for-csharp-devs.md) |
+| 2 | [TypeScript for C# developers (intro)](lesson-02-guide-typescript-for-csharp-devs.md) | [Typing a Menu Item](lesson-02-lab-typescript-for-csharp-devs.md) |
+| 3 | [Components, JSX, and TypeScript (orientation)](lesson-03-guide-components-jsx-typescript.md) | [A hardcoded Staff list](lesson-03-lab-staff-list-hardcoded.md) |
+| 4 | [State, effects, and fetching real data](lesson-04-guide-hooks-data-fetching.md) | [Fetch the Staff list](lesson-04-lab-staff-list-fetch.md) |
+| 5 | [Routing, the app shell, and props](lesson-05-guide-routing-layout-props.md) | [Route and navigate to the Staff page](lesson-05-lab-staff-routing.md) |
+| 6 | [Conditional rendering, tables, badges, skeletons](lesson-06-guide-conditional-rendering-skeletons.md) | [Staff card grid with conditional rendering](lesson-06-lab-staff-card-grid.md) |
+| 7 | [Forms with react-hook-form, shared create/edit](lesson-07-guide-forms-react-hook-form.md) | [The Staff create/edit form](lesson-07-lab-staff-form.md) |
+| 8 | [Route params and the detail page](lesson-08-guide-routing-params-detail.md) | [A Category detail view](lesson-08-lab-category-detail.md) |
+| 9 | [Status-driven workflow buttons and modals](lesson-09-guide-conditional-buttons-modals.md) | *Worked example — no lab* |
 | 10 | [The nested child form with derived fields](lesson-10-guide-nested-child-form.md) | *Worked example — no lab* |
 | 11 | [Sign In, localStorage, and Context](lesson-11-guide-auth-context.md) | *Worked example — no lab* |
 | 12 | [Toasts and centralized error handling](lesson-12-guide-toasts-error-handling.md) | [Toasts and error handling for Staff CRUD](lesson-12-lab-staff-crud-toasts.md) |

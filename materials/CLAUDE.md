@@ -40,7 +40,7 @@ This folder contains the lesson materials for the {pass description}.
 
 | Lesson | Guide | Lab |
 |--------|-------|-----|
-| 1 | [Topic description](lesson-1-guide-*.md) | [Lab description](lesson-1-lab-*.md) |
+| 1 | [Topic description](lesson-01-guide-*.md) | [Lab description](lesson-01-lab-*.md) |
 | 2 | ... | ... |
 
 ## Stretch challenges
@@ -56,8 +56,8 @@ Short blurb: each lab ends with a stretch section; link the standalone
 
 ### Rules for README maintenance
 - Link text in the schedule table should be the topic description, not the
-  filename — e.g. `[Project setup, controllers, EF DbContext](lesson-1-guide-...)`,
-  not `[lesson-1-guide-project-setup-crud.md](lesson-1-guide-...)`
+  filename — e.g. `[Project setup, controllers, EF DbContext](lesson-01-guide-...)`,
+  not `[lesson-01-guide-project-setup-crud.md](lesson-01-guide-...)`
 - If a lab slot has no file yet (e.g. Lesson 6 API where capstone begins),
   use plain text in the Lab column, not a broken link
 - Future guide/lab files that don't exist yet should appear as plain text
@@ -78,9 +78,10 @@ the curriculum plan should assume a specific day, a calendar date, or a part of
 the day.
 
 - **The unit of instruction is a "lesson."** Files are named
-  `lesson-{N}-guide-*.md` and `lesson-{N}-lab-*.md`; the schedule column in both
-  the README and the curriculum plan is **Lesson**; cross-references read
-  "Lesson N," never "Day N."
+  `lesson-{NN}-guide-*.md` and `lesson-{NN}-lab-*.md`, where `{NN}` is the lesson
+  number **zero-padded to two digits** (`lesson-01` … `lesson-15`) so files sort
+  numerically; the schedule column in both the README and the curriculum plan is
+  **Lesson**; cross-references read "Lesson N," never "Day N."
 - **Guide ↔ lab is I do / You do**, never morning/afternoon. The guide is the
   I-do concept reference; the lab is the You-do independent exercise.
 - **Banned words** (and their replacements):
@@ -113,24 +114,24 @@ the day.
 materials/
   api/
     README.md
-    lesson-1-guide-web-architecture-http-insomnia.md   # intro/overview — no reference-app build
-    lesson-1-lab-devtools-insomnia-exploration.md
-    lesson-2-guide-project-setup-crud.md
-    lesson-2-lab-categories-controller.md
+    lesson-01-guide-web-architecture-http-insomnia.md   # intro/overview — no reference-app build
+    lesson-01-lab-devtools-insomnia-exploration.md
+    lesson-02-guide-project-setup-crud.md
+    lesson-02-lab-categories-controller.md
     ...
     stretch-api-challenges.md          # cross-cutting stretch challenges (sorts last)
   html-css/
     README.md
-    lesson-1-guide-semantic-html-box-model.md          # intro/overview — raw HTML/CSS, plain files
-    lesson-1-lab-staff-card.md
-    lesson-2-guide-flexbox.md
-    lesson-2-lab-card-grid-flexbox-froggy.md
+    lesson-01-guide-semantic-html-box-model.md          # intro/overview — raw HTML/CSS, plain files
+    lesson-01-lab-staff-card.md
+    lesson-02-guide-flexbox.md
+    lesson-02-lab-card-grid-flexbox-froggy.md
     ...
     stretch-html-css-challenges.md
   react/
     README.md
-    lesson-1-guide-components-jsx-typescript.md
-    lesson-1-lab-...
+    lesson-01-guide-components-jsx-typescript.md
+    lesson-01-lab-...
     ...
     stretch-react-challenges.md
   reference/                           # evergreen cheat sheets + shared images (cross-pass)

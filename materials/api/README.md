@@ -18,12 +18,12 @@ to the guide and what you built alongside it as your model.
 
 | Lesson | Guide | Lab |
 |--------|-------|-----|
-| 1 | [How web apps talk: architecture, HTTP/REST/JSON, Insomnia](lesson-1-guide-web-architecture-http-insomnia.md) | [DevTools & Insomnia exploration](lesson-1-lab-devtools-insomnia-exploration.md) |
-| 2 | [Project setup, controllers, EF DbContext](lesson-2-guide-project-setup-crud.md) | [CategoriesController](lesson-2-lab-categories-controller.md) |
-| 3 | [Full CRUD: POST/PUT/DELETE](lesson-3-guide-full-crud.md) | [MenuItemsController CRUD](lesson-3-lab-menuitems-controller.md) |
-| 4 | [Nested data, Include(), FK lookups](lesson-4-guide-nested-data-fk-lookups.md) | [OrdersController with OrderItems](lesson-4-lab-orders-controller.md) |
-| 5 | [Side-effect recalculation, workflow endpoints](lesson-5-guide-side-effects-workflow-endpoints.md) | [Order status workflow endpoints](lesson-5-lab-orderitems-workflow.md) |
-| 6 | [Error handling, Insomnia, Login](lesson-6-guide-error-handling-login.md) | PRS backend capstone begins |
+| 1 | [How web apps talk: architecture, HTTP/REST/JSON, Insomnia](lesson-01-guide-web-architecture-http-insomnia.md) | [DevTools & Insomnia exploration](lesson-01-lab-devtools-insomnia-exploration.md) |
+| 2 | [Project setup, controllers, EF DbContext](lesson-02-guide-project-setup-crud.md) | [CategoriesController](lesson-02-lab-categories-controller.md) |
+| 3 | [Full CRUD: POST/PUT/DELETE](lesson-03-guide-full-crud.md) | [MenuItemsController CRUD](lesson-03-lab-menuitems-controller.md) |
+| 4 | [Nested data, Include(), FK lookups](lesson-04-guide-nested-data-fk-lookups.md) | [OrdersController with OrderItems](lesson-04-lab-orders-controller.md) |
+| 5 | [Side-effect recalculation, workflow endpoints](lesson-05-guide-side-effects-workflow-endpoints.md) | [Order status workflow endpoints](lesson-05-lab-orderitems-workflow.md) |
+| 6 | [Error handling, Insomnia, Login](lesson-06-guide-error-handling-login.md) | PRS backend capstone begins |
 
 **Lesson 1 is a no-code foundations lesson** — you explore real HTTP traffic in the
 browser and drive a public API in Insomnia, with no Visual Studio project. The
@@ -31,7 +31,7 @@ TableServe build starts in Lesson 2.
 
 ## Reference cheat sheets
 
-Two evergreen cheat sheets in [`../reference/`](../reference/) back this pass — skim
+Two evergreen cheat sheets in [`../reference/`](../reference/README.md) back this pass — skim
 them in Lesson 1 and keep them open throughout:
 
 - [HTTP, REST, JSON & Status Codes](../reference/http-rest-status-codes.md)
