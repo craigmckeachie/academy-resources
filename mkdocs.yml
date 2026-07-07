@@ -7,6 +7,9 @@ edit_uri: ""            # source is authored in a private repo — hide the edit
 
 docs_dir: materials
 
+extra_css:
+  - stylesheets/extra.css
+
 # Instructor-only authoring conventions — build them into the site? No.
 exclude_docs: |
   CLAUDE.md
