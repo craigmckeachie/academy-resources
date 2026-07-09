@@ -124,15 +124,9 @@ public class TableServeDbContext : DbContext
     public TableServeDbContext(DbContextOptions<TableServeDbContext> options)
         : base(options) { }
 
-    public DbSet<Staff> Staffs { get; set; }
+    public DbSet<Staff> Staff { get; set; }
 }
 ```
-
-Notice the `DbSet` is named **`Staffs`** (plural), like the `Categories`, `MenuItems`,
-`Orders`, and `OrderItems` collections you'll add later. EF Core names each database
-table after its `DbSet` property, so this creates a table called `Staffs`. That reads
-fine for most entities; for Staff it's a little awkward, and you'll fix it in section 10
-once you've seen it happen.
 
 `DbContextOptions` is passed in from `Program.cs` via dependency injection — the
 DbContext doesn't configure its own connection, it receives the configuration from
@@ -208,75 +202,15 @@ Update-Database
 
 `Add-Migration` generates a C# file describing the schema (creates a `Migrations/`
 folder in your project). `Update-Database` applies those changes to SQL Server,
-creating the `TableServeDb` database and the table for your Staff entity.
+creating the `TableServeDb` database and `Staff` table if they don't exist.
 
 After running `Update-Database`, open **SQL Server Object Explorer** in Visual Studio
-(View → SQL Server Object Explorer) and expand **TableServeDb → Tables**. Notice the
-table is named **`Staffs`**, not `Staff` — EF Core named it after your `Staffs` DbSet
-property. The next section fixes that.
+(View → SQL Server Object Explorer) to verify your `TableServeDb` database and
+`Staff` table exist.
 
 ---
 
-## 10. Naming the Table: `Staffs` → `Staff`
-
-EF Core names each table after the `DbSet<T>` **property** on your context — it does
-**not** pluralize class names for you. Your property is `Staffs`, so the table came out
-`Staffs`. For the other entities that plural is exactly what you want (`Categories`,
-`MenuItems`, `Orders`, `OrderItems`). But "staff" is already both singular and plural, so
-`Staffs` reads awkwardly — you want the table called `Staff`.
-
-Override the table name by adding an `OnModelCreating` method to the DbContext:
-
-```csharp
-using Microsoft.EntityFrameworkCore;
-using TableServe.Api.Models;
-
-namespace TableServe.Api.Data;
-
-public class TableServeDbContext : DbContext
-{
-    public TableServeDbContext(DbContextOptions<TableServeDbContext> options)
-        : base(options) { }
-
-    public DbSet<Staff> Staffs { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Map the Staff entity to a table named "Staff" instead of the default
-        // "Staffs" — staff is the same word singular and plural
-        modelBuilder.Entity<Staff>().ToTable("Staff");
-    }
-}
-```
-
-The C# `DbSet` stays `Staffs`, so your controller code still reads `_db.Staffs` — only the
-**database table** is renamed to `Staff`.
-
-Now make the change take effect. Because there's **no data yet**, the simplest reset is to
-drop the database and migrations and recreate them from a clean slate:
-
-1. **Drop the database.** In **SQL Server Object Explorer**, right-click **TableServeDb → Delete**
-   and check **"Close existing connections"**. (Or run `DROP DATABASE TableServeDb;` in a new
-   SQL query window.)
-2. **Delete the `Migrations/` folder** from the project in Solution Explorer.
-3. **Recreate the schema.** In the Package Manager Console, run `Add-Migration InitialCreate`,
-   then `Update-Database`.
-4. **Verify.** Refresh **SQL Server Object Explorer → TableServeDb → Tables** — the table is
-   now named **`Staff`**.
-
-> **Why drop instead of adding another migration?** `ToTable` can also be applied as a normal
-> rename migration (`Add-Migration` + `Update-Database`). But with no data to preserve,
-> dropping the database and deleting `Migrations/` gives you one clean `InitialCreate` with no
-> rename left in your history. If you ever need to keep data, roll back instead with
-> `Update-Database 0`, then `Remove-Migration`.
-
-> **Gotcha:** if the drop fails with "database is in use," something is holding a connection —
-> usually the running app or SQL Server Object Explorer. Stop the app (Shift+F5) and use the
-> **"Close existing connections"** checkbox.
-
----
-
-## 11. Seed Some Data
+## 10. Seed Some Data
 
 Run this in SSMS to add a few Staff records so your GET endpoints return real data:
 
@@ -302,7 +236,7 @@ VALUES
 
 ---
 
-## 12. Your First Controller
+## 11. Your First Controller
 
 A controller is a class that handles incoming HTTP requests and returns responses.
 Create `Controllers/StaffController.cs`:
@@ -330,14 +264,14 @@ public class StaffController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Staff>>> GetAll()
     {
-        return await _db.Staffs.ToListAsync();
+        return await _db.Staff.ToListAsync();
     }
 
     // GET: api/staff/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Staff>> GetById(int id)
     {
-        var staff = await _db.Staffs.FindAsync(id);
+        var staff = await _db.Staff.FindAsync(id);
         if (staff == null) return NotFound();
         return staff;
     }
@@ -362,7 +296,7 @@ A few things to notice:
 
 ---
 
-## 13. Verifying with Insomnia
+## 12. Verifying with Insomnia
 
 Insomnia is an API testing tool — it lets you send HTTP requests to your API
 and inspect the responses without needing a front end. You've been given a
@@ -458,16 +392,13 @@ controller name.
 3. Install NuGet packages: `Microsoft.EntityFrameworkCore.SqlServer` and
    `Microsoft.EntityFrameworkCore.Tools`
 4. Create `Models/Staff.cs` with the properties listed in section 5
-5. Create `Data/TableServeDbContext.cs` with a `DbSet<Staff> Staffs`
+5. Create `Data/TableServeDbContext.cs` with a `DbSet<Staff>`
 6. Add the SQL Express connection string to `appsettings.json`
 7. Register the DbContext in `Program.cs`
 8. Add CORS to `Program.cs` with `app.UseCors()` commented out
 9. Run `Add-Migration InitialCreate` then `Update-Database` in Package Manager Console
-10. Open SQL Server Object Explorer and note the table is named `Staffs` (pluralized)
-11. Add the `OnModelCreating` override with `modelBuilder.Entity<Staff>().ToTable("Staff")`,
-    then reset: drop `TableServeDb`, delete the `Migrations/` folder, and re-run
-    `Add-Migration InitialCreate` + `Update-Database` — the table is now `Staff` (section 10)
-12. Run the seed INSERT statements in SSMS
-13. Create `Controllers/StaffController.cs` with `GetAll` and `GetById` (querying `_db.Staffs`)
-14. Run the project, import the Insomnia collection, set `baseUrl`, and verify
-    the Staff endpoints (optionally try Login too) — see section 13 for full details
+10. Verify the `Staff` table exists in SQL Server Object Explorer
+11. Run the seed INSERT statements in SSMS
+12. Create `Controllers/StaffController.cs` with `GetAll` and `GetById`
+13. Run the project, import the Insomnia collection, set `baseUrl`, and verify
+    the Staff endpoints (optionally try Login too) — see section 12 for full details
