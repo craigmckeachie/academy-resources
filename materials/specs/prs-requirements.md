@@ -74,11 +74,11 @@ for you by EF Core, not by running SQL scripts.
 3. **Seed the data.** Run `populate-prs.sql` (in the academy-resources `files/`
    folder) in SQL Server Management Studio. This script only **inserts rows** (it contains no `CREATE TABLE`) — so
    run it *after* `Update-Database` has created the tables. It seeds **50 vendors,
-   50 products, and 11 users**. **Requests and RequestLines are intentionally left
-   empty** — an empty Requests list on first run is expected, not a bug; you
-   create requests through the app's workflow. **Every seed account's password is
-   the plaintext `test1234`** (stored as a bcrypt hash), so you can sign in while
-   testing.
+   50 products, 50 users, and 8 sample requests with line items** so the Requests
+   screens and endpoints have data to show on first run. You'll still create your
+   own requests through the app's workflow during the capstone. **Every seed
+   account's password is the plaintext `test1234`** (stored as a bcrypt hash), so
+   you can sign in while testing.
 
 4. **Run the API.** Start `Prs.Api` (F5 in Visual Studio, or `dotnet run`) and
    note the port it listens on.

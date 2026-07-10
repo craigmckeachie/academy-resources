@@ -1225,15 +1225,20 @@ GO
 SET IDENTITY_INSERT [dbo].[Vendors] OFF
 GO
 
+SET IDENTITY_INSERT [dbo].[Products] ON
+GO
+
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-632-08712-9'
+VALUES
+    (1
+    ,'978-0-632-08712-9'
            ,'Oriental Silk Keyboard'
            ,'41.09'
            ,'Each'
@@ -1241,14 +1246,16 @@ GO
            ,'18')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-136-36203-3'
+VALUES
+    (2
+    ,'978-1-136-36203-3'
            ,'Electronic Steel Pants'
            ,'93.39'
            ,'Pair'
@@ -1256,14 +1263,16 @@ GO
            ,'17')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-317-46549-2'
+VALUES
+    (3
+    ,'978-1-317-46549-2'
            ,'Oriental Concrete Bike'
            ,'13.29'
            ,'Dozen'
@@ -1271,14 +1280,16 @@ GO
            ,'4')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-02-613261-6'
+VALUES
+    (4
+    ,'978-1-02-613261-6'
            ,'Sleek Wooden Computer'
            ,'69.49'
            ,'Each'
@@ -1286,14 +1297,16 @@ GO
            ,'21')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-06-844569-9'
+VALUES
+    (5
+    ,'978-1-06-844569-9'
            ,'Luxurious Plastic Pizza'
            ,'61.49'
            ,'Box'
@@ -1301,14 +1314,16 @@ GO
            ,'29')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-8475-7898-6'
+VALUES
+    (6
+    ,'978-0-8475-7898-6'
            ,'Practical Bamboo Soap'
            ,'7.85'
            ,'Dozen'
@@ -1316,14 +1331,16 @@ GO
            ,'23')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-297-57352-1'
+VALUES
+    (7
+    ,'978-1-297-57352-1'
            ,'Sleek Wooden Pizza'
            ,'57.97'
            ,'Each'
@@ -1331,14 +1348,16 @@ GO
            ,'41')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4365-3386-7'
+VALUES
+    (8
+    ,'978-1-4365-3386-7'
            ,'Luxurious Metal Gloves'
            ,'71.59'
            ,'Box'
@@ -1346,14 +1365,16 @@ GO
            ,'33')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-593-44830-4'
+VALUES
+    (9
+    ,'978-0-593-44830-4'
            ,'Gorgeous Aluminum Soap'
            ,'46.39'
            ,'Pair'
@@ -1361,14 +1382,16 @@ GO
            ,'10')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-281-55413-0'
+VALUES
+    (10
+    ,'978-1-281-55413-0'
            ,'Electronic Marble Computer'
            ,'55.65'
            ,'Dozen'
@@ -1376,14 +1399,16 @@ GO
            ,'15')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-81030-233-1'
+VALUES
+    (11
+    ,'978-1-81030-233-1'
            ,'Handcrafted Granite Shoes'
            ,'57.69'
            ,'Pack'
@@ -1391,14 +1416,16 @@ GO
            ,'3')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-7229-1941-2'
+VALUES
+    (12
+    ,'978-1-7229-1941-2'
            ,'Soft Plastic Shirt'
            ,'28.49'
            ,'Box'
@@ -1406,14 +1433,16 @@ GO
            ,'37')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-260-64289-6'
+VALUES
+    (13
+    ,'978-1-260-64289-6'
            ,'Rustic Aluminum Towels'
            ,'42.19'
            ,'Box'
@@ -1421,14 +1450,16 @@ GO
            ,'42')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-911093-00-1'
+VALUES
+    (14
+    ,'978-0-911093-00-1'
            ,'Intelligent Silk Keyboard'
            ,'61.99'
            ,'Pack'
@@ -1436,14 +1467,16 @@ GO
            ,'31')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-7217-7780-8'
+VALUES
+    (15
+    ,'978-1-7217-7780-8'
            ,'Frozen Ceramic Hat'
            ,'29.05'
            ,'Box'
@@ -1451,14 +1484,16 @@ GO
            ,'28')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-693-43672-0'
+VALUES
+    (16
+    ,'978-0-693-43672-0'
            ,'Recycled Gold Fish'
            ,'35.54'
            ,'Pair'
@@ -1466,14 +1501,16 @@ GO
            ,'2')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-646-88915-3'
+VALUES
+    (17
+    ,'978-0-646-88915-3'
            ,'Oriental Granite Soap'
            ,'9.45'
            ,'Set'
@@ -1481,14 +1518,16 @@ GO
            ,'24')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4367-8610-2'
+VALUES
+    (18
+    ,'978-1-4367-8610-2'
            ,'Practical Aluminum Pants'
            ,'53.80'
            ,'Pack'
@@ -1496,14 +1535,16 @@ GO
            ,'44')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4135-0326-5'
+VALUES
+    (19
+    ,'978-1-4135-0326-5'
            ,'Handmade Ceramic Cheese'
            ,'80.25'
            ,'Set'
@@ -1511,14 +1552,16 @@ GO
            ,'9')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-310-10691-3'
+VALUES
+    (20
+    ,'978-0-310-10691-3'
            ,'Refined Ceramic Chips'
            ,'11.55'
            ,'Pack'
@@ -1526,14 +1569,16 @@ GO
            ,'4')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-321-95190-8'
+VALUES
+    (21
+    ,'978-0-321-95190-8'
            ,'Unbranded Ceramic Hat'
            ,'39.09'
            ,'Case'
@@ -1541,14 +1586,16 @@ GO
            ,'7')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4005-7321-9'
+VALUES
+    (22
+    ,'978-1-4005-7321-9'
            ,'Ergonomic Cotton Salad'
            ,'39.39'
            ,'Box'
@@ -1556,14 +1603,16 @@ GO
            ,'3')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4050-4146-1'
+VALUES
+    (23
+    ,'978-1-4050-4146-1'
            ,'Oriental Ceramic Shirt'
            ,'96.15'
            ,'Dozen'
@@ -1571,14 +1620,16 @@ GO
            ,'7')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-045-32592-1'
+VALUES
+    (24
+    ,'978-1-045-32592-1'
            ,'Elegant Metal Salad'
            ,'52.89'
            ,'Case'
@@ -1586,14 +1637,16 @@ GO
            ,'17')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-945732-51-5'
+VALUES
+    (25
+    ,'978-1-945732-51-5'
            ,'Gorgeous Aluminum Table'
            ,'83.97'
            ,'Case'
@@ -1601,14 +1654,16 @@ GO
            ,'15')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-78181-923-4'
+VALUES
+    (26
+    ,'978-1-78181-923-4'
            ,'Handcrafted Aluminum Soap'
            ,'86.15'
            ,'Pair'
@@ -1616,14 +1671,16 @@ GO
            ,'23')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-900037-02-3'
+VALUES
+    (27
+    ,'978-0-900037-02-3'
            ,'Handcrafted Granite Mouse'
            ,'21.95'
            ,'Set'
@@ -1631,14 +1688,16 @@ GO
            ,'8')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-4938-0619-5'
+VALUES
+    (28
+    ,'978-1-4938-0619-5'
            ,'Tasty Ceramic Soap'
            ,'91.59'
            ,'Box'
@@ -1646,14 +1705,16 @@ GO
            ,'48')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-8027-9247-1'
+VALUES
+    (29
+    ,'978-0-8027-9247-1'
            ,'Electronic Bronze Car'
            ,'11.00'
            ,'Pair'
@@ -1661,14 +1722,16 @@ GO
            ,'30')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-15-018189-7'
+VALUES
+    (30
+    ,'978-0-15-018189-7'
            ,'Oriental Rubber Chicken'
            ,'50.59'
            ,'Each'
@@ -1676,14 +1739,16 @@ GO
            ,'1')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-231-05388-4'
+VALUES
+    (31
+    ,'978-0-231-05388-4'
            ,'Elegant Gold Chips'
            ,'45.90'
            ,'Dozen'
@@ -1691,14 +1756,16 @@ GO
            ,'36')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-114-91830-6'
+VALUES
+    (32
+    ,'978-1-114-91830-6'
            ,'Soft Silk Soap'
            ,'81.79'
            ,'Pack'
@@ -1706,14 +1773,16 @@ GO
            ,'20')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-258-27764-2'
+VALUES
+    (33
+    ,'978-1-258-27764-2'
            ,'Modern Granite Soap'
            ,'17.80'
            ,'Set'
@@ -1721,14 +1790,16 @@ GO
            ,'13')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-09-295122-0'
+VALUES
+    (34
+    ,'978-0-09-295122-0'
            ,'Elegant Steel Shirt'
            ,'95.89'
            ,'Box'
@@ -1736,14 +1807,16 @@ GO
            ,'3')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-526-04023-0'
+VALUES
+    (35
+    ,'978-0-526-04023-0'
            ,'Tasty Aluminum Tuna'
            ,'29.39'
            ,'Pair'
@@ -1751,14 +1824,16 @@ GO
            ,'10')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-315-10868-1'
+VALUES
+    (36
+    ,'978-1-315-10868-1'
            ,'Fantastic Silk Chips'
            ,'63.09'
            ,'Pack'
@@ -1766,14 +1841,16 @@ GO
            ,'48')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-60241-065-7'
+VALUES
+    (37
+    ,'978-1-60241-065-7'
            ,'Intelligent Aluminum Ball'
            ,'96.19'
            ,'Box'
@@ -1781,14 +1858,16 @@ GO
            ,'35')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-8352-5956-9'
+VALUES
+    (38
+    ,'978-0-8352-5956-9'
            ,'Recycled Cotton Chicken'
            ,'20.69'
            ,'Pack'
@@ -1796,14 +1875,16 @@ GO
            ,'27')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-350-58194-4'
+VALUES
+    (39
+    ,'978-1-350-58194-4'
            ,'Soft Plastic Cheese'
            ,'88.17'
            ,'Each'
@@ -1811,14 +1892,16 @@ GO
            ,'11')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-346-83302-9'
+VALUES
+    (40
+    ,'978-0-346-83302-9'
            ,'Small Cotton Salad'
            ,'67.29'
            ,'Set'
@@ -1826,14 +1909,16 @@ GO
            ,'26')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-570-37825-9'
+VALUES
+    (41
+    ,'978-0-570-37825-9'
            ,'Fresh Aluminum Bike'
            ,'94.95'
            ,'Case'
@@ -1841,14 +1926,16 @@ GO
            ,'13')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-133-36475-7'
+VALUES
+    (42
+    ,'978-1-133-36475-7'
            ,'Modern Plastic Shirt'
            ,'53.55'
            ,'Box'
@@ -1856,14 +1943,16 @@ GO
            ,'21')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-348-23052-6'
+VALUES
+    (43
+    ,'978-1-348-23052-6'
            ,'Handmade Silk Gloves'
            ,'66.99'
            ,'Pair'
@@ -1871,14 +1960,16 @@ GO
            ,'2')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-635-04088-6'
+VALUES
+    (44
+    ,'978-0-635-04088-6'
            ,'Tasty Silk Table'
            ,'55.85'
            ,'Dozen'
@@ -1886,14 +1977,16 @@ GO
            ,'35')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-6880-8389-9'
+VALUES
+    (45
+    ,'978-1-6880-8389-9'
            ,'Handmade Rubber Soap'
            ,'37.09'
            ,'Pack'
@@ -1901,14 +1994,16 @@ GO
            ,'39')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-7076-1523-0'
+VALUES
+    (46
+    ,'978-1-7076-1523-0'
            ,'Refined Bamboo Bacon'
            ,'49.15'
            ,'Pair'
@@ -1916,14 +2011,16 @@ GO
            ,'45')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-7944-9669-9'
+VALUES
+    (47
+    ,'978-1-7944-9669-9'
            ,'Fresh Rubber Fish'
            ,'48.65'
            ,'Dozen'
@@ -1931,14 +2028,16 @@ GO
            ,'36')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-0-371-16848-6'
+VALUES
+    (48
+    ,'978-0-371-16848-6'
            ,'Generic Silk Pizza'
            ,'27.49'
            ,'Pair'
@@ -1946,14 +2045,16 @@ GO
            ,'4')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-925152-23-4'
+VALUES
+    (49
+    ,'978-1-925152-23-4'
            ,'Frozen Bronze Keyboard'
            ,'56.80'
            ,'Pair'
@@ -1961,14 +2062,16 @@ GO
            ,'42')
   
     INSERT INTO [dbo].[Products]
-           ([PartNumber]
+    ([Id]
+    ,[PartNumber]
            ,[Name]
            ,[Price]
            ,[Unit]
            ,[PhotoPath]
            ,[VendorId])
-     VALUES
-           ('978-1-002-65176-6'
+VALUES
+    (50
+    ,'978-1-002-65176-6'
            ,'Refined Marble Shoes'
            ,'11.19'
            ,'Each'
@@ -1977,8 +2080,15 @@ GO
   
 GO
 
+SET IDENTITY_INSERT [dbo].[Products] OFF
+GO
+
+SET IDENTITY_INSERT [dbo].[Users] ON
+GO
+
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -1987,7 +2097,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('torrey.schoen'
+    (1
+    ,'torrey.schoen'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Torrey'
     ,'Schoen'
@@ -1997,7 +2108,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2006,7 +2118,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('hope.hodkiewicz28'
+    (2
+    ,'hope.hodkiewicz28'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Hope'
     ,'Hodkiewicz'
@@ -2016,7 +2129,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2025,7 +2139,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('alexandre.anderson'
+    (3
+    ,'alexandre.anderson'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Alexandre'
     ,'Anderson'
@@ -2035,7 +2150,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2044,7 +2160,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('lyda_rolfson'
+    (4
+    ,'lyda_rolfson'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Lyda'
     ,'Rolfson'
@@ -2054,7 +2171,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2063,7 +2181,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('may.stracke79'
+    (5
+    ,'may.stracke79'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'May'
     ,'Stracke'
@@ -2073,7 +2192,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2082,7 +2202,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('melisa.king-okon'
+    (6
+    ,'melisa.king-okon'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Melisa'
     ,'King-O''Kon'
@@ -2092,7 +2213,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2101,7 +2223,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('myrtis.ferry-turcotte17'
+    (7
+    ,'myrtis.ferry-turcotte17'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Myrtis'
     ,'Ferry-Turcotte'
@@ -2111,7 +2234,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2120,7 +2244,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('randal.boyer'
+    (8
+    ,'randal.boyer'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Randal'
     ,'Boyer'
@@ -2130,7 +2255,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2139,7 +2265,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('haskell.ondricka96'
+    (9
+    ,'haskell.ondricka96'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Haskell'
     ,'Ondricka'
@@ -2149,7 +2276,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2158,7 +2286,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('jayme.okon14'
+    (10
+    ,'jayme.okon14'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Jayme'
     ,'O''Kon'
@@ -2168,7 +2297,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2177,7 +2307,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('bernadine.schamberger'
+    (11
+    ,'bernadine.schamberger'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Bernadine'
     ,'Schamberger'
@@ -2187,7 +2318,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2196,7 +2328,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('santino.satterfield'
+    (12
+    ,'santino.satterfield'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Santino'
     ,'Satterfield'
@@ -2206,7 +2339,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2215,7 +2349,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('ashlynn_howell'
+    (13
+    ,'ashlynn_howell'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Ashlynn'
     ,'Howell'
@@ -2225,7 +2360,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2234,7 +2370,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('dana_hand'
+    (14
+    ,'dana_hand'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Dana'
     ,'Hand'
@@ -2244,7 +2381,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2253,7 +2391,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('toy.morar'
+    (15
+    ,'toy.morar'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Toy'
     ,'Morar'
@@ -2263,7 +2402,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2272,7 +2412,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('vella_stracke84'
+    (16
+    ,'vella_stracke84'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Vella'
     ,'Stracke'
@@ -2282,7 +2423,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2291,7 +2433,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('norwood_zieme'
+    (17
+    ,'norwood_zieme'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Norwood'
     ,'Zieme'
@@ -2301,7 +2444,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2310,7 +2454,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('lorenz.sanford'
+    (18
+    ,'lorenz.sanford'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Lorenz'
     ,'Sanford'
@@ -2320,7 +2465,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2329,7 +2475,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('freddy_hilll'
+    (19
+    ,'freddy_hilll'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Freddy'
     ,'Hilll'
@@ -2339,7 +2486,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2348,7 +2496,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('maribel.lindgren'
+    (20
+    ,'maribel.lindgren'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Maribel'
     ,'Lindgren'
@@ -2358,7 +2507,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2367,7 +2517,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('carey_simonis33'
+    (21
+    ,'carey_simonis33'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Carey'
     ,'Simonis'
@@ -2377,7 +2528,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2386,7 +2538,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('hunter.metz'
+    (22
+    ,'hunter.metz'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Hunter'
     ,'Metz'
@@ -2396,7 +2549,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2405,7 +2559,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('liana.goldner'
+    (23
+    ,'liana.goldner'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Liana'
     ,'Goldner'
@@ -2415,7 +2570,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2424,7 +2580,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('everett.beatty'
+    (24
+    ,'everett.beatty'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Everett'
     ,'Beatty'
@@ -2434,7 +2591,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2443,7 +2601,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('presley.champlin-daniel3'
+    (25
+    ,'presley.champlin-daniel3'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Presley'
     ,'Champlin-Daniel'
@@ -2453,7 +2612,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2462,7 +2622,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('priscilla_thompson82'
+    (26
+    ,'priscilla_thompson82'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Priscilla'
     ,'Thompson'
@@ -2472,7 +2633,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2481,7 +2643,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('asa_oberbrunner'
+    (27
+    ,'asa_oberbrunner'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Asa'
     ,'Oberbrunner'
@@ -2491,7 +2654,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2500,7 +2664,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('clemmie_luettgen-swaniawski15'
+    (28
+    ,'clemmie_luettgen-swaniawski15'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Clemmie'
     ,'Luettgen-Swaniawski'
@@ -2510,7 +2675,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2519,7 +2685,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('jaylan_murray20'
+    (29
+    ,'jaylan_murray20'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Jaylan'
     ,'Murray'
@@ -2529,7 +2696,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2538,7 +2706,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('nels_schowalter'
+    (30
+    ,'nels_schowalter'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Nels'
     ,'Schowalter'
@@ -2548,7 +2717,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2557,7 +2727,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('georgiana.bruen-hettinger'
+    (31
+    ,'georgiana.bruen-hettinger'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Georgiana'
     ,'Bruen-Hettinger'
@@ -2567,7 +2738,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2576,7 +2748,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('minerva_waelchi'
+    (32
+    ,'minerva_waelchi'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Minerva'
     ,'Waelchi'
@@ -2586,7 +2759,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2595,7 +2769,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('favian_hills24'
+    (33
+    ,'favian_hills24'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Favian'
     ,'Hills'
@@ -2605,7 +2780,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2614,7 +2790,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('danyka.smith'
+    (34
+    ,'danyka.smith'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Danyka'
     ,'Smith'
@@ -2624,7 +2801,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2633,7 +2811,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('edwardo_kuvalis'
+    (35
+    ,'edwardo_kuvalis'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Edwardo'
     ,'Kuvalis'
@@ -2643,7 +2822,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2652,7 +2832,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('dixie.baumbach30'
+    (36
+    ,'dixie.baumbach30'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Dixie'
     ,'Baumbach'
@@ -2662,7 +2843,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2671,7 +2853,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('ole_kunde'
+    (37
+    ,'ole_kunde'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Ole'
     ,'Kunde'
@@ -2681,7 +2864,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2690,7 +2874,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('kariane.ohara'
+    (38
+    ,'kariane.ohara'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Kariane'
     ,'O''Hara'
@@ -2700,7 +2885,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2709,7 +2895,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('elmer_ortiz'
+    (39
+    ,'elmer_ortiz'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Elmer'
     ,'Ortiz'
@@ -2719,7 +2906,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2728,7 +2916,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('mack_murphy17'
+    (40
+    ,'mack_murphy17'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Mack'
     ,'Murphy'
@@ -2738,7 +2927,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2747,7 +2937,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('dana.carroll'
+    (41
+    ,'dana.carroll'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Dana'
     ,'Carroll'
@@ -2757,7 +2948,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2766,7 +2958,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('hudson_legros'
+    (42
+    ,'hudson_legros'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Hudson'
     ,'Legros'
@@ -2776,7 +2969,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2785,7 +2979,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('marion.gutmann'
+    (43
+    ,'marion.gutmann'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Marion'
     ,'Gutmann'
@@ -2795,7 +2990,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2804,7 +3000,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('braeden_nikolaus'
+    (44
+    ,'braeden_nikolaus'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Braeden'
     ,'Nikolaus'
@@ -2814,7 +3011,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2823,7 +3021,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('tracy.hodkiewicz4'
+    (45
+    ,'tracy.hodkiewicz4'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Tracy'
     ,'Hodkiewicz'
@@ -2833,7 +3032,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2842,7 +3042,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('kenna_fisher'
+    (46
+    ,'kenna_fisher'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Kenna'
     ,'Fisher'
@@ -2852,7 +3053,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2861,7 +3063,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('julia.armstrong16'
+    (47
+    ,'julia.armstrong16'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Julia'
     ,'Armstrong'
@@ -2871,7 +3074,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2880,7 +3084,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('lamont.welch'
+    (48
+    ,'lamont.welch'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Lamont'
     ,'Welch'
@@ -2890,7 +3095,8 @@ VALUES
     ,1)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2899,7 +3105,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('hettie.hickle-welch'
+    (49
+    ,'hettie.hickle-welch'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Hettie'
     ,'Hickle-Welch'
@@ -2909,7 +3116,8 @@ VALUES
     ,0)
   
 INSERT INTO [dbo].[Users]
-    ([Username]
+    ([Id]
+    ,[Username]
     ,[Password]
     ,[FirstName]
     ,[LastName]
@@ -2918,7 +3126,8 @@ INSERT INTO [dbo].[Users]
     ,[IsReviewer]
     ,[IsAdmin])
 VALUES
-    ('leonardo_goodwin'
+    (50
+    ,'leonardo_goodwin'
     ,'$2a$11$gPJJsroTfOFOyThpMTqctu8TIjSKNbjKG0f.Hlw/4xggmy8VS1cMa'
     ,'Leonardo'
     ,'Goodwin'
@@ -2927,4 +3136,67 @@ VALUES
     ,0
     ,0)
   
+GO
+
+SET IDENTITY_INSERT [dbo].[Users] OFF
+GO
+
+-- Requests + RequestLines (sample transactional data, ids 1-8).
+-- Owner ids are looked up by name so they stay correct regardless of Users seed order.
+SET IDENTITY_INSERT [dbo].[Requests] ON;
+
+DECLARE @torreyId INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Torrey'    AND [LastName] = 'Schoen');
+DECLARE @hopeId   INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Hope'      AND [LastName] = 'Hodkiewicz');
+DECLARE @alexId   INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Alexandre' AND [LastName] = 'Anderson');
+DECLARE @lydaId   INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Lyda'      AND [LastName] = 'Rolfson');
+DECLARE @mayId    INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'May'       AND [LastName] = 'Stracke');
+DECLARE @melisaId INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Melisa'    AND [LastName] = 'King-O''Kon');
+DECLARE @myrtisId INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Myrtis'    AND [LastName] = 'Ferry-Turcotte');
+DECLARE @randalId INT = (SELECT MIN([Id]) FROM [dbo].[Users] WHERE [FirstName] = 'Randal'    AND [LastName] = 'Boyer');
+
+INSERT INTO [dbo].[Requests]
+    ([Id],[Description],[Justification],[RejectionReason],[DeliveryMode],[Status],[Total],[UserId])
+VALUES
+     (1, 'Replace office chairs',      'Current chairs are broken and unsafe',       NULL,                                                     'Delivery',           'NEW',      0, @torreyId)
+    ,(2, 'New laptop for design team', 'Existing laptop fails hardware diagnostics',  NULL,                                                     'Pickup',             'REVIEW',   0, @hopeId)
+    ,(3, 'Break room coffee supplies', 'Team ran out of coffee and filters',          NULL,                                                     'Delivery',           'APPROVED', 0, @alexId)
+    ,(4, 'Replacement monitor',        'Monitor flickers during video calls',         'A comparable monitor is already available in inventory', 'Signature Delivery', 'REJECTED', 0, @lydaId)
+    ,(5, 'Warehouse safety gloves',    'OSHA compliance for new hires',               NULL,                                                     'Pickup',             'NEW',      0, @mayId)
+    ,(6, 'Conference room whiteboard', 'Whiteboard cracked beyond use',               NULL,                                                     'Delivery',           'REVIEW',   0, @melisaId)
+    ,(7, 'Shipping boxes',             'Restock packaging for outgoing orders',       NULL,                                                     'Pickup',             'APPROVED', 0, @myrtisId)
+    ,(8, 'Ergonomic keyboard',         'RSI accommodation request',                   NULL,                                                     'Signature Delivery', 'NEW',      0, @randalId);
+
+SET IDENTITY_INSERT [dbo].[Requests] OFF;
+GO
+
+SET IDENTITY_INSERT [dbo].[RequestLines] ON;
+
+INSERT INTO [dbo].[RequestLines]
+    ([Id],[Quantity],[RequestId],[ProductId])
+VALUES
+     (1,  4, 1, 1)
+    ,(2,  1, 1, 2)
+    ,(3,  1, 2, 3)
+    ,(4,  2, 2, 4)
+    ,(5,  3, 3, 5)
+    ,(6,  1, 4, 6)
+    ,(7,  2, 5, 7)
+    ,(8,  2, 5, 8)
+    ,(9,  2, 6, 9)
+    ,(10, 4, 6, 10)
+    ,(11, 5, 7, 11)
+    ,(12, 1, 8, 12)
+    ,(13, 2, 8, 1);
+
+SET IDENTITY_INSERT [dbo].[RequestLines] OFF;
+GO
+
+-- Recalculate each request total from its line items (Quantity * Product price)
+UPDATE [dbo].[Requests]
+SET [Total] = ISNULL((
+    SELECT SUM(rl.[Quantity] * p.[Price])
+    FROM [dbo].[RequestLines] rl
+    JOIN [dbo].[Products] p ON rl.[ProductId] = p.[Id]
+    WHERE rl.[RequestId] = [dbo].[Requests].[Id]
+), 0)
 GO
