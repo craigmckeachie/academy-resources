@@ -227,7 +227,69 @@ this lesson's lab.
 
 ---
 
-## 7. Verifying with Insomnia
+## 7. Route parameters vs query parameters
+
+So far every value in a URL has been a **route parameter** — the `{id}` in
+`[HttpGet("{id}")]` that picks one specific row. There's a second way to pass data to
+an endpoint: the **query string**, the `?key=value` part after the path. In this
+lesson's lab you'll give `OrdersController.GetAll` an optional `?status=` filter with
+`[FromQuery]`, so it's worth seeing where each kind of value sits and how they differ:
+
+```text
+       Protocol & Domain         Route (Path) Parameters         Query Parameters
+     ┌───────────────────┐    ┌───────────────────────────┐    ┌─────────────────┐
+     │                   │    │                           │    │                 │
+     https://example.com / api / users / 123 / collections / 5 ? sort=desc & page=2
+                                         ▲                   ▲   ▲         ▲
+                                         │                   │   │         │
+                                  Specific User ID           │ Key=Value   │
+                                                       Separator       Separator
+                                                      (Starts Query)  (Adds More)
+```
+
+**Route (path) parameters** — bound with `[FromRoute]` (the default for a value that
+appears in the route template, like `{id}`). They identify *which* specific resource
+you want and are **required** — the route doesn't even match if the segment is
+missing. In `GET /api/menuitems/5`, the `5` is required.
+
+**Query parameters** — bound with `[FromQuery]` (everything after the `?`). They are
+**optional** and usually **multi-variate**: several `key=value` pairs joined with `&`
+(`?status=PLACED&sort=desc&page=2`), used for filtering, sorting, and paging. You
+declare one as an optional method parameter with a default —
+`GetAll([FromQuery] string? status = null)` — so it's null when absent and you only
+filter when a value is supplied. `GET /api/orders` returns everything;
+`GET /api/orders?status=PLACED` narrows it.
+
+In a controller the two are bound with different attributes:
+
+```csharp
+// Route parameter — GET /api/menuitems/5
+[HttpGet("{id}")]                        // {id} is a token in the route template
+public async Task<ActionResult<MenuItem>> GetById([FromRoute] int id)
+{
+    // id comes from the /5 segment — required
+}
+
+// Query parameter — GET /api/orders?status=PLACED
+[HttpGet]                                // no token in the route
+public async Task<ActionResult<IEnumerable<Order>>> GetAll([FromQuery] string? status = null)
+{
+    // status comes from ?status= — optional, null when omitted
+}
+```
+
+Because of `[ApiController]`, both attributes are actually **optional**: a parameter
+whose name matches a route token binds from the route, and a plain simple-type
+parameter that isn't in the route binds from the query string. That's why
+`GetById(int id)` back in section 3 works with no attribute at all — writing
+`[FromRoute]` / `[FromQuery]` just makes the binding source explicit.
+
+Rule of thumb: **route params say *which* resource (required, one at a time); query
+params say *how* to shape the response (optional, often several at once).**
+
+---
+
+## 8. Verifying with Insomnia
 
 With the project running (no login required — the endpoints are open), expand the
 **MenuItems** folder:
@@ -279,4 +341,4 @@ On PRS in the capstone, `ProductsController` includes its `Vendor` exactly the w
 4. Add `[JsonIgnore]` (from `System.Text.Json.Serialization`) to the `Order`
    navigation property on `Models/OrderItem.cs` — you'll need it for the lab
 5. Run the project and verify in the **MenuItems** folder that each item now
-   carries a nested `category` object — see section 7
+   carries a nested `category` object — see section 8
