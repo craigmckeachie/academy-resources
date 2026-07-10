@@ -21,11 +21,13 @@
       "created": 1782950400000,
       "name": "Base Environment",
       "data": {
-        "baseUrl": "https://localhost:7234"
+        "baseUrl": "http://localhost:5556",
+        "createdId": ""
       },
       "dataPropertyOrder": {
         "&": [
-          "baseUrl"
+          "baseUrl",
+          "createdId"
         ]
       },
       "color": null,
@@ -180,7 +182,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
       "_type": "request"
     },
     {
@@ -221,7 +223,7 @@
       "parentId": "fld_staff",
       "modified": 1782950400000,
       "created": 1782950400000,
-      "url": "{{ _.baseUrl }}/api/staff/1",
+      "url": "{{ _.baseUrl }}/api/staff/{{ _.createdId }}",
       "name": "Delete Staff",
       "description": "Deletes a staff member by ID. Expect a 204 with no response body.",
       "method": "DELETE",
@@ -348,7 +350,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
       "_type": "request"
     },
     {
@@ -389,7 +391,7 @@
       "parentId": "fld_categories",
       "modified": 1782950400000,
       "created": 1782950400000,
-      "url": "{{ _.baseUrl }}/api/categories/1",
+      "url": "{{ _.baseUrl }}/api/categories/{{ _.createdId }}",
       "name": "Delete Category",
       "description": "Deletes a category by ID. Expect a 204 with no response body.",
       "method": "DELETE",
@@ -516,7 +518,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
       "_type": "request"
     },
     {
@@ -557,7 +559,7 @@
       "parentId": "fld_menuitems",
       "modified": 1782950400000,
       "created": 1782950400000,
-      "url": "{{ _.baseUrl }}/api/menuitems/1",
+      "url": "{{ _.baseUrl }}/api/menuitems/{{ _.createdId }}",
       "name": "Delete Menu Item",
       "description": "Deletes a menu item by ID. Expect a 204 with no response body.",
       "method": "DELETE",
@@ -684,7 +686,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
       "_type": "request"
     },
     {
@@ -725,7 +727,7 @@
       "parentId": "fld_orders",
       "modified": 1782950400000,
       "created": 1782950400000,
-      "url": "{{ _.baseUrl }}/api/orders/1",
+      "url": "{{ _.baseUrl }}/api/orders/{{ _.createdId }}",
       "name": "Delete Order",
       "description": "Deletes an order by ID. Expect a 204 with no response body.",
       "method": "DELETE",
@@ -975,7 +977,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
       "_type": "request"
     },
     {
@@ -1016,7 +1018,7 @@
       "parentId": "fld_orderitems",
       "modified": 1782950400000,
       "created": 1782950400000,
-      "url": "{{ _.baseUrl }}/api/orderitems/1",
+      "url": "{{ _.baseUrl }}/api/orderitems/{{ _.createdId }}",
       "name": "Delete Order Item",
       "description": "Deletes an order item by ID. Expect a 204 with no response body.",
       "method": "DELETE",

@@ -530,160 +530,33 @@ GO
 SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
 
+SET IDENTITY_INSERT [dbo].[OrderItems] ON
+GO
+
 INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
+    ([Id]
+    ,[Quantity]
     ,[Notes]
     ,[OrderId]
     ,[MenuItemId])
 VALUES
-    (1
-    ,'no onions'
-    ,1
-    ,4)
+    (1, 1, 'no onions', 1, 4)
+    ,(2, 1, NULL, 1, 8)
+    ,(3, 2, NULL, 1, 12)
+    ,(4, 2, 'medium well, please', 2, 3)
+    ,(5, 1, 'dressing on the side', 2, 7)
+    ,(6, 1, 'add a candle for the anniversary', 2, 10)
+    ,(7, 1, 'medium rare', 3, 6)
+    ,(8, 1, NULL, 3, 9)
+    ,(9, 2, NULL, 3, 13)
+    ,(10, 1, 'no nuts - guest allergy', 4, 5)
+    ,(11, 1, NULL, 4, 1)
+    ,(12, 1, NULL, 4, 14)
+    ,(13, 1, 'extra crispy', 5, 2)
+    ,(14, 1, NULL, 5, 11)
+GO
 
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,NULL
-    ,1
-    ,8)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (2
-    ,NULL
-    ,1
-    ,12)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (2
-    ,'medium well, please'
-    ,2
-    ,3)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,'dressing on the side'
-    ,2
-    ,7)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,'add a candle for the anniversary'
-    ,2
-    ,10)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,'medium rare'
-    ,3
-    ,6)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,NULL
-    ,3
-    ,9)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (2
-    ,NULL
-    ,3
-    ,13)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,'no nuts - guest allergy'
-    ,4
-    ,5)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,NULL
-    ,4
-    ,1)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,NULL
-    ,4
-    ,14)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,'extra crispy'
-    ,5
-    ,2)
-
-INSERT INTO [dbo].[OrderItems]
-    ([Quantity]
-    ,[Notes]
-    ,[OrderId]
-    ,[MenuItemId])
-VALUES
-    (1
-    ,NULL
-    ,5
-    ,11)
-
+SET IDENTITY_INSERT [dbo].[OrderItems] OFF
 GO
 
 UPDATE [dbo].[Orders]
