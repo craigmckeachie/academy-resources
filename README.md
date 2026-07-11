@@ -51,6 +51,7 @@ Ready-to-use files you import or run during the course:
 
 - `populate-tableserve.sql` / `populate-prs.sql` — seed-data scripts (run in SSMS)
 - `tableserve-insomnia.json` / `prs-insomnia.json` — Insomnia collections to import
+- `tableserve-design-starter.zip` / `prs-design-starter.zip` — HTML/CSS starter scaffolds (unzip, then run `npm install`)
 
 ## Good to know
 

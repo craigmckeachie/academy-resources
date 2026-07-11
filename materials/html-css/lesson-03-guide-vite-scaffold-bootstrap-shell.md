@@ -76,14 +76,15 @@ capstone.
 
 ## 2. The project scaffold (provided)
 
-You're given a starter project — you don't build the tooling from scratch. Open the
-`TableServe.Design` folder and you'll find:
+You're given a starter project — you don't build the tooling from scratch. Download
+and unzip [`tableserve-design-starter.zip`](https://github.com/craigmckeachie/academy-resources/raw/main/files/tableserve-design-starter.zip);
+the unzipped folder is your project, and inside you'll find:
 
 ```
 TableServe.Design/
   package.json          ← dependencies + dev/build scripts
   vite.config.js        ← Vite + handlebars partials config
-  index.html            ← redirects to signin.html
+  index.html            ← page directory — links to every page in the project
   partials/
     header.html         ← finished — the top bar + brand + user menu
     nav.html            ← finished — the left sidebar links
@@ -418,8 +419,9 @@ only the page title, the action button, and the content region change.
 ## Build Steps
 
 1. Open the provided `TableServe.Design` scaffold and run `npm install`.
-2. Run `npm run dev` and confirm the printed local URL loads (it will land on
-   `signin.html` via `index.html`'s redirect — that page is empty for now).
+2. Run `npm run dev` and confirm the printed local URL loads — `index.html` is a
+   **page directory**, a list of links to every page in the project, so you can
+   jump to any page as you build.
 3. Read `partials/header.html` and `partials/nav.html` so you recognize the shared
    pieces. Don't change them.
 4. Create `orders.html` in the project root with the full page shell from section 6.

@@ -48,10 +48,8 @@ Evergreen references to keep open throughout:
 
 ## Downloads
 
-Ready-to-use files you import or run during the course (in the repo's `files/` folder):
-
-- [`populate-tableserve.sql`](https://github.com/craigmckeachie/academy-resources/blob/main/files/populate-tableserve.sql) / [`populate-prs.sql`](https://github.com/craigmckeachie/academy-resources/blob/main/files/populate-prs.sql) — seed-data scripts (run in SSMS)
-- [`tableserve-insomnia.json`](https://github.com/craigmckeachie/academy-resources/blob/main/files/tableserve-insomnia.json) / [`prs-insomnia.json`](https://github.com/craigmckeachie/academy-resources/blob/main/files/prs-insomnia.json) — Insomnia collections to import
+All the seed scripts, Insomnia collections, and starter scaffolds you import, run, or
+unzip during the course are on the **[Downloads](downloads.md)** page.
 
 ## Good to know
 

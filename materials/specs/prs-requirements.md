@@ -71,8 +71,8 @@ for you by EF Core, not by running SQL scripts.
    models. (The `CREATE TABLE` statements later in this document are reference
    only; see the note under **Database Schema**.)
 
-3. **Seed the data.** Run `populate-prs.sql` (in the academy-resources `files/`
-   folder) in SQL Server Management Studio. This script only **inserts rows** (it contains no `CREATE TABLE`) — so
+3. **Seed the data.** Run [`populate-prs.sql`](https://github.com/craigmckeachie/academy-resources/blob/main/files/populate-prs.sql)
+   in SQL Server Management Studio. This script only **inserts rows** (it contains no `CREATE TABLE`) — so
    run it *after* `Update-Database` has created the tables. It seeds **50 vendors,
    50 products, 50 users, and 8 sample requests with line items** so the Requests
    screens and endpoints have data to show on first run. You'll still create your
@@ -83,8 +83,8 @@ for you by EF Core, not by running SQL scripts.
 4. **Run the API.** Start `Prs.Api` (F5 in Visual Studio, or `dotnet run`) and
    note the port it listens on.
 
-5. **Verify with Insomnia.** Import the collection `prs-insomnia.json` (in the
-   academy-resources `files/` folder), then set the `baseUrl` environment variable to
+5. **Verify with Insomnia.** Import the collection [`prs-insomnia.json`](https://github.com/craigmckeachie/academy-resources/blob/main/files/prs-insomnia.json),
+   then set the `baseUrl` environment variable to
    your API's address (e.g. `https://localhost:7234`). Run every request in every
    folder and check the **Tests** tab on each. No login is required first — every
    endpoint is open. **Your backend capstone is complete when every request shows

@@ -55,6 +55,9 @@ or **[Reach]** (goes past it, with a reference link to research).
   CSS by hand so you understand what Bootstrap does for you. **Lesson 3 onward uses the
   Vite scaffold** — run `npm run dev` and open the URL it prints so the `{{> header}}`
   partials expand.
+- **Get the scaffold for Lesson 3:** download [`tableserve-design-starter.zip`](https://github.com/craigmckeachie/academy-resources/raw/main/files/tableserve-design-starter.zip),
+  unzip it, and run `npm install` — that unzipped folder is the `TableServe.Design`
+  starter project the Lesson 3 guide builds on. (See all [Downloads](../downloads.md).)
 - **Flexbox for layout — never the Bootstrap `row`/`col` grid, and no CSS Grid.** Use
   `display: flex` (raw) / `d-flex` (Bootstrap), `justify-content-*`, `align-items-*`,
   `gap-*`, `flex-wrap`, and `flex-grow-1` for all layout.

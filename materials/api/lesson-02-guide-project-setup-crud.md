@@ -307,7 +307,7 @@ already configured.
 
 1. Open Insomnia
 2. Click **File → Import**
-3. Navigate to and select `tableserve-insomnia.json` from the academy-resources
+3. Navigate to and select [`tableserve-insomnia.json`](https://github.com/craigmckeachie/academy-resources/blob/main/files/tableserve-insomnia.json) from the academy-resources
    `files/` folder
 4. The **TableServe** collection appears in the left sidebar with folders for
    Auth, Staff, Categories, MenuItems, Orders, and OrderItems

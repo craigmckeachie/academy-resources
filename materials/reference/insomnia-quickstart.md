@@ -39,7 +39,7 @@ The five things you'll do map straight to CRUD:
 
 1. **Install Insomnia** from [insomnia.rest](https://insomnia.rest) and open it.
 2. **Import the collection** — `File → Import`, choose the provided
-   `tableserve-insomnia.json` (in the academy-resources `files/` folder). The
+   [`tableserve-insomnia.json`](https://github.com/craigmckeachie/academy-resources/blob/main/files/tableserve-insomnia.json). The
    **TableServe** collection appears with a folder per entity (Auth, Staff,
    Categories, MenuItems, Orders, OrderItems).
 3. **Set `baseUrl`** — run your API in Visual Studio (F5), note the port (e.g.
