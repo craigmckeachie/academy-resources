@@ -36,7 +36,7 @@
       "_type": "environment"
     },
     {
-      "_id": "fld_auth",
+      "_id": "fld_auth_prs",
       "parentId": "wrk_prs",
       "modified": 1782950400000,
       "created": 1782950400000,
@@ -48,8 +48,8 @@
       "_type": "request_group"
     },
     {
-      "_id": "req_login",
-      "parentId": "fld_auth",
+      "_id": "req_login_prs",
+      "parentId": "fld_auth_prs",
       "modified": 1782950400000,
       "created": 1782950400000,
       "url": "{{ _.baseUrl }}/api/users/login",
@@ -515,7 +515,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});\ninsomnia.test('each item has a populated vendor navigation property', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(item => item.vendor !== null && typeof item.vendor === 'object')).to.be.true;\n});",
       "_type": "request"
     },
     {
@@ -545,7 +545,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('vendor navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.vendor).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -608,7 +608,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}\ninsomnia.test('vendor navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.vendor).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -641,7 +641,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('vendor navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.vendor).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -713,7 +713,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});\ninsomnia.test('each item has a populated user navigation property', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(item => item.user !== null && typeof item.user === 'object')).to.be.true;\n});",
       "_type": "request"
     },
     {
@@ -743,7 +743,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});\ninsomnia.test('All items have matching status', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(r => r.status === 'NEW')).to.be.true;\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});\ninsomnia.test('All items have matching status', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(r => r.status === 'NEW')).to.be.true;\n});\ninsomnia.test('each item has a populated user navigation property', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(item => item.user !== null && typeof item.user === 'object')).to.be.true;\n});",
       "_type": "request"
     },
     {
@@ -773,7 +773,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('user navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.user).to.be.an('object');\n});\ninsomnia.test('requestLines each have a populated product navigation property', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.requestLines).to.be.an('array');\n  insomnia.expect(json.requestLines.every(c => c.product !== null && typeof c.product === 'object')).to.be.true;\n});",
       "_type": "request"
     },
     {
@@ -836,7 +836,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}\ninsomnia.test('user navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.user).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -869,7 +869,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('user navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.user).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -1034,7 +1034,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response is an array', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.be.an('array');\n});\ninsomnia.test('each item has a populated product navigation property', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.every(item => item.product !== null && typeof item.product === 'object')).to.be.true;\n});",
       "_type": "request"
     },
     {
@@ -1064,7 +1064,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('product navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.product).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -1127,7 +1127,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\nconst body = statusCode === 201 ? insomnia.response.json() : null;\ninsomnia.test('Status is 201', () => {\n  insomnia.expect(statusCode).to.equal(201);\n});\ninsomnia.test('Response has an id field', () => {\n  insomnia.expect(body).to.have.property('id');\n});\nif (body && body.id !== undefined) {\n  insomnia.environment.set('createdId', body.id);\n}\ninsomnia.test('product navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.product).to.be.an('object');\n});",
       "_type": "request"
     },
     {
@@ -1160,7 +1160,7 @@
       "settingRebuildPath": true,
       "settingFollowRedirects": "global",
       "preRequestScript": "",
-      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});",
+      "afterResponseScript": "const statusCode = insomnia.response.code;\ninsomnia.test('Status is 200', () => {\n  insomnia.expect(statusCode).to.equal(200);\n});\ninsomnia.test('Response has an id field', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json).to.have.property('id');\n});\ninsomnia.test('product navigation property is populated', () => {\n  const json = insomnia.response.json();\n  insomnia.expect(json.product).to.be.an('object');\n});",
       "_type": "request"
     },
     {
