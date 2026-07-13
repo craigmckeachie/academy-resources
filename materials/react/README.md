@@ -47,6 +47,14 @@ Item form, and Sign In/Context) — patterns that are *named exceptions* with no
 TableServe entity to repeat them on, so they're built once alongside the instructor.
 Lessons 13–15 are review, gap-check, and the capstone bridge.
 
+## Prework — optional head start
+
+Finished the API capstone early and want a running start? Work through
+[**React prework**](prework-react.md) — a self-guided warm-up on JavaScript and TypeScript
+for C# developers (the Lesson 1–2 material) that ends by calling **your own PRS API** from
+the browser with `fetch`. It's optional and ungraded; the pass teaches all of it from
+scratch.
+
 ## Stretch challenges
 
 Finished a lab early? Each lab ends with a short **Stretch challenges** section tied to

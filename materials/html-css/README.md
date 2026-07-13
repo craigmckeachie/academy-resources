@@ -36,6 +36,13 @@ these completed TableServe pages as the direct pattern reference: Sign In, Reque
 list, Request Detail (with the Reject modal), Request Create/Edit, Products, Vendors,
 Users, and RequestLine Create/Edit.
 
+## Prework — optional head start
+
+Between passes and want to get ahead? Work through
+[**HTML/CSS prework**](prework-html-css.md) — a self-guided warm-up on semantic HTML, the
+box model, CSS selectors, and flexbox (the Lesson 1–2 material), plus a skim of Bootstrap
+and a study of the PRS pages you'll build. Optional and ungraded; the pass teaches it all.
+
 ## Stretch challenges
 
 Finished a lab early? Each lab ends with a short **Stretch challenges** section tied to

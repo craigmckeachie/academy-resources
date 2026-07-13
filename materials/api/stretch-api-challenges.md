@@ -110,3 +110,16 @@ about the SQL — the seed script is the contract the generated data has to hono
 You'll reuse all of these instincts on the PRS capstone: aggregation queries,
 adding an FK entity, paging a long list, and seeding realistic data are exactly
 the kinds of things you'll reach for once the core CRUD is working.
+
+---
+
+## Even further ahead? Prework for the next passes
+
+Cleared these and still ahead of the cohort? Start banking time on the passes that come
+next — both are optional, ungraded, and self-guided:
+
+- [**React prework**](../react/prework-react.md) — JavaScript/TypeScript for C#
+  developers, ending by calling your own PRS API from the browser with `fetch`. This is
+  the highest-leverage head start, since React is the course's final and hardest pass.
+- [**HTML/CSS prework**](../html-css/prework-html-css.md) — semantic HTML, the box model,
+  and flexbox, plus a Bootstrap skim and a study of the PRS pages you'll build next.
