@@ -1,8 +1,9 @@
 # API Concepts — Lesson Materials
 
-This folder contains the lesson materials for the Web API pass (Lessons 1–6). It
+This folder contains the lesson materials for the Web API pass (Lessons 1–7). It
 starts with a **no-code foundations lesson** — how web apps talk over HTTP, REST/JSON,
-status codes, and Insomnia — then builds the TableServe Web API one entity at a time.
+status codes, and Insomnia — then builds the TableServe Web API one entity at a time, and
+closes with a **tooling lesson** on reviewing your code with GitHub Copilot.
 
 ## File types
 
@@ -24,18 +25,26 @@ to the guide and what you built alongside it as your model.
 | 4 | [Nested data, Include(), FK lookups](lesson-04-guide-nested-data-fk-lookups.md) | [OrdersController with OrderItems](lesson-04-lab-orders-controller.md) |
 | 5 | [Side-effect recalculation, workflow endpoints](lesson-05-guide-side-effects-workflow-endpoints.md) | [Order status workflow endpoints](lesson-05-lab-orderitems-workflow.md) |
 | 6 | [Error handling, Insomnia, Login](lesson-06-guide-error-handling-login.md) | PRS backend capstone begins |
+| 7 | [Reviewing your code with GitHub Copilot](lesson-07-guide-copilot-code-review.md) | [Review your PRS API with Copilot](lesson-07-lab-copilot-review-prs-api.md) |
 
 **Lesson 1 is a no-code foundations lesson** — you explore real HTTP traffic in the
 browser and drive a public API in Insomnia, with no Visual Studio project. The
 TableServe build starts in Lesson 2.
 
+**Lesson 7 is a tooling lesson** on **GitHub Copilot** (TQL's preferred AI assistant),
+taught at the boundary into the capstone. The guide teaches the review-and-triage skill on
+a TableServe controller; the lab turns it on the **PRS backend you build in the capstone** —
+so it's the first deliberate use of AI in the course, on code you wrote by hand.
+
 ## Reference cheat sheets
 
-Two evergreen cheat sheets in [`../reference/`](../reference/README.md) back this pass — skim
-them in Lesson 1 and keep them open throughout:
+Evergreen cheat sheets in [`../reference/`](../reference/README.md) back this pass — skim
+the first two in Lesson 1 and keep them open throughout; the Copilot sheet comes in with
+Lesson 7:
 
 - [HTTP, REST, JSON & Status Codes](../reference/http-rest-status-codes.md)
 - [Insomnia quick-start](../reference/insomnia-quickstart.md)
+- [GitHub Copilot quick-start](../reference/copilot-quickstart.md) — for the Lesson 7 code-review lesson
 
 ## Stretch challenges
 

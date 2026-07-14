@@ -12,6 +12,10 @@ here is a step-by-step build — these are lookups.
 - [Insomnia quick-start](insomnia-quickstart.md) — what Insomnia is, importing the
   TableServe collection, setting `baseUrl`, and reading responses. First taught in
   **API Lesson 1**.
+- [GitHub Copilot quick-start](copilot-quickstart.md) — TQL's preferred AI assistant:
+  the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
+  discipline, and the house-style watch-list. Backs the Copilot lessons and stretch
+  challenges across all three passes.
 
 ## images/
 
