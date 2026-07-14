@@ -163,6 +163,34 @@ status-badge-color function. Reference:
 
 ---
 
+## 8. Build a PRS feature with Copilot's agent mode — [Reach]
+
+You built the whole TableServe front end by hand and — in **Lesson 16** — learned to
+*generate* and *audit* with Copilot. Put both together: use **agent mode** to build **one**
+PRS feature end to end (say the **Vendors** feature folder — the analog of Staff/Categories),
+then review it against a rubric before keeping a line.
+
+1. Point Copilot at a finished TableServe feature folder as the template (`#StaffAPI.ts`,
+   `#StaffForm.tsx`, …) and describe the Vendors feature: interface, API module, page, list,
+   card, and shared create/edit form.
+2. Let agent mode propose the multi-file diff. **Do not "Accept All."** Review it hunk by
+   hunk against this rubric — every item must pass:
+   - fetch via the `checkStatus` / `parseJSON` helpers, in a `VendorAPI.ts` module — **no
+     axios, no inline fetch**
+   - form built with **react-hook-form** (`register` / `handleSubmit` / async `defaultValues`)
+   - layout in **flexbox utilities only** — no `row`/`col`, no CSS Grid
+   - feedback via **react-hot-toast**; typed with an **`IVendor`** interface
+   - the **feature-folder split** (not one big file); routes registered under `Layout`
+   - **no** `[Authorize]` / token / auth added — this course has none
+3. Fix or reject anything that fails the rubric, then **verify in the browser** — the Vendors
+   pages render, the Console is clean, and Network shows calls to your PRS API.
+
+Agent mode can draft a feature in one shot, but shipping it is a **review you own** — the
+rubric is just the house-style guardrails written down. Research agent mode:
+[Copilot Chat in VS Code](https://code.visualstudio.com/docs/copilot/overview).
+
+---
+
 You'll reuse every one of these instincts on the PRS capstone: reseeding to your own
 data, standing up a new entity's full feature folder, extracting shared hooks and
 components, and consolidating utilities are exactly the moves you'll reach for once the

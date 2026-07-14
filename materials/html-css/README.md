@@ -48,8 +48,8 @@ and a study of the PRS pages you'll build. Optional and ungraded; the pass teach
 Finished a lab early? Each lab ends with a short **Stretch challenges** section tied to
 that lesson's concept. For bigger challenges that span the whole pass — reskinning the
 app to your own restaurant, adding a brand-new entity's pages, dark mode, responsive
-layout, and retheming with CSS variables — see
-[Stretch challenges](stretch-html-css-challenges.md). None of it is required for the
+layout, retheming with CSS variables, and generating or reviewing markup with GitHub
+Copilot — see [Stretch challenges](stretch-html-css-challenges.md). None of it is required for the
 capstone; it's optional extra practice, tagged **[Reinforce]** (builds on the guide)
 or **[Reach]** (goes past it, with a reference link to research).
 
@@ -81,3 +81,8 @@ or **[Reach]** (goes past it, with a reference link to research).
 - The **avatar-circle-with-initials** on Staff cards is left for you to work out (a
   stretch challenge — raw CSS in the Lesson 1 lab, Bootstrap in the Lesson 4 lab) —
   you'll need the same pattern on PRS's Users cards.
+- **GitHub Copilot** (TQL's preferred AI assistant) appears in this pass only as optional
+  [stretch challenges](stretch-html-css-challenges.md) — generating markup and auditing it
+  against the flexbox-and-npm house style. Keep the
+  [Copilot quick-start](../reference/copilot-quickstart.md) handy; the required Copilot
+  lessons are in the API and React passes.

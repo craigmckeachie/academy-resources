@@ -20,7 +20,7 @@ You use two editors in this course, and Copilot shows up a little differently in
 
 | Pass | Editor | Copilot surface you'll use most |
 |---|---|---|
-| API (C#) | **Visual Studio** | Inline **autocomplete** as you type controllers/models |
+| API (C#) | **Visual Studio** | Inline **autocomplete** as you type controllers/models; **Chat** for the Lesson 7 code review |
 | HTML/CSS | **VS Code** | Inline **autocomplete** + **Chat** for markup |
 | React | **VS Code** | **Chat** and, later, **agent** workflows for features |
 

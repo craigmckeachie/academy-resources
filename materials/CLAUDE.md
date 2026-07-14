@@ -138,6 +138,7 @@ materials/
     README.md
     http-rest-status-codes.md
     insomnia-quickstart.md
+    copilot-quickstart.md
     images/                            # diagrams/infographics; manifest in images/README.md
 ```
 
@@ -320,6 +321,41 @@ places, and **both are produced as part of the normal guide/lab generation task*
   CORS policy (see **Known intentional simplifications**).
 - **Same terminology rules apply** — no day/time references; "lesson," "guide,"
   "lab," and "capstone" only.
+
+---
+
+## AI-assisted development (GitHub Copilot)
+
+GitHub Copilot — **TQL's preferred AI assistant** — is woven through the curriculum, not
+bolted on. Keep these facts straight when editing or regenerating any Copilot material:
+
+- **Cheat sheet.** `reference/copilot-quickstart.md` is the evergreen, cross-pass reference
+  (the three surfaces, set-up per editor, the verify-don't-trust discipline, the house-style
+  watch-list, and how to hand Copilot files). Every Copilot lesson/stretch links to it; keep
+  it editor-neutral except where it deliberately contrasts Visual Studio vs. VS Code.
+- **Two required lessons, sequenced review-before-generate:**
+  - **API Lesson 7** (`api/lesson-07-guide-copilot-code-review.md` + lab) — code **review**:
+    attach a controller to Copilot Chat and *triage* its suggestions (accept real bugs /
+    reject house-style violations / ignore noise). Guide demos on TableServe; lab reviews the
+    student's **PRS backend capstone**.
+  - **React Lesson 16** (`react/lesson-16-guide-building-with-copilot.md` + lab) — code
+    **generation**: autocomplete → Chat → agent mode, audited against house style. Lab
+    generates a Staff feature; a capstone stretch (challenge #8 in
+    `stretch-react-challenges.md`) builds a PRS feature with agent mode against a rubric.
+- **Pass 2 (HTML/CSS) is intentionally stretch-only** — no required Copilot lesson (it would
+  undercut the hand-building focus). Copilot appears there as challenges #7–#8 in
+  `stretch-html-css-challenges.md` (generate-and-audit markup; review your markup).
+- **These are intro/overview-style tooling lessons** — verified by **observation and
+  judgment** (reading/triaging Copilot's output), matched to each pass's tool for any code
+  actually changed (Insomnia for API, browser/DevTools for HTML/CSS and React). They are not
+  built against `tableserve/`; state this so a regeneration doesn't turn them into entity
+  builds.
+- **Carve-out to the "respect the intentional simplifications" stretch rule:** Copilot
+  materials deliberately *surface* the banned patterns (DTOs, `[Authorize]`/JWT, the
+  repository pattern, `EntityState.Modified`, the Bootstrap `row`/`col` grid, CDN links) **so
+  students reject them with a reason.** That is the opposite of *pushing students toward*
+  them and is allowed — do not "correct" a Copilot challenge for naming these. A Copilot
+  challenge must still never tell a student to *adopt* one.
 
 ---
 

@@ -139,6 +139,63 @@ in the `<use href>`.
 
 ---
 
+## 7. Generate a page with Copilot — then audit it against house style — [Reach]
+
+In the API pass you used **GitHub Copilot** to *review* code
+([API Lesson 7](../api/lesson-07-guide-copilot-code-review.md)). Here, try the harder
+direction — using it to *generate* markup — and see how hard it fights this course's house
+style.
+
+1. In VS Code, open **Copilot Chat** and ask it to generate a Bootstrap page from a
+   description — e.g. *"a responsive menu-item card grid in Bootstrap"* or *"a Bootstrap
+   create/edit form for a menu item."* **Don't** hand it one of your pages yet — you want to
+   see its raw defaults.
+2. **Audit what it produces** against the guardrails in the
+   [Copilot quick-start](../reference/copilot-quickstart.md). Expect it to reach for exactly
+   what this course bans:
+   - the Bootstrap **`row`/`col` grid** (or CSS Grid) for layout — we use **flexbox
+     utilities only**
+   - a Bootstrap **CDN `<link>`** — our Bootstrap comes from **npm** via Vite
+   - `<div>` soup where a **semantic** tag (`<address>`, `<section>`, `<dl>`) belongs
+3. **Rewrite every violation by hand** in house style: `row`/`col` → `d-flex flex-wrap gap-*`
+   with width utilities, the CDN link → the `/node_modules/bootstrap/...` link the shell
+   already uses, and semantic tags where they fit.
+4. Re-ask **with one of your finished pages as a `#` reference** (*"match the structure of
+   `#menuitems.html`"*) and note how many violations disappear once Copilot has the template.
+5. Drop the cleaned-up markup into a page and confirm it renders in the browser.
+
+The lesson: Copilot's default Bootstrap is **grid-and-CDN** Bootstrap; *this* app is
+**flexbox-and-npm** Bootstrap. Catching and fixing that difference is proof you own the
+layout rule. Not covered in the guides — start with the cheat sheet and
+[Copilot Chat in VS Code](https://code.visualstudio.com/docs/copilot/overview).
+
+---
+
+## 8. Review your own markup with Copilot — [Reinforce]
+
+Turn the **review-and-triage** habit from
+[API Lesson 7](../api/lesson-07-guide-copilot-code-review.md) on your finished HTML —
+Copilot is genuinely useful for catching semantic and accessibility gaps you can no longer
+see.
+
+1. In Copilot Chat, attach a finished page with a **`#` reference** (e.g.
+   `#order-detail.html`) and ask it to review the markup for **semantic HTML and
+   accessibility** issues.
+2. **Triage every suggestion** (accept / reject / ignore, with a reason), exactly as in the
+   API lesson:
+   - **Accept** the real ones — a missing `alt`, a skipped heading level, a `<label>`
+     without a matching `for`, a landmark you could add.
+   - **Reject** anything that crosses house style — if it suggests the `row`/`col` grid, a
+     CDN link, or a JS framework, that's Copilot not knowing your rules.
+3. Fix the accepted items and confirm the page still renders and behaves in the browser
+   (DevTools → Elements/Accessibility panes).
+
+You already know semantic HTML from Lesson 1; this is that knowledge plus a second set of
+eyes you learn to overrule. Reference: the
+[Copilot quick-start](../reference/copilot-quickstart.md).
+
+---
+
 You'll reuse every one of these instincts on the PRS capstone: reskinning to your own
 data, standing up a new entity's pages, and polishing layout and theming are exactly
 the kinds of things you'll reach for once the core PRS pages are in place.

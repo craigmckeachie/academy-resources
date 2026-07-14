@@ -1,11 +1,12 @@
 # React Concepts — Lesson Materials
 
-This folder contains the lesson materials for the React pass (Lessons 1–15). It **opens
+This folder contains the lesson materials for the React pass (Lessons 1–16). It **opens
 with two JavaScript/TypeScript intro lessons for C# developers** (run in a throwaway
 vanilla-ts scratch project), then a **React orientation** — components, JSX, and
 rendering lists — before building the TableServe front end one concept at a time (data
-fetching, routing, forms, detail pages, modals, auth/context, toasts) and ending with
-review lessons and a **capstone bridge** into PRS.
+fetching, routing, forms, detail pages, modals, auth/context, toasts), then review lessons
+and a **capstone bridge** into PRS, and closes with a **tooling lesson** on building with
+GitHub Copilot.
 
 ## File types
 
@@ -36,6 +37,7 @@ guide and what you built alongside it as your model.
 | 13 | [Review/Buffer: the Categories CRUD walkthrough](lesson-13-guide-review-categories-crud.md) | *Review — no lab* |
 | 14 | [Review/Buffer: full-app review and PRS gap-check](lesson-14-guide-review-app-gap-check.md) | *Review — no lab* |
 | 15 | [Capstone bridge: building the PRS front end](lesson-15-guide-capstone-bridge.md) | *Bridge — no lab* |
+| 16 | [Building with GitHub Copilot: autocomplete, Chat, agent mode](lesson-16-guide-building-with-copilot.md) | [Generate a Staff feature and audit it](lesson-16-lab-generate-and-audit-staff.md) |
 
 **Lessons 1–2 are JavaScript/TypeScript intro lessons** for students coming straight from
 the C# API pass — the language mapped onto what they already know, run and verified by
@@ -45,7 +47,10 @@ JSX, interfaces, and `.map()` in the browser. **Real data fetching starts in Les
 Lessons 9–11 are **worked examples** (the Order Detail workflow/modals, the nested Order
 Item form, and Sign In/Context) — patterns that are *named exceptions* with no second
 TableServe entity to repeat them on, so they're built once alongside the instructor.
-Lessons 13–15 are review, gap-check, and the capstone bridge.
+Lessons 13–15 are review, gap-check, and the capstone bridge. **Lesson 16 is a tooling
+lesson** on **GitHub Copilot** (TQL's preferred AI assistant) — generating React code and
+auditing it against this app's house style; verified by observation in the browser, and
+building on the API pass's Copilot code-review lesson.
 
 ## Prework — optional head start
 
@@ -84,3 +89,6 @@ guide) or **[Reach]** (goes past it, with a reference link to research).
 - Each entity uses the same **feature folder** pattern (interface, API module, page,
   list, card/row, skeleton, shared form, thin create/edit wrappers) — learn it once,
   repeat it per entity, then again across all of PRS.
+- **GitHub Copilot** is TQL's preferred AI assistant; Lesson 16 covers using it to
+  *generate* React code and audit it against this app's house style. Keep the
+  [Copilot quick-start](../reference/copilot-quickstart.md) open for the guardrails.
