@@ -29,8 +29,10 @@ new concepts. Learn the handful of genuinely new pieces (destructuring, spread, 
 - Your **PRS API runs** and you can hit it (you just finished it). Run it over **`http`**,
   not `https`, so the browser doesn't block it over a self-signed dev certificate — the
   same reason the Insomnia collection uses an `http://` base URL.
-- You **verify by observation** the whole way: the browser's **DevTools → Console** (F12)
-  and **Network** tab. No Insomnia here — this is the front-end world now.
+- **Two tools, two jobs:** you **edit code in VS Code** and **observe in the browser** —
+  the running page plus **DevTools → Console / Network** (F12, or right-click → Inspect).
+  You never type code into DevTools; it's only for reading output. (No Insomnia here — this
+  is the front-end world now.)
 
 ---
 
@@ -47,9 +49,12 @@ npm run dev
 ```
 
 `--template vanilla-ts` gives you plain TypeScript with **no framework** — just a file to
-run code in. `npm run dev` prints a URL (usually `http://localhost:5173`); open it and
-open **DevTools → Console**. Edit `src/main.ts`, save, and the page reloads. Anything you
-`console.log(...)` shows in the Console — this is your C# console app equivalent.
+run code in. Open the `js-ts-playground` folder in **VS Code** — that's where you edit
+code. `npm run dev` prints a URL (usually `http://localhost:5173`); open it in the
+**browser** and show **DevTools → Console**. Now edit `src/main.ts` **in VS Code** and
+save — Vite reloads the page automatically, and anything you `console.log(...)` appears in
+the browser Console. You write code in the editor; the browser (and its DevTools) is only
+for running and reading output. This is your C# console app equivalent.
 
 You are **not** throwing this project away — it's the exact sandbox Lessons 1–2 use, so
 you're set up early.

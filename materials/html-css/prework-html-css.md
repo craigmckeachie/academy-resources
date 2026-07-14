@@ -23,9 +23,9 @@ magic. `d-flex` is `display: flex`; `p-4` is padding. Learn the raw rules first.
 
 ## Before you start
 
-- **No tooling needed** for Parts 1–2 — just a text editor and a browser. You write
-  `.html` + `.css` files and open them **straight from disk** (`file://`), exactly as
-  Lessons 1–2 do. (Bootstrap and Vite don't arrive until Lesson 3.)
+- **No tooling needed** for Parts 1–2 — just **VS Code** (your editor) and a browser. You
+  write the `.html` + `.css` files in VS Code and open them **straight from disk**
+  (`file://`), exactly as Lessons 1–2 do. (Bootstrap and Vite don't arrive until Lesson 3.)
 - **Use Chrome** so these steps match exactly. (Edge is nearly identical — same engine.)
 - **Opening DevTools (Windows).** The reliable way: **right-click anything on the page →
   Inspect**. DevTools opens with that element already selected in the **Elements** panel —

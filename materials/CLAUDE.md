@@ -112,6 +112,8 @@ the day.
 
 ```
 materials/
+  index.md                             # docs-site landing page (front-matter title; links the 3 passes + capstone)
+  downloads.md                         # docs-site downloads page (seed SQL, Insomnia collections, starter zips — GitHub links)
   api/
     README.md
     lesson-01-guide-web-architecture-http-insomnia.md   # intro/overview — no reference-app build
@@ -122,6 +124,7 @@ materials/
     stretch-api-challenges.md          # cross-cutting stretch challenges (sorts last)
   html-css/
     README.md
+    prework-html-css.md                # optional head-start packet for fast finishers (see Other materials below)
     lesson-01-guide-semantic-html-box-model.md          # intro/overview — raw HTML/CSS, plain files
     lesson-01-lab-staff-card.md
     lesson-02-guide-flexbox.md
@@ -130,7 +133,8 @@ materials/
     stretch-html-css-challenges.md
   react/
     README.md
-    lesson-01-guide-components-jsx-typescript.md
+    prework-react.md                   # optional head-start packet for fast finishers (see Other materials below)
+    lesson-01-guide-javascript-for-csharp-devs.md
     lesson-01-lab-...
     ...
     stretch-react-challenges.md
@@ -139,8 +143,34 @@ materials/
     http-rest-status-codes.md
     insomnia-quickstart.md
     copilot-quickstart.md
+    csharp-naming-conventions.md
+    anatomy-of-a-class.md
+    anatomy-of-a-class-quiz.md
     images/                            # diagrams/infographics; manifest in images/README.md
 ```
+
+## Other materials (beyond guides and labs)
+
+Alongside the per-lesson guides and labs, the materials tree carries a few
+supporting files. They follow the same terminology rules (no day/time references)
+but are **not** part of the guide→lab generation flow — a bulk "generate a pass"
+run neither creates nor overwrites them. Maintain them by hand.
+
+- **Docs-site pages** (`materials/` root) — `index.md` (site landing page) and
+  `downloads.md` (the single place listing every seed SQL script, Insomnia
+  collection, and starter zip, with GitHub links). Both carry YAML front-matter
+  (`title:`) for the docs site. Update `index.md`'s pass/lesson table and
+  `downloads.md`'s file list whenever passes or downloadable assets change.
+- **Prework packets** — `html-css/prework-html-css.md` and
+  `react/prework-react.md`: optional, ungraded head-start packets for students who
+  finish the previous pass's capstone early. Each front-loads that pass's
+  intro/overview lessons and ends with a mini-exercise against the student's own
+  PRS work. There is intentionally **no API prework** (the API pass is first). Keep
+  each in sync with the intro lessons it previews.
+- **Extra reference cheat sheets** (`reference/`) — beyond the three cross-pass
+  quickstarts, `csharp-naming-conventions.md`, `anatomy-of-a-class.md`, and its
+  companion `anatomy-of-a-class-quiz.md` support the API pass. Evergreen; linked
+  from lessons and the `reference/README.md` manifest.
 
 ---
 
