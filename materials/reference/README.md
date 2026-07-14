@@ -16,6 +16,12 @@ here is a step-by-step build — these are lookups.
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
   discipline, and the house-style watch-list. Backs the Copilot lessons and stretch
   challenges across all three passes.
+- [Anatomy of a Class](anatomy-of-a-class.md) — an annotated model and controller that
+  name every part: class, object, method, parameter, field, local variable, property, and
+  the distinctions students trip on. Has a blank [quiz version](anatomy-of-a-class-quiz.md).
+  Useful from **API Lesson 2** and throughout the capstone.
+- [C# naming conventions](csharp-naming-conventions.md) — the PascalCase / camelCase /
+  `_field` rules, and how casing hints at what a token is. Pairs with Anatomy of a Class.
 
 ## images/
 

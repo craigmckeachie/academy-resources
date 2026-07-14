@@ -25,6 +25,13 @@ translation.
 > Lesson 3 — a sandbox to try the language in, nothing more. This lesson has no
 > `tableserve/` reference code because it precedes the build; that's intentional.
 
+> **Shaky on the C# vocabulary first?** This lesson maps C# *onto* JavaScript, so it
+> helps to be solid on the C# side. If naming a **class**, **object**, **method**,
+> **parameter**, **field**, or **local variable** in one of your controllers still feels
+> fuzzy, keep the [Anatomy of a Class](../reference/anatomy-of-a-class.md) reference (and
+> its [C# naming conventions](../reference/csharp-naming-conventions.md) companion) open —
+> the same parts, and most of the same words, reappear in the JavaScript below.
+
 ---
 
 ## 1. From C# to JavaScript

@@ -294,6 +294,14 @@ A few things to notice:
   the thread to handle other requests while waiting for SQL Server. Always use the
   async versions: `ToListAsync`, `FindAsync`, etc.
 
+> **Can you name every part?** This one controller contains a class, a base class, a
+> field, a constructor, a parameter, a method, a method call, and a local variable —
+> the whole vocabulary of C#. Two evergreen references break it down token by token:
+> [Anatomy of a Class](../reference/anatomy-of-a-class.md) (with a blank
+> [quiz](../reference/anatomy-of-a-class-quiz.md) to test yourself) and the
+> [C# naming conventions](../reference/csharp-naming-conventions.md) sheet, which shows
+> how casing alone hints at what each token is. Keep both open as you build.
+
 ---
 
 ## 12. Verifying with Insomnia
