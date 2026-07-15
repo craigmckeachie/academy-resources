@@ -12,10 +12,13 @@ its direct **children** become flexible items you arrange along a **main axis** 
 you'll find that Bootstrap's `d-flex`, `justify-content-*`, and `flex-grow-1` classes
 are exactly the flexbox properties you write here, just renamed.
 
-> **Still no framework.** Keep working in your `css-fundamentals/` folder with plain
-> `.html` + `.css` files, previewed with **Live Server** (the VS Code extension from
-> Lesson 1 — right-click the file → *Open with Live Server* so every save auto-reloads).
-> Bootstrap arrives next lesson.
+> **Still no framework — set up one file pair first.** Before the code-along sections
+> below, work in your `css-fundamentals/` folder from Lesson 1 and create a new
+> `flexbox.html` (Emmet `!` + Tab for the boilerplate, `link:css` for the stylesheet
+> link) plus a `flexbox.css`, with `* { box-sizing: border-box; }` at the top of the
+> CSS. Preview it with **Live Server** (the VS Code extension from Lesson 1 —
+> right-click the file → *Open with Live Server* so every save auto-reloads). Both
+> code-along patterns go into this one file pair. Bootstrap arrives next lesson.
 
 > **How to use this guide.** Sections marked **▶ Code along** are hands-on — type them
 > into your practice files as you read; the other sections are concepts to read. Emmet

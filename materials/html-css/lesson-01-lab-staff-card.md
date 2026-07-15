@@ -5,6 +5,12 @@ files, no framework), a different entity. A Staff card is an identity block just
 the Menu Item card, so the same box-model and `display` techniques apply. Refer back
 to the guide for the card, box model, and `display` details.
 
+Here's the end goal — the finished TableServe Staff page. You're hand-building **one
+card** from this grid; you'll rebuild it with Bootstrap in Lesson 4 and assemble the
+full wrapping grid then.
+
+![Finished TableServe Staff page: a wrapping grid of staff cards, each showing a name, username, phone, email, and role badges, with a three-dots action menu](screenshots/tableserve/staff.png)
+
 ---
 
 ## The Staff record
