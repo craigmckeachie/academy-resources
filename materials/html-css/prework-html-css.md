@@ -23,9 +23,14 @@ magic. `d-flex` is `display: flex`; `p-4` is padding. Learn the raw rules first.
 
 ## Before you start
 
-- **No tooling needed** for Parts 1–2 — just **VS Code** (your editor) and a browser. You
-  write the `.html` + `.css` files in VS Code and open them **straight from disk**
-  (`file://`), exactly as Lessons 1–2 do. (Bootstrap and Vite don't arrive until Lesson 3.)
+- **No framework or build step** for Parts 1–2 — just **VS Code** and a browser. You write
+  the `.html` + `.css` files in VS Code and preview them with the **Live Server** extension
+  (right-click the file → *Open with Live Server*) so every save auto-reloads — exactly as
+  Lessons 1–2 do. Install it once from the Extensions view (`Ctrl+Shift+X`, search
+  **Live Server** by Ritwick Dey). (Bootstrap and Vite don't arrive until Lesson 3.)
+- **Emmet** is built into VS Code — type an abbreviation and press **Tab** to expand it:
+  `!` for the HTML boilerplate, `link:css` for the stylesheet link, `div.card` for an
+  element. Keep the [Emmet cheat sheet](https://docs.emmet.io/cheat-sheet/) handy.
 - **Use Chrome** so these steps match exactly. (Edge is nearly identical — same engine.)
 - **Opening DevTools (Windows).** The reliable way: **right-click anything on the page →
   Inspect**. DevTools opens with that element already selected in the **Elements** panel —
@@ -41,7 +46,9 @@ magic. `d-flex` is `display: flex`; `p-4` is padding. Learn the raw rules first.
 ## Part 0 — A practice folder (once)
 
 Make a folder to experiment in — call it `css-fundamentals/` (the same name Lesson 1
-uses). Inside, create two linked files and open `index.html` in your browser:
+uses). Inside, create two linked files (in `index.html`, Emmet `!` + Tab writes the
+boilerplate and `link:css` + Tab adds the stylesheet link) and open `index.html` with
+**Live Server**:
 
 ```
 css-fundamentals/
@@ -71,17 +78,19 @@ DevTools.
       width/height), `inline-block` (flows but takes a size + padding — how a badge pill
       works).
 
-**Build it:** make a **card** by hand — a bordered, rounded, padded box with a bold name,
-a lighter line of secondary text, and a small colored **badge** pill (use
-`display: inline-block` on the badge). A PRS **Vendor card** is a good target — name + a
-code badge + an address — because you'll build the real one in the capstone.
+**Build it:** make a **card** by hand (Emmet `div.card`) — a bordered, rounded, padded box
+with a bold name, a lighter line of secondary text, and a small colored **badge** pill (use
+`display: inline-block` on the badge). A PRS **Vendor card** is a good target — a name, a
+code badge, and the vendor's **address** (that inner address block is the one place
+`<address>` genuinely fits; the card container itself is a `<div>`) — because you'll build
+the real one in the capstone.
 
-**Verify:** open the page, then **right-click the card → Inspect** (see *Before you start*
-for opening DevTools). With the card selected in the **Elements** panel, find the
-**box-model diagram** in the Styles/Computed panel and **hover each layer** — content,
-padding, border, margin — to watch it highlight on the page. Then delete
-`box-sizing: border-box` and reload — the card gets *wider* than you set, because padding is
-now added on top. Put it back.
+**Verify:** with the page open in **Live Server**, **right-click the card → Inspect** (see
+*Before you start* for opening DevTools). With the card selected in the **Elements** panel,
+find the **box-model diagram** in the Styles/Computed panel and **hover each layer** —
+content, padding, border, margin — to watch it highlight on the page. Then delete
+`box-sizing: border-box` and **save** — Live Server reloads and the card gets *wider* than
+you set, because padding is now added on top. Put it back.
 
 - **Drill selectors** with [CSS Diner](https://flukeout.github.io/) — a quick game for
   element/class/id/attribute selectors.
@@ -175,8 +184,8 @@ recognize.
 | Recognizing Bootstrap components | Lessons 3–5 (the same card / table / form / modal in Bootstrap) |
 | Spotting the repeating PRS page patterns | the HTML/CSS capstone (you build every PRS page) |
 
-You do **not** need to install Vite, npm, or Bootstrap — that's Lesson 3. Stay in plain
-files opened from disk.
+You do **not** need Vite, npm, or Bootstrap — that's Lesson 3. Stay in plain files
+previewed with Live Server.
 
 ---
 
@@ -185,4 +194,4 @@ files opened from disk.
 - **Optional and ungraded** — do as much or as little as you like; stop any time.
 - **Flexbox only** for layout — no Bootstrap `row`/`col` grid, no CSS Grid.
 - **Static pass** — no JavaScript of your own; the markup is what React wires up later.
-- Parts 1–2 are **plain files opened from disk** — no server, no build step.
+- Parts 1–2 are **plain files previewed with Live Server** — no framework, no build step.

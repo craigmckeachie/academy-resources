@@ -290,6 +290,40 @@ real patterns; never invent plausible-but-wrong code, markup, or class names.
   pass (see **Intro / overview lessons** above) have no reference-app code or markup to
   teach from — they precede the build on purpose. Verify them by observation, not
   against `tableserve/`.
+- **Intentional guide/lab divergences from the reference — don't "correct" these back.**
+  A few teaching choices deliberately differ from `tableserve/`:
+  - **Card wrappers are `<div>` in guides and labs**, even though the reference
+    implementations (`TableServe.Design`, `TableServe.Web`) wrap card identity blocks in
+    `<address>`. A menu/staff card isn't contact info, so guides and labs teach `<div>`;
+    `<address>` is reserved for a *real* address block (a stretch). The reference apps
+    keep `<address>` and are **not** being changed to match.
+
+### HTML/CSS by-hand lessons (Lessons 1–2) — workflow conventions
+
+The pre-Bootstrap "by hand" lessons follow a specific teaching workflow; keep it when
+editing or regenerating them:
+
+- **Preview with VS Code's Live Server extension**, not a `file://` double-click, so saves
+  auto-reload.
+- **Give Emmet hints for markup** — `!` / `html:5` for the HTML5 boilerplate, `link:css`
+  for the stylesheet link, and `tag.class` / `tag#id` (e.g. `div.card`) for elements. Note
+  that you type the tag name without angle brackets and press Tab, and link the
+  [Emmet cheat sheet](https://docs.emmet.io/cheat-sheet/).
+- **Hand out CSS incrementally**, not as one paste-the-whole-file block: build the example
+  up in small "add this, save, look" passes (a `▶ Save and look` cue) so students see each
+  rule take effect.
+
+### HTML/CSS guides (all lessons) — the `▶ Code along` convention
+
+Every guide in the HTML/CSS pass (Lessons 1–5, hand-written and Bootstrap alike) uses one
+signposting convention so students know when to type versus when to just read:
+
+- A **"How to use this guide"** blockquote near the top (after the goal + general pattern)
+  explaining the marker.
+- **`▶ Code along`** prefixed on the `## N. …` header of any section whose body the student
+  builds into their files — e.g. `## 6. ▶ Code along — the page shell`. Concept, decision,
+  reference-table, and verification sections stay unmarked. Build-heavy lessons (4–5) mark
+  most sections; concept-heavy ones (1–2) mark only their one or two build sections.
 
 ## Generating a whole pass (bulk runs)
 

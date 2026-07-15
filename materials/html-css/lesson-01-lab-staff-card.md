@@ -17,16 +17,17 @@ values — e.g. Jordan Reyes, jreyes, (555) 123-4567, jordan@tableserve.test, Ma
 
 ## Steps
 
-1. In your `css-fundamentals/` folder, create `staff-card.html` and (reuse or create)
-   a `staff.css`, linked from the HTML `<head>`.
+1. In your `css-fundamentals/` folder, create `staff-card.html` (Emmet `!` + Tab, then
+   `link:css`) and (reuse or create) a `staff.css`, linked from the HTML `<head>`. Open
+   it with **Live Server**.
 2. Add `* { box-sizing: border-box; }` and a little `body` padding to the CSS.
-3. Mark up the card with an `<address class="card">` holding:
+3. Mark up the card with a `<div class="card">` (Emmet: type `div.card` + Tab)
+   holding:
    - a `.name` span — first + last name
    - `.username`, `.phone`, `.email` spans — the contact lines
    - a `.badge` span — the role (e.g. "Manager")
 4. Style `.card` as a box: a fixed `width` (~`22rem`), `padding`, `border`,
-   `border-radius`, and a soft `box-shadow`. Remember `font-style: normal` to undo
-   `<address>`'s italic.
+   `border-radius`, and a soft `box-shadow`.
 5. Make `.name` a **block** span, larger and heavier (`font-size`, `font-weight`).
 6. Make the contact spans **block** and muted (`color: #6c757d`, smaller
    `font-size`); add a small `margin-bottom` between lines.
@@ -38,7 +39,8 @@ values — e.g. Jordan Reyes, jreyes, (555) 123-4567, jordan@tableserve.test, Ma
 
 ## Verify in the browser
 
-Browser checks work the same as the guide — section 6. Open `staff-card.html`:
+Browser checks work the same as the guide — section 9. With `staff-card.html` open in
+Live Server:
 
 1. Confirm the card renders as a bordered, rounded, padded box with the name on top,
    muted contact lines stacked below, and a colored role pill.

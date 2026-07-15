@@ -31,7 +31,7 @@ both, some neither.
 1. In your `staff.html` skeleton, add the `.list d-flex flex-row flex-wrap ... gap-5`
    tray (same as Menu Items).
 2. Add one card per staff member. Each card shows:
-   - First + Last name (`<strong>` inside an `<address>`)
+   - First + Last name (`<strong>` inside the card's content `<div>`)
    - Username, Phone, and Email as muted lines (`<span class="text-secondary">`)
    - Role **badges** — only when the flag is true:
      `<span class="badge text-bg-primary mt-1">Manager</span>` and/or

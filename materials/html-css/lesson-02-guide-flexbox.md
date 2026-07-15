@@ -12,8 +12,16 @@ its direct **children** become flexible items you arrange along a **main axis** 
 you'll find that Bootstrap's `d-flex`, `justify-content-*`, and `flex-grow-1` classes
 are exactly the flexbox properties you write here, just renamed.
 
-> **Still no tooling.** Keep working in your `css-fundamentals/` folder with plain
-> `.html` + `.css` files opened from disk. Bootstrap arrives next lesson.
+> **Still no framework.** Keep working in your `css-fundamentals/` folder with plain
+> `.html` + `.css` files, previewed with **Live Server** (the VS Code extension from
+> Lesson 1 — right-click the file → *Open with Live Server* so every save auto-reloads).
+> Bootstrap arrives next lesson.
+
+> **How to use this guide.** Sections marked **▶ Code along** are hands-on — type them
+> into your practice files as you read; the other sections are concepts to read. Emmet
+> hints (💡) are the same Tab-to-expand shortcuts from Lesson 1 (type the tag name
+> without angle brackets; keep the [Emmet cheat sheet](https://docs.emmet.io/cheat-sheet/)
+> handy).
 
 ---
 
@@ -136,10 +144,14 @@ fills-the-rest content area.
 
 ---
 
-## 4. Pattern 1 — the header row (title left, action right)
+## 4. ▶ Code along — Pattern 1: the header row (title left, action right)
 
 The single most common row in the app: a heading pinned to the left, a button pinned
 to the right, both vertically centered.
+
+💡 Emmet: type `div.header-row>h2+a.button` and press **Tab** — it scaffolds the
+container with its two children in one shot (`>` nests a child, `+` adds a sibling).
+Then fill in the text:
 
 ```html
 <div class="header-row">
@@ -156,16 +168,20 @@ to the right, both vertically centered.
 }
 ```
 
-`space-between` throws maximum space between the two children, pinning one to each
-end; `align-items: center` lines them up despite their different heights. That's the
-whole pattern — you'll reuse it on every list and detail page.
+**▶ Save and look:** the heading sits hard-left and the button hard-right, both
+vertically centered. `space-between` throws maximum space between the two children,
+pinning one to each end; `align-items: center` lines them up despite their different
+heights. That's the whole pattern — you'll reuse it on every list and detail page.
 
 ---
 
-## 5. Pattern 2 — the app frame (sidebar + growing content)
+## 5. ▶ Code along — Pattern 2: the app frame (sidebar + growing content)
 
 Every page in TableServe is a **fixed-width sidebar** next to a **content area that
 fills the rest** of the width. That's a flex row with `flex-grow` on the content:
+
+💡 Emmet: `main.frame>nav.sidebar+section.content` + **Tab** scaffolds all three
+elements at once.
 
 ```html
 <main class="frame">
@@ -190,10 +206,10 @@ fills the rest** of the width. That's a flex row with `flex-grow` on the content
 }
 ```
 
-The sidebar keeps its `280px`; the content's `flex-grow: 1` makes it expand to fill
-whatever's left, at any window width. Resize the window and the content flexes while
-the sidebar holds steady. **This is the exact frame** the Bootstrap scaffold gives you
-next lesson — you're building it by hand first so the scaffold isn't a mystery.
+**▶ Save and look:** the sidebar keeps its `280px` while the content's `flex-grow: 1`
+expands to fill whatever's left. **Resize the window** — the content flexes while the
+sidebar holds steady. **This is the exact frame** the Bootstrap scaffold gives you next
+lesson — you're building it by hand first so the scaffold isn't a mystery.
 
 ---
 
@@ -209,7 +225,7 @@ external tool this pass — everything else you build yourself.
 
 ## 7. Verifying in the browser
 
-Open your practice page and use DevTools to *see* the flex layout:
+With the page open in **Live Server**, use DevTools to *see* the flex layout:
 
 1. Confirm the header row shows the title hard-left and the button hard-right, aligned
    vertically.
@@ -246,15 +262,16 @@ property from this guide, renamed. You already know what they do.
 
 ## Build Steps
 
-1. In your `css-fundamentals/` folder, create a `flexbox.html` + `flexbox.css`
-   (linked), with `* { box-sizing: border-box; }` at the top of the CSS.
-2. Build the **header row** (section 4): a container with an `<h2>` and a button,
-   styled `display: flex; justify-content: space-between; align-items: center`.
-3. Build the **app frame** (section 5): a `<main>` flex row with a fixed-width
-   `<nav class="sidebar">` and a `<section class="content">` set to `flex-grow: 1`.
+1. In your `css-fundamentals/` folder, create a `flexbox.html` (Emmet `!` + Tab for the
+   boilerplate, `link:css` for the stylesheet link) + `flexbox.css`, with
+   `* { box-sizing: border-box; }` at the top of the CSS. Open it with **Live Server**.
+2. Build the **header row** (section 4, Emmet `div.header-row>h2+a.button`): style it
+   `display: flex; justify-content: space-between; align-items: center`. Save and look.
+3. Build the **app frame** (section 5, Emmet `main.frame>nav.sidebar+section.content`):
+   a flex row with a fixed-width `.sidebar` and a `.content` set to `flex-grow: 1`.
 4. Add a couple of nav links in the sidebar and a heading in the content so you can
    see the two regions.
-5. Open it in the browser, **resize the window**, and confirm the content flexes while
+5. With Live Server running, **resize the window** and confirm the content flexes while
    the sidebar holds its width (section 7).
 6. In DevTools, toggle the flex overlay and experiment with `justify-content` and
    `align-items` values to see each one move the items.

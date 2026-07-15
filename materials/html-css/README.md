@@ -26,10 +26,10 @@ guide and what you built alongside it as your model.
 | 4 | [Bootstrap cards, tables, badges, dropdowns, shared form](lesson-04-guide-bootstrap-cards-tables-forms.md) | [Staff list and form](lesson-04-lab-staff-list-and-form.md) |
 | 5 | [Detail pages, modals, nested form, Sign In](lesson-05-guide-forms-modals-detail-signin.md) | [Order form, Order Item edit, delete modals](lesson-05-lab-order-form-and-modals.md) |
 
-**Lessons 1–2 use plain files you write and open straight from disk** — no Vite, no
-npm, no Bootstrap. The point is to see raw HTML, the box model, and flexbox before a
-framework hides them. **The Vite scaffold and Bootstrap enter in Lesson 3**, and from
-there you build on the same page shell.
+**Lessons 1–2 use plain files you write and preview with the VS Code Live Server
+extension** — no Vite, no npm, no Bootstrap. The point is to see raw HTML, the box
+model, and flexbox before a framework hides them. **The Vite scaffold and Bootstrap
+enter in Lesson 3**, and from there you build on the same page shell.
 
 After the HTML/CSS pass you build all the **PRS static pages independently** using
 these completed TableServe pages as the direct pattern reference: Sign In, Requests
@@ -58,10 +58,10 @@ or **[Reach]** (goes past it, with a reference link to research).
 - Every guide and lab uses the **TableServe** domain (Staff, Categories, MenuItems,
   Orders, OrderItems). In the capstone you rebuild the same patterns for **PRS**
   (Users, Vendors, Products, Requests, RequestLines).
-- **Lessons 1–2 are plain files** (`.html` + `.css`, opened from disk) — you write the
-  CSS by hand so you understand what Bootstrap does for you. **Lesson 3 onward uses the
-  Vite scaffold** — run `npm run dev` and open the URL it prints so the `{{> header}}`
-  partials expand.
+- **Lessons 1–2 are plain files** (`.html` + `.css`, previewed with the **Live Server**
+  VS Code extension) — you write the CSS by hand so you understand what Bootstrap does for
+  you. **Lesson 3 onward uses the Vite scaffold** — run `npm run dev` and open the URL it
+  prints so the `{{> header}}` partials expand.
 - **Get the scaffold for Lesson 3:** download [`tableserve-design-starter.zip`](https://github.com/craigmckeachie/academy-resources/raw/main/files/tableserve-design-starter.zip),
   unzip it, and run `npm install` — that unzipped folder is the `TableServe.Design`
   starter project the Lesson 3 guide builds on. (See all [Downloads](../downloads.md).)

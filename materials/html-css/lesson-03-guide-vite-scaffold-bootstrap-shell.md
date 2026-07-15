@@ -15,6 +15,11 @@ wrote by hand in Lessons 1–2** — `d-flex` is `display: flex`, `p-4` is paddi
 so on. Once you can produce the shell, every other page is different content dropped
 into the same frame.
 
+> **How to use this guide.** Sections marked **▶ Code along** are hands-on — build them
+> into your `TableServe.Design` project as you read. The unmarked sections are concepts
+> and reference to read first, then apply in the code-along sections and the lab. (Emmet
+> abbreviations from Lessons 1–2 still speed up typing the markup.)
+
 ---
 
 **End goal — where you're headed.** This is the finished **Orders** page:
@@ -32,8 +37,8 @@ content.
 
 In **Lessons 1 and 2** you wrote HTML and CSS **by hand** in plain files — the box
 model, semantic tags, and flexbox, styled with your own CSS in a `.css` file you
-linked yourself. You opened those files straight in the browser. No tooling, no
-framework, on purpose: you needed to see the raw mechanics before anything hid them.
+linked yourself. You previewed those files with Live Server. No framework, no build
+tooling, on purpose: you needed to see the raw mechanics before anything hid them.
 
 Now you add the two things a real project uses to avoid repeating that work:
 
@@ -129,9 +134,9 @@ Three packages, that's it:
 Run `npm install` once to create `node_modules/`, then `npm run dev`. Vite prints a
 local URL (e.g. `http://localhost:5173`). Leave it running — it reloads on save.
 
-> **What changed from Lessons 1–2:** there you opened a `.html` file directly from
-> disk. Now you run a **dev server** (`npm run dev`) and open the URL it prints —
-> because the `{{> header}}` partials only expand when Vite processes the page.
+> **What changed from Lessons 1–2:** there you previewed a `.html` file with **Live
+> Server**. Now you run **Vite's** dev server (`npm run dev`) and open the URL it prints
+> — because the `{{> header}}` partials only expand when Vite processes the page.
 
 ---
 
@@ -192,7 +197,6 @@ ones you'll see:
 | `<nav>` | primary navigation (the sidebar) |
 | `<main>` | the one main content area of the page |
 | `<section>` | a thematic grouping (the page's content region) |
-| `<address>` | contact/identity info (used on cards next lesson) |
 
 Same rules as Lesson 1: exactly **one `<main>`** per page, reach for a `<div>` only
 when no semantic tag fits (a pure layout wrapper), and pick heading levels by rank
@@ -296,7 +300,7 @@ pane open as you build; when a class's effect isn't obvious, uncheck it and watc
 
 ---
 
-## 6. The page shell every screen shares
+## 6. ▶ Code along — the page shell every screen shares
 
 Here is the skeleton every TableServe page starts from. Commit it to memory — you'll
 type it (or copy it) at the top of every page you build:
@@ -336,7 +340,7 @@ Notice:
 
 ---
 
-## 7. The page-heading pattern
+## 7. ▶ Code along — the page-heading pattern
 
 Inside `section.content`, every list/detail page opens with the same heading row: a
 title on the left, a primary action button on the right, and a bottom border under
@@ -372,8 +376,9 @@ comment. Filling it with a card grid or table is next lesson's job. This is a
 
 ## 8. Verifying in the browser
 
-Same as Lessons 1–2 — the browser is your verification tool. The one difference: you
-open the URL that `npm run dev` prints, not the file from disk.
+Same as Lessons 1–2 — the browser is your verification tool. The one difference from
+Lessons 1–2: you open the URL that `npm run dev` prints rather than previewing the file
+with Live Server (Vite has to process the page for the `{{> header}}` partials to expand).
 
 1. With `npm run dev` running, open the printed URL and navigate to
    `/orders.html` (or click through from the header brand).
@@ -393,7 +398,7 @@ open the URL that `npm run dev` prints, not the file from disk.
 If the header or nav doesn't appear, the `{{> header}}` / `{{> nav}}` partial isn't
 resolving — confirm the file is named exactly `header.html` / `nav.html` in
 `partials/`, and that you started the page from `npm run dev` (partials only expand
-through Vite, not by opening the file directly from disk).
+through Vite, not by opening the raw `.html` file directly).
 
 ---
 

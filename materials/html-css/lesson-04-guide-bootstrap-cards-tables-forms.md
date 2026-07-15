@@ -13,6 +13,11 @@ row* becomes a **table**; a short status word becomes a **badge**; a per-row act
 menu is a **dropdown**; and **create and edit are the same form** — only the title,
 the pre-filled values, and the button label differ.
 
+> **How to use this guide.** Sections marked **▶ Code along** are hands-on — build them
+> into your project as you read. The unmarked sections are concepts and reference (like
+> "cards vs. tables" and the badge/dropdown component references) to read first, then
+> apply in the code-along sections and the lab.
+
 ---
 
 **End goal — what you're building.** Three finished pages come out of this lesson. The
@@ -39,7 +44,7 @@ Same data source either way — the layout follows the task, not the entity.
 
 ---
 
-## 2. The card grid
+## 2. ▶ Code along — the card grid
 
 A card grid is a flex container that wraps, holding fixed-width `.card` elements.
 Here's the Menu Items grid frame:
@@ -67,30 +72,33 @@ Rather than paste the finished card and move on, build it in four passes and wat
 layer of classes do its job. **Reload the page after each pass** — the goal is to *see*
 what every class changes, not to memorize the final block.
 
-**Pass 0 — semantic HTML, no classes.** Start with the meaning only:
+**Pass 0 — plain HTML, no classes.** Start with the structure only:
 
 ```html
 <div>
-  <address>
+  <div>
     <div><!-- 3-dots action menu (section 4) --></div>
     <span>Loaded Nachos</span><br />
     <span>$9.99</span><br />
     <div>Appetizers</div>
-  </address>
+  </div>
 </div>
 ```
 
-In the browser this is just black text stacked on white — no border, no card. This is
-the same starting point you hand-styled the long way in Lesson 1. Everything below is CSS
+A card groups a name, a price, and a category — there's no more-specific semantic tag
+for that, so it's plain `<div>`s (not an `<address>` — a card isn't contact info; that
+distinction is from Lesson 1). In the browser this is just black text stacked on white —
+no border, no card. This is the same starting point you hand-styled the long way in
+Lesson 1. Everything below is CSS
 Bootstrap already wrote, added one class at a time.
 
 **Pass 1 — make it a card.** Add `.card` and pad the content:
 
 ```html
 <div class="card" style="width: 23rem">
-  <address class="py-4 px-4">
+  <div class="py-4 px-4">
     ...
-  </address>
+  </div>
 </div>
 ```
 
@@ -129,7 +137,7 @@ the top:
 ```html
 <div class="card" style="width: 23rem">
   <div class="progress"><div class="progress-bar bg-primary-subtle" role="progressbar" style="width: 30%"></div></div>
-  <address class="py-4 px-4">
+  <div class="py-4 px-4">
     <div class="d-flex justify-content-end">
       <!-- 3-dots action menu (section 4) -->
     </div>
@@ -137,7 +145,7 @@ the top:
     <span class="fs-4 lh-l fw-medium">Loaded Nachos</span><br />
     <span class="fs-5 fw-light">$9.99</span><br />
     <div class="badge text-secondary bg-primary-subtle mt-5">Appetizers</div>
-  </address>
+  </div>
 </div>
 ```
 
@@ -146,7 +154,9 @@ Things to notice:
   class doesn't cover cleanly). Fixed width + `flex-wrap` is what makes the grid tidy.
 - The thin `.progress` bar at the top is a decorative accent — `styles.css` pins it
   to the top edge of the card. Leave it as-is.
-- `<address>` is the semantic wrapper for the identity block (you met it in Lesson 1).
+- The inner `<div class="py-4 px-4">` is a generic grouping wrapper for the card's
+  content — a card isn't contact info, so it's a plain `<div>`, not an `<address>` (the
+  distinction from Lesson 1).
 - Typography utilities set the visual hierarchy: `fs-4` (font size) + `fw-medium`
   (weight) for the name, `fs-5 fw-light` for the price.
 - The category renders as a **badge** — a small pill. `bg-primary-subtle` +
@@ -245,7 +255,7 @@ Opened, the menu looks like this — the same 3-dots menu appears on every card 
 
 ---
 
-## 5. The Orders table
+## 5. ▶ Code along — the Orders table
 
 Orders is the table layout. It sits in the same `.list` tray, with a **status
 filter** above it.
@@ -339,7 +349,7 @@ Ready, a Served, a Cancelled) so every badge color appears.
 
 ---
 
-## 6. The shared Create/Edit form
+## 6. ▶ Code along — the shared Create/Edit form
 
 Here's a pattern worth internalizing because you'll reuse it constantly:
 **"create" and "edit" are the same form.** The fields, layout, and validation are

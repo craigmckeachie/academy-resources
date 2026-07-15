@@ -14,6 +14,11 @@ shows on top of the page — used both for *confirming a destructive action* and
 *collecting a required reason before a state change*. A **nested child form** creates
 a record that belongs to a parent (an Order Item under an Order).
 
+> **How to use this guide.** Sections marked **▶ Code along** are hands-on — build them
+> into your project as you read. This is a build-heavy lesson: only the opening "detail
+> page anatomy" is concept; every section after it assembles real page markup. Read the
+> anatomy first, then code along the rest and in the lab.
+
 ---
 
 **End goal — what you're building.** The headline page is **Order Detail**: a summary,
@@ -40,7 +45,7 @@ hidden until triggered.
 
 ---
 
-## 2. The heading row with workflow buttons
+## 2. ▶ Code along — the heading row with workflow buttons
 
 The detail heading is the same `justify-content-between` row as a list page, but the
 right side holds *action buttons* instead of a single "Create" button:
@@ -98,7 +103,7 @@ data-bs-target="#cancelModal"` — it doesn't act directly, because cancelling
 
 ---
 
-## 3. The summary — `.detail-header` with definition lists
+## 3. ▶ Code along — the summary: `.detail-header` with definition lists
 
 The order's own fields render as a **definition list** (`<dl>` / `<dt>` / `<dd>`) —
 the right semantic element for label/value pairs. Three `<dl>`s sit side by side in a
@@ -140,7 +145,7 @@ the right semantic element for label/value pairs. Three `<dl>`s sit side by side
 
 ---
 
-## 4. The nested child table
+## 4. ▶ Code along — the nested child table
 
 Below the summary, a card holds the order's **Order Items** — the child records. It's
 a table with a running **Total** in the footer:
@@ -198,7 +203,7 @@ a table with a running **Total** in the footer:
 
 ---
 
-## 5. Modals
+## 5. ▶ Code along — Modals
 
 A **modal** is a dialog Bootstrap overlays on the page. The markup sits inert in the
 page until something with `data-bs-toggle="modal" data-bs-target="#itsId"` opens it —
@@ -287,7 +292,7 @@ Reject-Request there.
 
 ---
 
-## 6. The nested child form — Order Item Create
+## 6. ▶ Code along — the nested child form: Order Item Create
 
 `orderitem-create.html` creates a child record under an order. It's a form like
 Lesson 4's, with two twists: it's **scoped to a parent** (Cancel returns to the order
@@ -360,7 +365,7 @@ Amount) — minus the Notes field.
 
 ---
 
-## 7. The Sign In page
+## 7. ▶ Code along — the Sign In page
 
 Sign In is the one page **without** the header/nav shell — it's a centered card on a
 tinted full-height background. The `<body>` gets the `signin` class (the orange

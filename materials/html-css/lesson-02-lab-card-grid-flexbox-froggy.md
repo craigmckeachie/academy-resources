@@ -11,12 +11,14 @@ as the guide — no framework. Refer back to the guide for the flexbox propertie
 In Lesson 1 you built a single card. A real list page shows *many* cards that wrap
 across the page as it narrows — a flex container with `flex-wrap`.
 
-1. In `css-fundamentals/`, create `card-grid.html` + `card-grid.css` (linked), with
-   `* { box-sizing: border-box; }` at the top.
+1. In `css-fundamentals/`, create `card-grid.html` (Emmet `!` + Tab, then `link:css`) +
+   `card-grid.css`, with `* { box-sizing: border-box; }` at the top. Open it with
+   **Live Server**.
 2. Bring over your Menu Item card CSS from Lesson 1 (the `.card`, `.name`, `.price`,
    `.badge` rules).
 3. In the HTML, wrap **several** cards (4–6, different menu items) in a container:
-   `<section class="grid"> …cards… </section>`.
+   `<section class="grid"> …cards… </section>` (Emmet: `section.grid` for the container,
+   `div.card` for each card).
 4. Make the container a wrapping flex row:
    ```css
    .grid {
@@ -25,7 +27,7 @@ across the page as it narrows — a flex container with `flex-wrap`.
      gap: 1.5rem;
    }
    ```
-5. Open it and **resize the window** — the cards should reflow onto fewer/more per row
+5. Save and **resize the window** — the cards should reflow onto fewer/more per row
    as the width changes. That reflow is `flex-wrap` doing the work of a grid, with no
    `row`/`col` anywhere.
 
@@ -47,7 +49,8 @@ across the page as it narrows — a flex container with `flex-wrap`.
 
 ## Verify in the browser
 
-Browser checks work the same as the guide — section 7. Open `card-grid.html`:
+Browser checks work the same as the guide — section 7. With `card-grid.html` open in
+Live Server:
 
 1. Confirm the cards sit in a wrapping row with even `gap` spacing, and that they
    **reflow** when you resize the window.
