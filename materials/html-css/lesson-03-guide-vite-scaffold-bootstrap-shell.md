@@ -88,8 +88,15 @@ the unzipped folder is your project, and inside you'll find:
 ```
 TableServe.Design/
   package.json          ← dependencies + dev/build scripts
-  vite.config.js        ← Vite + handlebars partials config
+  vite.config.js        ← Vite + handlebars partials config (every page already wired)
   index.html            ← page directory — links to every page in the project
+  orders.html           ← ships BLANK (just the <head>) — you build its shell in
+                            this lesson's guide
+  staff.html            ← ships BLANK — you build its shell in this lesson's lab
+  menuitems.html        ← skeleton: the shared shell (header + nav + empty content)
+  categories.html         is already in place, ready to fill in
+  order-create.html       (…and the rest — see index.html for the full list)
+  …
   partials/
     header.html         ← finished — the top bar + brand + user menu
     nav.html            ← finished — the left sidebar links
@@ -101,7 +108,11 @@ TableServe.Design/
 ```
 
 The `header.html`, `nav.html`, `styles.css`, and `assets/` are **finished for you**.
-Your job this pass is the individual pages.
+**Most** entity pages also ship as a **skeleton** — the shared shell wrapped around an
+empty `section.content`, ready for you to fill in. Two are the exception: `orders.html`
+and `staff.html` ship **blank** (just the `<head>`) on purpose, because in this lesson
+you build their shell yourself — `orders.html` in the guide below, `staff.html` in the
+lab. Every other page you *open and fill*, not create.
 
 ### package.json
 
@@ -175,9 +186,10 @@ export default defineConfig({
 });
 ```
 
-When you add a **new page**, add one line to that `input` object so the production
-build knows about it. During `npm run dev` you can open any `.html` file directly
-without touching the config, but get in the habit of adding the build entry too.
+Every page the starter ships already has its line in that `input` object — you don't
+add entries for the provided pages. You only add one line here if you create a
+**brand-new page** of your own (say, in a stretch challenge) so the production build
+knows about it. During `npm run dev` you can open any `.html` file directly.
 
 You don't need to edit `header.html` or `nav.html` — they're done. It's still worth
 reading them so you recognize the pieces (the brand SVG logo, the user dropdown, the
@@ -302,8 +314,10 @@ pane open as you build; when a class's effect isn't obvious, uncheck it and watc
 
 ## 6. ▶ Code along — the page shell every screen shares
 
-Here is the skeleton every TableServe page starts from. Commit it to memory — you'll
-type it (or copy it) at the top of every page you build:
+`orders.html` ships **blank** — just the `<head>` and an empty `<body>`. You'll build
+that body now: the shell every TableServe page shares. **Open `orders.html`**  in VS Code and type this into the empty
+body. You produce it by hand once here — the pre-skeletoned pages already have this exact
+structure, so you'll recognize it everywhere:
 
 ```html
 <!doctype html>
@@ -429,12 +443,17 @@ only the page title, the action button, and the content region change.
    jump to any page as you build.
 3. Read `partials/header.html` and `partials/nav.html` so you recognize the shared
    pieces. Don't change them.
-4. Create `orders.html` in the project root with the full page shell from section 6.
-5. Add the page-heading row from section 7 inside `section.content` — an `<h2>`
-   "Orders" title and a "Create Order" primary button with the `#plus` icon.
+4. Open `orders.html` — click its link on the `index.html` page directory, or open
+   the file in VS Code. It ships **blank** (just the `<head>`); build the page shell
+   from section 6 into its empty `<body>` — `{{> header}}`, `<main class="d-flex">`
+   with `{{> nav}}` and `<section class="content p-4 flex-grow-1">`, and the JS bundle.
+5. Add the page-heading row from section 7 inside the existing `section.content` — an
+   `<h2>` "Orders" title and a "Create Order" primary button with the `#plus` icon.
 6. Leave the area below the heading empty (a placeholder comment) — components come
    next lesson.
-7. Add an `orders` entry to the `input` object in `vite.config.js`.
+7. Confirm `orders` is already listed in the `input` object of `vite.config.js` — every
+   starter page is pre-wired, so there's nothing to add here (you'd only add a line for
+   a brand-new page of your own).
 8. Open `/orders.html` in the browser and verify the shell renders (header, nav,
    heading, rule) using the checks in section 8 — resize to confirm `flex-grow-1`,
    and check the Console for 404s.

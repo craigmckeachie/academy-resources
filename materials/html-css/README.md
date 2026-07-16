@@ -22,7 +22,7 @@ guide and what you built alongside it as your model.
 |--------|-------|-----|
 | 1 | [Semantic HTML and the box model — raw CSS, plain files](lesson-01-guide-semantic-html-box-model.md) | [Style a Staff card by hand](lesson-01-lab-staff-card.md) |
 | 2 | [Flexbox — raw CSS](lesson-02-guide-flexbox.md) | [A card grid, and Flexbox Froggy](lesson-02-lab-card-grid-flexbox-froggy.md) |
-| 3 | [The Vite scaffold, partials, and the Bootstrap page shell](lesson-03-guide-vite-scaffold-bootstrap-shell.md) | [Page skeletons](lesson-03-lab-page-skeletons.md) |
+| 3 | [The Vite scaffold, partials, and the Bootstrap page shell](lesson-03-guide-vite-scaffold-bootstrap-shell.md) | [Staff page skeleton](lesson-03-lab-page-skeletons.md) |
 | 4 | [Bootstrap cards, tables, badges, dropdowns, shared form](lesson-04-guide-bootstrap-cards-tables-forms.md) | [Staff list and form](lesson-04-lab-staff-list-and-form.md) |
 | 5 | [Detail pages, modals, nested form, Sign In](lesson-05-guide-forms-modals-detail-signin.md) | [Order form, Order Item edit, delete modals](lesson-05-lab-order-form-and-modals.md) |
 

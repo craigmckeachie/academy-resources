@@ -1,74 +1,60 @@
-# Lesson 3 Lab — Page Skeletons
+# Lesson 3 Lab — Staff Page Skeleton
 
-Build the page **skeletons** for the rest of the TableServe pages, using the same
-shell and heading pattern you saw in the guide's `orders.html`. Skeleton = the page
-shell plus the heading row only — no cards, tables, or forms yet (those come in
-Lesson 4). Refer back to the guide (sections 6 and 7) for the shell and heading
-markup.
+Build the **Staff page skeleton** by hand — the same shell + heading pattern the guide
+built for `orders.html`, on a different page. `staff.html` ships **blank** (just the
+`<head>`) for exactly this reason: you build its body yourself. Skeleton = the page
+shell plus the heading row only — no cards or forms yet (those come in Lesson 4). Refer
+back to the guide (sections 6 and 7) for the shell and heading markup.
 
-> **End goal.** You're building the *empty shells* here — header, nav, and a heading
-> row, with nothing below. To see the finished pages these grow into over Lessons 4–5,
-> browse the `screenshots/tableserve/` folder — e.g. the finished
-> [Menu](screenshots/tableserve/menuitems.png) and
-> [Orders](screenshots/tableserve/orders.png) pages. Don't build those yet; just the
-> frame.
+> **End goal.** You're building the _empty shell_ here — header, nav, and a heading
+> row, with nothing below. To see the finished page it grows into over Lessons 4–5,
+> browse the [Staff page](screenshots/tableserve/staff.png) in
+> `screenshots/tableserve/`. Don't build the cards yet; just the frame.
 
----
-
-## Pages to skeleton
-
-Create each file in the project root with the standard shell (`{{> header}}`,
-`<main class="d-flex">`, `{{> nav}}`, `<section class="content p-4 flex-grow-1">`,
-Bootstrap JS bundle) and a `justify-content-between` heading row. Use these titles,
-buttons, and `<title>` tags:
-
-| File | `<title>` | Heading `<h2>` | Action button (text + icon) | Button href |
-|---|---|---|---|---|
-| `menuitems.html` | TableServe — Menu Items | Menu | Add Item (`#plus`) | `/menuitem-create.html` |
-| `categories.html` | TableServe — Categories | Categories | Add Category (`#plus`) | `/category-create.html` |
-| `staff.html` | TableServe — Staff | Staff | Add Staff (`#plus`) | `/staff-create.html` |
-
-Then two pages that have **no** action button — just a title and the rule:
-
-| File | `<title>` | Heading `<h2>` |
-|---|---|---|
-| `order-detail.html` | TableServe — Order Detail | Order |
-| `menuitem-create.html` | TableServe — New Menu Item | New Menu Item |
+![Finished TableServe Staff page: a wrapping grid of staff cards, each showing a name, username, phone, email, and role badges, with a three-dots action menu](screenshots/tableserve/staff.png)
 
 ---
 
 ## Steps
 
-1. Copy the page shell from the guide's section 7 into each new file.
-2. Set the correct `<title>` in `<head>` for each page.
-3. Add the heading row: `<div class="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">`
-   with the `<h2>` and (where listed) the primary button.
-4. For the button icon, reuse the SVG `<use href="/assets/bootstrap-icons.svg#plus" />`
+1. **Open `staff.html`** — click its link on the `index.html` page directory in the browser and open
+   the file in VS Code for editing. It's **blank** below the `<head>` (the `<head>`, with the
+   correct `<title>` and stylesheet links, is already there).
+2. Build the **page shell** into the empty `<body>` (guide section 6), in order:
+   - `{{> header}}`
+   - `<main class="d-flex">` containing `{{> nav}}` and
+     `<section class="content p-4 flex-grow-1">`
+   - the Bootstrap JS bundle `<script>` as the last line of `<body>`
+3. Inside `section.content`, add the **heading row** (guide section 7):
+   `<div class="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">` with
+   an `<h2>Staff</h2>` and an **Add Staff** primary button linking to
+   `/staff-create.html`.
+4. For the button icon, reuse the `<svg><use href="/assets/bootstrap-icons.svg#plus" /></svg>`
    pattern from the guide.
-5. For `order-detail.html` and `menuitem-create.html`, include only the `<h2>` in
-   the heading row — no button.
-6. Leave everything below each heading empty (a placeholder comment).
-7. Add an entry for each new page to the `input` object in `vite.config.js`
-   (`menuitems`, `categories`, `staff`, `orderDetail`, `menuitemCreate`).
+5. Leave everything below the heading empty (a placeholder comment) — the staff cards
+   come in Lesson 4.
+6. `staff.html` is already listed in the `input` object of `vite.config.js` — nothing
+   to add there.
 
 ---
 
 ## Verify in the browser
 
 Browser setup (running `npm run dev`, opening pages, DevTools) is covered in the
-guide — section 9. With the dev server running:
+guide — section 8. With the dev server running:
 
-1. Open each new page (`/menuitems.html`, `/categories.html`, `/staff.html`,
-   `/order-detail.html`, `/menuitem-create.html`) and confirm the header + nav +
-   heading render, matching `orders.html`.
+1. Open `/staff.html` and confirm the header + nav + heading render, matching the
+   `orders.html` you built in the guide.
 2. Click the nav links — each should navigate between your pages.
-3. Confirm the pages with buttons show the button pinned to the right; the two
-   without show just the title and rule.
-4. Check the Console (F12) for 404s on any page.
+3. Confirm the **Add Staff** button is pinned to the right of the heading row, with
+   the rule underneath.
+4. **Resize the window** and confirm the content area flexes beside the fixed-width
+   nav (`flex-grow-1`).
+5. Check the Console (F12) for 404s.
 
-You just reproduced the same shell across five pages — this is exactly what you'll
-do to stand up every PRS page (Requests, Products, Vendors, Users, Request Detail)
-in the capstone.
+You just stood up the same shell the guide built for Orders, on a second page — this is
+exactly what you'll do to stand up every PRS page (Requests, Products, Vendors, Users,
+Request Detail) in the capstone.
 
 ---
 
@@ -78,21 +64,22 @@ Optional — for when you finish early. Not needed for the capstone.
 **[Reinforce]** builds on what you just did; **[Reach]** goes past the guide and
 needs some research.
 
-- **Skeleton the whole app** — [Reinforce] — add shells for the remaining pages
-  (`category-create.html`, `staff-create.html`, `order-create.html`,
-  `order-edit.html`, `menuitem-edit.html`, `orderitem-create.html`) so every page
-  in the design has a shell waiting. Add each to `vite.config.js`.
+- **Heading rows for the other list pages** — [Reinforce] — the skeletoned
+  `menuitems.html` and `categories.html` already ship with the shell but an empty
+  content area. Add the same `justify-content-between` heading row to each — Menu /
+  **Add Item** → `/menuitem-create.html`, and Categories / **Add Category** →
+  `/category-create.html`. It's a head start on Lesson 4.
 - **Active nav link** — [Reinforce] — Bootstrap's nav-pills style an `active` link
   differently. Add `class="nav-link active"` to the current page's link in a copy of
   the nav and confirm it takes the orange highlight from `styles.css`. (In React
   you'll set this dynamically; here just prove you can see the active state.)
 - **Inspect the box model** — [Reinforce] — in DevTools, select your heading row and
   read off the computed `padding`, `margin`, and `border` values the `pb-4 mb-4
-  border-bottom border-2` classes produced. Match each number back to a layer of the
+border-bottom border-2` classes produced. Match each number back to a layer of the
   box-model diagram in the guide.
 - **Read Bootstrap's source** — [Reinforce] — open the unminified
   `node_modules/bootstrap/dist/css/bootstrap.css` and find the rules for three classes
-  you used on the Orders skeleton — `.btn-primary`, `.d-flex`, and `.border-bottom`.
+  you used on the Staff skeleton — `.btn-primary`, `.d-flex`, and `.border-bottom`.
   Confirm each is ordinary CSS you could have written yourself, exactly as the guide's
   section 5 says.
 - **A print stylesheet** — [Reach] — the box model and CSS you're learning aren't
