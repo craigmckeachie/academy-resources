@@ -76,6 +76,15 @@ Same validation pattern, one required select and one numeric minimum — on PRS 
 `js/validation.js` into every PRS form the same way in the capstone. Your validated pages
 are what your peers review against the error-state screenshots.
 
+> **Capstone note — your PRS design starter has no `js/validation.js`.** You downloaded
+> the PRS design starter before this lesson, so the script isn't in it. Create
+> `js/validation.js` yourself (copy it from the
+> [Lesson 6 guide](lesson-06-guide-form-validation-states.md)), load it on every form
+> page, and wire it into **all** of them — Sign In, User / Vendor / Product / Request
+> create & edit, the RequestLine form, and the Reject modal. The exact field-by-field
+> rules are in
+> [PRS requirements → Static Design Project](../specs/prs-requirements.md#static-design-project).
+
 ---
 
 ## Stretch challenges

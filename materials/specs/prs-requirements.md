@@ -730,3 +730,58 @@ Displays users as a **card grid**. Each card shows:
 | Admin | checkbox | Optional; maps to `IsAdmin` |
 
 On save: navigates to `/users`.
+
+---
+
+## Static Design Project
+
+The **HTML/CSS capstone** builds every PRS page above as **static HTML/CSS + Bootstrap** (the Vite scaffold from the HTML/CSS pass). The page layouts, fields, and buttons are exactly as described under **Frontend — Prs.Web** — use those as your visual target. Two things are specific to the static build:
+
+- **Content is hardcoded** from the provided sample data — nothing is fetched. Each page shows realistic rows and values so it matches its reference screenshot.
+- **Forms validate on submit** using a small shared script, `js/validation.js`, from **HTML/CSS Lesson 6**. Submitting an incomplete form reveals the error state — the same `is-invalid` + `.invalid-feedback` markup React's `react-hook-form` produces later, so the React capstone is a straight conversion.
+
+### Wiring validation
+
+Your PRS design starter does **not** include `js/validation.js` — create it (copy it from the Lesson 6 guide) and load it on every form page (`<script src="/js/validation.js">`). Then, on each form:
+
+- Add `novalidate` and `data-success="/…"` (where a valid submit navigates) to the `<form>`.
+- Add `required`, plus an `.invalid-feedback` message, to each required control.
+- Add `min="1"` to Quantity, and native `maxlength="N"` where a length cap applies.
+- Leave **disabled** controls (Requested By; Status on Create) and **optional** fields (Email, Phone) unvalidated.
+
+`required` and `min` are checked on submit (the control turns red and its message appears); `maxlength` is a native attribute that simply blocks over-long input.
+
+### Required validations
+
+Every rule below must be implemented and visible on an empty/invalid submit. The messages match the React app so the static pages and the React capstone read identically.
+
+| Page / Form | Field | Rule | Message |
+|---|---|---|---|
+| Sign In | Username | required | Username is required |
+| Sign In | Password | required | Password is required |
+| User Create / Edit | First Name | required | First name is required |
+| User Create / Edit | Last Name | required | Last name is required |
+| User Create / Edit | Username | required · `maxlength 50` | Username is required |
+| User Create / Edit | Password | required · `maxlength 60` | Password is required |
+| Vendor Create / Edit | Vendor Code | required · `maxlength 7` | Code is required |
+| Vendor Create / Edit | Vendor Name | required | Name is required |
+| Vendor Create / Edit | Address | required | Address is required |
+| Vendor Create / Edit | City | required | City is required |
+| Vendor Create / Edit | State | required | State is required |
+| Vendor Create / Edit | Zip | required | Zip is required |
+| Product Create / Edit | Product Number | required · `maxlength 20` | Number is required |
+| Product Create / Edit | Product Name | required | Name is required |
+| Product Create / Edit | Price | required | Price is required |
+| Product Create / Edit | Unit | required | Unit is required |
+| Product Create / Edit | Vendor | required | Vendor is required |
+| Request Create / Edit | Description | required | Description is required |
+| Request Create / Edit | Justification | required | Justification is required |
+| Request Create / Edit | Delivery Method | required | Delivery method is required |
+| Request Edit **only** | Status | required | Status is required |
+| Request Line Create / Edit | Product | required | Product is required |
+| Request Line Create / Edit | Quantity | `min 1` | Quantity must be at least 1 |
+| Request Detail — Reject modal | Rejection Reason | required | Rejection reason is required |
+
+> Fields not listed — Email, Phone, and the disabled Requested By and Create-page Status selects — are **not** validated.
+
+Peer review of the static design compares each form's empty-submit error state against the reference screenshots.
