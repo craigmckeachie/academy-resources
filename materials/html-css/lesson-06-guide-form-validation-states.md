@@ -20,8 +20,8 @@ form, and a peer reviewer checking your work, can trigger it).
 > rest and in the lab.
 
 > **A note on JavaScript.** This pass has been markup-only so far — the only script was
-> Bootstrap's bundle. Lesson 6 adds **one small script of your own**, `js/validation.js`,
-> because a form that never reacts to a bad submit can't be peer-reviewed against the
+> Bootstrap's bundle. Lesson 6 uses **one small script**, `js/validation.js` — provided
+> in your design starter — because a form that never reacts to a bad submit can't be peer-reviewed against the
 > error-state screenshots. It's the one sanctioned bit of custom JS in this pass, and
 > it's a direct preview of what `react-hook-form` will do for you in React.
 
@@ -117,7 +117,7 @@ browser enforces it as you type, so the script never has to.
 
 ## 4. ▶ Code along — the validation script, wired to Sign In
 
-Create **`js/validation.js`** in the project:
+Your design starter already includes **`js/validation.js`** — open it and read what it does (if your copy predates it, create it with this script):
 
 ```js
 // Reveal validation errors on submit — the static-pass stand-in for react-hook-form.
@@ -151,7 +151,9 @@ div in your markup, exactly like the `required` messages you already wrote. If n
 failed, it navigates to the form's `data-success` — the static stand-in for "save
 succeeded, go to the next page."
 
-Now **wire Sign In** to it. Three edits to `signin.html`:
+Now **wire Sign In** to it. Two edits to `signin.html` — the
+`<script src="/js/validation.js">` tag is already linked on every page in your starter,
+right after the Bootstrap bundle:
 
 1. Mark the form so the script picks it up, and tell it where a valid submit goes:
    ```html
@@ -163,11 +165,6 @@ Now **wire Sign In** to it. Three edits to `signin.html`:
    <div class="mb-3 d-grid gap-2">
      <button type="submit" class="btn btn-lg btn-primary">Sign in</button>
    </div>
-   ```
-3. Load the script before `</body>`, after the Bootstrap bundle:
-   ```html
-   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-   <script src="/js/validation.js"></script>
    ```
 
 **▶ Save and look.** Click **Sign in** with both fields empty — both turn red with
@@ -215,13 +212,10 @@ Leave **Email** and **Phone** alone — they're optional, so no `required`, no m
 The **Role** checkboxes aren't validated either.
 
 Then wire the form the same way as Sign In — but the **Save staff** button is *already*
-`type="submit"`, so you only add the form attributes and the script tag:
+`type="submit"`, so you only add the form attributes (the `<script>` is already linked):
 
 ```html
 <form class="d-flex flex-wrap w-75 gap-2" novalidate data-success="/staff.html">
-```
-```html
-<script src="/js/validation.js"></script>
 ```
 
 **▶ Save and look.** Click **Save staff** with the form empty — First Name, Last Name,
@@ -346,14 +340,14 @@ screenshots.
 
 ## Build Steps
 
-1. Create **`js/validation.js`** with the script from section 4.
+1. Confirm **`js/validation.js`** is in your starter (or create it from section 4).
 2. In `signin.html`, add `required` + an `.invalid-feedback` div to Username and
    Password; add `novalidate data-success="/orders.html"` to the form; change the Sign
-   in `<a>` to a `<button type="submit">`; load `/js/validation.js`.
+   in `<a>` to a `<button type="submit">`.
 3. In `staff-create.html`, add `required` + message divs to First Name, Last Name,
    Username, Password; add `maxlength="50"`/`maxlength="60"` to Username/Password; add
-   `novalidate data-success="/staff.html"` to the form; load the script.
+   `novalidate data-success="/staff.html"` to the form.
 4. In `order-detail.html`, add `novalidate data-success="/orders.html"` to the Cancel
-   modal's form (its required textarea + message already exist); load the script.
+   modal's form (its required textarea + message already exist).
 5. Verify all three in the browser per section 8, watching `is-invalid` toggle in
    DevTools.

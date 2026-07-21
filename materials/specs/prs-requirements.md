@@ -742,7 +742,7 @@ The **HTML/CSS capstone** builds every PRS page above as **static HTML/CSS + Boo
 
 ### Wiring validation
 
-Your PRS design starter does **not** include `js/validation.js` — create it (copy it from the Lesson 6 guide) and load it on every form page (`<script src="/js/validation.js">`). Then, on each form:
+Your PRS design starter includes `js/validation.js`, already linked on every page (`<script src="/js/validation.js">`) — if your copy predates it, create it from the Lesson 6 guide and link it. Then, on each form:
 
 - Add `novalidate` and `data-success="/…"` (where a valid submit navigates) to the `<form>`.
 - Add `required`, plus an `.invalid-feedback` message, to each required control.

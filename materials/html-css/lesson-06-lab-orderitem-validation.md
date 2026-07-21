@@ -35,13 +35,10 @@ Amount, and Notes stay as they are (Price/Amount are display-only; Notes is opti
    <input id="quantity" type="number" class="form-control" value="0" min="1" />
    <div class="invalid-feedback">Quantity must be at least 1</div>
    ```
-3. Wire the form and load the script (the **Save item** button is already
-   `type="submit"`):
+3. Wire the form — the **Save item** button is already `type="submit"`, and the
+   `<script src="/js/validation.js">` tag is already linked on the page:
    ```html
    <form class="form w-50" novalidate data-success="/order-detail.html">
-   ```
-   ```html
-   <script src="/js/validation.js"></script>
    ```
 
 ---
@@ -50,7 +47,7 @@ Amount, and Notes stay as they are (Price/Amount are display-only; Notes is opti
 
 4. Apply the same three edits to the edit form: `required` + empty-value placeholder +
    message slot on the dropdown, `min="1"` + a hardcoded message slot on Quantity, and
-   `novalidate data-success="/order-detail.html"` + the script tag on the form.
+   `novalidate data-success="/order-detail.html"` on the form (the script tag is already linked).
 5. Leave the pre-filled `value`s alone — the edit form already has a `selected` menu item
    and a real quantity, so a valid submit sails straight through to the order detail.
 
@@ -76,11 +73,10 @@ Same validation pattern, one required select and one numeric minimum — on PRS 
 `js/validation.js` into every PRS form the same way in the capstone. Your validated pages
 are what your peers review against the error-state screenshots.
 
-> **Capstone note — your PRS design starter has no `js/validation.js`.** You downloaded
-> the PRS design starter before this lesson, so the script isn't in it. Create
-> `js/validation.js` yourself (copy it from the
-> [Lesson 6 guide](lesson-06-guide-form-validation-states.md)), load it on every form
-> page, and wire it into **all** of them — Sign In, User / Vendor / Product / Request
+> **Capstone note — wire `js/validation.js` into every PRS form.** Your PRS design
+> starter includes `js/validation.js`, already linked on every page (if your copy
+> predates it, create it from the [Lesson 6 guide](lesson-06-guide-form-validation-states.md)
+> and link it). Wire it into **all** of them — Sign In, User / Vendor / Product / Request
 > create & edit, the RequestLine form, and the Reject modal. The exact field-by-field
 > rules are in
 > [PRS requirements → Static Design Project](../specs/prs-requirements.md#static-design-project).
