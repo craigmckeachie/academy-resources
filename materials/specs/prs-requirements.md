@@ -552,8 +552,6 @@ Both pages render the same form. On save, both navigate to `/requests/detail/{id
 On Create: POSTs to `POST /api/requests`, then redirects to the new request's detail page.  
 On Edit: PUTs to `PUT /api/requests/:id`, then redirects to the request's detail page.
 
-<!-- On Edit only (the request already has an `id`), the same **Items table** shown on Request Detail also renders below the form, so line items can be added, edited, or deleted directly from the Edit page without navigating away. It does not appear on Create, since a new request has no `id` yet and therefore no line items. -->
-
 ---
 
 ### Request Detail (`/requests/detail/:id`)
