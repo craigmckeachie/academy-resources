@@ -90,11 +90,11 @@ needs some research.
   button per the guide's table — and on the Cancelled copy, add the **Cancellation
   Reason** to the summary. This is the manual version of the conditional rendering
   you'll write in React.
-- **Live client-side validation** — [Reach] — make the Cancel modal's required
-  textarea actually block an empty submit and reveal the `invalid-feedback` message,
-  using Bootstrap's validation styles. Not covered in the guide — research the
-  `needs-validation` / `was-validated` approach:
-  [Bootstrap form validation](https://getbootstrap.com/docs/5.3/forms/validation/).
+- **Peek ahead at live validation** — [Reinforce] — the Cancel modal's required textarea
+  has an `.invalid-feedback` message that stays hidden. Add `is-invalid` to the textarea
+  by hand, save, and watch the message appear; remove it and it's gone. That single class
+  is the whole error state — **Lesson 6** makes it happen automatically on submit across
+  every form.
 - **Static "Add Item" preview** — [Reinforce] — on `order-detail.html`, add one more
   Order Item row and update the footer **Total** by hand, proving you understand the
   Amount = Price × Quantity and Total = sum-of-Amounts relationships you'll compute in

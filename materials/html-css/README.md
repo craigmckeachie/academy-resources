@@ -1,7 +1,7 @@
 # HTML/CSS Concepts — Lesson Materials
 
 This folder contains the lesson materials for the HTML/CSS/Bootstrap pass
-(Lessons 1–5). It starts with **hand-written HTML, CSS, the box model, and flexbox in
+(Lessons 1–6). It starts with **hand-written HTML, CSS, the box model, and flexbox in
 plain files** — no tooling, no framework — then adds a Vite + `vite-plugin-handlebars`
 scaffold and **Bootstrap** to build the TableServe static front end with a
 flexbox-only layout.
@@ -25,6 +25,7 @@ guide and what you built alongside it as your model.
 | 3 | [The Vite scaffold, partials, and the Bootstrap page shell](lesson-03-guide-vite-scaffold-bootstrap-shell.md) | [Staff page skeleton](lesson-03-lab-page-skeletons.md) |
 | 4 | [Bootstrap cards, tables, badges, dropdowns, shared form](lesson-04-guide-bootstrap-cards-tables-forms.md) | [Staff list and form](lesson-04-lab-staff-list-and-form.md) |
 | 5 | [Detail pages, modals, nested form, Sign In](lesson-05-guide-forms-modals-detail-signin.md) | [Order form, Order Item edit, delete modals](lesson-05-lab-order-form-and-modals.md) |
+| 6 | [Form validation states — `is-invalid`, error messages, submit script](lesson-06-guide-form-validation-states.md) | [Validate the Order Item form](lesson-06-lab-orderitem-validation.md) |
 
 **Lessons 1–2 use plain files you write and preview with the VS Code Live Server
 extension** — no Vite, no npm, no Bootstrap. The point is to see raw HTML, the box
@@ -73,8 +74,10 @@ or **[Reach]** (goes past it, with a reference link to research).
   `justify-content: space-between`. If a class ever feels like magic, recall the raw
   rule from Lessons 1–2.
 - This is a **static** pass: no JavaScript of your own beyond Bootstrap's bundle (which
-  drives dropdowns and modals). Forms and Sign In don't really submit — the markup is
-  the target React will wire up later.
+  drives dropdowns and modals) — with **one exception in Lesson 6**, a small provided
+  `js/validation.js` that reveals form errors on submit so the pages can be peer-reviewed
+  against the error-state screenshots. Otherwise the markup is the target React wires up
+  later.
 - The **header** and **nav** partials, `styles.css`, and the icon sprite are provided
   finished — you build the individual pages. The **Categories** list and form are also
   provided as reference.

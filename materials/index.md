@@ -27,7 +27,7 @@ system — on your own:
 | Pass | What you build | Lessons | Start here |
 |---|---|---|---|
 | **1 · Web API** | C# / ASP.NET Core back end (TableServe) | 1–6 | [Web API »](api/README.md) |
-| **2 · HTML / CSS** | Static Bootstrap front end (TableServe) | 1–5 | [HTML / CSS »](html-css/README.md) |
+| **2 · HTML / CSS** | Static Bootstrap front end (TableServe) | 1–6 | [HTML / CSS »](html-css/README.md) |
 | **3 · React** | React + TypeScript front end (TableServe) | 1–13 | [React »](react/README.md) |
 
 Use the left sidebar to move between lessons; the right sidebar is the table of

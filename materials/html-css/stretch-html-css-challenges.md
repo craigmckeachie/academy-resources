@@ -196,6 +196,26 @@ eyes you learn to overrule. Reference: the
 
 ---
 
+## 9. Validate every form in the app — [Reinforce]
+
+Lesson 6 wired validation into Sign In, the Staff form, the Cancel modal, and the Order
+Item form. Finish the job: bring **every** form in the app to the same standard, so no
+form anywhere submits empty.
+
+1. Add the `required` markup + `.invalid-feedback` slots, `novalidate`, a `data-success`
+   URL, and the `/js/validation.js` script tag to each remaining form —
+   `menuitem-create/edit`, `category-create/edit`, `order-create/edit`, and `staff-edit`.
+2. Add `min="1"` (with a hardcoded `.invalid-feedback` message) to any numeric field that
+   shouldn't go below one, and native `maxlength` to any field with a length cap.
+3. Submit each page empty and confirm the right fields go red; fill them and confirm the
+   navigation.
+
+This is the exact sweep you'll run across the PRS forms in the capstone (Users, Vendors,
+Products, Requests, RequestLines) — doing it here on TableServe first means the capstone
+is muscle memory. No new concept; it's Lesson 6 applied everywhere.
+
+---
+
 You'll reuse every one of these instincts on the PRS capstone: reskinning to your own
 data, standing up a new entity's pages, and polishing layout and theming are exactly
 the kinds of things you'll reach for once the core PRS pages are in place.
