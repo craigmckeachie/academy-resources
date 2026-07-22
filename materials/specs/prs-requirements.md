@@ -738,6 +738,18 @@ The **HTML/CSS capstone** builds every PRS page above as **static HTML/CSS + Boo
 - **Content is hardcoded** from the provided sample data — nothing is fetched. Each page shows realistic rows and values so it matches its reference screenshot.
 - **Forms validate on submit** using a small shared script, `js/validation.js`, from **HTML/CSS Lesson 6**. Submitting an incomplete form reveals the error state — the same `is-invalid` + `.invalid-feedback` markup React's `react-hook-form` produces later, so the React capstone is a straight conversion.
 
+### Card layouts (list pages)
+
+The three card-grid list pages don't share one card technique — each item's width is set **per element** (an inline `style` or a utility class), never in the stylesheet, and **Users isn't a Bootstrap card at all**. Match each page to the reference:
+
+| Entity | Item markup | Card? | Width |
+|---|---|---|---|
+| Products | `<div class="card" style="width: 23rem">` | Bootstrap `.card` | `23rem` (inline) |
+| Vendors | `<div class="card w-25">` | Bootstrap `.card` | `w-25` (25% utility) |
+| Users | `<div class="d-flex gap-4" style="width: 25rem">` + avatar circle + `<address>` | **not a card** | `25rem` (inline) |
+
+The user "card" is really a flex row: a `6rem` avatar circle (`rounded-circle`) beside an `<address>` holding the name, role, and phone. It reads as a contact block (semantic `<address>`), which is why it drops the `.card` box — this is the avatar-circle-with-initials pattern.
+
 ### Wiring validation
 
 Your PRS design starter includes `js/validation.js`, already linked on every page (`<script src="/js/validation.js">`) — if your copy predates it, create it from the Lesson 6 guide and link it. Then, on each form:
