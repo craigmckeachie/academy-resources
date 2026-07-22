@@ -750,6 +750,39 @@ The three card-grid list pages don't share one card technique — each item's wi
 
 The user "card" is really a flex row: a `6rem` avatar circle (`rounded-circle`) beside an `<address>` holding the name, role, and phone. It reads as a contact block (semantic `<address>`), which is why it drops the `.card` box — this is the avatar-circle-with-initials pattern.
 
+### Colors
+
+The design is almost entirely **stock Bootstrap 5** — the only custom values are one brand blue, a logo indigo, the Sign In gradient, and the Raleway font. Everything else comes from Bootstrap utility classes.
+
+**Custom (non-Bootstrap) values**
+
+| Value | Used for | Defined in |
+|---|---|---|
+| `#007AFF` (bright "system blue") | Link color, active nav pill, action-icon fills (edit / add / ⋮ / save), the logo's primary shape | `css/styles.css` (`--bs-link-color-rgb: 0,122,255`, `.nav-pills` active) + inline `fill=` |
+| `#312ECB` (indigo) | The logo's second shape only | inline in `signin.html` |
+| `#D6F2FF → #EDFAFF` (light-blue radial gradient) | Full-page background of the Sign In page | `css/styles.css` `.signin` |
+| `Raleway` (weights 400 / 600) | App-wide font | `css/styles.css` `@import` (Google Fonts) |
+
+> **Two blues:** links and icons use the custom `#007AFF`, but buttons (`btn-primary`) and the Vendor card's accent bar stay Bootstrap's default `#0d6efd` — `--bs-primary` is never overridden.
+
+**Backgrounds** (all Bootstrap utilities)
+
+| Surface | Class / value |
+|---|---|
+| Page body | white (default) |
+| Header bar & left nav | `bg-body-tertiary` (very light gray); active nav pill = `#007AFF` bg + white text |
+| Sign In page | light-blue radial gradient (`.signin`) |
+| Card-grid panel — Products / Vendors / Users | `bg-light` |
+| Requests list panel | `bg-body-tertiary` |
+| User avatar circle | `bg-secondary` + `text-white` initials |
+| Header signed-in avatar | `bg-primary-subtle` + `text-secondary` |
+| Product card — top accent bar (30%) + part-number badge | `bg-primary-subtle` (light blue) |
+| Vendor card — top accent bar (60%) | default `progress-bar`, no `bg-` class → Bootstrap primary blue `#0d6efd` |
+
+**Text** — default body `#212529`; muted secondary via `text-secondary` / `text-body-secondary` (justification, delivery mode, role, phone); `text-white` on avatars and primary buttons.
+
+**Semantic** — status badges: NEW `text-bg-primary` (blue), REVIEW `text-bg-warning` (yellow), APPROVED `text-bg-success` (green), REJECTED `text-bg-danger` (red). Buttons: `btn-primary` / `btn-outline-primary` (blue); `btn-outline-danger` (Reject, Cancel Order) and `btn-danger` (delete-confirm) for destructive actions; `btn-light` (transparent) for the ⋮ dropdown toggles. Other badges: Vendor code = `badge bg-secondary` (gray); Product part-number = `badge text-secondary bg-primary-subtle` (light blue).
+
 ### Wiring validation
 
 Your PRS design starter includes `js/validation.js`, already linked on every page (`<script src="/js/validation.js">`) — if your copy predates it, create it from the Lesson 6 guide and link it. Then, on each form:
