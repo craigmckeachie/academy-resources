@@ -162,6 +162,7 @@ const greet = (first, last) => {     // a block body needs an explicit return
   return full;
 };
 console.log(double(5));              // 10
+console.log(greet("Sam", "Diaz"));  // Sam Diaz
 ```
 
 Arrow functions are *everywhere* in React — every event handler and every `.map()`
@@ -176,8 +177,8 @@ const label = `${item} — $${price}`;   // C#: $"{item} — ${price}"
 console.log(label);                    // Nachos — $9.99
 ```
 
-> **▶ Try it** — paste both snippets beneath `menu`. **Console:** `10`, then
-> `Nachos — $9.99`.
+> **▶ Try it** — paste both snippets beneath `menu`. **Console:** `10`, then `Sam Diaz`,
+> then `Nachos — $9.99`.
 
 ---
 
@@ -268,6 +269,7 @@ for (let i = 0; i < numbers.length; i++) {
 manage, but you still push manually.
 
 ```ts
+const numbers = [1, 2, 3];
 const tens = [];
 numbers.forEach((number) => tens.push(number * 10));
 ```
@@ -276,6 +278,7 @@ numbers.forEach((number) => tens.push(number * 10));
 get back a new array of the results. No temp array, no `push`.
 
 ```ts
+const numbers = [1, 2, 3];
 const tens = numbers.map((number) => number * 10);
 ```
 

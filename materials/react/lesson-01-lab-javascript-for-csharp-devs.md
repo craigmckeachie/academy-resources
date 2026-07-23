@@ -45,9 +45,9 @@ Refer back to the guide for syntax.
 7. **`.filter()` = LINQ `.Where()`.** From the same `prices`, log only those under `$16`
    with `prices.filter(...)`. (C#: `prices.Where(p => p < 16)`.)
 
-8. **Modules.** Create `src/money.ts` that `export`s a named
-   `format = (n: number) => \`$${n.toFixed(2)}\``. `import { format }` into `main.ts` and
-   log `format(24.99)`.
+8. **Modules.** Create `src/money.ts` that `export`s a named `format` helper — the same
+   `function format(n: number)` from the guide (§9), returning a currency string.
+   `import { format }` into `main.ts` and log `format(24.99)` (→ `$24.99`).
 
 ---
 
