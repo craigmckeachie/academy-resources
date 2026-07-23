@@ -35,9 +35,11 @@ Practice TypeScript by giving types to the kind of data the app is built from. S
 6. **A typed array.** Declare `const menu: IMenuItem[] = [ ... ]` with two or three items.
    Log `menu.length`.
 
-7. **A union "enum".** Add `status: "Placed" | "Preparing" | "Ready"` to a small `order`
-   object. Assign `"Placed"` — fine. Assign `"Done"` — confirm the compiler rejects it
-   (it's not one of the allowed strings).
+7. **A literal union.** Add `status: "Placed" | "Preparing" | "Ready"` to a small `order`
+   object — TypeScript's lightweight alternative to an enum. Assign `"Placed"` — fine.
+   Assign `"Done"` — confirm the compiler rejects it (it's not one of the allowed
+   strings). (The reference app types `status` as plain `string`; this literal union is
+   the stricter option.)
 
 ---
 
@@ -67,9 +69,6 @@ some research.
 - **Add a nested type** — [Reinforce] — define an `ICategory { id: number; name: string }`
   and add `category?: ICategory` to `IMenuItem`. Assign an item both with and without a
   nested category object. This mirrors the API's nav-property shape.
-- **A reusable list type** — [Reinforce] — declare `Record<number, IMenuItem>` mapping id
-  to item, and populate it from your array. That's the `Dictionary<int, MenuItem>`
-  equivalent.
 - **A generic function** — [Reach] — write a `first<T>(items: T[]): T | undefined` that
   returns the first element of any typed array (not covered in the guide — research
   generic functions). Reference:

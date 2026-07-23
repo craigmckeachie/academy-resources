@@ -167,7 +167,7 @@ string or null"; you'll also see it for ids that don't exist until the server as
 
 ```ts
 id: number | undefined;         // a number, or not set yet
-status: "Placed" | "Preparing" | "Ready";   // one of these exact strings (like an enum)
+status: "Placed" | "Preparing" | "Ready";   // a literal union — one of these exact strings
 ```
 
 > **▶ Try it** — declare a status with the literal-union type and give it a bad value:
@@ -177,9 +177,12 @@ status: "Placed" | "Preparing" | "Ready";   // one of these exact strings (like 
 > **You'll see:** *Type '"Done"' is not assignable to type '"Placed" | "Preparing" |
 > "Ready"'.* Change `"Done"` to `"Placed"` and it clears.
 
-That last form — a union of literal strings — is how the course types status values
-without a C# enum. Optional `?` and `| undefined` overlap; you'll see both in the
-reference code.
+That last form — a **literal union** — is TypeScript's lightweight alternative to an
+enum: it pins a value to a fixed set of strings with no separate `enum` declaration.
+TypeScript has an `enum` keyword too, but this course never uses it — and the reference
+app goes lighter still, typing `status` as plain `string`. Treat the literal union as the
+stricter option you *could* reach for, not what the app actually does. Optional `?` and
+`| undefined` overlap; you'll see both in the reference code.
 
 ---
 
@@ -187,15 +190,15 @@ reference code.
 
 - **Arrays:** `IStaff[]` is "array of staff" — the type you give a fetched list.
   `Array<IStaff>` is the same thing, spelled with generics.
-- **`Record<K, V>`** is C#'s `Dictionary<K, V>`: `Record<string, number>` maps string
-  keys to number values.
 - **Generics** are the same idea as C# — a type parameter in angle brackets. You mostly
   *consume* generics rather than write them: `useState<IStaff[]>([])` says "this state
   holds an array of staff," just like `List<Staff>`.
+- **`Record<K, V>`** is C#'s `Dictionary<K, V>` (`Record<string, number>` maps string keys
+  to number values). Worth **recognizing** as the `Dictionary` mapping — but you'll rarely
+  reach for it in this app, which shapes its data with interfaces and arrays.
 
 ```ts
-const staff: IStaff[] = [];                 // List<Staff>
-const byId: Record<number, IStaff> = {};    // Dictionary<int, Staff>
+const staff: IStaff[] = [];    // List<Staff>
 ```
 
 > **▶ Try it** — with `IStaff` in the file, build a typed array and push an incomplete item:
@@ -269,8 +272,9 @@ complain, then satisfying it**. In `src/main.ts`:
   `Record<K,V>` for `Dictionary`, `interface` for a model class.
 - An **interface** (`IStaff`) names a data shape — the front-end echo of your C# model —
   and TypeScript matches it **structurally** (by shape, not name).
-- **`?`** marks optional properties; **`|`** builds union types (`number | undefined`,
-  literal-string "enums").
+- **`?`** marks optional properties; **`|`** builds union types (`number | undefined`, or
+  literal-string unions — a lightweight stand-in for an enum, though the app types
+  `status` as plain `string`).
 - **`async`/`await`** are the same keywords as C#; a JS async function returns a
   `Promise<T>` — full treatment in Lesson 4.
 

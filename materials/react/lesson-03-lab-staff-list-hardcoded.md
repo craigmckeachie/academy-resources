@@ -22,8 +22,18 @@ fundamentals exercise.)
    - `id: number | undefined`
    - `firstName: string`, `lastName: string`, `username: string`
    - `isManager: boolean`, `isAdmin: boolean`
-3. In `src/staff/StaffPage.tsx`, declare a hardcoded `IStaff[]` array of several
-   members — mix the roles (some managers, some admins, some both, some neither).
+3. In `src/staff/StaffPage.tsx`, declare this hardcoded `IStaff[]` array above the
+   component — the roles are already mixed (a manager, an admin, one of both, one of
+   neither):
+   ```ts
+   const staff: IStaff[] = [
+     { id: 1, firstName: "Sam", lastName: "Diaz", username: "sdiaz", isManager: true, isAdmin: false },
+     { id: 2, firstName: "Ana", lastName: "Cruz", username: "acruz", isManager: false, isAdmin: true },
+     { id: 3, firstName: "Leo", lastName: "Park", username: "lpark", isManager: true, isAdmin: true },
+     { id: 4, firstName: "Mia", lastName: "Nguyen", username: "mnguyen", isManager: false, isAdmin: false },
+     { id: 5, firstName: "Owen", lastName: "Bell", username: "obell", isManager: true, isAdmin: false },
+   ];
+   ```
 4. Write a `StaffPage` **component** that returns a heading and a `.list d-flex
    flex-row flex-wrap gap-5 p-4` tray, `.map()`-ing the array into one card per member.
    Each card shows:

@@ -58,13 +58,15 @@ that turns the response into what the user sees.
 static scaffold — same tool, now driving a React app). Create a project:
 
 ```bash
-npm create vite@latest tableserve-web -- --template react-ts
-cd tableserve-web
+npm create vite@latest TableServe.Web -- --template react-ts
+cd TableServe.Web
 npm install
 npm run dev
 ```
 
 - `--template react-ts` gives you **React + TypeScript**.
+- Vite may prompt for a **package name** (npm names can't contain capitals or dots) —
+  accept its suggested `tableserve.web`; the folder still keeps the `TableServe.Web` name.
 - `npm run dev` starts the dev server and prints a URL (usually
   `http://localhost:5173`). Open it — you get Vite's starter page.
 - Vite has **hot module replacement (HMR)**: save a file and the browser updates
@@ -83,7 +85,7 @@ npm install bootstrap react-bootstrap react-router-dom react-hook-form react-hot
 The important files:
 
 ```
-tableserve-web/
+TableServe.Web/
   index.html          ← the single HTML shell; has <div id="root"></div>
   src/
     main.tsx          ← entry point — mounts React into #root
@@ -268,14 +270,17 @@ It works, but it's noisy — a temp array, an index, a manual `push`.
 **Stage 2 — `forEach`.** Drops the index; still pushes manually:
 
 ```tsx
-const cards = [];
-menuItems.forEach((menuItem) => {
-  cards.push(
-    <div className="card p-4" key={menuItem.id}>
-      <span className="fs-4 fw-medium">{menuItem.name}</span>
-    </div>
-  );
-});
+function MenuItemsPage() {
+  const cards = [];
+  menuItems.forEach((menuItem) => {
+    cards.push(
+      <div className="card p-4" key={menuItem.id}>
+        <span className="fs-4 fw-medium">{menuItem.name}</span>
+      </div>
+    );
+  });
+  return <section>{cards}</section>;
+}
 ```
 
 **Stage 3 — `.map()`.** `.map()` *is* "transform each element into a new one," so it hands
@@ -395,7 +400,7 @@ On PRS you'll write the same three things first — an `IProduct` interface, a
 
 ## Build Steps
 
-1. Scaffold the project: `npm create vite@latest tableserve-web -- --template react-ts`,
+1. Scaffold the project: `npm create vite@latest TableServe.Web -- --template react-ts`,
    then `cd` in and `npm install`.
 2. Install the pass's libraries (`bootstrap react-bootstrap react-router-dom
    react-hook-form react-hot-toast`) and start `npm run dev`.
