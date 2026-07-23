@@ -43,8 +43,42 @@ in.
 
 ## 2. Context — sharing the user across the tree
 
-Passing the current user as a prop through every component would be painful. **Context**
-lets any component read a shared value directly. Define it in `App.tsx`:
+Two Lesson-5 threads come together here. First, the router gains an **outer `App`
+route** — the app-wide wrapper that holds Context (this lesson) and Toasts (Lesson 12)
+and lets the **Sign In** page live outside the shell (§3). In Lesson 5 the route tree was
+rooted at `Layout` with a single `Outlet`; wrap that in an `App` route now:
+
+```tsx
+// main.tsx — App becomes the root; Layout nests inside it
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: "signin", element: <SignInPage /> },   // sibling of Layout → no shell
+      {
+        element: <Layout />,
+        children: [
+          { index: true, element: <IndexPage /> },
+          { path: "orders", element: <OrdersPage /> },
+          { path: "menuitems", element: <MenuItemsPage /> },
+          // …the rest of the page routes
+        ],
+      },
+    ],
+  },
+]);
+```
+
+Now there are **two `Outlet`s**, each owned by a different route level: `App`'s `Outlet`
+holds either `SignInPage` (no shell) or `Layout`; `Layout`'s `Outlet` holds the active
+page (with the shell). `errorElement` moves up to the `App` route, and `App.tsx` imports
+Bootstrap's CSS again (it lived in `Layout` only while `App` was out of the tree).
+
+That wrapper's real payoff is **Context**. Passing the current user as a prop through
+every component would be painful; Context lets any component read a shared value directly.
+Define it in `App.tsx`:
 
 ```tsx
 import { createContext, useContext, useState } from "react";
@@ -98,7 +132,9 @@ Everything under the provider (the whole app) can now call `useStaffContext()`.
 
 ## 3. The Sign In page
 
-Sign In sits **outside** the `Layout` (no header/nav) — a route sibling of the layout:
+Sign In sits **outside** the `Layout` (no header/nav) — the `signin` route you added to
+the router in §2 is a **sibling** of the `Layout` route, so it renders in `App`'s `Outlet`
+without the shell:
 
 ```tsx
 { path: "signin", element: <SignInPage /> },
@@ -298,19 +334,23 @@ Approve/Reject on a reviewer's *own* request — the direct analog of this Cance
 
 ## Build Steps
 
-1. In `App.tsx`, create `StaffContext`, the `useStaffContext` hook, `getPersistedStaff`
-   (reads localStorage), and wrap `<Outlet />` in `<StaffContext.Provider>` seeded from
-   localStorage.
-2. Add `findByAccount(username, password)` to `StaffAPI.ts` (POST `/api/staff/login`).
-3. Build `SignInPage` (outside `Layout`): a react-hook-form that logs in, **strips the
+1. In `main.tsx`, bring `App` back as the route root: wrap the Lesson-5 tree in
+   `{ path: "/", element: <App />, errorElement: <ErrorPage />, children: [...] }`, move
+   `errorElement` up to it, add `signin` as a **sibling** of `Layout`, and an `index`
+   route → `IndexPage` under `Layout`.
+2. In `App.tsx`, create `StaffContext`, the `useStaffContext` hook, `getPersistedStaff`
+   (reads localStorage), import Bootstrap's CSS, and wrap `<Outlet />` in
+   `<StaffContext.Provider>` seeded from localStorage.
+3. Add `findByAccount(username, password)` to `StaffAPI.ts` (POST `/api/staff/login`).
+4. Build `SignInPage` (outside `Layout`): a react-hook-form that logs in, **strips the
    password** via destructuring, `persistStaff` + `setStaff`, then `navigate("/orders")`;
    error toast on failure.
-4. Update `Header` to read context: user dropdown with initials + **Sign out**
+5. Update `Header` to read context: user dropdown with initials + **Sign out**
    (clears localStorage + context) when signed in, else a **Sign in** `Link`.
-5. Add `IndexPage` redirect by sign-in state; keep the `signin` route a sibling of
-   `Layout`.
-6. Add role-based conditional UI, and on `OrderDetailPage` set
+6. Implement the `IndexPage` redirect by sign-in state (signed out → `/signin`, signed in
+   → `/orders`).
+7. Add role-based conditional UI, and on `OrderDetailPage` set
    `disabled={order?.staffId !== staff?.id}` on **Cancel Order**.
-7. Verify in the browser using section 6 — sign in/out, password-free localStorage,
+8. Verify in the browser using section 6 — sign in/out, password-free localStorage,
    refresh persistence, and the ownership-disabled Cancel button.
 ```

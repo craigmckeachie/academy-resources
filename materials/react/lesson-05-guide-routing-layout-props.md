@@ -28,35 +28,21 @@ react-router `<Link to>` (section 5).
 
 ---
 
-## 2. Installing and mounting the router
+## 2. Installing and mounting the router — start flat
 
-`react-router-dom` is already installed (Lesson 3). You define the routes in
-`main.tsx` with `createBrowserRouter` and render them with `RouterProvider`:
+`react-router-dom` is already installed (Lesson 3). You define the routes in `main.tsx`
+with `createBrowserRouter` and render them with `RouterProvider`. Start with the simplest
+thing that works — a **flat** list of routes, one path per page:
 
 ```tsx
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import Layout from "./Layout";
-import MenuItemsPage from "./menuItems/MenuItemsPage";
 import OrdersPage from "./orders/OrdersPage";
-import ErrorPage from "./ErrorPage";
+import MenuItemsPage from "./menuItems/MenuItemsPage";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        element: <Layout />,
-        children: [
-          { path: "orders", element: <OrdersPage /> },
-          { path: "menuitems", element: <MenuItemsPage /> },
-        ],
-      },
-    ],
-  },
+  { path: "orders", element: <OrdersPage /> },
+  { path: "menuitems", element: <MenuItemsPage /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -64,35 +50,25 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 ```
 
-- Each route is `{ path, element }` — visiting the path renders the element.
-- Routes **nest** via `children`. The `/` route renders `<App />`; inside it, a
-  `<Layout />` route wraps the page routes. That nesting is what puts every page inside
-  the shell (section 4).
-- `errorElement` catches routing/render errors and shows `ErrorPage`.
+- Each route is `{ path, element }` — visiting the path renders that component.
+- Visit `/orders` and you get `OrdersPage`; visit `/menuitems` and you get
+  `MenuItemsPage`. No shared header or nav yet — one page per URL.
 
-`App.tsx` shrinks to the app-wide wrapper (it holds context and toasts later); for now
-it just renders an `<Outlet />`:
+That's a working router. But every page needs the same `Header` and `AppNav` around it,
+and pasting them into each page component would be repetitive. That's exactly what nested
+routes and `Outlet` are for — next.
+
+---
+
+## 3. `Outlet` and nested routes — one shared shell
+
+To wrap every page in the same chrome, put the shared parts in a **`Layout`** component,
+then nest the page routes **inside** a `Layout` route. `<Outlet />` is the placeholder
+where the active child route renders:
 
 ```tsx
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Outlet } from "react-router-dom";
-
-function App() {
-  return <Outlet />;
-}
-export default App;
-```
-
----
-
-## 3. `Outlet` — where the child route renders
-
-`<Outlet />` is a placeholder that renders **whichever child route is active**. A
-parent route renders its own chrome and drops the matched child into the `Outlet`. The
-`Layout` uses it to render the current page beside the nav:
-
-```tsx
 import Header from "./Header";
 import AppNav from "./AppNav";
 import { Outlet } from "react-router-dom";
@@ -111,32 +87,68 @@ function Layout() {
 export default Layout;
 ```
 
-Visiting `/menuitems` renders `Layout`, and the `Outlet` becomes `<MenuItemsPage />`.
-Visiting `/orders` keeps the same `Header` + `AppNav` and swaps only the `Outlet`
-content. **The shell renders once; only the page inside changes** — that's the SPA
-feel.
+> **Where did the Bootstrap import go?** In Lesson 3 it lived in `App.tsx`. `App` is no
+> longer in the route tree — `main.tsx` renders the router directly — so its imports
+> wouldn't run. Put the CSS imports in `Layout` for now; Lesson 11 brings `App` back as
+> the app-wide wrapper.
+
+Now nest the two page routes as **children** of a `Layout` route:
+
+```tsx
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      { path: "orders", element: <OrdersPage /> },
+      { path: "menuitems", element: <MenuItemsPage /> },
+    ],
+  },
+]);
+```
+
+- The parent route renders `<Layout />`; whichever child route matches renders **into
+  `Layout`'s `<Outlet />`**.
+- Visit `/orders` → `Layout` draws `Header` + `AppNav`, and its `Outlet` becomes
+  `<OrdersPage />`. Visit `/menuitems` → the same `Header` + `AppNav`, only the `Outlet`
+  swaps to `<MenuItemsPage />`.
+- **The shell renders once; only the page inside the `Outlet` changes** — that's the SPA
+  feel. Add a page by adding one `{ path, element }` under `children`; it gets the shell
+  for free.
+
+Right now there's just **one `Outlet`** in the whole app — the one in `Layout`. Hold onto
+that: a *second* one appears in Lesson 11, for a specific reason (next).
 
 ---
 
-## 4. The nesting that builds the shell
+## 4. Catching bad routes with `errorElement`
 
-Read the route tree top-down:
+Attach an `errorElement` to the `Layout` route so a bad URL — or an error thrown while
+rendering — shows a friendly page instead of a blank screen:
 
+```tsx
+import ErrorPage from "./ErrorPage";
+
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: "orders", element: <OrdersPage /> },
+      { path: "menuitems", element: <MenuItemsPage /> },
+    ],
+  },
+]);
 ```
-/  → App  (Outlet)
-     └─ Layout  (Header + AppNav + Outlet)
-          ├─ orders     → OrdersPage
-          └─ menuitems  → MenuItemsPage
-```
 
-- `App`'s `Outlet` holds `Layout`.
-- `Layout`'s `Outlet` holds the active page.
-- So every page is automatically wrapped in `Header` + `AppNav`. Add a new page by
-  adding one `{ path, element }` under `Layout`'s `children` — the shell comes for
-  free.
+`errorElement` catches routing/render errors under this route — including a URL that
+matches no page — and renders `ErrorPage`.
 
-(The Sign In page, Lesson 11, sits *outside* `Layout` so it has no shell — you'll add it
-as a sibling of the `Layout` route.)
+> **What's coming in Lesson 11.** Every page so far lives inside the shell. The **Sign
+> In** page (Lesson 11) is the exception — it has *no* header or nav. To make a page
+> shell-less, you'll wrap this whole tree in an outer **`App`** route that has **its own**
+> `Outlet`, and place Sign In as a sibling of `Layout` (inside `App`, outside `Layout`).
+> That's when the **second `Outlet`** appears — introduced exactly when a page needs to
+> sit outside the shell. For now: one shell, one `Outlet`.
 
 ---
 
@@ -286,8 +298,9 @@ const props = { menuItem: item };
 
 With `npm run dev` running:
 
-1. Open the app at `/` — you should see the `Header` bar and the `AppNav` sidebar with
-   your page beside it.
+1. Open the app at **`/orders`** — you should see the `Header` bar and the `AppNav`
+   sidebar with the Orders page beside it. (The bare `/` matches no route yet — it shows
+   `ErrorPage` until a home route is added in Lesson 11.)
 2. Click a nav link — the URL changes (e.g. to `/menuitems`) and the page content swaps
    **without a full reload** (watch the browser's reload spinner — it shouldn't fire).
    The `Header` and `AppNav` stay put; only the `Outlet` area changes.
@@ -303,8 +316,10 @@ With `npm run dev` running:
 ## The General Pattern (what to take away)
 
 - A **router** (`createBrowserRouter` + `RouterProvider`) maps **paths to components**.
-- **Nested routes** + **`Outlet`** build a shared **shell**: `App` → `Layout`
-  (`Header` + `AppNav`) → the active page. Add a page = add one route child.
+- **Nested routes** + **`Outlet`** build a shared **shell**: a `Layout` route
+  (`Header` + `AppNav`) wraps the page routes and drops the active page into its single
+  `Outlet`. Add a page = add one route child. (Lesson 11 wraps this in an outer `App`
+  route so the Sign In page can sit outside the shell.)
 - **`Link to=`** navigates in-place — never `<a href>` for internal links.
 - **Props** pass data from parent to child; destructure them from the props argument
   and type them with an interface. `{...obj}` spreads an object as props.
@@ -319,12 +334,13 @@ Products / Vendors / Users links, a `Layout` with an `Outlet`, and a route per p
 
 1. Convert `header.html` → `Header.tsx` and `nav.html` → `AppNav.tsx` (rename
    `class`→`className`, `<a href>`→`<Link to>`).
-2. Create `Layout.tsx` rendering `<Header />`, a `<main className="d-flex">`, `<AppNav />`,
-   and an `<Outlet />`.
-3. Shrink `App.tsx` to import Bootstrap CSS and render an `<Outlet />`.
-4. In `main.tsx`, build the route tree with `createBrowserRouter`: `/` → `App`
-   (`errorElement: <ErrorPage />`), child `<Layout />`, and page routes (`orders`,
-   `menuitems`) under it. Render with `<RouterProvider>`.
+2. In `main.tsx`, start with a **flat** router — `createBrowserRouter` with `orders` and
+   `menuitems` as top-level `{ path, element }` routes — rendered by `<RouterProvider>`.
+3. Create `Layout.tsx` rendering `<Header />`, a `<main className="d-flex">`, `<AppNav />`,
+   and an `<Outlet />` (with the Bootstrap CSS imports moved here from `App.tsx`).
+4. Nest the page routes as `children` of a `Layout` route and add
+   `errorElement: <ErrorPage />` to it — every page now renders inside the shell's single
+   `Outlet`.
 5. Make the `AppNav` links `Nav.Link as={Link} to="…"` for Orders and Menu.
 6. Split your menu list into `MenuItemList` (fetch + map) and `MenuItemCard` (takes a
    `menuItem` **prop**), passing `key` + `menuItem` in the `.map()`.
