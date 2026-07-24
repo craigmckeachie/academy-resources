@@ -154,4 +154,3 @@ The *form pattern* never changes — only which fields you `register`. Check
 
 Build PRS the way you built TableServe — one feature folder at a time, verified in the
 browser. You've already done every part of it once.
-```

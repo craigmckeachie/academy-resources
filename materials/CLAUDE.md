@@ -325,6 +325,15 @@ signposting convention so students know when to type versus when to just read:
   reference-table, and verification sections stay unmarked. Build-heavy lessons (4–5) mark
   most sections; concept-heavy ones (1–2) mark only their one or two build sections.
 
+> **Also piloted in React Lesson 3.** `react/lesson-03-guide-components-jsx-typescript.md`
+> now uses this same `▶ Code along` convention and the "How to use this guide" blockquote,
+> and additionally **prefixes each code block with its target filename**
+> (`// src/menuItems/IMenuItem.ts`). It also teaches **mechanics first, styling second**
+> (plain JSX, then a Bootstrap pass) and renders **one card before the `.map()` list**,
+> with a ✅ checkpoint at the single-card stage. This is a **pilot** — don't strip these on
+> a React regeneration. Whether to roll the convention across the whole React pass is an
+> open decision.
+
 ## Generating a whole pass (bulk runs)
 
 When asked to generate every guide/lab for a pass at once, **begin by stating the

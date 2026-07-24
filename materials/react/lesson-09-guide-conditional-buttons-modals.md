@@ -292,4 +292,3 @@ On PRS: Request Detail shows Send-for-Review (New) / Approve + Reject (Review), 
    `removeOrderItem` → delete → clear + re-fetch; a trash button per item row opens it.
 5. Verify in the browser using section 6 — buttons change per status, both modals work,
    validation blocks an empty reason, totals update.
-```

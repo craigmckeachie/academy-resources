@@ -218,4 +218,3 @@ definition-list summary with a status badge, and (Lesson 9) workflow buttons.
 5. Ensure the `orders/detail/:id` route exists under `Layout`.
 6. Verify in the browser using section 5 — a different id loads a different order, the
    cancelled-only field toggles, Network shows the GET.
-```

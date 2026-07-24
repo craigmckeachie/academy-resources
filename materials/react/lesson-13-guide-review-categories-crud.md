@@ -114,4 +114,3 @@ Anything unchecked, fix it now — the capstone assumes all of it.
 
 On PRS, **Vendors** is this walkthrough's twin — a simple no-FK entity you build from
 these same eight files.
-```

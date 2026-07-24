@@ -285,12 +285,17 @@ parent to remove an item. You'll use that pattern in Lesson 12's CRUD.)
 ### The spread operator
 
 When a component takes many props, `{...obj}` **spreads** an object's properties as
-individual props — shorthand you'll see in library code and route definitions:
+individual props — shorthand you'll see in library code and route definitions. With two
+or more props it earns its keep: one `{...cardProps}` instead of listing each by hand:
 
 ```tsx
-const props = { menuItem: item };
-<MenuItemCard {...props} />   // same as <MenuItemCard menuItem={item} />
+const cardProps = { menuItem: item, onRemove: removeMenuItem };
+<MenuItemCard {...cardProps} />
+// same as: <MenuItemCard menuItem={item} onRemove={removeMenuItem} />
 ```
+
+That `onRemove` is the callback prop noted just above — the real `MenuItemCard` takes
+both a `menuItem` and an `onRemove`, so spreading a two-key object hands over both at once.
 
 ---
 
@@ -346,4 +351,3 @@ Products / Vendors / Users links, a `Layout` with an `Outlet`, and a route per p
    `menuItem` **prop**), passing `key` + `menuItem` in the `.map()`.
 7. Verify in the browser using section 7 — nav swaps pages without reload, Back works,
    Console is clean.
-```

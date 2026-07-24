@@ -3,21 +3,21 @@
 **This is an intro / overview lesson.** It's the big picture: what a React
 single-page app is, how the Vite project is laid out, and the three ideas every
 React file is built from — **components**, **JSX**, and **typed data**. There's no
-API and no database yet. You render a **hardcoded** array of menu items so you can
-see components and JSX working on their own, before data fetching, routing, or forms
-enter the picture. You verify everything **by observation in the browser** — not
-against the finished reference app, not in Insomnia.
+API and no database yet. You render **one hardcoded menu-item card**, then a whole
+**list** of them, so you see components and JSX working on their own — before data
+fetching, routing, or forms. You verify everything **by observation in the browser** —
+not against the finished reference app, not in Insomnia.
 
 > **This lesson builds on the JavaScript and TypeScript intro (Lessons 1–2).** `.map()`,
 > `interface`, and `import`/`export` are used here as tools you already met — this lesson
 > is about putting them together into your first React components, not re-teaching the
 > language. If any of those feel shaky, revisit Lessons 1–2 first.
 
-**Goal:** by the end of this lesson you can create a React project with Vite,
-understand how `main.tsx` boots the app, write a **component** that returns **JSX**,
-describe the shape of your data with a **TypeScript interface**, and render a list by
-calling **`.map()`** over a hardcoded array. You'll have a Menu Items page showing a
-grid of cards built entirely from local data.
+**Goal:** by the end of this lesson you can create a React project with Vite, write a
+**component** that returns **JSX**, describe the shape of your data with a **TypeScript
+interface**, render **one** card from that data, and then render a **whole list** by
+calling **`.map()`** over a hardcoded array. You'll have a Menu Items page showing a grid
+of cards built entirely from local data.
 
 **The general pattern you're learning:** a React UI is a tree of **components** —
 functions that return **JSX**. Data is just JavaScript values (typed with an
@@ -25,14 +25,23 @@ functions that return **JSX**. Data is just JavaScript values (typed with an
 **`.map()`**. Everything for the rest of this pass — fetching, routing, forms — hangs
 off these three ideas.
 
+> **How to use this guide.** Sections headed **▶ Code along** are ones you **build into
+> your project** — type them as you go. Unmarked sections are concept or orientation:
+> read them (or watch the instructor), but there's nothing to type. Each code block names
+> the file it belongs in on its first line (e.g. `// src/menuItems/IMenuItem.ts`). The
+> **Build Steps** at the end recap every ▶ Code along action in order, so you can catch up
+> on your own.
+
 > **Why hardcoded data here?** This lesson comes *before* the build of the real
 > TableServe front end. Its job is to establish mental models, so it deliberately
-> uses a local array instead of the API. You confirm it works by looking at the page
-> in the browser. Real data fetching arrives in Lesson 4.
+> uses local data instead of the API. You confirm it works by looking at the page in the
+> browser. Real data fetching arrives in Lesson 4.
 
 ---
 
 ## 1. What is a single-page app (and where React fits)
+
+*(Read this — nothing to type yet.)*
 
 In the API pass you built a Web API that returns JSON. In the HTML/CSS pass you built
 static pages. **React is what ties them together**: it runs in the browser, fetches
@@ -52,10 +61,13 @@ that turns the response into what the user sees.
 
 ---
 
-## 2. Creating the project with Vite
+## 2. ▶ Code along — Create the project
+
+*(One-time setup. You run these commands once; the rest of the pass builds inside this
+project.)*
 
 **Vite** is the build tool and dev server (you met it in the HTML/CSS pass for the
-static scaffold — same tool, now driving a React app). Create a project:
+static scaffold — same tool, now driving a React app). Create the project:
 
 ```bash
 npm create vite@latest TableServe.Web -- --template react-ts
@@ -70,7 +82,7 @@ npm run dev
 - `npm run dev` starts the dev server and prints a URL (usually
   `http://localhost:5173`). Open it — you get Vite's starter page.
 - Vite has **hot module replacement (HMR)**: save a file and the browser updates
-  instantly, no manual refresh.
+  instantly, no manual refresh. Leave `npm run dev` running for the whole lesson.
 
 Install the libraries this pass uses (you'll wire them in over the coming lessons):
 
@@ -80,7 +92,9 @@ npm install bootstrap react-bootstrap react-router-dom react-hook-form react-hot
 
 ---
 
-## 3. The project structure
+## 3. How the project is laid out and boots
+
+*(Read this to get oriented — **you won't edit `main.tsx` in this lesson**.)*
 
 The important files:
 
@@ -103,21 +117,11 @@ We organize by **feature folder** — one folder per entity (`menuItems/`, `staf
 calls. This is the exact structure the finished app uses and the structure you'll
 mirror on PRS.
 
-### How the app boots
-
-`index.html` contains one meaningful line:
-
-```html
-<div id="root"></div>
-```
-
+**How the app boots:** `index.html` contains one meaningful line, `<div id="root"></div>`.
 `src/main.tsx` finds that `div` and tells React to render your app into it:
 
 ```tsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-
+// src/main.tsx — already generated by Vite; shown so you know where the app starts
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
@@ -129,15 +133,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 - `<App />` is your root **component** (next section).
 - `<React.StrictMode>` is a development helper that surfaces bugs — leave it.
 
-You rarely touch `main.tsx` in this lesson; it's shown so you know where the app
-starts. (In Lesson 5 you'll add the router here.)
+You don't touch `main.tsx` in this lesson. (In Lesson 5 you'll add the router here.)
 
 ---
 
-## 4. Components — functions that return JSX
+## 4. Components & JSX — the two ideas
 
-A **component** is a JavaScript function whose name starts with a **capital letter**
-and returns **JSX** (markup). That's the whole definition.
+*(Read this. You'll put both to work in section 5.)*
+
+**A component** is a JavaScript function whose name starts with a **capital letter** and
+returns **JSX** (markup). That's the whole definition:
 
 ```tsx
 function App() {
@@ -147,154 +152,203 @@ function App() {
 export default App;
 ```
 
-- The capital `A` in `App` is required — React treats lowercase names as HTML tags
-  (`<div>`) and capitalized names as components (`<App />`).
-- `export default App` makes the component importable from other files — the **default
-  export** you met in Lesson 1. `main.tsx` did `import App from "./App.tsx"` to get it.
-  Our convention: components are default exports (one per file); helpers and interfaces
-  are named exports.
-- You **use** a component by writing it as a tag: `<App />`.
+- The capital `A` is required — React treats lowercase names as HTML tags (`<div>`) and
+  capitalized names as components (`<App />`).
+- `export default App` makes the component importable — the **default export** from
+  Lesson 1. You **use** a component by writing it as a tag: `<App />`. Components nest: a
+  page renders smaller components, a tree rooted at `<App />`.
 
 > **Default vs named exports (Lesson 1), made concrete.** `App` is a **default** export —
 > imported with no braces, and the importer can name it anything: `import App from "./App"`.
-> The `IMenuItem` interface you write in section 6 is a **named** export — imported in braces
-> that must match its exact name: `import { IMenuItem } from "./IMenuItem"`. That pairing
-> *is* the whole convention: **default exports for components** (one per file), **named
-> exports for helpers, interfaces, and hooks** (`import { useForm } from "react-hook-form"`).
-> The quick tell from Lesson 1 holds: **braces in an import mean a named export.**
+> The `IMenuItem` interface you write next is a **named** export — imported in braces that
+> must match its exact name: `import { IMenuItem } from "./IMenuItem"`. That pairing *is*
+> the convention: **default exports for components** (one per file), **named exports for
+> helpers, interfaces, and hooks**. The tell from Lesson 1 holds: **braces in an import
+> mean a named export.**
 
-Components nest. A page component renders smaller components, which render smaller ones
-still — a tree, rooted at `<App />`.
-
----
-
-## 5. JSX — markup inside JavaScript
-
-**JSX** is the HTML-like syntax you return from a component. It looks like HTML but
-it's JavaScript, so a few things differ:
-
-```tsx
-function MenuItemsPage() {
-  const heading = "Menu";
-  return (
-    <section className="content">
-      <h2>{heading}</h2>
-      <p>Our items are listed below.</p>
-    </section>
-  );
-}
-```
-
-The rules that trip people up coming from HTML:
+**JSX** is the HTML-like syntax you return from a component. It looks like HTML, but it's
+JavaScript, so a few things differ:
 
 - **`className`, not `class`** — `class` is a reserved word in JavaScript.
-- **`{ }` embeds JavaScript** — `{heading}` drops the value of the `heading` variable
-  into the markup. Anything inside braces is a JS expression: `{2 + 2}`,
-  `{item.name}`, `{items.map(...)}`.
-- **One root element** — a component must return a *single* top-level element. Wrap
-  siblings in one parent, or an empty **fragment** `<>...</>` if you don't want an
-  extra `<div>`:
-
-  ```tsx
-  return (
-    <>
-      <h2>Menu</h2>
-      <p>Subtitle</p>
-    </>
-  );
-  ```
-
+- **`{ }` embeds JavaScript** — `{heading}` drops the value of `heading` into the markup.
+  Anything in braces is a JS expression: `{2 + 2}`, `{item.name}`, `{items.map(...)}`.
+- **One root element** — a component returns a *single* top-level element. Wrap siblings
+  in one parent, or an empty **fragment** `<>...</>` if you don't want an extra `<div>`.
 - **Self-close empty tags** — `<br />`, `<img />`, `<input />`.
 - **`htmlFor`, not `for`** on labels (another reserved word).
 
-If this feels familiar it should — it's the Bootstrap markup from the HTML/CSS pass
-with `class` renamed to `className`. The `d-flex`, `card`, `badge` classes all carry
-straight over.
+If this feels familiar it should — it's the Bootstrap markup from the HTML/CSS pass with
+`class` renamed to `className`.
 
 ---
 
-## 6. Typing your data with an interface
+## 5. ▶ Code along — Your first component: an interface and one card
 
-You met **interfaces** in Lesson 2 — a named set of properties and their types, the
-front-end echo of your C# model class. Here you write your first real one. Create
-`src/menuItems/IMenuItem.ts`:
+Start with a single card so you can *see* a component render typed data, before any loop.
+
+**Describe the data with an interface.** You met **interfaces** in Lesson 2 — a named set
+of properties and their types, the front-end echo of your C# model. Create the feature
+folder `src/menuItems/`, then the interface:
 
 ```ts
+// src/menuItems/IMenuItem.ts
 export interface IMenuItem {
   id: number | undefined;
   name: string;
   price: number | undefined;
-  categoryId: number | undefined;
-  category?: ICategory;
 }
 ```
 
-Quick reminders from Lesson 2, now on real data: the `I` prefix is our convention;
-`number | undefined` is a **union** (an id doesn't exist until the server assigns one);
-`category?` is **optional**. This mirrors the C# `MenuItem` model exactly — the interface
-is how the front end knows what the API returns.
+The `I` prefix is our convention; `number | undefined` is a **union** (an id doesn't
+exist until the server assigns one). The real model has more fields (`categoryId`,
+`category`) — you'll add them when they're needed; `id`, `name`, `price` is enough to
+start.
 
-For this lesson, `category` isn't needed — you'll display just `name` and `price` — so
-a minimal `IMenuItem` with `id`, `name`, and `price` is enough to start.
+**Render one card.** Write a component that holds one hardcoded item and returns plain
+JSX for it — no styling yet, just the React shape:
+
+```tsx
+// src/menuItems/MenuItemsPage.tsx
+import { IMenuItem } from "./IMenuItem";
+
+const nachos: IMenuItem = { id: 1, name: "Loaded Nachos", price: 9.99 };
+
+function MenuItemsPage() {
+  return (
+    <section>
+      <h2>Menu</h2>
+      <div>
+        <span>{nachos.name}</span>
+        <span>${nachos.price}</span>
+      </div>
+    </section>
+  );
+}
+
+export default MenuItemsPage;
+```
+
+`{nachos.name}` and `{nachos.price}` are the `{ }` embed from section 4 — pulling values
+out of your typed object into the markup.
+
+**Show it on screen.** Render your page from the root component. For now `App` just
+renders `<MenuItemsPage />`:
+
+```tsx
+// src/App.tsx
+import MenuItemsPage from "./menuItems/MenuItemsPage";
+
+function App() {
+  return <MenuItemsPage />;
+}
+
+export default App;
+```
+
+Save. With `npm run dev` running, the browser shows the **Menu** heading and **one**
+plain card — the name and price of your one item.
+
+> **✅ Checkpoint.** One card on screen means a **component** is rendering **typed data**
+> through **JSX** — the whole core of React, working. If you're following along live,
+> this is a natural place to pause before the next part.
 
 ---
 
-## 7. Rendering a list — from `for` to `.map()`
+## 6. Two arrow shapes: `=> ( … )` vs `=> { … }`
 
-Real UIs render *lists*. In Lesson 1 you watched loops evolve from a `for` loop to
-`.map()` for transforming **numbers**. Rendering a list is the **exact same transform** —
-only the output changes: an **array of data** becomes an **array of JSX elements**. Walk
-the same three stages once more, now producing cards from a hardcoded `menuItems:
-IMenuItem[]` array (shown in full at stage 3).
+*(Read this — it's the one syntax gotcha in the next section.)*
 
-**Stage 1 — a `for` loop.** JSX elements are just values, so you can build an array of
-them by hand and drop it into the return:
+In a moment you'll pass an arrow function to `.map()`, and which **shape** you use
+matters. From Lesson 1, an arrow function has two forms:
+
+- **`item => ( … )`** — the parentheses hold a **single expression** that is **returned
+  automatically**. The parens are just grouping so the JSX can span several lines. This is
+  the form you use to return JSX from `.map()`.
+- **`item => { … }`** — the curly braces are a **block body**; a block runs statements and
+  **returns nothing unless you write `return`**.
+
+So these two are equivalent:
 
 ```tsx
-function MenuItemsPage() {
-  const cards = [];
-  for (let i = 0; i < menuItems.length; i++) {
-    const menuItem = menuItems[i];
-    cards.push(
-      <div className="card p-4" key={menuItem.id}>
-        <span className="fs-4 fw-medium">{menuItem.name}</span>
-      </div>
-    );
-  }
-  return <section>{cards}</section>;
-}
+menuItem => ( <div>{menuItem.name}</div> )          // implicit return of the JSX
+menuItem => { return <div>{menuItem.name}</div>; }  // block body, explicit return
 ```
 
-It works, but it's noisy — a temp array, an index, a manual `push`.
-
-**Stage 2 — `forEach`.** Drops the index; still pushes manually:
+…but this one is the classic first bug — a block body with **no `return`**, which renders
+**nothing**:
 
 ```tsx
-function MenuItemsPage() {
-  const cards = [];
-  menuItems.forEach((menuItem) => {
-    cards.push(
-      <div className="card p-4" key={menuItem.id}>
-        <span className="fs-4 fw-medium">{menuItem.name}</span>
-      </div>
-    );
-  });
-  return <section>{cards}</section>;
-}
+menuItem => { <div>{menuItem.name}</div> }          // ⚠ returns undefined — blank output
 ```
 
-**Stage 3 — `.map()`.** `.map()` *is* "transform each element into a new one," so it hands
-back the array of elements directly — no temp array, no `push`. You embed it right inside
-the JSX with the `{ }` from section 5. **This is how React renders every list.** Here's
-the whole page:
+Rule of thumb for `.map()`: reach for `=> ( … )` so the JSX is returned for you.
+
+---
+
+## 7. ▶ Code along — Render the list with `.map()`
+
+One card is good; a real page renders *many*. In Lesson 1 you walked
+`for → forEach → map` to transform an array of **numbers**; rendering a list is that
+**same transform**, only the output is JSX instead of numbers — so go straight to
+`.map()`.
+
+Swap your single item for a hardcoded **array**, and `.map()` it into one card per item
+(still plain — styling is the next section):
 
 ```tsx
+// src/menuItems/MenuItemsPage.tsx
 import { IMenuItem } from "./IMenuItem";
 
 const menuItems: IMenuItem[] = [
-  { id: 1, name: "Loaded Nachos", price: 9.99, categoryId: 1 },
-  { id: 2, name: "Mozzarella Sticks", price: 7.99, categoryId: 1 },
-  { id: 3, name: "Ribeye Steak", price: 24.99, categoryId: 2 },
+  { id: 1, name: "Loaded Nachos", price: 9.99 },
+  { id: 2, name: "Mozzarella Sticks", price: 7.99 },
+  { id: 3, name: "Ribeye Steak", price: 24.99 },
+];
+
+function MenuItemsPage() {
+  return (
+    <section>
+      <h2>Menu</h2>
+      {menuItems.map((menuItem) => (
+        <div key={menuItem.id}>
+          <span>{menuItem.name}</span>
+          <span>${menuItem.price}</span>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+export default MenuItemsPage;
+```
+
+Save — three plain cards appear. Three things to understand:
+
+- **`menuItems.map((menuItem) => ( … ))`** runs the arrow once per element (the `=> ( … )`
+  form from section 6), producing one `<div>` per item. The array of elements renders in
+  order. **This is how React renders every list.**
+- **`key={menuItem.id}`** — every element in a `.map()` needs a unique **`key`** so React
+  can track items when the list changes. Use the record's `id`. Never use the array index
+  if the list can reorder, and never `Math.random()`.
+- **`const menuItems: IMenuItem[]`** types the array — TypeScript checks each object has
+  the right shape, and your editor autocompletes `menuItem.name`.
+
+---
+
+## 8. ▶ Code along — Make it look like a card
+
+The mechanics work; now make it *look* like the design. Add the Bootstrap classes — the
+same ones from the HTML/CSS pass — plus a `.list` tray around the cards, and import
+Bootstrap's CSS so the classes take effect:
+
+```tsx
+// src/menuItems/MenuItemsPage.tsx
+import { IMenuItem } from "./IMenuItem";
+
+const menuItems: IMenuItem[] = [
+  { id: 1, name: "Loaded Nachos", price: 9.99 },
+  { id: 2, name: "Mozzarella Sticks", price: 7.99 },
+  { id: 3, name: "Ribeye Steak", price: 24.99 },
 ];
 
 function MenuItemsPage() {
@@ -316,33 +370,8 @@ function MenuItemsPage() {
 export default MenuItemsPage;
 ```
 
-The three things to understand:
-
-- **`menuItems.map((menuItem) => (...))`** runs the arrow function once per array
-  element, producing one `<div className="card">` per menu item. The resulting array
-  of elements renders in order.
-- **`{menuItem.name}` / `{menuItem.price}`** pull values out of each item with the
-  `{ }` embed from section 5.
-- **`key={menuItem.id}`** — every element in a `.map()` needs a unique **`key`** so
-  React can track items efficiently when the list changes. Use the record's `id`.
-  Never use the array index if the list can reorder, and never `Math.random()`.
-
-`const menuItems: IMenuItem[]` types the array — `IMenuItem[]` means "an array of
-`IMenuItem`." TypeScript now checks that each object has the right properties, and your
-editor autocompletes `menuItem.name`.
-
-> **Styling note:** the `card`, `d-flex flex-wrap`, `gap-5`, `badge` classes are the
-> same Bootstrap classes from the HTML/CSS pass. Import Bootstrap's CSS once (in
-> `App.tsx`, shown next lesson) and every class works. This lesson focuses on the
-> React mechanics; the polished `MenuItemCard` component comes in Lesson 6.
-
----
-
-## 8. Wiring the page into `App`
-
-Render your page from the root component so it shows up:
-
 ```tsx
+// src/App.tsx — add the Bootstrap + App CSS imports
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import MenuItemsPage from "./menuItems/MenuItemsPage";
@@ -354,8 +383,14 @@ function App() {
 export default App;
 ```
 
-Save, and the browser (still running `npm run dev`) updates instantly — a wrapping grid
-of hardcoded menu cards.
+Save — the plain cards become a wrapping grid of styled cards. Notice the **only** things
+that changed from section 7 are `className`s and the CSS import; the React logic (the
+component, the `.map()`, the `key`) is identical. That's the point of doing styling as a
+separate pass — the mechanics and the look are two different jobs.
+
+> **Styling note:** the `card`, `d-flex flex-wrap`, `gap-5` classes are the same Bootstrap
+> classes as the HTML/CSS pass. This lesson keeps the JSX minimal on purpose; the polished
+> `MenuItemCard` component (its own file, a `Card` from react-bootstrap) comes in Lesson 6.
 
 ---
 
@@ -365,18 +400,18 @@ There's no Insomnia and no API here — you verify **by looking at the page and 
 DevTools**. With `npm run dev` running:
 
 1. Open the printed URL (e.g. `http://localhost:5173`). You should see the **Menu**
-   heading and one card per item in your hardcoded array.
-2. Open **DevTools → Console** (F12). It should be clean. The most common first error
-   is **"Each child in a list should have a unique key"** — that means a `.map()` is
-   missing its `key={...}`. Add it and the warning clears.
-3. Edit an item's `name` in the array and save — the card updates immediately (that's
-   HMR + React re-rendering).
-4. Add a fourth object to the `menuItems` array and save — a fourth card appears
-   without you writing any more JSX. That's the payoff of `.map()`: the markup is
-   written once; the data drives how many render.
+   heading and one styled card per item in your hardcoded array.
+2. Open **DevTools → Console** (F12). It should be clean. The most common first error is
+   **"Each child in a list should have a unique key"** — that means a `.map()` is missing
+   its `key={...}`. Add it and the warning clears.
+3. Edit an item's `name` in the array and save — the card updates immediately (that's HMR
+   + React re-rendering).
+4. Add a fourth object to the `menuItems` array and save — a fourth card appears without
+   you writing any more JSX. That's the payoff of `.map()`: the markup is written once;
+   the data drives how many render.
 5. **Install React DevTools** (browser extension) if you can — the **Components** tab
-   shows your component tree (`App → MenuItemsPage`), which is the clearest way to
-   *see* that a React app is a tree of components.
+   shows your component tree (`App → MenuItemsPage`), the clearest way to *see* that a
+   React app is a tree of components.
 
 ---
 
@@ -388,13 +423,16 @@ DevTools**. With `npm run dev` running:
   values, one root element (or a `<>` fragment).
 - A **TypeScript interface** (`IMenuItem`) names the shape of your data — the front-end
   echo of your C# model.
-- **`.map()`** turns an array of data into a list of elements; each needs a unique
-  **`key`**.
-- Everything else in this pass builds on these: Lesson 4 swaps the hardcoded array for
-  a real fetch; Lesson 5 adds routing between pages; Lesson 7 adds forms.
+- Render **one** first, then **many**: **`.map()`** turns an array of data into a list of
+  elements, each with a unique **`key`**. Use `=> ( … )` in the callback so the JSX
+  returns.
+- Build the **mechanics first, styling second** — the same component just gains
+  `className`s.
+- Everything else in this pass builds on these: Lesson 4 swaps the hardcoded array for a
+  real fetch; Lesson 5 adds routing between pages; Lesson 7 adds forms.
 
-On PRS you'll write the same three things first — an `IProduct` interface, a
-`ProductsPage` component, and a `.map()` over products — before any data loads.
+On PRS you'll write the same things first — an `IProduct` interface, a `ProductsPage`
+component, one card, then a `.map()` over products — before any data loads.
 
 ---
 
@@ -404,12 +442,13 @@ On PRS you'll write the same three things first — an `IProduct` interface, a
    then `cd` in and `npm install`.
 2. Install the pass's libraries (`bootstrap react-bootstrap react-router-dom
    react-hook-form react-hot-toast`) and start `npm run dev`.
-3. Create the `src/menuItems/` feature folder.
-4. In `src/menuItems/IMenuItem.ts`, define the `IMenuItem` **interface** (start with
-   `id`, `name`, `price`).
-5. In `src/menuItems/MenuItemsPage.tsx`, declare a hardcoded `IMenuItem[]` array and a
-   `MenuItemsPage` **component** that **`.map()`s** it into cards, each with a **`key`**.
-6. In `App.tsx`, import Bootstrap's CSS and render `<MenuItemsPage />`.
-7. Verify in the browser using section 9 — cards render, the Console is clean, adding an
+3. Create the `src/menuItems/` feature folder and `src/menuItems/IMenuItem.ts` with the
+   `IMenuItem` **interface** (`id`, `name`, `price`).
+4. In `src/menuItems/MenuItemsPage.tsx`, render **one** hardcoded item as a plain card.
+5. In `App.tsx`, render `<MenuItemsPage />` and confirm the one card shows (**checkpoint**).
+6. Swap the single item for a hardcoded `IMenuItem[]` array and **`.map()`** it into cards,
+   each with a **`key`** — still plain.
+7. Add the Bootstrap `className`s and import `bootstrap/dist/css/bootstrap.min.css` in
+   `App.tsx` to style the cards.
+8. Verify in the browser using section 9 — cards render, the Console is clean, adding an
    array item adds a card.
-```

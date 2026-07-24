@@ -76,4 +76,3 @@ some research.
 Finished these and want more? See
 [stretch-react-challenges.md](stretch-react-challenges.md) for bigger challenges that
 span the whole React pass.
-```

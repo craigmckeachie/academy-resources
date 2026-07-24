@@ -259,4 +259,3 @@ the **Request** form is a shared create/edit form too.
    (`menuitems/create`, `menuitems/edit/:id`) under `Layout`.
 7. Verify in the browser using section 7 — empty create, validation, pre-filled edit,
    201/200 in Network.
-```

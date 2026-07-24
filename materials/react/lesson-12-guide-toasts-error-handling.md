@@ -234,4 +234,3 @@ Requests, and RequestLines.
    every `catch` across the Menu Item list, form, and delete.
 5. Verify in the browser using section 5 — success toasts, a forced error toast + the
    `checkStatus` console log, form stays on failure.
-```

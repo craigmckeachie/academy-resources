@@ -282,4 +282,3 @@ in a `useEffect` — identical to this, different entity.
 6. Render `menuItems.map(...)` into cards with a `key`, plus a `{loading && …}` message.
 7. Verify in the browser using section 7 — real cards render, Network shows a 200, and
    the CORS error (if any) is resolved.
-```

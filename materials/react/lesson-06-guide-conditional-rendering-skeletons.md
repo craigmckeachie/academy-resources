@@ -316,4 +316,3 @@ filter via `useSearchParams`, and a 3-dots menu (Review / Edit / Delete).
    and `{loading && skeletons}` around the fetch.
 7. Verify in the browser using section 7 — badge colors, a sticky URL filter, working
    row actions, and skeletons on slow network.
-```

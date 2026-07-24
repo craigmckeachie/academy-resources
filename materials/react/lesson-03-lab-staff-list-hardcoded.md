@@ -17,14 +17,20 @@ fundamentals exercise.)
 
 ## Steps
 
-1. Create the `src/staff/` feature folder.
-2. In `src/staff/IStaff.ts`, define an `IStaff` **interface**:
+Same arc as the guide: **one card → the list → badges → styling.**
+
+1. Create the `src/staff/` feature folder and `src/staff/IStaff.ts` with an `IStaff`
+   **interface**:
    - `id: number | undefined`
    - `firstName: string`, `lastName: string`, `username: string`
    - `isManager: boolean`, `isAdmin: boolean`
-3. In `src/staff/StaffPage.tsx`, declare this hardcoded `IStaff[]` array above the
-   component — the roles are already mixed (a manager, an admin, one of both, one of
-   neither):
+2. **One card first.** In `src/staff/StaffPage.tsx`, render a **single** hardcoded staff
+   member as a plain card (first + last name and username) — no styling yet.
+3. In `App.tsx`, render `<StaffPage />` (swap it in for `<MenuItemsPage />`). Confirm the
+   one card shows. **✅ Checkpoint** — a component rendering typed data.
+4. **Now the list.** Swap the single member for this hardcoded `IStaff[]` array (roles are
+   already mixed — a manager, an admin, one of both, one of neither) and `.map()` it into
+   one card per member, each with `key={staffMember.id}` — still plain:
    ```ts
    const staff: IStaff[] = [
      { id: 1, firstName: "Sam", lastName: "Diaz", username: "sdiaz", isManager: true, isAdmin: false },
@@ -34,17 +40,12 @@ fundamentals exercise.)
      { id: 5, firstName: "Owen", lastName: "Bell", username: "obell", isManager: true, isAdmin: false },
    ];
    ```
-4. Write a `StaffPage` **component** that returns a heading and a `.list d-flex
-   flex-row flex-wrap gap-5 p-4` tray, `.map()`-ing the array into one card per member.
-   Each card shows:
-   - First + last name (`fs-4 fw-medium`)
-   - Username (`text-secondary`)
-   - A role **badge** *only when the flag is true* — embed a JS expression:
-     `{staffMember.isManager && <span className="badge text-bg-primary">Manager</span>}`
-     and the same for `isAdmin` (`text-bg-dark`).
-   - Give each card a **`key={staffMember.id}`**.
-5. In `App.tsx`, render `<StaffPage />` (swap it in for `<MenuItemsPage />`, or render
-   both).
+5. **Conditional role badges.** In each card, render a badge *only when its flag is true*:
+   `{staffMember.isManager && <span className="badge text-bg-primary">Manager</span>}`
+   and the same for `isAdmin` (`text-bg-dark`).
+6. **Style it.** Wrap the `.map()` in a `.list d-flex flex-row flex-wrap gap-5 p-4` tray
+   and give each card `card p-4`; show the name `fs-4 fw-medium` and username
+   `text-secondary`. (Bootstrap's CSS is already imported in `App.tsx` from the guide.)
 
 > **`{flag && <span>…</span>}` is a first taste of conditional rendering** — when
 > `flag` is false, nothing renders. Lesson 6 makes this pattern a first-class concept.
@@ -94,4 +95,3 @@ some research.
 Finished these and want more? See
 [stretch-react-challenges.md](stretch-react-challenges.md) for bigger challenges that
 span the whole React pass.
-```

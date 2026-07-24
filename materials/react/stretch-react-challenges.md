@@ -195,4 +195,3 @@ You'll reuse every one of these instincts on the PRS capstone: reseeding to your
 data, standing up a new entity's full feature folder, extracting shared hooks and
 components, and consolidating utilities are exactly the moves you'll reach for once the
 core PRS pages are in place.
-```

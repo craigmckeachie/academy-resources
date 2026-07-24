@@ -111,4 +111,3 @@ for every PRS screen.
 
 Next lesson (13) is the **capstone bridge** — it turns this gap-check into an explicit
 plan and expectations for building PRS.
-```

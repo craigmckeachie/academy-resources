@@ -353,4 +353,3 @@ Approve/Reject on a reviewer's *own* request — the direct analog of this Cance
    `disabled={order?.staffId !== staff?.id}` on **Cancel Order**.
 8. Verify in the browser using section 6 — sign in/out, password-free localStorage,
    refresh persistence, and the ownership-disabled Cancel button.
-```
