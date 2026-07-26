@@ -1,26 +1,52 @@
 # Lesson 5 Lab — Route and Navigate to the Staff Page
 
-Wire your **Staff** page into the app shell: give it a route, a nav link, and split it
-into a `StaffList` + `StaffCard` using **props** — the same routing and
-component-splitting the guide did for Menu Items. Refer back to the guide for the route
-tree, `Link`, `Outlet`, and props.
+Wire your **Staff** page into the shell you just built: give it a **route** and a **nav
+link**, then **extract a `StaffCard`** using **props** — the same routing + prop-splitting
+the guide did for Menu Items. Refer back to the guide for the route tree, `Link`, and props.
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> CORS enabled and Staff seed data loaded. You're extending the `StaffPage` you built in
+> Lesson 4 (fetch + map) and the shell (`Layout`, `AppNav`) from this lesson's guide.
 
 ---
 
 ## Steps
 
-1. In `main.tsx`, add a `{ path: "staff", element: <StaffPage /> }` route **under
+Same arc as the guide: **route + nav link → extract a Card with props.** Your `StaffPage`
+already fetches and maps (Lesson 4); here it gains a route and a `StaffCard`.
+
+1. **Add the route.** In `main.tsx`, add `{ path: "staff", element: <StaffPage /> }` **under
    `Layout`'s `children`** (so it gets the shell), and import `StaffPage`.
-2. In `AppNav.tsx`, add a `Nav.Link as={Link} to="/staff"` item labeled **Staff**
-   (reuse the `people` icon if you're carrying the sprite over).
-3. Split your Staff list into two components:
-   - `StaffList` — holds the state, fetches in `useEffect`, and `.map()`s.
-   - `StaffCard` — takes a single `staff` **prop** (type an `IStaffCardProps`
-     interface) and renders one card.
-4. In the `.map()`, render `<StaffCard key={staffMember.id} staff={staffMember} />`.
-5. Make `StaffPage` the route target: a heading + an **Add Staff** `<Link
-   to="/staff/create">` button + `<StaffList />` (the create page comes in Lesson 7 —
-   the link can 404 until then).
+2. **Add the nav link.** In the provided `AppNav`, add a Staff `Nav.Item` — copy the icon
+   pattern from the Orders/Menu items, using the `#people` icon (`bootstrapIcons` is already
+   imported):
+   ```tsx
+   <Nav.Item as="li">
+     <Nav.Link eventKey="/staff" as={Link} to="/staff">
+       <svg className="bi pe-none me-2" width={16} height={16} fill="currentColor">
+         <use xlinkHref={`${bootstrapIcons}#people`} />
+       </svg>
+       Staff
+     </Nav.Link>
+   </Nav.Item>
+   ```
+   **✅ Checkpoint:** click **Staff** — your staff cards render inside the shell, no full
+   reload.
+3. **Extract a `StaffCard` (props).** Pull the per-member card out of `StaffPage` into a
+   `StaffCard` that takes a single `staff` **prop**, typed with an interface:
+   ```tsx
+   interface IStaffCardProps {
+     staff: IStaff;
+   }
+   function StaffCard({ staff }: IStaffCardProps) { /* one card: name, username, role badges */ }
+   ```
+   `StaffPage` still fetches and maps; render `<StaffCard key={staffMember.id}
+   staff={staffMember} />` inside the `.map()`. The page should look **exactly the same** —
+   you've just moved one card's markup into a reusable component.
+
+> **Add Staff button:** give `StaffPage`'s heading an **Add Staff** `<Link
+> to="/staff/create">` button. The create page comes in Lesson 7, so the link 404s until
+> then — that's fine.
 
 ---
 
@@ -28,16 +54,16 @@ tree, `Link`, `Outlet`, and props.
 
 Browser checks are covered in the guide — section 7. With `npm run dev` running:
 
-1. Click the **Staff** nav link — the URL becomes `/staff` and the staff cards render
-   inside the shell, **no full reload**.
-2. Click between **Staff**, **Menu**, and **Orders** — the `Header`/`AppNav` stay put;
-   only the page swaps. The active nav pill follows the URL.
+1. Click the **Staff** nav link — the URL becomes `/staff` and the staff cards render inside
+   the shell, **no full reload**.
+2. Click between **Staff**, **Menu**, and **Orders** — the `Header`/`AppNav` stay put; only
+   the page swaps, and the active nav pill follows the URL.
 3. Use **Back** — it returns to the previous page.
-4. Check the **Console** — clean. A blank page usually means a missing import or a
+4. Open **DevTools → Console** — clean. A blank page usually means a missing import or a
    `path` typo.
 
-Same routing + props + component-split pattern, a different entity — exactly how you'll
-route the PRS **Users** page in the capstone.
+Same routing + props + component-split pattern, a different entity — exactly how you'll route
+the PRS **Users** page in the capstone.
 
 ---
 

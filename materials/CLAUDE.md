@@ -324,15 +324,97 @@ signposting convention so students know when to type versus when to just read:
   builds into their files — e.g. `## 6. ▶ Code along — the page shell`. Concept, decision,
   reference-table, and verification sections stay unmarked. Build-heavy lessons (4–5) mark
   most sections; concept-heavy ones (1–2) mark only their one or two build sections.
+- **Each `▶ Code along` section ends with a quick check** — a one-line "save and you should
+  see X" so a mistake surfaces immediately, not only at the end. When a piece isn't visible
+  on its own yet (a component not wired in until later), say so honestly. The lesson's final
+  *Verifying …* section still does the full pass. (Full rationale and examples: **React pass
+  — authoring lessons** → principle 7, below.)
 
 > **Also piloted in React Lesson 3.** `react/lesson-03-guide-components-jsx-typescript.md`
 > now uses this same `▶ Code along` convention and the "How to use this guide" blockquote,
 > and additionally **prefixes each code block with its target filename**
 > (`// src/menuItems/IMenuItem.ts`). It also teaches **mechanics first, styling second**
 > (plain JSX, then a Bootstrap pass) and renders **one card before the `.map()` list**,
-> with a ✅ checkpoint at the single-card stage. This is a **pilot** — don't strip these on
-> a React regeneration. Whether to roll the convention across the whole React pass is an
-> open decision.
+> with a ✅ checkpoint at the single-card stage. **Decision:** these are now adopted across
+> the React **build** lessons (Lessons 3+) — don't strip them on a regeneration. The full
+> set is in **React pass — authoring lessons (from delivering Lesson 3)** below.
+
+## React pass — authoring lessons (from delivering Lesson 3)
+
+Surfaced by teaching **React Lesson 3** live and reworking its guide + lab. They apply to
+**every remaining React build lesson (3–16)** — carry them through when writing or reworking
+any React guide/lab. Several generalize to the other passes too; treat them as React-first,
+not React-only.
+
+1. **Signpost code-along vs. read.** Every React build lesson (3+) marks build-section
+   headers with **`▶ Code along`**, leaves concept/orientation/verification sections
+   unmarked, opens with a "How to use this guide" blockquote, and **prefixes each code block
+   with its target file** (`// src/menuItems/IMenuItem.ts`). (Intro Lessons 1–2 keep their
+   `▶ Try it` scratch-project convention.) See the ▶ Code along note under *Reference
+   implementations and verification*.
+
+2. **Code-along steps are literal and complete — assume nothing.** Spell out every action a
+   live coder takes: creating files, **deleting scaffold boilerplate** (Vite's demo
+   `App.tsx`; emptying `App.css`/`index.css`), and every import that changes. When a snippet
+   replaces a whole file, say "replace the whole file with this." A student coding along
+   can't fill gaps you leave implicit.
+
+3. **Minimize Bootstrap up front; borrow the design's classes when you add them.** Teach the
+   React mechanics on plain (or barely-classed) markup first, then a **separate styling
+   pass**. When you add classes, frame them as the ones students already wrote in the
+   HTML/CSS pass and point at the finished design
+   (`github.com/craigmckeachie/tableserve-design`) so they read as recognition, not new
+   material. The React **teaching** lessons hand students finished components — **Lesson 5
+   provides `Header.tsx`/`AppNav.tsx`** (like the static pass handed over the partials), so
+   there's no HTML→JSX conversion there. The real "convert HTML → JSX (with a helper)" moment
+   is the **PRS capstone** (students convert their own static pages); introduce the tool at
+   the capstone bridge, not the teaching lessons (see the `html-to-jsx-at-capstone` memory).
+   Interactive Bootstrap (dropdowns, modals) is rebuilt as react-bootstrap by hand, not
+   machine-converted. **Flag the SVG-icon gotcha wherever icons
+   convert** (Lesson 5's logo/nav icons, the 3-dots dropdowns from Lesson 6 on): SVG
+   attributes go camelCase (`class`→`className`, `stroke-width`→`strokeWidth`), and the
+   Bootstrap Icons sprite must be **imported**
+   (`import bootstrapIcons from "./assets/bootstrap-icons.svg"`) and referenced with
+   **`xlinkHref`** on `<use>` (the imported URL + `#icon-id`) — *not* the design's
+   `<use href="/assets/…">`. The html-to-jsx tool handles the attribute camelCasing but
+   **not** the sprite `import` (a module/build step) — that part is always by hand.
+
+4. **Explain every new React concept at first use.** The instant new syntax/idiom appears,
+   stop and explain it — e.g. the `.map()` arrow shapes `=> ( )` vs `=> { }`, the
+   `style={{ }}` double-brace + camelCase-vs-CSS, `key`, default vs named exports,
+   `useState`/`useEffect`. Don't let a new concept ride unremarked inside a bigger snippet.
+
+5. **Split freely — don't cram; there's schedule slack.** If a lesson conflates too much
+   (setup + concepts + build), split it or add a lab rather than overload one guide. Cohorts
+   have been moving roughly **one lesson (guide+lab) per half-day** and finishing the
+   capstones **well ahead**, so extra, smaller lessons are affordable. **Prefer splitting
+   content into clearly-marked parts with a ✅ checkpoint over renumbering** — lesson numbers
+   are referenced across guides, the curriculum plan, and the Kahoot quizzes
+   (`tooling/quizzes/`), so a renumber has wide blast radius. Renumber only if a true split
+   is unavoidable. (Specific cohort dates/pacing live in session memory, not here — they
+   shift per cohort.)
+
+6. **Labs mirror the guide's build arc, and hand over data that isn't the point.** A lab is
+   the *You do* of the guide's *I do* — give it the **same sequence and ✅ checkpoint** on a
+   **parallel entity** (Staff for Menu Items), not a different shape. And provide any
+   **starter data as a ready snippet** (a hardcoded `IStaff[]`, seed rows) when typing it
+   out isn't the skill being practiced — students should spend effort on the concept
+   (`.map()`, the badges, the fetch), not on inventing data. (The Lesson 3 lab hands over a
+   5-member `IStaff[]` and is built one-card → list → badges → styling, matching the guide.)
+
+7. **Each ▶ Code along section ends with a quick check.** After a build step, tell students
+   the one thing to do and see to confirm it worked — "save; open `/menuitems` and the shell
+   now wraps the page" — so a mistake surfaces immediately, not only at the end. One or two
+   lines. When a piece isn't visible on its own yet (a component not wired in until a later
+   section), say so honestly ("nothing on screen yet — it renders once `Layout` wraps it;
+   confirm no editor errors"). The final **Verifying in the browser** section still does the
+   full pass; the per-section checks are the incremental confirmations along the way.
+
+The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of all seven
+principles — use them as the template when reworking Lessons 6–16 or writing new React
+material.
+
+---
 
 ## Generating a whole pass (bulk runs)
 

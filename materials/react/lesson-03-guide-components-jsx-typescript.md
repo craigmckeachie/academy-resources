@@ -90,6 +90,10 @@ Install the libraries this pass uses (you'll wire them in over the coming lesson
 npm install bootstrap react-bootstrap react-router-dom react-hook-form react-hot-toast
 ```
 
+**Save and check:** the dev server is running and the browser shows Vite's default starter
+page (a spinning logo + a counter button) at the printed URL — proof the project scaffolded.
+You'll replace that starter content in section 5.
+
 ---
 
 ## 3. How the project is laid out and boots
@@ -103,6 +107,7 @@ TableServe.Web/
   index.html          ← the single HTML shell; has <div id="root"></div>
   src/
     main.tsx          ← entry point — mounts React into #root
+    index.css         ← global styles (Vite ships demo CSS here)
     App.tsx           ← the root component
     App.css           ← app-wide styles
     menuItems/        ← a feature folder (you'll create these per entity)
@@ -231,11 +236,23 @@ export default MenuItemsPage;
 `{nachos.name}` and `{nachos.price}` are the `{ }` embed from section 4 — pulling values
 out of your typed object into the markup.
 
-**Show it on screen.** Render your page from the root component. For now `App` just
-renders `<MenuItemsPage />`:
+**Clear out Vite's starter content.** The scaffold filled a few files with a demo app —
+a counter, the Vite/React logos, and demo styles (a centered, max-width `#root`, and even
+a `.card` rule that would fight Bootstrap later). Wipe all of it so you start from a blank
+slate:
+
+- **`src/App.tsx`** — **delete the entire file's contents and replace them** with the
+  snippet below. That removes the logo `import`s, the `useState` counter, and the starter
+  JSX in one move (a full replace is cleaner here than editing line by line).
+- **`src/App.css`** and **`src/index.css`** — **select all and delete** so each file is
+  empty. You don't need Vite's demo styles; Bootstrap provides the look in section 8. Leave
+  the (now-empty) files in place — they're still imported elsewhere, and that's fine.
+
+**Show it on screen.** Point the root component at your page. For now `App` just renders
+`<MenuItemsPage />`:
 
 ```tsx
-// src/App.tsx
+// src/App.tsx — replace the whole file with this
 import MenuItemsPage from "./menuItems/MenuItemsPage";
 
 function App() {
@@ -246,7 +263,7 @@ export default App;
 ```
 
 Save. With `npm run dev` running, the browser shows the **Menu** heading and **one**
-plain card — the name and price of your one item.
+plain card — the name and price of your one item, with **no Vite logos or counter**.
 
 > **✅ Checkpoint.** One card on screen means a **component** is rendering **typed data**
 > through **JSX** — the whole core of React, working. If you're following along live,
@@ -322,7 +339,7 @@ function MenuItemsPage() {
 export default MenuItemsPage;
 ```
 
-Save — three plain cards appear. Three things to understand:
+**Save and check:** three plain cards appear. Three things to understand:
 
 - **`menuItems.map((menuItem) => ( … ))`** runs the arrow once per element (the `=> ( … )`
   form from section 6), producing one `<div>` per item. The array of elements renders in
@@ -337,8 +354,11 @@ Save — three plain cards appear. Three things to understand:
 
 ## 8. ▶ Code along — Make it look like a card
 
-The mechanics work; now make it *look* like the design. Add the Bootstrap classes — the
-same ones from the HTML/CSS pass — plus a `.list` tray around the cards, and import
+The mechanics work; now make it *look* like the design. These are **the same Bootstrap
+classes you put on the menu-items card in the HTML/CSS pass** — `card`, the `d-flex` tray,
+the `fs-*` type utilities — so this is mostly recognition, not new material. (The finished
+markup lives in the [TableServe design repo](https://github.com/craigmckeachie/tableserve-design),
+`menuitems.html`.) Add the classes, plus a `.list` tray around the cards, and import
 Bootstrap's CSS so the classes take effect:
 
 ```tsx
@@ -383,10 +403,21 @@ function App() {
 export default App;
 ```
 
-Save — the plain cards become a wrapping grid of styled cards. Notice the **only** things
+**Save and check:** the plain cards become a wrapping grid of styled cards. Notice the **only** things
 that changed from section 7 are `className`s and the CSS import; the React logic (the
 component, the `.map()`, the `key`) is identical. That's the point of doing styling as a
-separate pass — the mechanics and the look are two different jobs.
+separate pass — the mechanics and the look are two different jobs. (`App.css` is still the
+empty file from section 5 — that's fine; it's just where app-wide styles would go. Here,
+Bootstrap's CSS is doing the work.)
+
+> **New JSX syntax — `style={{ … }}`.** Those are **two** sets of braces doing two things.
+> The **outer `{ }`** drops into a JavaScript expression (the embed from section 4); the
+> **inner `{ }`** is a JavaScript **object** — the style object. So
+> `style={{ width: "23rem" }}` reads as "*the `style` prop equals this object.*" Two things
+> differ from CSS: property names are **camelCase**, not kebab-case (`backgroundColor`, not
+> `background-color`; `width` is one word so it happens to look the same), and the values
+> are **strings** (`"23rem"`). Prefer classes for styling — reach for `style` only for a
+> one-off value like this fixed card width.
 
 > **Styling note:** the `card`, `d-flex flex-wrap`, `gap-5` classes are the same Bootstrap
 > classes as the HTML/CSS pass. This lesson keeps the JSX minimal on purpose; the polished
@@ -397,7 +428,8 @@ separate pass — the mechanics and the look are two different jobs.
 ## 9. Verifying in the browser
 
 There's no Insomnia and no API here — you verify **by looking at the page and the
-DevTools**. With `npm run dev` running:
+DevTools**. You've checked each piece as you built it; this is the full pass. With
+`npm run dev` running:
 
 1. Open the printed URL (e.g. `http://localhost:5173`). You should see the **Menu**
    heading and one styled card per item in your hardcoded array.
@@ -445,7 +477,9 @@ component, one card, then a `.map()` over products — before any data loads.
 3. Create the `src/menuItems/` feature folder and `src/menuItems/IMenuItem.ts` with the
    `IMenuItem` **interface** (`id`, `name`, `price`).
 4. In `src/menuItems/MenuItemsPage.tsx`, render **one** hardcoded item as a plain card.
-5. In `App.tsx`, render `<MenuItemsPage />` and confirm the one card shows (**checkpoint**).
+5. **Clear Vite's boilerplate:** replace all of `App.tsx` with a render of
+   `<MenuItemsPage />`, and empty `App.css` and `index.css`. Confirm the one card shows
+   (**checkpoint**).
 6. Swap the single item for a hardcoded `IMenuItem[]` array and **`.map()`** it into cards,
    each with a **`key`** — still plain.
 7. Add the Bootstrap `className`s and import `bootstrap/dist/css/bootstrap.min.css` in
