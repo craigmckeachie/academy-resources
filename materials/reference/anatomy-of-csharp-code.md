@@ -1,4 +1,4 @@
-# Anatomy of a Class — Naming the Parts
+# Anatomy of C# Code — Naming the Parts
 
 An evergreen reference for the whole API pass and the capstone. You can *write* C#
 before you can *talk* about it — this sheet closes that gap. It points at every token
@@ -6,9 +6,10 @@ in a real model and a real controller and names what it is: **class**, **object*
 **method**, **parameter**, **field**, **local variable**, and the rest.
 
 Keep it open from **API Lesson 2** (your first controller) onward. There's a blank
-[quiz version](anatomy-of-a-class-quiz.md) for practice, and a companion
+[quiz version](anatomy-of-csharp-code-quiz.md) for practice, and a companion
 [C# naming conventions](csharp-naming-conventions.md) sheet — once you can *name* a
-part, its casing tells you how to *write* it.
+part, its casing tells you how to *write* it. For the React pass, see the TypeScript
+companion, [Anatomy of TypeScript Code](anatomy-of-typescript-code.md).
 
 Both specimens below are copied verbatim from the TableServe reference API.
 
@@ -167,7 +168,7 @@ distinction (#1 above) matters.
 
 ## How to use this in a lesson
 
-- **As a warm-up quiz:** hand out the [blank version](anatomy-of-a-class-quiz.md) — same
+- **As a warm-up quiz:** hand out the [blank version](anatomy-of-csharp-code-quiz.md) — same
   code, empty legend, a word bank — and have students fill it in before revealing this key.
 - **As a live callout:** during the Lesson 2 build, pause on each new token and ask
   "class, object, method, parameter, field, or local?" before moving on.

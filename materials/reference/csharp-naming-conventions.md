@@ -2,7 +2,7 @@
 
 An evergreen reference for the whole API pass and the capstone. C# uses **casing** to
 signal what an identifier *is* — so once you can name the parts of a class (see
-[Anatomy of a Class](anatomy-of-a-class.md)), casing tells you how to write each one.
+[Anatomy of C# Code](anatomy-of-csharp-code.md)), casing tells you how to write each one.
 Match these and your code reads like the reference implementation.
 
 ---

@@ -206,10 +206,10 @@ navigate(`/orders/detail/${newOrder.id}`);  // go to a computed path
 ```
 
 You've already seen it in the form's `save` (Lesson 7) — after POST/PUT it calls
-`navigate("/menuitems")`. On this detail page an Edit link uses a `Link`
-(`to={\`/orders/edit/${order.id}\`}`), while Lesson 9's workflow buttons will `navigate`
-after their API calls. **`Link` for what the user clicks to go somewhere; `useNavigate` for
-going somewhere as a result of an action.**
+`navigate("/menuitems")`. A row's **⋮ → View** uses a `Link` (the user clicks to go to the
+detail page), while Lesson 9's workflow buttons will `navigate` after their API calls.
+**`Link` for what the user clicks to go somewhere; `useNavigate` for going somewhere as a
+result of an action.**
 
 ---
 

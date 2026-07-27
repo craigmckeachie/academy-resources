@@ -16,12 +16,17 @@ here is a step-by-step build — these are lookups.
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
   discipline, and the house-style watch-list. Backs the Copilot lessons and stretch
   challenges across all three passes.
-- [Anatomy of a Class](anatomy-of-a-class.md) — an annotated model and controller that
+- [Anatomy of C# Code](anatomy-of-csharp-code.md) — an annotated model and controller that
   name every part: class, object, method, parameter, field, local variable, property, and
-  the distinctions students trip on. Has a blank [quiz version](anatomy-of-a-class-quiz.md).
+  the distinctions students trip on. Has a blank [quiz version](anatomy-of-csharp-code-quiz.md).
   Useful from **API Lesson 2** and throughout the capstone.
+- [Anatomy of TypeScript Code](anatomy-of-typescript-code.md) — the TypeScript/React companion:
+  an annotated interface, API module, and list component that name every part — interface,
+  property, type, object, method, function, hook, parameter, argument, and the distinctions
+  students trip on. Has a blank [quiz version](anatomy-of-typescript-code-quiz.md). Useful from
+  **React Lesson 3–4** and throughout the capstone.
 - [C# naming conventions](csharp-naming-conventions.md) — the PascalCase / camelCase /
-  `_field` rules, and how casing hints at what a token is. Pairs with Anatomy of a Class.
+  `_field` rules, and how casing hints at what a token is. Pairs with Anatomy of C# Code.
 
 ## images/
 

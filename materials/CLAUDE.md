@@ -156,8 +156,10 @@ materials/
     insomnia-quickstart.md
     copilot-quickstart.md
     csharp-naming-conventions.md
-    anatomy-of-a-class.md
-    anatomy-of-a-class-quiz.md
+    anatomy-of-csharp-code.md
+    anatomy-of-csharp-code-quiz.md
+    anatomy-of-typescript-code.md
+    anatomy-of-typescript-code-quiz.md
     images/                            # diagrams/infographics; manifest in images/README.md
 ```
 
@@ -180,9 +182,11 @@ run neither creates nor overwrites them. Maintain them by hand.
   PRS work. There is intentionally **no API prework** (the API pass is first). Keep
   each in sync with the intro lessons it previews.
 - **Extra reference cheat sheets** (`reference/`) — beyond the three cross-pass
-  quickstarts, `csharp-naming-conventions.md`, `anatomy-of-a-class.md`, and its
-  companion `anatomy-of-a-class-quiz.md` support the API pass. Evergreen; linked
-  from lessons and the `reference/README.md` manifest.
+  quickstarts, `csharp-naming-conventions.md`, `anatomy-of-csharp-code.md`, and its
+  companion `anatomy-of-csharp-code-quiz.md` support the API pass; the parallel
+  `anatomy-of-typescript-code.md` and `anatomy-of-typescript-code-quiz.md` support the
+  React pass (same "name every token" exercise, on an interface / API module / component).
+  Evergreen; linked from lessons and the `reference/README.md` manifest.
 
 ---
 

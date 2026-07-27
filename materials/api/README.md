@@ -60,8 +60,8 @@ or **[Reach]** (goes past it, with a reference link to research).
 - The guide and lab always use the **TableServe** domain (Staff, Categories,
   MenuItems, Orders, OrderItems)
 - Fuzzy on the vocabulary — **class vs. object vs. method vs. parameter vs. field vs.
-  local variable**? Keep [Anatomy of a Class](../reference/anatomy-of-a-class.md) (with a
-  blank [quiz](../reference/anatomy-of-a-class-quiz.md)) and the
+  local variable**? Keep [Anatomy of C# Code](../reference/anatomy-of-csharp-code.md) (with a
+  blank [quiz](../reference/anatomy-of-csharp-code-quiz.md)) and the
   [C# naming conventions](../reference/csharp-naming-conventions.md) sheet open from
   Lesson 2 on — they name every part of a real controller and model
 - After the API pass you will build the **PRS backend independently** using

@@ -70,7 +70,7 @@ So the flow per page is: **paste HTML → HTML2JSX → fix the sprite imports �
 | Product form | Menu Item form | shared create/edit, **Vendor FK dropdown** |
 | Requests list | Orders list | **table**, status badges, **status filter** |
 | Request Detail | Order Detail | `useParams`, workflow buttons, **Reject modal**, items table |
-| Request Create/Edit | Order Create/Edit form | shared form (status disabled on create) |
+| Request Create/Edit | Menu Item / Staff form | shared create/edit form pattern; fields per the spec, status not set on this form |
 | RequestLine create/edit | Order Item form | **nested**, **derived Amount**, parent total |
 
 Work in the order that unblocks the most: Sign In + Context first (everything needs the

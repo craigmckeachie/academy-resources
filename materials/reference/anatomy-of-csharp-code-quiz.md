@@ -1,7 +1,7 @@
-# Anatomy of a Class — Quiz
+# Anatomy of C# Code — Quiz
 
 Name every numbered token below. This is the blank version of the
-[Anatomy of a Class](anatomy-of-a-class.md) reference — match each token to a term from
+[Anatomy of C# Code](anatomy-of-csharp-code.md) reference — match each token to a term from
 the word bank, then check yourself against that sheet.
 
 You can print this and fill it in by hand, or copy the
@@ -149,7 +149,7 @@ Not from the word bank — explain in your own words:
 3. Where is an **object** actually created in Specimen B, and why is there no visible
    `new Category()` even though the code clearly works with `Category` objects?
 
-Answers are all on the [reference sheet](anatomy-of-a-class.md).
+Answers are all on the [reference sheet](anatomy-of-csharp-code.md).
 
 ---
 

@@ -82,7 +82,6 @@ current status** — pure conditional rendering:
     <button className="btn btn-primary" onClick={markServed}>Mark Served</button>
   )}
   {/* SERVED and CANCELLED are terminal — no buttons */}
-  <Link to={`/orders/edit/${order?.id}`} className="btn btn-outline">✎</Link>
 </div>
 ```
 

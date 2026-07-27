@@ -285,6 +285,14 @@ Add the `<select>` above the table:
 </select>
 ```
 
+> **Why `?? ""` on the value?** This is a *controlled* `<select>` (it has a `value` prop), so
+> `value` must always be a **string**. But `searchParams.get("status")` returns `null` when
+> there's no `?status=…` in the URL (the default, unfiltered state), and React treats
+> `value={null}` as an *uncontrolled* input — you'd get a "changing an uncontrolled input to
+> controlled" warning and the select would stop tracking state. `?? ""` swaps that `null` for
+> `""`, which both keeps it controlled **and** matches `<option value="">All</option>`, so an
+> empty filter shows **All** selected.
+
 The key idea: **the `useEffect` now depends on `searchParams.get("status")`** — a
 **non-empty dependency array**. This is the first time you've used a dependency other than
 `[]`: when the filter changes the query string, the status value changes, the effect
@@ -324,7 +332,6 @@ function OrderRow({ order, onRemove }: IOrderRowProps) {
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item as={Link} to={`/orders/detail/${order.id}`}>View</Dropdown.Item>
-        <Dropdown.Item as={Link} to={`/orders/edit/${order.id}`}>Edit</Dropdown.Item>
         <Dropdown.Item as="a" href="#" onClick={async (event) => {
           event.preventDefault();
           if (confirm("Are you sure you want to delete this order?")) {
@@ -345,14 +352,14 @@ function OrderRow({ order, onRemove }: IOrderRowProps) {
 
 - The toggle's icon is the same **SVG sprite** pattern as Lesson 5's `AppNav` — `import` the
   sprite, reference it with `xlinkHref` (see *SVGs in JSX* in the Lesson 5 guide).
-- `as={Link}` makes **View** / **Edit** navigate to the detail / edit routes (built in
-  Lessons 8–10 — they'll 404 until then).
+- `as={Link}` makes **View** navigate to the detail route (built in Lesson 8 — it'll 404
+  until then).
 - **Delete** calls the API, then calls the **`onRemove` callback prop** so the parent drops
   the row from state — the pattern where a child asks the parent to update. `OrdersPage`
   supplies it as `removeOrder`. A `window.confirm(...)` guards it for now; **Lesson 9**
   replaces that with a modal.
 
-**Save and check:** open a row's **⋮** menu → **View** / **Edit** navigate (or 404 for now);
+**Save and check:** open a row's **⋮** menu → **View** navigates (or 404 for now);
 **Delete** confirms, removes the row, and **Network** shows a `DELETE`.
 
 ---
@@ -361,10 +368,57 @@ function OrderRow({ order, onRemove }: IOrderRowProps) {
 
 While a fetch is in flight, a blank page feels broken. A **skeleton** is a grey placeholder
 shaped like the real content, shown *only while loading*. Skeletons matter most on the
-**card grids** — add them to your **Menu Items** page:
+**card grids** — add them to your **Menu Items** page.
+
+**First, create the skeleton component.** It's a copy of your `MenuItemCard` (from Lesson 5)
+with the real text swapped for grey bars — same `card` wrapper and sizing so the placeholder
+occupies the same space:
+
+```tsx
+// src/menuItems/MenuItemCardSkeleton.tsx
+function MenuItemCardSkeleton() {
+  return (
+    <div className="card p-4" style={{ width: "23rem" }}>
+      <span className="fs-4 fw-medium skeleton skeleton-text"></span>
+      <span className="fs-5 fw-light skeleton skeleton-text"></span>
+    </div>
+  );
+}
+
+export default MenuItemCardSkeleton;
+```
+
+The empty `<span>`s carry no text — the **`skeleton skeleton-text`** classes give them a fixed
+size and the shimmering grey animation. Those classes aren't Bootstrap; add them to
+**`App.css`** (which you emptied in Lesson 3 — this is the one bit of custom CSS the pass
+needs):
+
+```css
+/* src/App.css — skeleton loading placeholders */
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0%   { background-color: hsl(200, 20%, 80%); }
+  100% { background-color: hsl(200, 20%, 95%); }
+}
+
+.skeleton-text {
+  width: 18ch;
+  height: 0.8rem;
+  display: block;
+  border-radius: 0.25rem;
+  margin: 0.2rem;
+}
+```
+
+**Now render the skeletons while loading**, in `MenuItemsPage`:
 
 ```tsx
 // src/menuItems/MenuItemsPage.tsx — loading skeletons
+import MenuItemCardSkeleton from "./MenuItemCardSkeleton";
+
 const [loading, setLoading] = useState(false);
 
 const menuItemCardSkeletons = Array.from(Array(12), (_value, index) => (
@@ -382,9 +436,6 @@ const menuItemCardSkeletons = Array.from(Array(12), (_value, index) => (
   render N copies. (Here the array **index is a valid `key`** — skeletons never reorder.)
 - `{loading && menuItemCardSkeletons}` shows them only during the fetch; set `loading` `true`
   before the `await` and `false` in a `finally` (the loading flag from Lesson 4).
-- `MenuItemCardSkeleton` is a copy of the card with text swapped for grey bars (`skeleton
-  skeleton-text` classes). The Categories feature ships a ready-made `CategoryCardSkeleton`
-  you can model yours on.
 
 The Orders **table** can use a simpler `{loading && <p>Loading…</p>}`; the skeleton *cards*
 are what matter on the grids.
@@ -442,6 +493,8 @@ filter via `useSearchParams`, and a 3-dots menu (Review / Edit / Delete).
    reload.
 4. Fill the 3-dots **`Dropdown`** in `OrderRow` (View/Edit `Link`s + Delete-with-confirm
    calling `onRemove`; sprite icon via `xlinkHref`). **Check** the row actions work.
-5. Add skeletons to the **Menu Items** card grid: a `MenuItemCardSkeleton`, a `loading` flag,
-   and `{loading && skeletons}`. **Check** skeletons show on Slow 3G.
+5. Add skeletons to the **Menu Items** card grid: create `MenuItemCardSkeleton.tsx` (a copy of
+   `MenuItemCard` with `skeleton skeleton-text` bars), add the `.skeleton`/`.skeleton-text` CSS
+   to `App.css`, then render `{loading && skeletons}` behind a `loading` flag. **Check**
+   skeletons show on Slow 3G.
 6. Verify in the browser using section 7.
