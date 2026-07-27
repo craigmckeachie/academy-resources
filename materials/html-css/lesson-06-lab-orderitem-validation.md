@@ -92,8 +92,8 @@ some research.
 - **Validate the Order form** — [Reinforce] — wire `order-create.html` and
   `order-edit.html`: make **Table Number** required (with a message and
   `data-success="/orders.html"`), so every Order-related form now validates.
-- **Sweep the rest of the app** — [Reinforce] — add the `required` markup + `novalidate`
-  + the script to the remaining forms (`menuitem-create/edit`, `category-create/edit`,
+- **Sweep the rest of the app** — [Reinforce] — add the `required` markup, `novalidate`,
+  and the script to the remaining forms (`menuitem-create/edit`, `category-create/edit`,
   `staff-edit`) so no form in the app submits empty. This is the same sweep you'll run
   across the PRS forms.
 - **Prove client validation is only a convenience** — [Reach] — in DevTools, disable

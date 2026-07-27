@@ -16,15 +16,15 @@ Walk the app the way a user would, naming the pattern behind each screen:
 
 | Screen | Patterns in play | Lessons |
 |---|---|---|
-| Sign In | react-hook-form, login, localStorage, Context | 5, 9 |
-| Menu Items list | fetch, card grid, skeleton, 3-dots delete | 2, 4 |
-| Menu Item form | shared create/edit, **FK dropdown** (Category) | 5 |
-| Staff list | fetch, card grid, **conditional role badges**, skeleton | 4 |
-| Staff form | shared create/edit, **no FK**, checkboxes | 5 |
-| Categories | provided — card grid + no-FK form | 11 |
-| Orders list | **table**, status badges, **`useSearchParams` filter**, 3-dots | 4 |
-| Order Detail | `useParams`, definition-list, **status workflow buttons**, **modals** | 6, 7 |
-| Order Item form | **nested child**, **derived fields** (`watch`), parent total | 8 |
+| Sign In | react-hook-form, login, localStorage, Context | 7, 11 |
+| Menu Items list | fetch, card grid, skeleton, 3-dots delete | 4, 6 |
+| Menu Item form | shared create/edit, **FK dropdown** (Category) | 7 |
+| Staff list | fetch, card grid, **conditional role badges**, skeleton | 4, 6 |
+| Staff form | shared create/edit, **no FK**, checkboxes | 7 |
+| Categories | provided — card grid + no-FK form | 13 |
+| Orders list | **table**, status badges, **`useSearchParams` filter**, 3-dots | 6 |
+| Order Detail | `useParams`, definition-list, **status workflow buttons**, **modals** | 8, 9 |
+| Order Item form | **nested child**, **derived fields** (`watch`), parent total | 10 |
 
 If any row is shaky, re-open that lesson's guide.
 
@@ -87,6 +87,9 @@ different fields/workflow**:
 
 ## 5. Verifying in the browser
 
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> all seed data loaded.
+
 With your API running and `npm run dev` up, do a final pass:
 
 1. Click every nav link; open every list; create, edit, and delete a record in each.
@@ -109,5 +112,5 @@ for every PRS screen.
 - **Every PRS page has a TableServe precedent** — except the three named exceptions.
 - The capstone changes **entities, fields, and workflow words**, not concepts.
 
-Next lesson (13) is the **capstone bridge** — it turns this gap-check into an explicit
+Next lesson (15) is the **capstone bridge** — it turns this gap-check into an explicit
 plan and expectations for building PRS.

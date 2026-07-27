@@ -1,35 +1,61 @@
-# Lesson 6 Lab — Staff Card Grid with Conditional Rendering
+# Lesson 6 Lab — Staff Card Grid: Conditional Badges, Skeletons, and a Dropdown
 
-Turn your fetched Staff list into a polished **card grid** — extract a `StaffCard`,
-render **role badges conditionally**, and add **skeleton** loading placeholders. The
-guide built a *table* (Orders) with conditional badges and skeletons; here you apply
-the same conditional-rendering ideas to a *card grid*. Refer back to the guide for the
-`&&` / lookup-function patterns and the skeleton setup.
+Apply Lesson 6's ideas to your **Staff card grid**. You already have `StaffPage`
+(fetch + map) and `StaffCard` (extracted in Lesson 5); here you round out the card, add a
+**3-dots menu**, and add **skeleton** loading placeholders. The guide built a *table*
+(Orders); this is the same conditional-rendering + skeleton work on a *card grid*.
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> Staff seed data loaded. You're extending the `StaffPage` + `StaffCard` from Lesson 5.
+
+> **No status badge or filter here** — Staff has **role flags**, not a workflow status, so
+> you use the plain `{flag && <badge>}` conditional (the `&&` shape), not the
+> `getTextBackgroundByStatus` lookup, and there's no `useSearchParams` filter.
 
 ---
 
 ## Steps
 
-1. **Card grid tray** — in `StaffList`, wrap the `.map()` in
-   `<section className="list d-flex flex-row flex-wrap bg-light gap-5 p-4 rounded-4">`.
-2. **`StaffCard`** — the per-member card (props: `staff`, plus an `onRemove` callback
-   you'll use in Lesson 12; wire the prop now, a `confirm`-based delete is fine). Show
-   name, username, phone (`formatPhoneNumber`), and email.
-3. **Conditional role badges** — render each badge only when its flag is true:
+Same arc as the guide's applicable parts: **round out the card → add the dropdown →
+skeletons.**
+
+1. **Round out `StaffCard`.** Alongside name and username, show **phone**
+   (`formatPhoneNumber` from `formatUtilities.ts`) and **email**. Keep the conditional role
+   badges — the `&&` shape, one badge per flag:
    ```tsx
    {staff.isManager && <span className="badge text-bg-primary mt-1">Manager</span>}{" "}
    {staff.isAdmin && <span className="badge text-bg-dark mt-1">Admin</span>}
    ```
-4. **Skeletons** — add a `loading` flag (set around the fetch), build a
-   `StaffCardSkeleton` (a copy of the card with `skeleton skeleton-text` bars), and
-   render `{loading && staffCardSkeletons}` where `staffCardSkeletons` is
+2. **Add the 3-dots `Dropdown`.** Give `StaffCard` an `onRemove` prop (add
+   `onRemove: (staff: IStaff) => void` to `IStaffCardProps`), add `delete(id)` to `staffAPI`,
+   and add the menu — the same react-bootstrap `Dropdown` + sprite icon as the guide's
+   `OrderRow` (imports: `Dropdown`, `Link`, `bootstrapIcons`, `staffAPI`):
+   ```tsx
+   <Dropdown className="d-inline">
+     <Dropdown.Toggle className="btn btn-light" style={{ background: "none" }}>
+       <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
+         <use xlinkHref={`${bootstrapIcons}#three-dots-vertical`} />
+       </svg>
+     </Dropdown.Toggle>
+     <Dropdown.Menu>
+       <Dropdown.Item as={Link} to={`/staff/edit/${staff.id}`}>Edit</Dropdown.Item>
+       <Dropdown.Item as="a" href="#" onClick={async (event) => {
+         event.preventDefault();
+         if (confirm("Delete this staff member?") && staff.id) {
+           await staffAPI.delete(staff.id);
+           onRemove(staff);
+         }
+       }}>Delete</Dropdown.Item>
+     </Dropdown.Menu>
+   </Dropdown>
+   ```
+   `StaffPage` supplies `onRemove` as a `removeStaff` that filters the deleted member out of
+   state (like `OrdersPage`'s `removeOrder`). **✅ Checkpoint:** the ⋮ menu opens; **Delete**
+   confirms, removes the card, and **Network** shows a `DELETE`. (Edit 404s until Lesson 7.)
+3. **Add skeletons.** On `StaffPage`, add a `loading` flag (set around the fetch), build a
+   `StaffCardSkeleton` (a copy of the card with `skeleton skeleton-text` bars), and render
+   `{loading && staffCardSkeletons}` where `staffCardSkeletons` is
    `Array.from(Array(12), (_v, i) => <StaffCardSkeleton key={i} />)`.
-5. **3-dots dropdown** — add a react-bootstrap `Dropdown` to each card with **Edit**
-   (`as={Link} to={/staff/edit/${staff.id}}`) and **Delete** (confirm → API → remove).
-
-> **No status badge here** — Staff has role flags, not a workflow status, so you use
-> the plain `{flag && <badge>}` conditional rather than the `getTextBackgroundByStatus`
-> lookup. Same idea, simpler condition.
 
 ---
 

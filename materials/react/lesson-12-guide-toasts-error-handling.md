@@ -13,14 +13,28 @@ response through a shared **`checkStatus`** that throws a friendly `Error` on no
 so components have a consistent thing to catch. Feedback + centralized errors are the
 polish that makes the app feel finished.
 
+> **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
+> blocks name their file on the first line.
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
+> you have the Menu Item CRUD (list/create/edit/delete) from Lessons 3–7.
+
+> **This lesson pays off a running promise.** Since Lesson 6 your API modules have used
+> plain `fetch` with a hardcoded URL and (in a couple of spots) an inline
+> `if (!response.ok) throw` guard. Here you build the shared **`fetchUtilities`** once and
+> retrofit **every** module (Menu Items, Orders, OrderItems, Staff, Categories) to it — the
+> guide walks Menu Items; you repeat the same three-line change across the rest.
+
 ---
 
-## 1. Mounting the Toaster
+## 1. ▶ Code along — Mounting the Toaster
 
 `react-hot-toast` needs one `<Toaster />` mounted near the app root (you added it in
 Lesson 11's `App.tsx`). It renders whatever toasts you fire from anywhere:
 
 ```tsx
+// src/App.tsx
 import { Toaster } from "react-hot-toast";
 
 // inside App's provider:
@@ -35,11 +49,15 @@ import { Toaster } from "react-hot-toast";
 `toastOptions` themes the toasts (the brand orange check). Mount it once; you never
 render toasts directly — you *call* them.
 
+**Save and check:** nothing visible yet (no toast is firing) — confirm the app still loads
+and the console is clean. You'll see toasts once you fire them in section 4.
+
 ---
 
 ## 2. Firing toasts
 
-Import the default `toast` and call it wherever an action succeeds or fails:
+*(Read this — the two calls you'll wire into CRUD in section 4.)* Import the default `toast`
+and call it wherever an action succeeds or fails:
 
 ```tsx
 import toast from "react-hot-toast";
@@ -56,13 +74,14 @@ Toasts stack and auto-dismiss; no state or cleanup on your part.
 
 ---
 
-## 3. Centralized fetch error handling
+## 3. ▶ Code along — Centralized fetch error handling
 
 A `fetch` promise **doesn't reject on 404/500** — it resolves with a non-`ok` response.
 So each API module runs responses through shared helpers in
 `src/utility/fetchUtilities.ts` that turn a bad status into a thrown `Error`:
 
 ```ts
+// src/utility/fetchUtilities.ts
 export const BASE_URL = "http://localhost:5556/api";
 
 export function translateStatusToErrorMessage(status: number) {
@@ -96,6 +115,7 @@ export function parseJSON(response: Response) {
 Every API method chains these, so errors are consistent everywhere:
 
 ```ts
+// src/menuItems/MenuItemAPI.ts
 import { BASE_URL, checkStatus, parseJSON } from "../utility/fetchUtilities";
 
 const url = `${BASE_URL}/menuitems`;
@@ -128,9 +148,20 @@ ready-made `Error`.
 > ("error saving or retrieving data") is what you'll actually see, e.g. when the API is
 > down.
 
+**Now retrofit every other module the same way.** `OrderAPI`, `OrderItemAPI`, `StaffAPI`, and
+`CategoryAPI` were all written with plain `fetch` and a hardcoded URL. In each: import
+`{ BASE_URL, checkStatus, parseJSON }`, change `const url` to `` `${BASE_URL}/orders` `` (etc.),
+and chain `.then(checkStatus).then(parseJSON)` on every method (a bodiless `delete`/`put`
+uses just `.then(checkStatus)`). The inline `if (!response.ok) throw` you wrote in Lesson 11's
+`findByAccount` becomes a plain `.then(checkStatus)` too — that's the guard, now shared.
+
+**Save and check:** the app behaves exactly as before (lists load, saves work) — you've
+changed *how* errors surface, not the happy path. Confirm the console is clean and every
+page still fetches.
+
 ---
 
-## 4. Wiring toasts into CRUD
+## 4. ▶ Code along — Wiring toasts into CRUD
 
 With `checkStatus` throwing and `toast` available, each action follows one shape:
 **`try` the API call → `toast.success` → (navigate/update); `catch` → `toast.error`.**
@@ -186,11 +217,16 @@ onClick={async (event) => {
 The `error.message` you toast is exactly the friendly string `checkStatus` threw — that
 handshake between the utility and the `catch` is the whole point.
 
+**Save and check:** save a valid menu item → a green **"Successfully saved."** toast; delete
+one → **"Successfully deleted."** Stop the API and reload `/menuitems` → a red error toast and
+the `http error status` console log from `checkStatus`.
+
 ---
 
 ## 5. Verifying in the browser
 
-Verify in the **browser**. With your API running and `npm run dev` up:
+You've checked each piece as you built it; this is the full pass. With your API running and
+`npm run dev` up:
 
 1. Save a valid menu item → a green **"Successfully saved."** toast; delete one → a
    **"Successfully deleted."** toast.
@@ -229,8 +265,11 @@ Requests, and RequestLines.
 2. Create `src/utility/fetchUtilities.ts` with `BASE_URL`, `translateStatusToErrorMessage`,
    `checkStatus` (throws on non-`ok`), and `parseJSON`.
 3. Refactor `MenuItemAPI.ts` so every method chains `.then(checkStatus).then(parseJSON)`
-   (delete just `.then(checkStatus)`).
-4. Add `toast.success` after successful save/delete and `toast.error(error.message)` in
+   (delete just `.then(checkStatus)`), using `BASE_URL` for the URL.
+4. **Repeat that retrofit across `OrderAPI`, `OrderItemAPI`, `StaffAPI`, and `CategoryAPI`** —
+   `BASE_URL` + `.then(checkStatus).then(parseJSON)`; replace Lesson 11's inline
+   `if (!response.ok) throw` in `findByAccount` with `.then(checkStatus)`.
+5. Add `toast.success` after successful save/delete and `toast.error(error.message)` in
    every `catch` across the Menu Item list, form, and delete.
-5. Verify in the browser using section 5 — success toasts, a forced error toast + the
+6. Verify in the browser using section 5 — success toasts, a forced error toast + the
    `checkStatus` console log, form stays on failure.

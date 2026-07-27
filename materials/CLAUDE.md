@@ -108,6 +108,18 @@ the day.
 
 ---
 
+## Markdown formatting — wrapped list items
+
+When a list item or a numbered build/verify step **wraps** onto a second line, make sure the
+continuation line does **not start with `+ `, `- `, or `* `** (or `N. `). Markdown parses a
+line beginning with one of those as a **new bullet**, so the tail of your sentence renders as
+a stray sub-item instead of continuing the line. This bites most often with a `+` used as
+"and": e.g. `(that's HMR\n   + React re-rendering)` renders "React re-rendering)" as its own
+bullet. **Fix by rewording so the marker isn't at a line start** — `HMR + React` →
+`HMR and React`; separate list-y items with commas/`and` rather than `+`.
+
+---
+
 ## Directory structure
 
 ```
@@ -411,8 +423,19 @@ not React-only.
    full pass; the per-section checks are the incremental confirmations along the way.
 
 The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of all seven
-principles — use them as the template when reworking Lessons 6–16 or writing new React
-material.
+principles — use them as the template when writing new React material. **All React lessons
+1–16 have now been reworked to these principles** (guides + labs, plus the L13–15 review/
+bridge lessons and the L16 Copilot tooling lesson), so any React guide/lab is a valid model;
+match whichever is closest in shape to what you're writing. A few lesson-specific decisions
+worth preserving on regeneration: the **items table + delete-confirm modal live entirely in
+Lesson 10** (the OrderItem child-collection unit) — **Lesson 9 builds only the status buttons +
+Cancel modal** and merely notes that the delete modal comes in L10 (it does not preview it);
+L10 reuses L9's state-driven `Modal` *pattern* for the delete confirmation. Every API module
+uses **plain `fetch` until
+Lesson 12**, which introduces the shared `fetchUtilities` (`checkStatus`/`parseJSON`) and
+retrofits all modules at once (Lesson 11's `findByAccount` uses an inline
+`if (!response.ok) throw` guard in the interim). The **html-to-jsx tool** intro lives in the
+**Lesson 15 capstone bridge**, not the teaching lessons.
 
 ---
 

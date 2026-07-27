@@ -24,14 +24,14 @@ Categories follows the standard feature-folder pattern (every entity uses it):
 
 | File | Role | Lesson it draws on |
 |---|---|---|
-| `ICategory.ts` | The TypeScript interface (`id`, `name`, `sortOrder`) | 1 |
-| `CategoryAPI.ts` | `list` / `find` / `post` / `put` / `delete`, via `checkStatus`/`parseJSON` | 2, 10 |
-| `CategoriesPage.tsx` | Route target — heading, **Add Category** link, renders the list | 3 |
-| `CategoryList.tsx` | Fetches in `useEffect`, holds state, `.map()`s cards, skeletons | 2, 4 |
-| `CategoryCard.tsx` | One card (props `category`, `onRemove`), 3-dots dropdown | 3, 4 |
-| `CategoryCardSkeleton.tsx` | Grey placeholder card shown while loading | 4 |
-| `CategoryForm.tsx` | Shared create/edit form (no FK), react-hook-form | 5 |
-| `CategoryCreatePage.tsx` / `CategoryEditPage.tsx` | Thin wrappers around the form | 5 |
+| `ICategory.ts` | The TypeScript interface (`id`, `name`, `sortOrder`) | 3 |
+| `CategoryAPI.ts` | `list` / `find` / `post` / `put` / `delete`, via `checkStatus`/`parseJSON` | 4, 12 |
+| `CategoriesPage.tsx` | Route target — heading, **Add Category** link, renders the list | 5 |
+| `CategoryList.tsx` | Fetches in `useEffect`, holds state, `.map()`s cards, skeletons | 4, 6 |
+| `CategoryCard.tsx` | One card (props `category`, `onRemove`), 3-dots dropdown | 5, 6 |
+| `CategoryCardSkeleton.tsx` | Grey placeholder card shown while loading | 6 |
+| `CategoryForm.tsx` | Shared create/edit form (no FK), react-hook-form | 7 |
+| `CategoryCreatePage.tsx` / `CategoryEditPage.tsx` | Thin wrappers around the form | 7, 8 |
 
 Read them in that order — interface → API → page → list → card → form. Each file should
 now look familiar: it's the pattern from its lesson, on Categories.
@@ -72,6 +72,9 @@ Plus the **Categories** `Nav.Link` in `AppNav` (already there from Lesson 5).
 ---
 
 ## 4. Verifying in the browser
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> Categories seed data loaded.
 
 With your API running and `npm run dev` up:
 

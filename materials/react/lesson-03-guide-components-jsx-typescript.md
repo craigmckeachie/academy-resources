@@ -437,7 +437,7 @@ DevTools**. You've checked each piece as you built it; this is the full pass. Wi
    **"Each child in a list should have a unique key"** — that means a `.map()` is missing
    its `key={...}`. Add it and the warning clears.
 3. Edit an item's `name` in the array and save — the card updates immediately (that's HMR
-   + React re-rendering).
+   and React re-rendering).
 4. Add a fourth object to the `menuItems` array and save — a fourth card appears without
    you writing any more JSX. That's the payoff of `.map()`: the markup is written once;
    the data drives how many render.

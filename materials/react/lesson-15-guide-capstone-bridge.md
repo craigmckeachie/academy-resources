@@ -26,11 +26,35 @@ You don't start PRS from scratch. Three things are already done:
   you start the front end.
 - **The PRS static markup** (HTML/CSS pass) — every PRS page as Bootstrap HTML. This is
   your **JSX conversion target**: rename `class`→`className`, `for`→`htmlFor`, wire
-  `Link`/state/forms — exactly the conversion you did for TableServe.
+  `Link`/state/forms — the same conversion the TableServe React app is the finished example of.
 - **The TableServe React app** (this pass) — your **pattern reference**. For every PRS
   page, open its TableServe twin and follow it.
 
 The capstone is *integration*, not invention.
+
+### Converting the static markup to JSX — use a helper
+
+Renaming attributes by hand across every page is tedious and error-prone. Use the
+**[HTML to JSX](https://marketplace.visualstudio.com/items?itemName=riazxrazor.html-to-jsx)**
+VS Code extension: paste a chunk of your static HTML, run **HTML2JSX** from the command
+palette, and it does the mechanical renames for you — `class`→`className`, `for`→`htmlFor`,
+`stroke-width`→`strokeWidth` (and the rest of the camelCase SVG attributes), self-closing
+tags, and `style="…"` → `style={{ … }}`.
+
+Two things the tool **cannot** do — you finish these by hand:
+
+- **The Bootstrap Icons sprite import.** The tool converts `<use href="…">` to
+  `<use xlinkHref="…">`, but it can't turn the static `/assets/bootstrap-icons.svg` path
+  into a module import. Add `import bootstrapIcons from "../assets/bootstrap-icons.svg";` at
+  the top of the file and change each icon reference to
+  ``<use xlinkHref={`${bootstrapIcons}#icon-id`} />`` — the same pattern you saw in
+  TableServe's nav, cards, and buttons. (This is a build/module step, not a text rename.)
+- **Interactive Bootstrap.** Dropdowns and modals that used `data-bs-toggle` in the static
+  markup are **rebuilt as react-bootstrap** (`<Dropdown>`, `<Modal>` driven by React state),
+  not machine-converted — exactly as you did on TableServe.
+
+So the flow per page is: **paste HTML → HTML2JSX → fix the sprite imports → swap
+`data-bs-*` widgets for react-bootstrap → wire `Link`, state, props, and forms.**
 
 ---
 

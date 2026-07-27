@@ -1,9 +1,10 @@
 # Lesson 9 Guide — Status-Driven Workflow Buttons and Modals
 
-**Goal:** by the end of this lesson the **Order Detail** page is fully interactive —
-**workflow buttons that change with the order's status**, a **Cancel modal** with a
-required-reason textarea, and a **delete-confirmation modal** for order items. You call
-the API's custom workflow endpoints and re-fetch the order to reflect the new state.
+**Goal:** by the end of this lesson the **Order Detail** page is interactive —
+**workflow buttons that change with the order's status** and a **Cancel modal** with a
+required-reason textarea. You call the API's custom workflow endpoints and re-fetch the
+order to reflect the new state. (The order-item **delete-confirmation modal** comes in
+Lesson 10, alongside the items table it acts on.)
 
 > **This is a worked-example lesson — there is no paired lab.** The Cancel-with-reason
 > modal directly rehearses PRS's **Reject** modal, and the status-driven buttons
@@ -19,9 +20,18 @@ of the page; use a **confirmation** modal for destructive actions and a **reason
 modal (required textarea) before a state change. After any action, **re-fetch** the
 record so the page shows the new truth.
 
+> **How to use this guide.** This is a worked example — you build it alongside the
+> instructor. Sections headed **▶ Code along** are the build (each ends with a quick **Save
+> and check**); §1 is concept. Code blocks name their file on the first line.
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
+> you have the Order Detail page from Lesson 8 — this lesson makes it interactive.
+
 ---
 
 ## 1. Modals are React state, not `data-bs-toggle`
+
+*(Read this.)*
 
 In the static pass, Bootstrap's JS opened modals via `data-bs-toggle="modal"`. In
 React you control a modal with **state** and react-bootstrap's `Modal` component — no
@@ -49,7 +59,7 @@ const handleCloseCancelModal = () => setShowCancelModal(false);
 
 ---
 
-## 2. Status-driven workflow buttons
+## 2. ▶ Code along — Status-driven workflow buttons
 
 TableServe's order workflow is linear: `Placed → Preparing → Ready → Served`, with
 `Cancelled` branching off Placed/Preparing. **The advance button shown depends on the
@@ -87,9 +97,12 @@ Each `{order?.status === "X" && …}` shows its buttons only in that state. **Ca
 Order** doesn't act directly — it opens the Cancel modal, because cancelling requires a
 reason (section 4).
 
+**Save and check:** open a **Placed** order — only **Start Preparing** shows; a **Served**
+order shows no advance buttons. (The handlers that make them *act* come next.)
+
 ---
 
-## 3. Calling workflow endpoints and re-fetching
+## 3. ▶ Code along — Call the endpoints and re-fetch
 
 The advance buttons call the API's **custom workflow endpoints** (from the API pass),
 then **re-load the order** so the page reflects the new status:
@@ -111,24 +124,29 @@ async function startPreparing() {
 ```
 
 `markReady` and `markServed` are identical against their endpoints. The API methods are
-plain PUTs to the id-before-verb routes:
+plain PUTs to the id-before-verb routes (plain `fetch` for now — Lesson 12 adds the shared
+`checkStatus`/`parseJSON` helpers):
 
 ```ts
+// src/orders/OrderAPI.ts — workflow endpoints
 startPreparing(id: number) {
-  return fetch(`${url}/${id}/startpreparing`, { method: "PUT" })
-    .then(checkStatus).then(parseJSON);
+  return fetch(`${url}/${id}/startpreparing`, { method: "PUT" });
 },
-markReady(id: number) { return fetch(`${url}/${id}/markready`, { method: "PUT" })… },
-markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" })… },
+markReady(id: number)  { return fetch(`${url}/${id}/markready`,  { method: "PUT" }); },
+markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" }); },
 ```
 
-**Re-fetching after the action** is the key idea: the server owns the status, so after
-it changes you reload to get the truth rather than guessing the new state locally. The
-new status flips which buttons render.
+**Re-fetching after the action** is the key idea: the server owns the status, so after it
+changes you reload to get the truth rather than guessing locally. The new status flips which
+buttons render.
+
+**Save and check:** click **Start Preparing** on a Placed order — the badge flips to
+PREPARING and the buttons become **Mark Ready** + **Cancel Order** (the re-fetch
+re-rendering). Network shows the PUT to `…/startpreparing`.
 
 ---
 
-## 4. The Cancel modal — a required reason before a state change
+## 4. ▶ Code along — The Cancel modal (required reason)
 
 Cancelling needs a **reason**, so the modal body holds a small react-hook-form with a
 required textarea. This is a self-contained form *inside* the detail page:
@@ -182,12 +200,13 @@ const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
   `CANCELLED`, showing the reason via the `OrderHeader` conditional from Lesson 8).
 
 ```ts
+// src/orders/OrderAPI.ts — cancel sends the reason as a plain string body
 cancel(id: number, cancellationReason: string) {
   return fetch(`${url}/${id}/cancel`, {
     method: "PUT",
     body: JSON.stringify(cancellationReason),   // plain string, not { reason: … }
     headers: { "Content-Type": "application/json" },
-  }).then(checkStatus);
+  });
 },
 ```
 
@@ -195,67 +214,28 @@ cancel(id: number, cancellationReason: string) {
 > textarea before a status change, PUT as a plain string to `/requests/{id}/reject`.
 > Same shape, different words.
 
----
-
-## 5. The delete-confirmation modal
-
-Deleting an order item uses a **confirmation** modal instead of `window.confirm`. Hold
-the *item to delete* in state — non-null means "show the modal for this item":
-
-```tsx
-const [orderItemToDelete, setOrderItemToDelete] = useState<IOrderItem | undefined>(undefined);
-
-function handleShowDeleteItemModal(orderItem: IOrderItem) { setOrderItemToDelete(orderItem); }
-function handleCloseDeleteItemModal() { setOrderItemToDelete(undefined); }
-
-async function removeOrderItem() {
-  if (!orderItemToDelete?.id) return;
-  await orderItemAPI.delete(orderItemToDelete.id);
-  setOrderItemToDelete(undefined);
-  toast.success("Successfully deleted.");
-  await loadOrder();          // re-fetch so the total + rows update
-}
-```
-
-```tsx
-<Modal show={!!orderItemToDelete} onHide={handleCloseDeleteItemModal}>
-  <Modal.Header closeButton><Modal.Title>Delete Order Item</Modal.Title></Modal.Header>
-  <Modal.Body>
-    <p>Are you sure you want to delete this order item?</p>
-    <div className="d-flex justify-content-end gap-2">
-      <button className="btn btn-outline-primary" onClick={handleCloseDeleteItemModal}>Cancel</button>
-      <button className="btn btn-danger" onClick={removeOrderItem}>Delete</button>
-    </div>
-  </Modal.Body>
-</Modal>
-```
-
-- `show={!!orderItemToDelete}` — the double-bang turns the item-or-undefined into a
-  boolean: an item present → modal open. Storing the *item* (not just a boolean) means
-  the confirm handler knows exactly which one to delete. A trash button per row calls
-  `handleShowDeleteItemModal(orderItem)`.
-- After deleting, re-fetch the order so the items table and the recalculated **Total**
-  update (the API recomputes `Order.Total` — you built that in the API pass).
+**Save and check:** on a Preparing order, click **Cancel Order** → the modal opens. Click
+**Confirm** with the textarea empty → the required error shows and the modal stays open.
+Enter a reason, Confirm → the modal closes, the status is CANCELLED, and the reason shows in
+the summary.
 
 ---
 
-## 6. Verifying in the browser
+## 5. Verifying in the browser
 
-Verify in the **browser**. With your API running and `npm run dev` up:
+You've checked each piece as you built it; this is the full pass. With your API running and
+`npm run dev` up:
 
-1. Open a **Placed** order's detail — only **Start Preparing** shows. Click it → the
-   status badge flips to PREPARING and the buttons become **Mark Ready** + **Cancel
-   Order** (that's the re-fetch re-rendering). **Network** shows a PUT to
-   `…/startpreparing`.
+1. Open a **Placed** order's detail — only **Start Preparing** shows. Click it → the status
+   badge flips to PREPARING and the buttons become **Mark Ready** + **Cancel Order** (that's
+   the re-fetch re-rendering). **Network** shows a PUT to `…/startpreparing`.
 2. Click **Mark Ready** → READY, then **Mark Served** → SERVED and the buttons vanish
    (terminal). Each step is a PUT + re-fetch.
-3. On a Preparing order, click **Cancel Order** — the modal opens. Click **Confirm**
-   with the textarea empty → "Cancellation reason is required" shows, modal stays open.
-   Enter a reason, Confirm → modal closes, status is CANCELLED, and the **Cancellation
-   Reason** appears in the summary.
-4. Click a row's **trash** → the delete-confirm modal opens; **Delete** removes the item
-   and the **Total** updates.
-5. Console clean; each action shows the right request in **Network**.
+3. On a Preparing order, click **Cancel Order** — the modal opens. Click **Confirm** with the
+   textarea empty → "Cancellation reason is required" shows, modal stays open. Enter a
+   reason, Confirm → modal closes, status is CANCELLED, and the **Cancellation Reason**
+   appears in the summary.
+4. Console clean; each action shows the right request in **Network**.
 
 ---
 
@@ -265,9 +245,9 @@ Verify in the **browser**. With your API running and `npm run dev` up:
   `{status === "X" && <buttons/>}`; terminal states show none.
 - A **modal** is a react-bootstrap `Modal` gated by **state** (`show={bool}` /
   `onHide`), not `data-bs-toggle`.
-- Use a **reason modal** (required textarea via react-hook-form) before a state change,
-  and a **confirmation modal** (store the target in state, `show={!!target}`) for
-  deletes.
+- Use a **reason modal** (required textarea via react-hook-form) before a state change.
+  (The **confirmation modal** for deletes — store the target in state, `show={!!target}` —
+  comes in Lesson 10 with the items table.)
 - **Re-fetch after every action** so the page reflects server truth and the buttons
   update.
 - Workflow endpoints are plain PUTs to id-before-verb routes; Cancel/Reject send a
@@ -288,7 +268,5 @@ On PRS: Request Detail shows Send-for-Review (New) / Approve + Reject (Review), 
    toasts, and `await loadOrder()`.
 3. Add the **Cancel modal**: `showCancelModal` state, a react-hook-form with a required
    `cancellationReason` textarea, `saveCancel` → `orderAPI.cancel` → close + re-fetch.
-4. Add the **delete-confirm modal**: `orderItemToDelete` state, `show={!!orderItemToDelete}`,
-   `removeOrderItem` → delete → clear + re-fetch; a trash button per item row opens it.
-5. Verify in the browser using section 6 — buttons change per status, both modals work,
-   validation blocks an empty reason, totals update.
+4. Verify using section 5 — buttons change per status, and the Cancel modal blocks an empty
+   reason then flips the status to CANCELLED.

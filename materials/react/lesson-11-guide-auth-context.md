@@ -22,6 +22,13 @@ UI — client-side only.
 > production security. Passwords *are* bcrypt-hashed server-side (seed password:
 > `test1234`).
 
+> **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
+> blocks name their file on the first line.
+
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> Staff seed data loaded — you need a real username/password to sign in (`test1234`).
+
 ---
 
 ## 1. What "signed in" means here
@@ -41,7 +48,7 @@ in.
 
 ---
 
-## 2. Context — sharing the user across the tree
+## 2. ▶ Code along — Context: sharing the user across the tree
 
 Two Lesson-5 threads come together here. First, the router gains an **outer `App`
 route** — the app-wide wrapper that holds Context (this lesson) and Toasts (Lesson 12)
@@ -128,9 +135,13 @@ function App() {
 
 Everything under the provider (the whole app) can now call `useStaffContext()`.
 
+**Save and check:** the app still loads at `/orders` (or any page route) — nothing changed
+visually yet, but the console is clean and there are no "context not found" errors. The
+`signin` route resolves to a blank page until you build `SignInPage` next.
+
 ---
 
-## 3. The Sign In page
+## 3. ▶ Code along — The Sign In page
 
 Sign In sits **outside** the `Layout` (no header/nav) — the `signin` route you added to
 the router in §2 is a **sibling** of the `Layout` route, so it renders in `App`'s `Outlet`
@@ -143,6 +154,7 @@ without the shell:
 It's a small react-hook-form (Lesson 7 pattern) that logs in on submit:
 
 ```tsx
+// src/account/SignInPage.tsx
 interface IAccount { username: string; password: string; }
 
 function persistStaff(staff: IStaff) {
@@ -181,23 +193,39 @@ function SignInPage() {
   the app. A failed login toasts an error and stays put.
 
 ```ts
+// src/staff/StaffAPI.ts — add findByAccount
 findByAccount(username: string, password: string): Promise<IStaff> {
   return fetch(`${url}/login`, {
     method: "POST",
     body: JSON.stringify({ username, password }),
     headers: { "Content-Type": "application/json" },
-  }).then(checkStatus).then(parseJSON);
+  }).then((response) => {
+    if (!response.ok) throw new Error("Login failed");   // wrong credentials → reject
+    return response.json();
+  });
 },
 ```
 
+> **Why the explicit `if (!response.ok) throw`?** `fetch` only rejects on a network failure,
+> **not** on a 400/401 — so without this check a wrong password would resolve, not throw, and
+> the `signin` handler's `catch` would never run. You've now written this same guard in a few
+> modules; **Lesson 12 extracts it** into a shared `checkStatus` helper and drops it into every
+> API module at once.
+
+**Save and check:** go to `/signin` → the form renders (no shell — it's outside `Layout`).
+Sign in with a seeded username and `test1234` → you land on `/orders`. In **DevTools →
+Application → Local Storage** there's a `staff` entry **with no `password` field**. A wrong
+password shows the error toast and keeps you on the page.
+
 ---
 
-## 4. The header — reading context and signing out
+## 4. ▶ Code along — The header: reading context and signing out
 
 The `Header` reads the context to show the current user, or a Sign In button when
 signed out:
 
 ```tsx
+// src/Header.tsx
 function Header() {
   const { staff, setStaff } = useStaffContext();
   const navigate = useNavigate();
@@ -240,6 +268,7 @@ then flips to the Sign In button.
 The index route redirects by context: signed out → `/signin`, signed in → `/orders`:
 
 ```tsx
+// src/IndexPage.tsx
 function IndexPage() {
   const navigate = useNavigate();
   const { staff } = useStaffContext();
@@ -251,9 +280,13 @@ function IndexPage() {
 }
 ```
 
+**Save and check:** signed in, the header shows the user's initials + name with a dropdown;
+**Sign out** flips it back to the **Sign in** button, clears the `staff` entry in Local
+Storage, and returns you to `/signin`. Opening `/` (the index) redirects by state.
+
 ---
 
-## 5. Role-based conditional UI
+## 5. ▶ Code along — Role-based conditional UI
 
 The role flags on the Staff object drive what the UI offers — the same conditional
 rendering you've used all pass, keyed on `staff.isManager` / `staff.isAdmin`:
@@ -291,11 +324,16 @@ signed-in staff's `id`. This **mirrors PRS's ownership rule exactly** — there,
 Reviewer may not Approve or Reject *their own* request, so those buttons are disabled
 when `request.userId === currentUser.id`.
 
+**Save and check:** open a Preparing order **you took** (matching `staffId`) → **Cancel
+Order** is enabled; open one **someone else** took → it's greyed out. If you gated the Staff
+nav on `isAdmin`, it appears only when you're signed in as an admin.
+
 ---
 
 ## 6. Verifying in the browser
 
-Verify in the **browser**. With your API running and `npm run dev` up:
+You've checked each piece as you built it; this is the full pass. With your API running and
+`npm run dev` up:
 
 1. Open the app signed out — you land on `/signin` (the index redirect). The header
    shows a **Sign in** button.

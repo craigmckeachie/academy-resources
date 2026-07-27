@@ -199,7 +199,7 @@ a table with a running **Total** in the footer:
   3-dots menu because there are only two actions and space is tight in a row.
 - The **`<tfoot>`** holds the **Add Order Item** button (links to the nested create
   form) and the order **Total** aligned under the Amount column. Footer = "add more"
-  + "running total," a recognizable child-table convention.
+  and "running total" — a recognizable child-table convention.
 
 ---
 

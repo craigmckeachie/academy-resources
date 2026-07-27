@@ -6,6 +6,9 @@ fetch the one record, render it as a **definition list**. Category is a simple e
 so this is the detail pattern at its smallest. Refer back to the guide for `useParams`,
 the `undefined`-initialized state guard, and the `<dl>` layout.
 
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> Categories seed data loaded.
+
 > **Note:** the finished TableServe app ships Categories as list + create/edit only —
 > there's no Category detail page in the reference. You're building this one as
 > **practice for the detail/params pattern** on a simple entity. Categories CRUD itself
@@ -22,17 +25,21 @@ the `undefined`-initialized state guard, and the `<dl>` layout.
 
 ## Steps
 
+Same arc as the guide, on the simplest entity: **`find` → fetch by `:id` → definition list.**
+
 1. Ensure `CategoryAPI.ts` has `find(id)` (GET `/api/categories/{id}`) — add it if the
    provided module doesn't.
-2. Build `CategoryDetailPage`: read `:id` with `useParams`, `Number(id)` it, and fetch
-   into `useState<ICategory | undefined>(undefined)` in a `useEffect`.
+2. Build `CategoryDetailPage`: read `:id` with `useParams`, `Number(id)` it, and fetch into
+   `useState<ICategory | undefined>(undefined)` in a `useEffect`.
 3. Guard the render with `{category && …}`; show a `{loading && <p>Loading…</p>}` while
    fetching.
-4. Render a heading row ("Category") and a `.detail-header` with a `<dl>` showing
-   **Name** and **Sort Order** as `<dt>`/`<dd>` pairs.
+4. Render a heading row ("Category") and a `<dl>` (inside a `d-flex flex-wrap gap-4` row)
+   showing **Name** and **Sort Order** as `<dt>`/`<dd>` pairs.
 5. Add an Edit (pencil) `Link` to `/categories/edit/:id` in the heading, and add the
    `categories/detail/:id` route under `Layout`.
 6. Link to it from the Category card's **⋮** menu (add a **View** item, like Orders).
+   **✅ Checkpoint:** a card's **⋮ → View** opens the detail; changing the id in the URL loads
+   a different category.
 
 ---
 
@@ -44,7 +51,7 @@ Browser checks are covered in the guide — section 5. With your API running and
 1. From `/categories`, open a card's **⋮ → View** → `/categories/detail/{id}` shows
    that category's Name and Sort Order.
 2. Change the id in the URL and reload — a different category loads (that's `useParams`
-   + the keyed fetch).
+   plus the keyed fetch).
 3. Click Edit → it navigates to the category edit form.
 4. Console clean; **Network** shows `GET /api/categories/{id}`.
 

@@ -5,6 +5,9 @@ and the shared **`checkStatus`/`parseJSON`** fetch helpers — the same feedback
 centralized error handling the guide added to Menu Items. Refer back to the guide for
 the `checkStatus` helper and the try/success/catch shape.
 
+> **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
+> Staff seed data loaded, and you have the Staff CRUD from earlier lessons.
+
 ---
 
 ## Steps
