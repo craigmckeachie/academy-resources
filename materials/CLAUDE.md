@@ -437,6 +437,16 @@ retrofits all modules at once (Lesson 11's `findByAccount` uses an inline
 `if (!response.ok) throw` guard in the interim). The **html-to-jsx tool** intro lives in the
 **Lesson 15 capstone bridge**, not the teaching lessons.
 
+**`verbatimModuleSyntax` is turned OFF (Lesson 3 setup).** Current Vite's `react-ts` template
+scaffolds `tsconfig.app.json` with `"verbatimModuleSyntax": true`, which would force
+`import type { … }` for every interface import. The L3 setup step sets it to **`false`** so all
+guides/labs use a **plain `import { IMenuItem }`** for interfaces — matching the reference app
+(`TableServe.Web`, which predates the flag and uses plain imports). **Do not** rewrite the
+guide/lab imports to `import type`, and don't drop the tsconfig step — keeping the flag off is
+the intentional choice (minimize incidental complexity; one config line beats `import type`
+noise on ~40 imports). Copilot/agent-mode output will use `import type`; that's a fine triage
+example, not a house-style correction to adopt.
+
 ---
 
 ## Generating a whole pass (bulk runs)

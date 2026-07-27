@@ -84,6 +84,21 @@ npm run dev
 - Vite has **hot module replacement (HMR)**: save a file and the browser updates
   instantly, no manual refresh. Leave `npm run dev` running for the whole lesson.
 
+**One tsconfig tweak (do this now).** Current Vite scaffolds `tsconfig.app.json` with
+`"verbatimModuleSyntax": true`, which forces a special `import type { … }` form when you
+import an interface (a *type-only* import). To keep every import simple and consistent — a
+plain `import { … }` whether you're importing a component, a function, or an interface —
+open **`tsconfig.app.json`** and set that option to `false` (or delete the line):
+
+```jsonc
+// tsconfig.app.json
+"verbatimModuleSyntax": false,
+```
+
+Now `import { IMenuItem } from "./IMenuItem"` works exactly like importing anything else — no
+special `type` keyword needed. (Leaving the flag on isn't wrong; it just adds `import type`
+noise this course doesn't need.)
+
 Install the libraries this pass uses (you'll wire them in over the coming lessons):
 
 ```bash
@@ -471,7 +486,8 @@ component, one card, then a `.map()` over products — before any data loads.
 ## Build Steps
 
 1. Scaffold the project: `npm create vite@latest TableServe.Web -- --template react-ts`,
-   then `cd` in and `npm install`.
+   then `cd` in and `npm install`. In **`tsconfig.app.json`**, set
+   `"verbatimModuleSyntax": false` (so plain `import { IMenuItem }` works for interfaces).
 2. Install the pass's libraries (`bootstrap react-bootstrap react-router-dom
    react-hook-form react-hot-toast`) and start `npm run dev`.
 3. Create the `src/menuItems/` feature folder and `src/menuItems/IMenuItem.ts` with the
