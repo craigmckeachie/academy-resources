@@ -14,8 +14,8 @@ so components have a consistent thing to catch. Feedback + centralized errors ar
 polish that makes the app feel finished.
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
-> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
-> blocks name their file on the first line.
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Each
+> code block carries its file name as a title bar.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
 > you have the Menu Item CRUD (list/create/edit/delete) from Lessons 3–7.
@@ -33,8 +33,7 @@ polish that makes the app feel finished.
 `react-hot-toast` needs one `<Toaster />` mounted near the app root (you added it in
 Lesson 11's `App.tsx`). It renders whatever toasts you fire from anywhere:
 
-```tsx
-// src/App.tsx
+```tsx title="src/App.tsx"
 import { Toaster } from "react-hot-toast";
 
 // inside App's provider:
@@ -80,8 +79,7 @@ A `fetch` promise **doesn't reject on 404/500** — it resolves with a non-`ok` 
 So each API module runs responses through shared helpers in
 `src/utility/fetchUtilities.ts` that turn a bad status into a thrown `Error`:
 
-```ts
-// src/utility/fetchUtilities.ts
+```ts title="src/utility/fetchUtilities.ts"
 export const BASE_URL = "http://localhost:5556/api";
 
 export function translateStatusToErrorMessage(status: number) {
@@ -114,30 +112,20 @@ export function parseJSON(response: Response) {
 
 Every API method chains these, so errors are consistent everywhere:
 
-```ts
-// src/menuItems/MenuItemAPI.ts
-import { BASE_URL, checkStatus, parseJSON } from "../utility/fetchUtilities";
+```diff title="src/menuItems/MenuItemAPI.ts"
++ import { BASE_URL, checkStatus, parseJSON } from "../utility/fetchUtilities";
 
-const url = `${BASE_URL}/menuitems`;
+- const url = "http://localhost:5556/api/menuitems";
++ const url = `${BASE_URL}/menuitems`;
 
-export const menuItemAPI = {
-  list(): Promise<IMenuItem[]> {
-    return fetch(url).then(checkStatus).then(parseJSON);
-  },
-  find(id: number): Promise<IMenuItem> {
-    return fetch(`${url}/${id}`).then(checkStatus).then(parseJSON);
-  },
-  post(menuItem: IMenuItem) {
-    return fetch(url, {
-      method: "POST", body: JSON.stringify(menuItem),
-      headers: { "Content-Type": "application/json" },
-    }).then(checkStatus).then(parseJSON);
-  },
-  put(menuItem: IMenuItem) { /* PUT … .then(checkStatus).then(parseJSON) */ },
-  delete(id: number) {
-    return fetch(`${url}/${id}`, { method: "DELETE" }).then(checkStatus);
-  },
-};
+  export const menuItemAPI = {
+    list(): Promise<IMenuItem[]> {
+-     return fetch(url).then((response) => response.json());
++     return fetch(url).then(checkStatus).then(parseJSON);
+    },
+    ...  // find/post/put get the same .then(checkStatus).then(parseJSON);
+         // the bodiless delete gets just .then(checkStatus)
+  };
 ```
 
 Now a component doesn't inspect status codes — it just `try`s the call and `catch`es a
@@ -205,8 +193,7 @@ Lesson 7 gave `MenuItemCard` a **⋮** dropdown with an **Edit** item; now add a
 item beside it. Give `MenuItemCard` an `onRemove` prop (like `StaffCard`) so it can tell
 `MenuItemsPage` to drop the deleted card from state:
 
-```diff
-  // src/menuItems/MenuItemCard.tsx — add Delete to the ⋮ menu
+```diff title="src/menuItems/MenuItemCard.tsx"
   <Dropdown.Menu>
     <Dropdown.Item as={Link} to={`/menuitems/edit/${menuItem.id}`}>Edit</Dropdown.Item>
 +   <Dropdown.Item as="a" href="#" onClick={async (event) => {

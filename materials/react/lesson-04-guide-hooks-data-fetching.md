@@ -148,8 +148,7 @@ hardcoded array for a real fetch — and adding one new file.
 
 **Step 1 — the API module.** Create the fetch wrapper:
 
-```ts
-// src/menuItems/MenuItemAPI.ts
+```ts title="src/menuItems/MenuItemAPI.ts"
 import { IMenuItem } from "./IMenuItem";
 
 const url = "http://localhost:5556/api/menuitems";
@@ -169,49 +168,54 @@ place, add: `useState` for the items (typed `IMenuItem[]`, initial `[]`) and a `
 flag, an `async loadMenuItems()` that fetches through the API module, and a `useEffect` to
 call it on mount. The card markup stays exactly as it was in Lesson 3:
 
-```tsx
-// src/menuItems/MenuItemsPage.tsx
-import { useEffect, useState } from "react";
-import { IMenuItem } from "./IMenuItem";
-import { menuItemAPI } from "./MenuItemAPI";
+```diff title="src/menuItems/MenuItemsPage.tsx"
++ import { useEffect, useState } from "react";
+  import { IMenuItem } from "./IMenuItem";
++ import { menuItemAPI } from "./MenuItemAPI";
 
-function MenuItemsPage() {
-  const [loading, setLoading] = useState(false);
-  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
+- const menuItems: IMenuItem[] = [
+-   { id: 1, name: "Loaded Nachos", price: 9.99 },
+-   { id: 2, name: "Mozzarella Sticks", price: 7.99 },
+-   { id: 3, name: "Ribeye Steak", price: 24.99 },
+- ];
 
-  async function loadMenuItems() {
-    setLoading(true);
-    try {
-      const data = await menuItemAPI.list();
-      setMenuItems(data);
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  function MenuItemsPage() {
++   const [loading, setLoading] = useState(false);
++   const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
++
++   async function loadMenuItems() {
++     setLoading(true);
++     try {
++       const data = await menuItemAPI.list();
++       setMenuItems(data);
++     } catch (error: any) {
++       console.error(error);
++     } finally {
++       setLoading(false);
++     }
++   }
++
++   useEffect(() => {
++     loadMenuItems();
++   }, []);
++
+    return (
+      <section className="content container-fluid mx-5 my-2 py-4">
+        <h2 className="pb-4 mb-4 border-bottom border-2">Menu</h2>
+        <section className="list d-flex flex-row flex-wrap bg-light gap-5 p-4 rounded-4">
++         {loading && <p>Loading…</p>}
+          {menuItems.map((menuItem) => (
+            <div className="card p-4" style={{ width: "23rem" }} key={menuItem.id}>
+              <span className="fs-4 fw-medium">{menuItem.name}</span>
+              <span className="fs-5 fw-light">${menuItem.price}</span>
+            </div>
+          ))}
+        </section>
+      </section>
+    );
   }
 
-  useEffect(() => {
-    loadMenuItems();
-  }, []);
-
-  return (
-    <section className="content container-fluid mx-5 my-2 py-4">
-      <h2 className="pb-4 mb-4 border-bottom border-2">Menu</h2>
-      <section className="list d-flex flex-row flex-wrap bg-light gap-5 p-4 rounded-4">
-        {loading && <p>Loading…</p>}
-        {menuItems.map((menuItem) => (
-          <div className="card p-4" style={{ width: "23rem" }} key={menuItem.id}>
-            <span className="fs-4 fw-medium">{menuItem.name}</span>
-            <span className="fs-5 fw-light">${menuItem.price}</span>
-          </div>
-        ))}
-      </section>
-    </section>
-  );
-}
-
-export default MenuItemsPage;
+  export default MenuItemsPage;
 ```
 
 Trace the flow: first render → `menuItems` is `[]`, nothing to map → the effect runs →
@@ -252,8 +256,7 @@ logs), but the browser refuses to hand the response to your JavaScript.
 `builder.Services.AddCors(...)` is active — and left only the **middleware** commented. So
 just **uncomment the `app.UseCors();` line** after `builder.Build()`:
 
-```csharp
-// TableServe.Api/Program.cs — uncomment the line you left commented in the API pass
+```csharp title="TableServe.Api/Program.cs"
 app.UseCors();
 ```
 

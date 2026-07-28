@@ -23,8 +23,8 @@ UI — client-side only.
 > `test1234`).
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
-> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
-> blocks name their file on the first line.
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Each
+> code block carries its file name as a title bar.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
 > Staff seed data loaded — you need a real username/password to sign in (`test1234`).
@@ -55,27 +55,27 @@ route** — the app-wide wrapper that holds Context (this lesson) and Toasts (Le
 and lets the **Sign In** page live outside the shell (§3). In Lesson 5 the route tree was
 rooted at `Layout` with a single `Outlet`; wrap that in an `App` route now:
 
-```tsx
-// main.tsx — App becomes the root; Layout nests inside it
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      { path: "signin", element: <SignInPage /> },   // sibling of Layout → no shell
-      {
-        element: <Layout />,
-        children: [
-          { index: true, element: <IndexPage /> },
-          { path: "orders", element: <OrdersPage /> },
-          { path: "menuitems", element: <MenuItemsPage /> },
-          // …the rest of the page routes
-        ],
-      },
-    ],
-  },
-]);
+```diff title="src/main.tsx"
+  const router = createBrowserRouter([
++   {
++     path: "/",
++     element: <App />,             // outer wrapper — holds Context + Toaster
++     errorElement: <ErrorPage />,  // moved up here from the Layout route
++     children: [
++       { path: "signin", element: <SignInPage /> },   // sibling of Layout → no shell
+        {
+          element: <Layout />,
+-         errorElement: <ErrorPage />,
+          children: [
++           { index: true, element: <IndexPage /> },
+            { path: "orders", element: <OrdersPage /> },
+            { path: "menuitems", element: <MenuItemsPage /> },
+            ...
+          ],
+        },
++     ],
++   },
+  ]);
 ```
 
 Now there are **two `Outlet`s**, each owned by a different route level: `App`'s `Outlet`
@@ -153,8 +153,7 @@ without the shell:
 
 It's a small react-hook-form (Lesson 7 pattern) that logs in on submit:
 
-```tsx
-// src/account/SignInPage.tsx
+```tsx title="src/account/SignInPage.tsx"
 interface IAccount { username: string; password: string; }
 
 function persistStaff(staff: IStaff) {
@@ -192,18 +191,21 @@ function SignInPage() {
 - `persistStaff` writes to localStorage; `setStaff` updates context; `navigate` goes to
   the app. A failed login toasts an error and stays put.
 
-```ts
-// src/staff/StaffAPI.ts — add findByAccount
-findByAccount(username: string, password: string): Promise<IStaff> {
-  return fetch(`${url}/login`, {
-    method: "POST",
-    body: JSON.stringify({ username, password }),
-    headers: { "Content-Type": "application/json" },
-  }).then((response) => {
-    if (!response.ok) throw new Error("Login failed");   // wrong credentials → reject
-    return response.json();
-  });
-},
+```diff title="src/staff/StaffAPI.ts"
+  export const staffAPI = {
+    ...  // list, find, post, put (earlier lessons)
+
++   findByAccount(username: string, password: string): Promise<IStaff> {
++     return fetch(`${url}/login`, {
++       method: "POST",
++       body: JSON.stringify({ username, password }),
++       headers: { "Content-Type": "application/json" },
++     }).then((response) => {
++       if (!response.ok) throw new Error("Login failed");   // wrong credentials → reject
++       return response.json();
++     });
++   },
+  };
 ```
 
 > **Why the explicit `if (!response.ok) throw`?** `fetch` only rejects on a network failure,
@@ -224,8 +226,7 @@ password shows the error toast and keeps you on the page.
 The `Header` reads the context to show the current user, or a Sign In button when
 signed out:
 
-```tsx
-// src/Header.tsx
+```tsx title="src/Header.tsx"
 function Header() {
   const { staff, setStaff } = useStaffContext();
   const navigate = useNavigate();
@@ -267,8 +268,7 @@ then flips to the Sign In button.
 
 The index route redirects by context: signed out → `/signin`, signed in → `/orders`:
 
-```tsx
-// src/IndexPage.tsx
+```tsx title="src/IndexPage.tsx"
 function IndexPage() {
   const navigate = useNavigate();
   const { staff } = useStaffContext();

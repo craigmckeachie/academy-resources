@@ -22,8 +22,8 @@ edited, and deleted (with a delete-confirmation modal, the state-driven `Modal` 
 Lesson 9 applied to a destructive action).
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
-> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
-> blocks name their file on the first line.
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Each
+> code block carries its file name as a title bar.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
 > you have the **Order Detail** page from Lessons 8–9 (this lesson adds the items table to it).
@@ -36,8 +36,7 @@ First the child's **type** and its **API module**. Like the other modules so far
 plain `fetch` — Lesson 12 hardens every module with the shared `checkStatus`/`parseJSON`
 helpers:
 
-```ts
-// src/orderItems/IOrderItem.ts
+```ts title="src/orderItems/IOrderItem.ts"
 import { IMenuItem } from "../menuItems/IMenuItem";
 import { IOrder } from "../orders/IOrder";
 
@@ -52,8 +51,7 @@ export interface IOrderItem {
 }
 ```
 
-```ts
-// src/orderItems/OrderItemAPI.ts
+```ts title="src/orderItems/OrderItemAPI.ts"
 import { IOrderItem } from "./IOrderItem";
 
 const url = "http://localhost:5556/api/orderitems";
@@ -91,8 +89,7 @@ item's `itemId`:
 { path: "orders/detail/:id/orderitem/edit/:itemId", element: <OrderItemEditPage /> },
 ```
 
-```tsx
-// src/orderItems/OrderItemForm.tsx
+```tsx title="src/orderItems/OrderItemForm.tsx"
 let { itemId, id } = useParams<{ itemId: string; id: string }>();
 const orderItemId = Number(itemId);
 const orderId = Number(id);
@@ -235,8 +232,7 @@ stands alone.
 
 Save POSTs (no id) or PUTs (has id), then returns to the parent detail:
 
-```tsx
-// src/orderItems/OrderItemForm.tsx — save handler
+```tsx title="src/orderItems/OrderItemForm.tsx"
 const save: SubmitHandler<IOrderItem> = async (orderItem) => {
   try {
     if (!orderItem.id) {
@@ -274,46 +270,54 @@ link and running **Total**, and per-row **Edit** / **trash** actions. The trash 
 **delete-confirmation modal** — the same state-driven `Modal` you built for Cancel in Lesson 9,
 now for a destructive action.
 
-```tsx
-// src/orders/OrderDetailPage.tsx — items table, inside the return, after <OrderHeader />
-{order && (
-  <div className="card p-4 mt-5">
-    <h5 className="card-title">Order Items</h5>
-    <table className="table w-75">
-      <thead>
-        <tr>
-          <th>Menu Item</th><th>Price</th><th>Quantity</th><th>Notes</th><th>Amount</th><th />
-        </tr>
-      </thead>
-      <tbody>
-        {order.orderItems.map((orderItem) => (
-          <tr key={orderItem.id}>
-            <td>{orderItem.menuItem?.name}</td>
-            <td>{money(orderItem.menuItem?.price ?? 0)}</td>
-            <td>{orderItem.quantity}</td>
-            <td className="text-body-secondary small">{orderItem.notes || "—"}</td>
-            <td>{money((orderItem.menuItem?.price ?? 0) * orderItem.quantity)}</td>
-            <td>
-              <Link to={`/orders/detail/${order.id}/orderitem/edit/${orderItem.id}`}
-                className="btn btn-outline">Edit</Link>
-              <button type="button" className="btn btn-outline"
-                onClick={() => handleShowDeleteItemModal(orderItem)}>Delete</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>
-            <Link to={`/orders/detail/${order.id}/orderitem/create`}
-              className="btn btn-outline-primary">Add Order Item</Link>
-          </td>
-          <td /><td /><td>{money(order.total)}</td><td />
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-)}
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...
+    return (
+      <section className="content container-fluid mx-5 my-2 py-4">
+        ...
+        {order && <OrderHeader order={order} />}
++       {order && (
++         <div className="card p-4 mt-5">
++           <h5 className="card-title">Order Items</h5>
++           <table className="table w-75">
++             <thead>
++               <tr>
++                 <th>Menu Item</th><th>Price</th><th>Quantity</th><th>Notes</th><th>Amount</th><th />
++               </tr>
++             </thead>
++             <tbody>
++               {order.orderItems.map((orderItem) => (
++                 <tr key={orderItem.id}>
++                   <td>{orderItem.menuItem?.name}</td>
++                   <td>{money(orderItem.menuItem?.price ?? 0)}</td>
++                   <td>{orderItem.quantity}</td>
++                   <td className="text-body-secondary small">{orderItem.notes || "—"}</td>
++                   <td>{money((orderItem.menuItem?.price ?? 0) * orderItem.quantity)}</td>
++                   <td>
++                     <Link to={`/orders/detail/${order.id}/orderitem/edit/${orderItem.id}`}
++                       className="btn btn-outline">Edit</Link>
++                     <button type="button" className="btn btn-outline"
++                       onClick={() => handleShowDeleteItemModal(orderItem)}>Delete</button>
++                   </td>
++                 </tr>
++               ))}
++             </tbody>
++             <tfoot>
++               <tr>
++                 <td>
++                   <Link to={`/orders/detail/${order.id}/orderitem/create`}
++                     className="btn btn-outline-primary">Add Order Item</Link>
++                 </td>
++                 <td /><td /><td>{money(order.total)}</td><td />
++               </tr>
++             </tfoot>
++           </table>
++         </div>
++       )}
+      </section>
+    );
+  }
 ```
 
 > `money(...)` is shorthand here for the `Intl.NumberFormat("en-US", { style: "currency",
@@ -326,34 +330,44 @@ Now the **trash button** calls `handleShowDeleteItemModal(orderItem)`. Add its s
 handlers, and the confirm modal — storing the *item* to delete (not just a boolean) so the
 confirm handler knows exactly which one to remove:
 
-```tsx
-// src/orders/OrderDetailPage.tsx — delete-item state + handler
-const [orderItemToDelete, setOrderItemToDelete] = useState<IOrderItem | undefined>(undefined);
-function handleShowDeleteItemModal(orderItem: IOrderItem) { setOrderItemToDelete(orderItem); }
-function handleCloseDeleteItemModal() { setOrderItemToDelete(undefined); }
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...  // useParams, order/loading state, Cancel-modal state, loadOrder (Lessons 8–9)
 
-async function removeOrderItem() {
-  if (!orderItemToDelete?.id) return;
-  await orderItemAPI.delete(orderItemToDelete.id);
-  setOrderItemToDelete(undefined);
-  toast.success("Successfully deleted.");
-  await loadOrder();                     // re-fetch → the row is gone and Total drops
-}
++   const [orderItemToDelete, setOrderItemToDelete] = useState<IOrderItem | undefined>(undefined);
++   function handleShowDeleteItemModal(orderItem: IOrderItem) { setOrderItemToDelete(orderItem); }
++   function handleCloseDeleteItemModal() { setOrderItemToDelete(undefined); }
++
++   async function removeOrderItem() {
++     if (!orderItemToDelete?.id) return;
++     await orderItemAPI.delete(orderItemToDelete.id);
++     setOrderItemToDelete(undefined);
++     toast.success("Successfully deleted.");
++     await loadOrder();                     // re-fetch → the row is gone and Total drops
++   }
+    ...
+    return ( ... );
+  }
 ```
 
-```tsx
-// src/orders/OrderDetailPage.tsx — the confirm modal (near the Cancel modal)
-<Modal show={!!orderItemToDelete} onHide={handleCloseDeleteItemModal}>
-  <Modal.Header closeButton><Modal.Title>Delete Order Item</Modal.Title></Modal.Header>
-  <Modal.Body>
-    <p>Are you sure you want to delete this order item?</p>
-    <div className="d-flex justify-content-end gap-2">
-      <button type="button" className="btn btn-outline-primary"
-        onClick={handleCloseDeleteItemModal}>Cancel</button>
-      <button type="button" className="btn btn-danger" onClick={removeOrderItem}>Delete</button>
-    </div>
-  </Modal.Body>
-</Modal>
+```diff title="src/orders/OrderDetailPage.tsx"
+  return (
+    <section className="content container-fluid mx-5 my-2 py-4">
+      {/* …the Cancel modal from Lesson 9… */}
++     <Modal show={!!orderItemToDelete} onHide={handleCloseDeleteItemModal}>
++       <Modal.Header closeButton><Modal.Title>Delete Order Item</Modal.Title></Modal.Header>
++       <Modal.Body>
++         <p>Are you sure you want to delete this order item?</p>
++         <div className="d-flex justify-content-end gap-2">
++           <button type="button" className="btn btn-outline-primary"
++             onClick={handleCloseDeleteItemModal}>Cancel</button>
++           <button type="button" className="btn btn-danger" onClick={removeOrderItem}>Delete</button>
++         </div>
++       </Modal.Body>
++     </Modal>
+      ...
+    </section>
+  );
 ```
 
 - `show={!!orderItemToDelete}` — storing the *item* (not a boolean) means `removeOrderItem`
