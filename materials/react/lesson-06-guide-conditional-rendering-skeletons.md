@@ -14,8 +14,8 @@ badge color). A list you *compare row by row* becomes a **table**; a list of thi
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you **build into your
 > project** — type them as you go, and each ends with a quick **Save and check**. Unmarked
-> sections are concept: read them (or watch), nothing to type. Each code block names its
-> file on the first line. The **Build Steps** at the end recap every ▶ Code along action.
+> sections are concept: read them (or watch), nothing to type. Each code block carries its
+> file name as a title bar. The **Build Steps** at the end recap every ▶ Code along action.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
 > **Orders seed data** loaded, and the app has the shell + routing from Lesson 5. You'll
@@ -92,8 +92,7 @@ Flesh out the `OrdersPage` stub from Lesson 5 into the real list. Four small fil
 **1 — the interface.** `src/orders/IOrder.ts` describes an order (enough fields for the
 table):
 
-```ts
-// src/orders/IOrder.ts
+```ts title="src/orders/IOrder.ts"
 import { IStaff } from "../staff/IStaff";
 
 export interface IOrder {
@@ -111,8 +110,7 @@ export interface IOrder {
 **2 — the API module** (same plain shape as `MenuItemAPI` from Lesson 4; `list` takes an
 optional status you'll use in section 4):
 
-```ts
-// src/orders/OrderAPI.ts
+```ts title="src/orders/OrderAPI.ts"
 import { IOrder } from "./IOrder";
 
 const url = "http://localhost:5556/api/orders";
@@ -134,8 +132,7 @@ export const orderAPI = {
 **4 — the page and the row.** Replace the `OrdersPage` stub with a fetch + a `<table>` that
 maps an `OrderRow` per order:
 
-```tsx
-// src/orders/OrdersPage.tsx
+```tsx title="src/orders/OrdersPage.tsx"
 import { useEffect, useState } from "react";
 import { IOrder } from "./IOrder";
 import { orderAPI } from "./OrderAPI";
@@ -188,8 +185,7 @@ function OrdersPage() {
 export default OrdersPage;
 ```
 
-```tsx
-// src/orders/OrderRow.tsx
+```tsx title="src/orders/OrderRow.tsx"
 import { IOrder } from "./IOrder";
 import { getTextBackgroundByStatus } from "../utility/formatUtilities";
 
@@ -249,40 +245,51 @@ Put the filter's selected value in the **URL** (`/orders?status=PREPARING`) so t
 shareable and survives a refresh. react-router's **`useSearchParams`** reads and writes the
 query string. Update `OrdersPage`:
 
-```tsx
-// src/orders/OrdersPage.tsx — add the filter
-import { useSearchParams } from "react-router-dom";
-import { SyntheticEvent } from "react";
+```diff title="src/orders/OrdersPage.tsx"
+- import { useEffect, useState } from "react";
++ import { useEffect, useState, SyntheticEvent } from "react";
++ import { useSearchParams } from "react-router-dom";
+  ...
+  function OrdersPage() {
+    const [orders, setOrders] = useState<IOrder[]>([]);
++   const [searchParams, setSearchParams] = useSearchParams();
 
-const [searchParams, setSearchParams] = useSearchParams();
+    async function loadOrders() {
+-     const data = await orderAPI.list();
++     const data = await orderAPI.list(searchParams.get("status") ?? undefined);
+      setOrders(data);
+    }
+    ...
+    useEffect(() => {
+      loadOrders();
+-   }, []);
++   }, [searchParams.get("status")]);   // ← re-runs when the filter changes
 
-async function loadOrders() {
-  const data = await orderAPI.list(searchParams.get("status") ?? undefined);
-  setOrders(data);
-}
++   function handleStatusChange(event: SyntheticEvent) {
++     setSearchParams({ status: (event.target as HTMLSelectElement).value });
++   }
 
-useEffect(() => {
-  loadOrders();
-}, [searchParams.get("status")]);   // ← re-runs when the filter changes
-
-function handleStatusChange(event: SyntheticEvent) {
-  setSearchParams({ status: (event.target as HTMLSelectElement).value });
-}
-```
-
-Add the `<select>` above the table:
-
-```tsx
-<select id="status" className="form-select w-auto mb-3"
-  value={searchParams.get("status") ?? ""}
-  onChange={handleStatusChange}>
-  <option value="">All</option>
-  <option value="PLACED">Placed</option>
-  <option value="PREPARING">Preparing</option>
-  <option value="READY">Ready</option>
-  <option value="SERVED">Served</option>
-  <option value="CANCELLED">Cancelled</option>
-</select>
+    return (
+      <section className="content container-fluid mx-5 my-2 py-4">
+        <h2 className="pb-4 mb-4 border-bottom border-2">Orders</h2>
+        <section className="list bg-body-tertiary p-4 rounded-4">
++         <select id="status" className="form-select w-auto mb-3"
++           value={searchParams.get("status") ?? ""}
++           onChange={handleStatusChange}>
++           <option value="">All</option>
++           <option value="PLACED">Placed</option>
++           <option value="PREPARING">Preparing</option>
++           <option value="READY">Ready</option>
++           <option value="SERVED">Served</option>
++           <option value="CANCELLED">Cancelled</option>
++         </select>
+          <table className="table table-hover w-100 rounded-4">
+            ...
+          </table>
+        </section>
+      </section>
+    );
+  }
 ```
 
 > **Why `?? ""` on the value?** This is a *controlled* `<select>` (it has a `value` prop), so
@@ -312,43 +319,45 @@ Fill the last cell of `OrderRow` with a per-row action menu. As promised in Less
 static pass's `data-bs-toggle="dropdown"` menu, managing open/close with React state (no
 Bootstrap JS). Add the imports, destructure `onRemove`, and replace the placeholder cell:
 
-```tsx
-// src/orders/OrderRow.tsx — add imports at the top
-import Dropdown from "react-bootstrap/Dropdown";
-import { Link } from "react-router-dom";
-import bootstrapIcons from "../assets/bootstrap-icons.svg";
+```diff title="src/orders/OrderRow.tsx"
++ import Dropdown from "react-bootstrap/Dropdown";
++ import { Link } from "react-router-dom";
++ import bootstrapIcons from "../assets/bootstrap-icons.svg";
++ import { orderAPI } from "./OrderAPI";
+  ...
+- function OrderRow({ order }: IOrderRowProps) {
++ function OrderRow({ order, onRemove }: IOrderRowProps) {
+    return (
+      <tr>
+        ...
+-       <td>{/* 3-dots dropdown — section 5 */}</td>
++       <td>
++         <Dropdown className="d-inline">
++           <Dropdown.Toggle className="btn btn-light" style={{ background: "none" }}>
++             <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
++               <use xlinkHref={`${bootstrapIcons}#three-dots-vertical`} />
++             </svg>
++           </Dropdown.Toggle>
++           <Dropdown.Menu>
++             <Dropdown.Item as={Link} to={`/orders/detail/${order.id}`}>View</Dropdown.Item>
++             <Dropdown.Item as="a" href="#" onClick={async (event) => {
++               event.preventDefault();
++               if (confirm("Are you sure you want to delete this order?")) {
++                 if (order.id) {
++                   await orderAPI.delete(order.id);
++                   onRemove(order);   // tell the parent to drop the row
++                 }
++               }
++             }}>
++               Delete
++             </Dropdown.Item>
++           </Dropdown.Menu>
++         </Dropdown>
++       </td>
+      </tr>
+    );
+  }
 ```
-
-```tsx
-// …change the signature to also take onRemove…
-function OrderRow({ order, onRemove }: IOrderRowProps) {
-  // …and replace the last <td> with:
-  <td>
-    <Dropdown className="d-inline">
-      <Dropdown.Toggle className="btn btn-light" style={{ background: "none" }}>
-        <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
-          <use xlinkHref={`${bootstrapIcons}#three-dots-vertical`} />
-        </svg>
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item as={Link} to={`/orders/detail/${order.id}`}>View</Dropdown.Item>
-        <Dropdown.Item as="a" href="#" onClick={async (event) => {
-          event.preventDefault();
-          if (confirm("Are you sure you want to delete this order?")) {
-            if (order.id) {
-              await orderAPI.delete(order.id);
-              onRemove(order);   // tell the parent to drop the row
-            }
-          }
-        }}>
-          Delete
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
-  </td>
-```
-
-(You'll also `import { orderAPI } from "./OrderAPI";` in `OrderRow` for the delete.)
 
 - The toggle's icon is the same **SVG sprite** pattern as Lesson 5's `AppNav` — `import` the
   sprite, reference it with `xlinkHref` (see *SVGs in JSX* in the Lesson 5 guide).
@@ -374,8 +383,7 @@ shaped like the real content, shown *only while loading*. Skeletons matter most 
 with the real text swapped for grey bars — same `card` wrapper and sizing so the placeholder
 occupies the same space:
 
-```tsx
-// src/menuItems/MenuItemCardSkeleton.tsx
+```tsx title="src/menuItems/MenuItemCardSkeleton.tsx"
 function MenuItemCardSkeleton() {
   return (
     <div className="card p-4" style={{ width: "23rem" }}>
@@ -393,8 +401,7 @@ size and the shimmering grey animation. Those classes aren't Bootstrap; add them
 **`App.css`** (which you emptied in Lesson 3 — this is the one bit of custom CSS the pass
 needs):
 
-```css
-/* src/App.css — skeleton loading placeholders */
+```css title="src/App.css"
 .skeleton {
   animation: skeleton-loading 1s linear infinite alternate;
 }
@@ -415,21 +422,28 @@ needs):
 
 **Now render the skeletons while loading**, in `MenuItemsPage`:
 
-```tsx
-// src/menuItems/MenuItemsPage.tsx — loading skeletons
-import MenuItemCardSkeleton from "./MenuItemCardSkeleton";
-
-const [loading, setLoading] = useState(false);
-
-const menuItemCardSkeletons = Array.from(Array(12), (_value, index) => (
-  <MenuItemCardSkeleton key={index} />
-));
-
-// in the JSX, inside the .list tray:
-{loading && menuItemCardSkeletons}
-{menuItems.map((menuItem) => (
-  <MenuItemCard key={menuItem.id} menuItem={menuItem} />
-))}
+```diff title="src/menuItems/MenuItemsPage.tsx"
++ import MenuItemCardSkeleton from "./MenuItemCardSkeleton";
+  ...
+  function MenuItemsPage() {
+    const [loading, setLoading] = useState(false);   // already added in Lesson 4
+    const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
++   const menuItemCardSkeletons = Array.from(Array(12), (_value, index) => (
++     <MenuItemCardSkeleton key={index} />
++   ));
+    ...
+    return (
+      ...
+      <section className="list d-flex flex-row flex-wrap bg-light gap-5 p-4 rounded-4">
+-       {loading && <p>Loading…</p>}
++       {loading && menuItemCardSkeletons}
+        {menuItems.map((menuItem) => (
+          <MenuItemCard key={menuItem.id} menuItem={menuItem} />
+        ))}
+      </section>
+      ...
+    );
+  }
 ```
 
 - `Array.from(Array(12), (_v, index) => …)` builds 12 skeleton elements — a quick way to

@@ -19,9 +19,21 @@ Apply Lesson 6's ideas to your **Staff card grid**. You already have `StaffPage`
 Same arc as the guide's applicable parts: **round out the card → add the dropdown →
 skeletons.**
 
-1. **Round out `StaffCard`.** Alongside name and username, show **phone**
-   (`formatPhoneNumber` from `formatUtilities.ts`) and **email**. Keep the conditional role
-   badges — the `&&` shape, one badge per flag:
+1. **Round out `StaffCard`.** First add a `formatPhoneNumber` helper to
+   `src/utility/formatUtilities.ts` — the file already exists from the guide (§3, where you
+   added `getTextBackgroundByStatus`). This little formatter is tangential to this lesson, so
+   here it is ready to paste alongside the badge helper:
+   ```ts title="src/utility/formatUtilities.ts"
+   export function formatPhoneNumber(phoneNumber: string) {
+     if (!phoneNumber) return;
+     const area = phoneNumber.substring(0, 3);
+     const prefix = phoneNumber.substring(3, 6);
+     const line = phoneNumber.substring(6, 10);
+     return `(${area}) ${prefix}-${line}`;
+   }
+   ```
+   Then, alongside name and username, show **phone** (`formatPhoneNumber(staff.phone)`) and
+   **email**. Keep the conditional role badges — the `&&` shape, one badge per flag:
    ```tsx
    {staff.isManager && <span className="badge text-bg-primary mt-1">Manager</span>}{" "}
    {staff.isAdmin && <span className="badge text-bg-dark mt-1">Admin</span>}

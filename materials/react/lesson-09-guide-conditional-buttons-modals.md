@@ -22,7 +22,9 @@ record so the page shows the new truth.
 
 > **How to use this guide.** This is a worked example — you build it alongside the
 > instructor. Sections headed **▶ Code along** are the build (each ends with a quick **Save
-> and check**); §1 is concept. Code blocks name their file on the first line.
+> and check**); §1 is concept. **Each code block carries its file name as a title bar** (e.g.
+> `src/orders/OrderDetailPage.tsx`); a **`diff`** block shows the enclosing function or object
+> with `...` for unchanged code and `+` / `-` for the lines you change.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
 > you have the Order Detail page from Lesson 8 — this lesson makes it interactive.
@@ -63,26 +65,41 @@ const handleCloseCancelModal = () => setShowCancelModal(false);
 
 TableServe's order workflow is linear: `Placed → Preparing → Ready → Served`, with
 `Cancelled` branching off Placed/Preparing. **The advance button shown depends on the
-current status** — pure conditional rendering:
+current status** — pure conditional rendering.
 
-```tsx
-<div className="d-flex justify-content-end gap-2">
-  {order?.status === "PLACED" && (
-    <button className="btn btn-primary" onClick={startPreparing}>Start Preparing</button>
-  )}
-  {order?.status === "PREPARING" && (
-    <>
-      <button className="btn btn-primary" onClick={markReady}>Mark Ready</button>
-      <button className="btn btn-outline-danger" onClick={handleShowCancelModal}>
-        Cancel Order
-      </button>
-    </>
-  )}
-  {order?.status === "READY" && (
-    <button className="btn btn-primary" onClick={markServed}>Mark Served</button>
-  )}
-  {/* SERVED and CANCELLED are terminal — no buttons */}
-</div>
+Add a buttons `<div>` **inside the heading row you built in Lesson 8** — right after
+`<h2>Order</h2>`, so the buttons sit to the right of the title (the row is already
+`justify-content-between`). The unchanged lines are shown for context; the `+` lines are what
+you add:
+
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...
+    return (
+      ...
+      <div className="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">
+        <h2>Order</h2>
++       <div className="d-flex justify-content-end gap-2">
++         {order?.status === "PLACED" && (
++           <button className="btn btn-primary" onClick={startPreparing}>Start Preparing</button>
++         )}
++         {order?.status === "PREPARING" && (
++           <>
++             <button className="btn btn-primary" onClick={markReady}>Mark Ready</button>
++             <button className="btn btn-outline-danger" onClick={handleShowCancelModal}>
++               Cancel Order
++             </button>
++           </>
++         )}
++         {order?.status === "READY" && (
++           <button className="btn btn-primary" onClick={markServed}>Mark Served</button>
++         )}
++         {/* SERVED and CANCELLED are terminal — no buttons */}
++       </div>
+      </div>
+      ...
+    );
+  }
 ```
 
 | Status | Advance button | Cancel? |
@@ -96,43 +113,64 @@ Each `{order?.status === "X" && …}` shows its buttons only in that state. **Ca
 Order** doesn't act directly — it opens the Cancel modal, because cancelling requires a
 reason (section 4).
 
-**Save and check:** open a **Placed** order — only **Start Preparing** shows; a **Served**
-order shows no advance buttons. (The handlers that make them *act* come next.)
+**Save and check:** the buttons call handlers you add next — `startPreparing`, `markReady`,
+and `markServed` in section 3, and `handleShowCancelModal` (with its `showCancelModal` state)
+in section 4 — so your editor will flag those names as *not defined* for now; that's expected.
+Once section 3's handlers are in, open a **Placed** order → only **Start Preparing** shows, and
+a **Served** order shows none.
 
 ---
 
 ## 3. ▶ Code along — Call the endpoints and re-fetch
 
-The advance buttons call the API's **custom workflow endpoints** (from the API pass),
-then **re-load the order** so the page reflects the new status:
+The buttons' `onClick` handlers call the API's **custom workflow endpoints** (from the API
+pass), then **re-load the order** so the page reflects the new status. Add them **inside the
+`OrderDetailPage` component, above the `return`** — alongside the `loadOrder` you wrote in
+Lesson 8:
 
-```tsx
-async function startPreparing() {
-  if (!order?.id) return;
-  setLoading(true);
-  try {
-    await orderAPI.startPreparing(order.id);
-    toast.success("Successfully saved.");
-    await loadOrder();          // re-fetch → UI now shows the new status + buttons
-  } catch (error: any) {
-    toast.error(error.message);
-  } finally {
-    setLoading(false);
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...  // useParams, loading/order state, and loadOrder (Lesson 8)
+
++   async function startPreparing() {
++     if (!order?.id) return;
++     setLoading(true);
++     try {
++       await orderAPI.startPreparing(order.id);
++       toast.success("Successfully saved.");
++       await loadOrder();          // re-fetch → UI now shows the new status + buttons
++     } catch (error: any) {
++       toast.error(error.message);
++     } finally {
++       setLoading(false);
++     }
++   }
+
+    useEffect(() => {
+      loadOrder();
+    }, []);
+    ...
   }
-}
 ```
 
-`markReady` and `markServed` are identical against their endpoints. The API methods are
-plain PUTs to the id-before-verb routes (plain `fetch` for now — Lesson 12 adds the shared
-`checkStatus`/`parseJSON` helpers):
+`markReady` and `markServed` are the **same function** with the endpoint swapped — add both
+(`orderAPI.markReady(order.id)` / `orderAPI.markServed(order.id)`) right below
+`startPreparing`.
 
-```ts
-// src/orders/OrderAPI.ts — workflow endpoints
-startPreparing(id: number) {
-  return fetch(`${url}/${id}/startpreparing`, { method: "PUT" });
-},
-markReady(id: number)  { return fetch(`${url}/${id}/markready`,  { method: "PUT" }); },
-markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" }); },
+Then add the three endpoints **to the `orderAPI` object** (alongside `find`/`delete` from
+Lessons 6–8). They're plain PUTs to the id-before-verb routes (plain `fetch` for now —
+Lesson 12 adds the shared `checkStatus`/`parseJSON` helpers):
+
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, find, delete (Lessons 6–8)
+
++   startPreparing(id: number) {
++     return fetch(`${url}/${id}/startpreparing`, { method: "PUT" });
++   },
++   markReady(id: number)  { return fetch(`${url}/${id}/markready`,  { method: "PUT" }); },
++   markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" }); },
+  };
 ```
 
 **Re-fetching after the action** is the key idea: the server owns the status, so after it
@@ -147,49 +185,94 @@ re-rendering). Network shows the PUT to `…/startpreparing`.
 
 ## 4. ▶ Code along — The Cancel modal (required reason)
 
-Cancelling needs a **reason**, so the modal body holds a small react-hook-form with a
-required textarea. This is a self-contained form *inside* the detail page:
+Cancelling needs a **reason**, so the modal holds a small react-hook-form with a required
+textarea. This adds four pieces to `OrderDetailPage.tsx` — a form type, some component
+state/handlers, and the `<Modal>` markup — plus one API method.
 
-```tsx
-interface ICancelForm {
-  cancellationReason: string | undefined;
-}
+**(a) The form type** — at the **top of the file** (module scope, above the component), by
+the imports:
 
-const { register, handleSubmit, formState: { errors } } = useForm<ICancelForm>({
-  defaultValues: async () => ({ cancellationReason: undefined }),
-});
+```diff title="src/orders/OrderDetailPage.tsx"
+  ...  // imports (react-router, react-bootstrap Modal, react-hook-form, IOrder, orderAPI, …)
 
-const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
-  if (!order?.id || !form.cancellationReason) return;
-  await orderAPI.cancel(order.id, form.cancellationReason);
-  setShowCancelModal(false);
-  await loadOrder();
-};
++ interface ICancelForm {
++   cancellationReason: string | undefined;
++ }
+
+  function OrderDetailPage() {
+    ...
+  }
 ```
 
-```tsx
-<Modal show={showCancelModal} onHide={handleCloseCancelModal}>
-  <Modal.Header closeButton>
-    <Modal.Title>Cancel Order</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <form onSubmit={handleSubmit(saveCancel)}>
-      <div className="mb-3">
-        <label className="form-label" htmlFor="cancellationReason">Cancellation Reason</label>
-        <textarea
-          {...register("cancellationReason", { required: "Cancellation reason is required" })}
-          className={`form-control ${errors?.cancellationReason && "is-invalid"}`}
-          id="cancellationReason" rows={6}
-        ></textarea>
-        <div className="invalid-feedback">{errors?.cancellationReason?.message}</div>
-      </div>
-      <div className="d-flex justify-content-end gap-2">
-        <button type="button" className="btn btn-outline-primary" onClick={handleCloseCancelModal}>Cancel</button>
-        <button type="submit" className="btn btn-primary">Confirm</button>
-      </div>
-    </form>
-  </Modal.Body>
-</Modal>
+**(b) Modal state, open/close handlers, the form hook, and the submit handler** — **inside
+the component, above the `return`** (this is the modal-state pattern from section 1, now made
+real). Also add the imports `import { Modal } from "react-bootstrap";` and
+`import { useForm, SubmitHandler } from "react-hook-form";`:
+
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...  // useParams, loading/order state, loadOrder, and the §3 workflow handlers
+
++   const [showCancelModal, setShowCancelModal] = useState(false);
++   const handleShowCancelModal = () => setShowCancelModal(true);   // ← the Cancel Order button (§2) calls this
++   const handleCloseCancelModal = () => setShowCancelModal(false);
++
++   const { register, handleSubmit, formState: { errors } } = useForm<ICancelForm>({
++     defaultValues: async () => ({ cancellationReason: undefined }),
++   });
++
++   const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
++     if (!order?.id || !form.cancellationReason) return;
++     await orderAPI.cancel(order.id, form.cancellationReason);
++     setShowCancelModal(false);
++     await loadOrder();
++   };
+
+    return (
+      ...
+    );
+  }
+```
+
+**(c) The modal markup** — **inside the `return`, as the first child of the `<section>`** (a
+modal can live anywhere in the JSX; putting it first keeps it out of the layout flow, and it
+only appears when `showCancelModal` is `true`):
+
+```diff title="src/orders/OrderDetailPage.tsx"
+  function OrderDetailPage() {
+    ...
+    return (
+      <section className="content container-fluid mx-5 my-2 py-4">
++       <Modal show={showCancelModal} onHide={handleCloseCancelModal}>
++         <Modal.Header closeButton>
++           <Modal.Title>Cancel Order</Modal.Title>
++         </Modal.Header>
++         <Modal.Body>
++           <form onSubmit={handleSubmit(saveCancel)}>
++             <div className="mb-3">
++               <label className="form-label" htmlFor="cancellationReason">Cancellation Reason</label>
++               <textarea
++                 {...register("cancellationReason", { required: "Cancellation reason is required" })}
++                 className={`form-control ${errors?.cancellationReason && "is-invalid"}`}
++                 id="cancellationReason" rows={6}
++               ></textarea>
++               <div className="invalid-feedback">{errors?.cancellationReason?.message}</div>
++             </div>
++             <div className="d-flex justify-content-end gap-2">
++               <button type="button" className="btn btn-outline-primary" onClick={handleCloseCancelModal}>Cancel</button>
++               <button type="submit" className="btn btn-primary">Confirm</button>
++             </div>
++           </form>
++         </Modal.Body>
++       </Modal>
+        <div className="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">
+          <h2>Order</h2>
+          {/* … workflow buttons from §2 … */}
+        </div>
+        ...
+      </section>
+    );
+  }
 ```
 
 - The **required textarea** validates like any react-hook-form field — try to Confirm
@@ -198,15 +281,21 @@ const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
   body** to `/orders/{id}/cancel`, then the modal closes and the order re-loads (now
   `CANCELLED`, showing the reason via the `OrderHeader` conditional from Lesson 8).
 
-```ts
-// src/orders/OrderAPI.ts — cancel sends the reason as a plain string body
-cancel(id: number, cancellationReason: string) {
-  return fetch(`${url}/${id}/cancel`, {
-    method: "PUT",
-    body: JSON.stringify(cancellationReason),   // plain string, not { reason: … }
-    headers: { "Content-Type": "application/json" },
-  });
-},
+**(d) The `cancel` API method** — add it **to the `orderAPI` object**; it sends the reason as
+a **plain string** body:
+
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, find, delete, startPreparing, markReady, markServed
+
++   cancel(id: number, cancellationReason: string) {
++     return fetch(`${url}/${id}/cancel`, {
++       method: "PUT",
++       body: JSON.stringify(cancellationReason),   // plain string, not { reason: … }
++       headers: { "Content-Type": "application/json" },
++     });
++   },
+  };
 ```
 
 > **This modal is the rehearsal for PRS's Reject modal** — a required `rejectionReason`

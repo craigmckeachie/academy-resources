@@ -12,8 +12,8 @@ fetches that one record, and renders its fields — commonly as a **definition l
 navigates (after a save, or on a button click).
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
-> project (each ends with a quick **Save and check**); unmarked sections are concept. Code
-> blocks name their file on the first line.
+> project (each ends with a quick **Save and check**); unmarked sections are concept. Each
+> code block carries its file name as a title bar.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`), and
 > you have the Orders list from Lesson 6 (its **⋮ → View** item links here).
@@ -24,8 +24,9 @@ navigates (after a save, or on a button click).
 
 *(Read this.)*
 
-A **route param** is a named slot in a path, written with a colon. You already added one for
-edit forms:
+A **route param** is a named slot in a path, written with a colon. You already used one on
+Lesson 7's edit route (`menuitems/edit/:id`). The Order Detail page uses the same idea — you
+register this route in section 2:
 
 ```tsx
 { path: "orders/detail/:id", element: <OrderDetailPage /> },
@@ -51,15 +52,17 @@ With the id in hand, fetch that single order into state and render it. Because t
 one object (not a list), initialize state as `undefined` and guard the render until it
 arrives. First add `find(id)` to the API module:
 
-```ts
-// src/orders/OrderAPI.ts — add find
-find(id: number): Promise<IOrder> {
-  return fetch(`${url}/${id}`).then((response) => response.json());
-},
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, delete (Lesson 6)
+
++   find(id: number): Promise<IOrder> {
++     return fetch(`${url}/${id}`).then((response) => response.json());
++   },
+  };
 ```
 
-```tsx
-// src/orders/OrderDetailPage.tsx
+```tsx title="src/orders/OrderDetailPage.tsx"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -106,6 +109,20 @@ export default OrderDetailPage;
 - `orderAPI.find(id)` GETs `/api/orders/{id}`, which returns the order with its nested
   `staff` and `orderItems`.
 
+Finally, **register the route** so `/orders/detail/:id` reaches this page — add it under the
+`Layout` route in `main.tsx` and import the page. This is the route Lesson 6's **⋮ → View**
+link points at:
+
+```diff title="src/main.tsx"
++ import OrderDetailPage from "./orders/OrderDetailPage";
+  ...
+  children: [
+    { path: "orders", element: <OrdersPage /> },
++   { path: "orders/detail/:id", element: <OrderDetailPage /> },
+    ...
+  ],
+```
+
 **Check:** the page imports `OrderHeader`, which you build next — so it won't render until
 section 3. For now confirm the editor shows no *other* errors.
 
@@ -116,8 +133,7 @@ section 3. For now confirm the editor shows no *other* errors.
 The order's fields render as a **definition list** — the right semantic element for
 label/value pairs. Three `<dl>` columns sit in a flex row:
 
-```tsx
-// src/orders/OrderHeader.tsx
+```tsx title="src/orders/OrderHeader.tsx"
 import { IOrder } from "./IOrder";
 import { getTextBackgroundByStatus } from "../utility/formatUtilities";
 
@@ -254,7 +270,7 @@ definition-list summary with a status badge, and (Lesson 9) workflow buttons.
    row, with a **status badge**, an `Intl.NumberFormat` **Total**, and a
    `{status === "CANCELLED" && <>…</>}` reason pair (add `cancellationReason?` to `IOrder` if
    needed). **Check** a View link renders the summary.
-4. Confirm the `orders/detail/:id` route exists under `Layout`, and the **⋮ → View** item
-   from Lesson 6 reaches it.
+4. **Register the `orders/detail/:id` route** under `Layout` (import `OrderDetailPage`) — the
+   **⋮ → View** item from Lesson 6 now reaches it.
 5. Verify using section 5 — a different id loads a different order; the cancelled-only field
    toggles; Network shows the GET.

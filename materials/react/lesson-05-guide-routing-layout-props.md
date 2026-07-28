@@ -14,8 +14,8 @@ routing setup is built once and hosts every page in the app.
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you **build into your
 > project** — type them as you go. Unmarked sections are concept: read them (or watch the
-> instructor), nothing to type. Each code block names the file it belongs in on its first
-> line. The **Build Steps** at the end recap every ▶ Code along action in order.
+> instructor), nothing to type. Each code block carries its file name as a title bar. The
+> **Build Steps** at the end recap every ▶ Code along action in order.
 
 ---
 
@@ -43,8 +43,7 @@ static pages into JSX during the capstone — so read the provided files now to 
 with `createBrowserRouter` and render them with `RouterProvider`. Start with the simplest
 thing that works — a **flat** list of routes, one path per page:
 
-```tsx
-// src/main.tsx
+```tsx title="src/main.tsx"
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import MenuItemsPage from "./menuItems/MenuItemsPage";
@@ -64,8 +63,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 - Visit `/menuitems` and you get the page you built in Lessons 3–4. `OrdersPage` is built in
   Lesson 6 — for now a one-line stub is enough to route to:
 
-  ```tsx
-  // src/orders/OrdersPage.tsx — temporary stub until Lesson 6
+  ```tsx title="src/orders/OrdersPage.tsx"
   function OrdersPage() {
     return <h2>Orders</h2>;
   }
@@ -97,8 +95,7 @@ below.
 Here's the provided **`AppNav`** — a column of `Link`s on react-bootstrap's `Nav`, with the
 Bootstrap Icons already wired up:
 
-```tsx
-// src/AppNav.tsx  (provided — copy as-is)
+```tsx title="src/AppNav.tsx"
 import { Link, useLocation } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import bootstrapIcons from "./assets/bootstrap-icons.svg";
@@ -168,8 +165,7 @@ And the provided **`Header`** — the logo + title bar. It's just the logo and t
 the signed-in **`Dropdown`** and the **Sign in** button need the Staff context, which arrives
 in **Lesson 11**, so they're added there.
 
-```tsx
-// src/Header.tsx  (provided — copy as-is; the auth dropdown / Sign in button arrive in Lesson 11)
+```tsx title="src/Header.tsx"
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -221,8 +217,7 @@ To wrap every page in the same chrome, put the shared parts in a **`Layout`** co
 then nest the page routes **inside** a `Layout` route. `<Outlet />` is the placeholder where
 the active child route renders:
 
-```tsx
-// src/Layout.tsx
+```tsx title="src/Layout.tsx"
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Header from "./Header";
@@ -250,17 +245,20 @@ export default Layout;
 
 Now nest the page routes as **children** of a `Layout` route:
 
-```tsx
-// src/main.tsx — nest the pages under a Layout route
-const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    children: [
-      { path: "menuitems", element: <MenuItemsPage /> },
-      { path: "orders", element: <OrdersPage /> },
-    ],
-  },
-]);
+```diff title="src/main.tsx"
++ import Layout from "./Layout";
+  ...
+  const router = createBrowserRouter([
+-   { path: "menuitems", element: <MenuItemsPage /> },
+-   { path: "orders", element: <OrdersPage /> },
++   {
++     element: <Layout />,
++     children: [
++       { path: "menuitems", element: <MenuItemsPage /> },
++       { path: "orders", element: <OrdersPage /> },
++     ],
++   },
+  ]);
 ```
 
 - The parent route renders `<Layout />`; whichever child route matches renders **into
@@ -287,8 +285,7 @@ A bad URL — or an error thrown while rendering — should show a friendly page
 screen. **First create that page.** react-router hands the caught error to it via
 **`useRouteError()`**:
 
-```tsx
-// src/ErrorPage.tsx
+```tsx title="src/ErrorPage.tsx"
 import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
@@ -309,20 +306,19 @@ export default function ErrorPage() {
 
 Now attach it to the `Layout` route as its **`errorElement`**:
 
-```tsx
-// src/main.tsx
-import ErrorPage from "./ErrorPage";
-
-const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
-      { path: "menuitems", element: <MenuItemsPage /> },
-      { path: "orders", element: <OrdersPage /> },
-    ],
-  },
-]);
+```diff title="src/main.tsx"
++ import ErrorPage from "./ErrorPage";
+  ...
+  const router = createBrowserRouter([
+    {
+      element: <Layout />,
++     errorElement: <ErrorPage />,
+      children: [
+        { path: "menuitems", element: <MenuItemsPage /> },
+        { path: "orders", element: <OrdersPage /> },
+      ],
+    },
+  ]);
 ```
 
 `errorElement` catches routing/render errors under this route — including a URL that matches
@@ -390,8 +386,7 @@ function MenuItemCard(props) {
 the destructuring right where it arrives. **This is the form to type** — the whole course
 uses it:
 
-```tsx
-// src/menuItems/MenuItemCard.tsx
+```tsx title="src/menuItems/MenuItemCard.tsx"
 import { IMenuItem } from "./IMenuItem";
 
 interface IMenuItemCardProps {
@@ -419,11 +414,23 @@ export default MenuItemCard;
 Now **pull the per-item card out of `MenuItemsPage`** into that `MenuItemCard` —
 `MenuItemsPage` still fetches and maps; `MenuItemCard` renders one item:
 
-```tsx
-// in MenuItemsPage — render a MenuItemCard per item
-{menuItems.map((menuItem) => (
-  <MenuItemCard key={menuItem.id} menuItem={menuItem} />
-))}
+```diff title="src/menuItems/MenuItemsPage.tsx"
++ import MenuItemCard from "./MenuItemCard";
+  ...
+  function MenuItemsPage() {
+    ...
+    return (
+      ...
+      {menuItems.map((menuItem) => (
+-       <div className="card p-4" style={{ width: "23rem" }} key={menuItem.id}>
+-         <span className="fs-4 fw-medium">{menuItem.name}</span>
+-         <span className="fs-5 fw-light">${menuItem.price}</span>
+-       </div>
++       <MenuItemCard key={menuItem.id} menuItem={menuItem} />
+      ))}
+      ...
+    );
+  }
 ```
 
 Note `key` goes on the element in the `.map()`, and `menuItem` is passed as a prop. (Props

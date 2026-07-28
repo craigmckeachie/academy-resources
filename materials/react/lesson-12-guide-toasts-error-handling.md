@@ -199,19 +199,25 @@ const save: SubmitHandler<IMenuItem> = async (menuItem) => {
 };
 ```
 
-### Delete (in the card/row dropdown)
+### Delete — add it to the `MenuItemCard` ⋮ dropdown (built in Lesson 7)
 
-```tsx
-onClick={async (event) => {
-  event.preventDefault();
-  if (confirm("Are you sure you want to delete this menu item?")) {
-    if (menuItem.id) {
-      await menuItemAPI.delete(menuItem.id);
-      onRemove(menuItem);                     // update parent state
-      toast.success("Successfully deleted.");
-    }
-  }
-}}
+Lesson 7 gave `MenuItemCard` a **⋮** dropdown with an **Edit** item; now add a **Delete**
+item beside it. Give `MenuItemCard` an `onRemove` prop (like `StaffCard`) so it can tell
+`MenuItemsPage` to drop the deleted card from state:
+
+```diff
+  // src/menuItems/MenuItemCard.tsx — add Delete to the ⋮ menu
+  <Dropdown.Menu>
+    <Dropdown.Item as={Link} to={`/menuitems/edit/${menuItem.id}`}>Edit</Dropdown.Item>
++   <Dropdown.Item as="a" href="#" onClick={async (event) => {
++     event.preventDefault();
++     if (confirm("Are you sure you want to delete this menu item?") && menuItem.id) {
++       await menuItemAPI.delete(menuItem.id);
++       onRemove(menuItem);                     // update parent state
++       toast.success("Successfully deleted.");
++     }
++   }}>Delete</Dropdown.Item>
+  </Dropdown.Menu>
 ```
 
 The `error.message` you toast is exactly the friendly string `checkStatus` threw — that

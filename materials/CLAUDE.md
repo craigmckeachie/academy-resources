@@ -348,8 +348,8 @@ signposting convention so students know when to type versus when to just read:
 
 > **Also piloted in React Lesson 3.** `react/lesson-03-guide-components-jsx-typescript.md`
 > now uses this same `▶ Code along` convention and the "How to use this guide" blockquote,
-> and additionally **prefixes each code block with its target filename**
-> (`// src/menuItems/IMenuItem.ts`). It also teaches **mechanics first, styling second**
+> and additionally **labels each code block with its target file as a code-block `title=`**
+> (`` ```tsx title="src/menuItems/IMenuItem.ts" ``). It also teaches **mechanics first, styling second**
 > (plain JSX, then a Bootstrap pass) and renders **one card before the `.map()` list**,
 > with a ✅ checkpoint at the single-card stage. **Decision:** these are now adopted across
 > the React **build** lessons (Lessons 3+) — don't strip them on a regeneration. The full
@@ -364,9 +364,10 @@ not React-only.
 
 1. **Signpost code-along vs. read.** Every React build lesson (3+) marks build-section
    headers with **`▶ Code along`**, leaves concept/orientation/verification sections
-   unmarked, opens with a "How to use this guide" blockquote, and **prefixes each code block
-   with its target file** (`// src/menuItems/IMenuItem.ts`). (Intro Lessons 1–2 keep their
-   `▶ Try it` scratch-project convention.) See the ▶ Code along note under *Reference
+   unmarked, opens with a "How to use this guide" blockquote, and **labels each code block
+   with its target file as a code-block `title=`** (`` ```tsx title="src/menuItems/IMenuItem.ts" ``
+   — see principle 8; **not** a `// path` comment inside the fence). (Intro Lessons 1–2 keep
+   their `▶ Try it` scratch-project convention.) See the ▶ Code along note under *Reference
    implementations and verification*.
 
 2. **Code-along steps are literal and complete — assume nothing.** Spell out every action a
@@ -426,8 +427,33 @@ not React-only.
    confirm no editor errors"). The final **Verifying in the browser** section still does the
    full pass; the per-section checks are the incremental confirmations along the way.
 
-The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of all seven
-principles — use them as the template when writing new React material. **All React lessons
+8. **Label every code block with a `title=`, and show *where* edited code goes — full block to
+   create, `diff` to modify.** The file name goes in a **Material for MkDocs code-block title**
+   on the fence line — `` ```tsx title="src/menuItems/IMenuItem.ts" `` — which renders as a
+   header bar fused to the top of the block. **Not** a `// path` comment inside the fence (the
+   old style; don't reintroduce it). `title=` works via `pymdownx.superfences` (in
+   `mkdocs.yml`) and, unlike a `####` heading, doesn't pollute the right-rail TOC. A code block
+   that **creates a new file** is shown whole under its `title=`. A code block that **modifies
+   an existing file** — adds a method to an API object, a handler/state to a component, JSX to a
+   `return` — is shown as a **`diff` fence** (`` ```diff title="…" ``) so a student coding along
+   knows exactly where the new lines nest, without re-printing the whole file. Every such diff:
+   - **shows the enclosing function or object** you're editing — `function OrderDetailPage() {`,
+     `export const orderAPI = {` — so "what am I inside of?" is never a guess (for a
+     module-scope addition like an `interface`, show the neighbouring `...  // imports` and the
+     component instead, since it isn't inside a function);
+   - **elides untouched code with `...`** — a short `// what's here` note is fine in JS/TS
+     statement positions; use a bare `...` inside JSX;
+   - marks **added lines with `+`** (removed with `-`), indented to their real nesting.
+
+   Genuine *code* comments (`// plain string, not { reason: … }`) stay; only the file-path
+   banner moves to the `title=`. Concept/"(Read this.)" snippets that illustrate an idea across
+   files (not "add this to one file now") stay plain — no `title=`, don't diff them.
+   **Lesson 9 is the worked example** — every build block in §2–§4 uses this shape; match it
+   when reworking other lessons.
+
+The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of principles
+1–7; **Lesson 9** is the worked example of principle 8 — use them as the template when writing
+new React material. **All React lessons
 1–16 have now been reworked to these principles** (guides + labs, plus the L13–15 review/
 bridge lessons and the L16 Copilot tooling lesson), so any React guide/lab is a valid model;
 match whichever is closest in shape to what you're writing. A few lesson-specific decisions

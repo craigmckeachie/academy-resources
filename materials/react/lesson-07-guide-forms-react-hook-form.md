@@ -14,8 +14,8 @@ is the single most repeated pattern in the app.
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you **build into your
 > project** — type them as you go, and each ends with a quick **Save and check**. Unmarked
-> sections are concept: read them (or watch). Each code block names its file on the first
-> line. The **Build Steps** at the end recap every ▶ Code along action.
+> sections are concept: read them (or watch). Each code block carries its file name as a
+> title bar. The **Build Steps** at the end recap every ▶ Code along action.
 
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
 > **Menu Items and Categories seed data** loaded (the form's dropdown fetches categories),
@@ -45,13 +45,60 @@ const {
 
 ---
 
-## 2. Registering a field, and the validation rules
+## 2. Registering a field — what `register` actually returns
 
 *(Read this — you'll apply it in section 3.)*
 
-`register("name", rules)` connects an input and declares its validation. `errors` drives a
-**conditional** `is-invalid` class + an `invalid-feedback` message (the Lesson 6 pattern,
-applied to validation):
+The one function you use on every input is **`register`**. Before the shorthand, it helps to
+see what it hands back. `register("name")` returns a plain **object** of the props an input
+needs to be tracked — log it and look:
+
+```tsx
+console.log(register("name"));
+// { name: "name", onChange: ƒ, onBlur: ƒ, ref: ƒ }
+```
+
+Four things, each a piece the input needs:
+
+- **`name`** — the field's name (`"name"`), also the key react-hook-form stores its value
+  under (it matches your `IMenuItem` property).
+- **`onChange`** — the handler react-hook-form uses to record the value as the user types.
+- **`onBlur`** — fires when the field loses focus, so rhf knows it's been "touched."
+- **`ref`** — a callback ref that gives react-hook-form direct access to the DOM `<input>` to
+  read its value. (Reading the input directly, instead of re-rendering on every keystroke, is
+  what makes rhf fast.)
+
+**Wire it by hand first, so there's no magic.** You could take that object and set each prop
+on the input yourself:
+
+```tsx
+const nameField = register("name");   // { name, onChange, onBlur, ref }
+
+<input
+  id="name"
+  name={nameField.name}
+  ref={nameField.ref}
+  onChange={nameField.onChange}
+  onBlur={nameField.onBlur}
+/>
+```
+
+That works — but setting four props on every field is tedious, and **`register` returns
+exactly the object you'd spread.** So the shortcut does all four at once:
+
+```tsx
+<input id="name" {...register("name")} />   // identical to wiring name/ref/onChange/onBlur by hand
+```
+
+`{...register("name")}` is just the **spread operator** (Lesson 5) copying every property of
+that returned object onto the `<input>` — same result, no boilerplate. This is how you'll
+write every field from here on.
+
+### Adding the validation rules
+
+`register` takes a **second argument** — a `rules` object — that declares validation.
+`errors` (from `formState`) then drives a **conditional** `is-invalid` class + an
+`invalid-feedback` message (the Lesson 6 conditional pattern, applied to validation):
 
 ```tsx
 <input
@@ -62,9 +109,9 @@ applied to validation):
 <div className="invalid-feedback">{errors?.name?.message}</div>
 ```
 
-- `{...register("name", …)}` **spreads** the props react-hook-form needs onto the input
-  (name, ref, onChange) — the spread operator from Lesson 5 doing real work.
 - The rules object declares validation; the string is the message shown on failure.
+- `errors?.name && "is-invalid"` turns the field red only when it has an error;
+  `errors?.name?.message` renders that message below it.
 
 **The rule vocabulary** (you'll meet all four across the app's forms):
 
@@ -90,31 +137,33 @@ Two subtleties worth knowing:
 
 First add the CRUD calls to the API module:
 
-```ts
-// src/menuItems/MenuItemAPI.ts — add find, post, put (delete came in Lesson 6)
-find(id: number): Promise<IMenuItem> {
-  return fetch(`${url}/${id}`).then((response) => response.json());
-},
-post(menuItem: IMenuItem): Promise<IMenuItem> {
-  return fetch(url, {
-    method: "POST",
-    body: JSON.stringify(menuItem),
-    headers: { "Content-Type": "application/json" },
-  }).then((response) => response.json());
-},
-put(menuItem: IMenuItem): Promise<IMenuItem> {
-  return fetch(`${url}/${menuItem.id}`, {
-    method: "PUT",
-    body: JSON.stringify(menuItem),
-    headers: { "Content-Type": "application/json" },
-  }).then((response) => response.json());
-},
+```diff title="src/menuItems/MenuItemAPI.ts"
+  export const menuItemAPI = {
+    ...  // list (Lesson 4)
+
++   find(id: number): Promise<IMenuItem> {
++     return fetch(`${url}/${id}`).then((response) => response.json());
++   },
++   post(menuItem: IMenuItem): Promise<IMenuItem> {
++     return fetch(url, {
++       method: "POST",
++       body: JSON.stringify(menuItem),
++       headers: { "Content-Type": "application/json" },
++     }).then((response) => response.json());
++   },
++   put(menuItem: IMenuItem): Promise<IMenuItem> {
++     return fetch(`${url}/${menuItem.id}`, {
++       method: "PUT",
++       body: JSON.stringify(menuItem),
++       headers: { "Content-Type": "application/json" },
++     }).then((response) => response.json());
++   },
+  };
 ```
 
 Now the form — one component for both create and edit:
 
-```tsx
-// src/menuItems/MenuItemForm.tsx
+```tsx title="src/menuItems/MenuItemForm.tsx"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -203,6 +252,14 @@ function MenuItemForm() {
 export default MenuItemForm;
 ```
 
+> **What's `toast`?** `react-hot-toast` (installed back in Lesson 3) shows a small,
+> auto-dismissing pop-up for feedback — `toast.success(...)` after a good save,
+> `toast.error(...)` in a `catch`. One catch: it only renders if a `<Toaster>` component is
+> mounted at the app root, which you add in **Lesson 11** (and **Lesson 12** covers toasts +
+> error handling properly). So these calls are **wired now but won't show anything on screen
+> until Lesson 11** — that's expected, not a bug. Here, navigating back to the list on success
+> is your real confirmation for now.
+
 The three ideas that make it one form for both modes:
 
 - **`defaultValues` (async) is the create-vs-edit switch.** No `:id` in the URL → return
@@ -213,8 +270,71 @@ The three ideas that make it one form for both modes:
   from the fetched `categories`. `value` carries the id (stored as `categoryId`); on edit the
   record's `categoryId` auto-selects the matching option.
 - **`save` decides create vs. edit by `!menuItem.id`** — no id → `post` (Create), id →
-  `put` (Edit). `delete menuItem.category` drops the nested nav object before sending. (The
-  `toast` calls are shown so the form is complete; toasts are Lesson 12.)
+  `put` (Edit). `delete menuItem.category` drops the nested nav object before sending. (See
+  the `toast` note above — the calls are here for completeness; toasts render from Lesson 11
+  and are covered in Lesson 12.)
+
+> **Try it — see what `register` returns (ties back to §2).** Temporarily drop a
+> `console.log(register("name"))` just above the `return`. Once the routes exist (next
+> section) and you open the form, the DevTools **Console** shows the
+> `{ name, onChange, onBlur, ref }` object that `{...register("name")}` spreads onto the
+> input — the manual wiring from §2, now live. Delete the log once you've seen it.
+
+### Optional: watch react-hook-form work (a temporary debug view)
+
+Want to *see* what react-hook-form tracks as you interact with the form? Pull a few extra
+pieces from `useForm` and drop a debug `<pre>` inside the form. **This is a throwaway teaching
+aid — you'll delete it once it clicks.**
+
+Pull `watch` and two more `formState` fields (and, so errors show *as you go* instead of only
+after a submit, add `mode: "onTouched"`):
+
+```tsx title="src/menuItems/MenuItemForm.tsx"
+const {
+  register, handleSubmit, watch,
+  formState: { errors, touchedFields, dirtyFields },
+} = useForm<IMenuItem>({
+  mode: "onTouched",   // validate on blur, then on change — so errors appear live
+  defaultValues: async () => {
+    /* … unchanged from above … */
+  },
+});
+```
+
+Then add this just inside the `<form>` (above the first field):
+
+```tsx
+{/* 🔎 TEMPORARY — delete once you've seen how rhf tracks the form */}
+<pre className="bg-light border rounded p-3 small w-100">
+{JSON.stringify(
+  {
+    values: watch(),                       // updates as you TYPE (onChange)
+    touched: Object.keys(touchedFields),   // a field lands here when you BLUR (leave) it
+    dirty: Object.keys(dirtyFields),       // lands here once its value differs from the default
+    errors: Object.fromEntries(
+      Object.entries(errors).map(([field, e]) => [field, e?.message]),
+    ),
+  },
+  null,
+  2,
+)}
+</pre>
+```
+
+Open the form (after the next section wires the routes) and interact with it while watching
+the `<pre>`:
+
+- **Type** in a field → `values` updates on every keystroke (that's `onChange`), and the field
+  name appears in `dirty`.
+- **Click into a field, then click out** without a valid value → the field name appears in
+  `touched` (that's `onBlur`), and `errors` gains its message (because `mode: "onTouched"`).
+- **Fix the field** → its error disappears.
+
+That's the difference between **change** (value tracking → `values`/`dirty`) and **blur**
+(→ `touched`, where errors first appear), live — the `onChange`/`onBlur` from the `register`
+object in §2, doing their jobs. (`watch()` is the same hook you'll use for real in Lesson 10's
+derived fields.) **Remove the `<pre>`, the extra `formState` fields, and `mode` when you're
+done** — the reference form validates on submit, without them.
 
 **Save and check:** you can't reach the form until its routes exist (next section) — for now
 confirm the editor shows **no red errors** in `MenuItemForm.tsx` and `MenuItemAPI.ts`.
@@ -226,8 +346,7 @@ confirm the editor shows **no red errors** in `MenuItemForm.tsx` and `MenuItemAP
 The route targets are tiny — a heading plus `<MenuItemForm />`. Both render the *same* form;
 the URL (with or without `:id`) makes it create or edit:
 
-```tsx
-// src/menuItems/MenuItemCreatePage.tsx
+```tsx title="src/menuItems/MenuItemCreatePage.tsx"
 import MenuItemForm from "./MenuItemForm";
 
 function MenuItemCreatePage() {
@@ -247,13 +366,71 @@ export default MenuItemCreatePage;
 `MenuItemEditPage` is identical but titled "Edit Menu Item". Add both routes under `Layout`
 in `main.tsx`:
 
-```tsx
-{ path: "menuitems/create", element: <MenuItemCreatePage /> },
-{ path: "menuitems/edit/:id", element: <MenuItemEditPage /> },
+```diff title="src/main.tsx"
++ import MenuItemCreatePage from "./menuItems/MenuItemCreatePage";
++ import MenuItemEditPage from "./menuItems/MenuItemEditPage";
+  ...
+  children: [
+    { path: "menuitems", element: <MenuItemsPage /> },
++   { path: "menuitems/create", element: <MenuItemCreatePage /> },
++   { path: "menuitems/edit/:id", element: <MenuItemEditPage /> },
+    ...
+  ],
 ```
 
-The `:id` in the edit path is what `useParams` reads in the form. (The **Add Item** button on
-the list and the **Edit** dropdown item you built in Lesson 6 now reach these.)
+The `:id` in the edit path is what `useParams` reads in the form.
+
+**Now reach the form from the list** — the routes exist, but nothing links to them yet. Add an
+**Add Item** button to `MenuItemsPage` and an **Edit** item to a `MenuItemCard` **⋮** dropdown
+(the same react-bootstrap `Dropdown` + sprite-icon pattern as Lesson 6's `OrderRow`):
+
+```diff title="src/menuItems/MenuItemsPage.tsx"
++ import { Link } from "react-router-dom";
+  ...
+  function MenuItemsPage() {
+    ...
+    return (
+      <section className="content container-fluid mx-5 my-2 py-4">
+-       <h2 className="pb-4 mb-4 border-bottom border-2">Menu</h2>
++       <div className="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">
++         <h2>Menu</h2>
++         <Link to="/menuitems/create" className="btn btn-primary">Add Item</Link>
++       </div>
+        ...
+      </section>
+    );
+  }
+```
+
+```diff title="src/menuItems/MenuItemCard.tsx"
++ import { Link } from "react-router-dom";
++ import Dropdown from "react-bootstrap/Dropdown";
++ import bootstrapIcons from "../assets/bootstrap-icons.svg";
+  ...
+  function MenuItemCard({ menuItem }: IMenuItemCardProps) {
+    return (
+      <div className="card p-4" style={{ width: "23rem" }}>
++       <div className="d-flex justify-content-end">
++         <Dropdown>
++           <Dropdown.Toggle className="btn btn-light" style={{ background: "none" }}>
++             <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
++               <use xlinkHref={`${bootstrapIcons}#three-dots-vertical`} />
++             </svg>
++           </Dropdown.Toggle>
++           <Dropdown.Menu>
++             <Dropdown.Item as={Link} to={`/menuitems/edit/${menuItem.id}`}>Edit</Dropdown.Item>
++           </Dropdown.Menu>
++         </Dropdown>
++       </div>
+        <span className="fs-4 fw-medium">{menuItem.name}</span>
+        <span className="fs-5 fw-light">${menuItem.price}</span>
+      </div>
+    );
+  }
+```
+
+(A **Delete** item joins this same ⋮ dropdown in **Lesson 12**, where `menuItemAPI.delete` +
+toasts are added.)
 
 **Save and check:** from `/menuitems`, click **Add Item** → `/menuitems/create` shows an empty
 form with the **Category** dropdown listing your seeded categories. Save with Name empty → the
@@ -335,4 +512,7 @@ create/edit form too.
 4. Write `save` (`handleSubmit`): `delete menuItem.category`, POST when `!id` else PUT, then
    `navigate("/menuitems")`. **Check** create + edit both work (201 / 200).
 5. Create thin `MenuItemCreatePage` / `MenuItemEditPage` and add both routes under `Layout`.
-6. Verify using section 6, including the "disable JS" bypass from section 5.
+6. Add an **Add Item** button on `MenuItemsPage` (→ `/menuitems/create`) and an **Edit** item
+   in a `MenuItemCard` **⋮** dropdown (→ `/menuitems/edit/:id`) so the forms are reachable.
+   (Delete joins that dropdown in Lesson 12.)
+7. Verify using section 6, including the "disable JS" bypass from section 5.
