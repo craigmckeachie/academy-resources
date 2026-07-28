@@ -39,24 +39,31 @@ static pages into JSX during the capstone — so read the provided files now to 
 
 ## 2. ▶ Code along — Mount the router (start flat)
 
-`react-router-dom` is already installed (Lesson 3). You define the routes in `main.tsx`
-with `createBrowserRouter` and render them with `RouterProvider`. Start with the simplest
-thing that works — a **flat** list of routes, one path per page:
+`react-router-dom` is already installed (Lesson 3). In Lesson 3, `main.tsx` rendered
+`<App />` inside `<React.StrictMode>`; now **swap that `<App />` for a router** (`App.tsx` then
+sits unused until Lesson 11 brings it back). Define the routes with `createBrowserRouter` and
+hand them to `RouterProvider` — start with the simplest thing that works, a **flat** list of
+routes, one path per page:
 
-```tsx title="src/main.tsx"
-import ReactDOM from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import MenuItemsPage from "./menuItems/MenuItemsPage";
-import OrdersPage from "./orders/OrdersPage";
+```diff title="src/main.tsx"
+  import React from "react";
+  import ReactDOM from "react-dom/client";
++ import { RouterProvider, createBrowserRouter } from "react-router-dom";
++ import MenuItemsPage from "./menuItems/MenuItemsPage";
++ import OrdersPage from "./orders/OrdersPage";
+- import App from "./App.tsx";
 
-const router = createBrowserRouter([
-  { path: "menuitems", element: <MenuItemsPage /> },
-  { path: "orders", element: <OrdersPage /> },
-]);
++ const router = createBrowserRouter([
++   { path: "menuitems", element: <MenuItemsPage /> },
++   { path: "orders", element: <OrdersPage /> },
++ ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
-);
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+-     <App />
++     <RouterProvider router={router} />
+    </React.StrictMode>
+  );
 ```
 
 - Each route is `{ path, element }` — visiting the path renders that component.
