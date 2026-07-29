@@ -9,11 +9,11 @@ the `undefined`-initialized state guard, and the `<dl>` layout.
 > **Prerequisite:** your API is running **on the HTTP profile** (`http`, not `https`) with
 > Categories seed data loaded.
 
-> **Note:** the finished TableServe app ships Categories as list + create/edit only —
-> there's no Category detail page in the reference. You're building this one as
-> **practice for the detail/params pattern** on a simple entity. Categories CRUD itself
-> is provided starter code (walked through in Lesson 13); here you add just the detail
-> view.
+> **Note:** you already started the Categories module in **Lesson 7** (the `ICategory`
+> interface + a `list()` for the Menu Item form's dropdown). Here you add a `find` and a
+> **detail view** — extra **practice for the detail/params pattern**. The finished reference
+> app has no Category detail page, so reach it by **typing the URL**; the Categories **list**
+> and **form** come in the Lesson 9–10 labs.
 
 ---
 
@@ -27,19 +27,21 @@ the `undefined`-initialized state guard, and the `<dl>` layout.
 
 Same arc as the guide, on the simplest entity: **`find` → fetch by `:id` → definition list.**
 
-1. Ensure `CategoryAPI.ts` has `find(id)` (GET `/api/categories/{id}`) — add it if the
-   provided module doesn't.
+1. Add `find(id)` (GET `/api/categories/{id}`) to the `CategoryAPI` you started in **Lesson 7**
+   (it already has `ICategory` and `list`). You add `delete` / `post` / `put` in the Lesson
+   9–10 labs.
 2. Build `CategoryDetailPage`: read `:id` with `useParams`, `Number(id)` it, and fetch into
    `useState<ICategory | undefined>(undefined)` in a `useEffect`.
 3. Guard the render with `{category && …}`; show a `{loading && <p>Loading…</p>}` while
    fetching.
 4. Render a heading row ("Category") and a `<dl>` (inside a `d-flex flex-wrap gap-4` row)
    showing **Name** and **Sort Order** as `<dt>`/`<dd>` pairs.
-5. Add an Edit (pencil) `Link` to `/categories/edit/:id` in the heading, and add the
-   `categories/detail/:id` route under `Layout`.
-6. Link to it from the Category card's **⋮** menu (add a **View** item, like Orders).
-   **✅ Checkpoint:** a card's **⋮ → View** opens the detail; changing the id in the URL loads
-   a different category.
+5. Add the `categories/detail/:id` route under `Layout`. (An Edit pencil `Link` to
+   `/categories/edit/:id` in the heading will 404 until the Lesson 10 lab builds the form —
+   add it now or later.)
+   **✅ Checkpoint:** type `/categories/detail/5` in the address bar → the detail renders;
+   change the id → a different category loads. (There's no list or card to click from yet — the
+   Lesson 9 lab builds the Category card, where you can add a **View** item that links here.)
 
 ---
 
@@ -48,11 +50,12 @@ Same arc as the guide, on the simplest entity: **`find` → fetch by `:id` → d
 Browser checks are covered in the guide — section 5. With your API running and
 `npm run dev` up:
 
-1. From `/categories`, open a card's **⋮ → View** → `/categories/detail/{id}` shows
-   that category's Name and Sort Order.
+1. Type `/categories/detail/5` in the address bar → the page shows that category's Name and
+   Sort Order.
 2. Change the id in the URL and reload — a different category loads (that's `useParams`
    plus the keyed fetch).
-3. Click Edit → it navigates to the category edit form.
+3. If you added the Edit link, clicking it 404s for now — the category edit form is the
+   Lesson 10 lab.
 4. Console clean; **Network** shows `GET /api/categories/{id}`.
 
 Same `useParams` + detail pattern on the simplest entity — the mechanics you'll reuse

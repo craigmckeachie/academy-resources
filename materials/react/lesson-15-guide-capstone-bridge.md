@@ -65,12 +65,12 @@ So the flow per page is: **paste HTML → HTML2JSX → fix the sprite imports �
 | Sign In | Sign In | login → strip password → localStorage → Context |
 | Users list | Staff list | card grid, conditional role label, skeleton |
 | User form | Staff form | shared create/edit, **no FK**, role checkboxes |
-| Vendors list + form | Categories (provided) | simple no-FK entity |
+| Vendors list + form | Categories | simple no-FK entity |
 | Products list | Menu Items list | card grid, 3-dots |
 | Product form | Menu Item form | shared create/edit, **Vendor FK dropdown** |
 | Requests list | Orders list | **table**, status badges, **status filter** |
 | Request Detail | Order Detail | `useParams`, workflow buttons, **Reject modal**, items table |
-| Request Create/Edit | Menu Item / Staff form | shared create/edit form pattern; fields per the spec, status not set on this form |
+| Request Create/Edit | Order create/edit form | shared form with a **User FK** (like the Order form's Staff FK, pre-filled from Context); status set by the workflow, not the form |
 | RequestLine create/edit | Order Item form | **nested**, **derived Amount**, parent total |
 
 Work in the order that unblocks the most: Sign In + Context first (everything needs the

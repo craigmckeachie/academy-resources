@@ -161,6 +161,47 @@ First add the CRUD calls to the API module:
   };
 ```
 
+The form's **Category dropdown** fetches its options from *another* entity — Categories — so
+before the form, two small additions.
+
+**Extend `IMenuItem`** with the category fields you deferred in Lesson 3:
+
+```diff title="src/menuItems/IMenuItem.ts"
++ import { ICategory } from "../categories/ICategory";
++
+  export interface IMenuItem {
+    id: number | undefined;
+    name: string;
+    price: number | undefined;
++   categoryId: number | undefined;
++   category: ICategory | undefined;
+  }
+```
+
+**Create the minimal Categories files** the dropdown reads from — an interface and a `list()`.
+You build the *rest* of Categories (find, delete, the cards, the form) in the **Lesson 8–10
+labs**; here you need just enough to fill the dropdown:
+
+```ts title="src/categories/ICategory.ts"
+export interface ICategory {
+  id: number | undefined;
+  name: string;
+  sortOrder: number;
+}
+```
+
+```ts title="src/categories/CategoryAPI.ts"
+import { ICategory } from "./ICategory";
+
+const url = "http://localhost:5556/api/categories";
+
+export const categoryAPI = {
+  list(): Promise<ICategory[]> {
+    return fetch(url).then((response) => response.json());
+  },
+};
+```
+
 Now the form — one component for both create and edit:
 
 ```tsx title="src/menuItems/MenuItemForm.tsx"
@@ -502,7 +543,10 @@ create/edit form too.
 
 ## Build Steps
 
-1. Add `find(id)`, `post(item)`, `put(item)` to `MenuItemAPI.ts`.
+1. Add `find(id)`, `post(item)`, `put(item)` to `MenuItemAPI.ts`. Extend `IMenuItem` with
+   `categoryId` + `category` (deferred in Lesson 3), and create the minimal
+   `categories/ICategory.ts` + `categories/CategoryAPI.ts` (`list()` only) that the dropdown
+   fetches from — you flesh Categories out into full CRUD in the Lesson 8–10 labs.
 2. Build `MenuItemForm` with `useForm<IMenuItem>`; read `:id` with `useParams`; in
    `defaultValues` (async) `loadCategories()` then return `emptyMenuItem` (no `:id`) or
    `menuItemAPI.find(id)`.

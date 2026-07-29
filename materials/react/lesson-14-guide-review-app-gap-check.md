@@ -21,7 +21,7 @@ Walk the app the way a user would, naming the pattern behind each screen:
 | Menu Item form | shared create/edit, **FK dropdown** (Category) | 7 |
 | Staff list | fetch, card grid, **conditional role badges**, skeleton | 4, 6 |
 | Staff form | shared create/edit, **no FK**, checkboxes | 7 |
-| Categories | provided — card grid + no-FK form | 13 |
+| Categories | card grid + no-FK form (you built it) | 9–10 |
 | Orders list | **table**, status badges, **`useSearchParams` filter**, 3-dots | 6 |
 | Order Detail | `useParams`, definition-list, **status workflow buttons**, **modals** | 8, 9 |
 | Order Item form | **nested child**, **derived fields** (`watch`), parent total | 10 |
@@ -39,7 +39,7 @@ capstone's blueprint:
 |---|---|---|
 | User sign in | Staff Sign In | localStorage, Context, no JWT |
 | Users list + form | Staff list + form | card grid, role flags, **no FK** |
-| Vendors list + form | Categories (provided) | simple no-FK entity |
+| Vendors list + form | Categories | simple no-FK entity |
 | Products list + form | Menu Items list + form | **FK dropdown** (Vendor ↔ Category) |
 | Requests list | Orders list | **table**, status badges, status **filter** |
 | Request Detail | Order Detail | `useParams`, workflow buttons, **Reject modal** |

@@ -30,11 +30,11 @@ guide and what you built alongside it as your model.
 | 6 | [Conditional rendering, tables, badges, skeletons](lesson-06-guide-conditional-rendering-skeletons.md) | [Staff card grid with conditional rendering](lesson-06-lab-staff-card-grid.md) |
 | 7 | [Forms with react-hook-form, shared create/edit](lesson-07-guide-forms-react-hook-form.md) | [The Staff create/edit form](lesson-07-lab-staff-form.md) |
 | 8 | [Route params and the detail page](lesson-08-guide-routing-params-detail.md) | [A Category detail view](lesson-08-lab-category-detail.md) |
-| 9 | [Status-driven workflow buttons and modals](lesson-09-guide-conditional-buttons-modals.md) | *Worked example — no lab* |
-| 10 | [The nested child form with derived fields](lesson-10-guide-nested-child-form.md) | *Worked example — no lab* |
-| 11 | [Sign In, localStorage, and Context](lesson-11-guide-auth-context.md) | *Worked example — no lab* |
+| 9 | [Status-driven workflow buttons and modals](lesson-09-guide-conditional-buttons-modals.md) | [The Categories list](lesson-09-lab-categories-list.md) |
+| 10 | [The nested child form with derived fields](lesson-10-guide-nested-child-form.md) | [The Categories create/edit form](lesson-10-lab-categories-form.md) |
+| 11 | [Sign In, localStorage, and Context](lesson-11-guide-auth-context.md) | [The Order create/edit form](lesson-11-lab-order-form.md) |
 | 12 | [Toasts and centralized error handling](lesson-12-guide-toasts-error-handling.md) | [Toasts and error handling for Staff CRUD](lesson-12-lab-staff-crud-toasts.md) |
-| 13 | [Review/Buffer: the Categories CRUD walkthrough](lesson-13-guide-review-categories-crud.md) | *Review — no lab* |
+| 13 | [Review/Buffer: the feature-folder pattern across your app](lesson-13-guide-review-categories-crud.md) | *Review — no lab* |
 | 14 | [Review/Buffer: full-app review and PRS gap-check](lesson-14-guide-review-app-gap-check.md) | *Review — no lab* |
 | 15 | [Capstone bridge: building the PRS front end](lesson-15-guide-capstone-bridge.md) | *Bridge — no lab* |
 | 16 | [Building with GitHub Copilot: autocomplete, Chat, agent mode](lesson-16-guide-building-with-copilot.md) | [Generate a Staff feature and audit it](lesson-16-lab-generate-and-audit-staff.md) |
@@ -44,9 +44,12 @@ the C# API pass — the language mapped onto what they already know, run and ver
 observation in a throwaway **vanilla-ts scratch project**, not against the reference app.
 **Lesson 3 is a React orientation** — you render a hardcoded array to learn components,
 JSX, interfaces, and `.map()` in the browser. **Real data fetching starts in Lesson 4.**
-Lessons 9–11 are **worked examples** (the Order Detail workflow/modals, the nested Order
-Item form, and Sign In/Context) — patterns that are *named exceptions* with no second
-TableServe entity to repeat them on, so they're built once alongside the instructor.
+Lessons 9–11 **guides** are **worked examples** (the Order Detail workflow/modals, the nested
+Order Item form, and Sign In/Context) — patterns that are *named exceptions* with no second
+TableServe entity to repeat them on, so they're built once alongside the instructor. Their
+**labs** don't repeat those exact patterns; instead they **build out the rest of the app** so
+students finish with a complete TableServe — the **Categories** list (L9) and form (L10), and
+the **Order** create/edit form (L11, which applies the Context from the guide).
 Lessons 13–15 are review, gap-check, and the capstone bridge. **Lesson 16 is a tooling
 lesson** on **GitHub Copilot** (TQL's preferred AI assistant) — generating React code and
 auditing it against this app's house style; verified by observation in the browser, and
