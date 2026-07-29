@@ -448,8 +448,13 @@ not React-only.
    Genuine *code* comments (`// plain string, not { reason: … }`) stay; only the file-path
    banner moves to the `title=`. Concept/"(Read this.)" snippets that illustrate an idea across
    files (not "add this to one file now") stay plain — no `title=`, don't diff them.
-   **Lesson 9 is the worked example** — every build block in §2–§4 uses this shape; match it
-   when reworking other lessons.
+   **Temporary / throwaway code** the student will remove later (a debug `<pre>`, a scratch
+   `console.log`, a swapped-in `useForm` for a demo) is shown NOT as a diff but by **commenting
+   out the original and pasting the replacement below it** — with `// added:` notes on the new
+   pieces and `...` for the enclosing context — so reverting is just "delete this, uncomment
+   that." (Worked example: the L7 §3 *optional debug-view* step.)
+   **Lesson 9 is the worked example** of the diff shape — every build block in §2–§4 uses it;
+   match it when reworking other lessons.
 
 The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of principles
 1–7; **Lesson 9** is the worked example of principle 8 — use them as the template when writing
@@ -466,6 +471,20 @@ Lesson 12**, which introduces the shared `fetchUtilities` (`checkStatus`/`parseJ
 retrofits all modules at once (Lesson 11's `findByAccount` uses an inline
 `if (!response.ok) throw` guard in the interim). The **html-to-jsx tool** intro lives in the
 **Lesson 15 capstone bridge**, not the teaching lessons.
+
+**Categories is student-built, not provided** (the whole app is built from a blank project — no
+shared completed code beyond the guides/labs). Its module grows **incrementally**: `list` (L7
+guide, for the Menu Item FK dropdown) → `find` (L8 lab) → `delete` (L9 lab) → `post`/`put` (L10
+lab); L7 also extends `IMenuItem` with `categoryId` + `category` (deferred in L3), so create
+`ICategory` + `CategoryAPI` **before** editing `IMenuItem` (it imports `ICategory`). **Lessons
+9–11 guides are worked examples but each now has a lab that builds out the rest of TableServe**
+so students finish with a complete reference app: **Categories list** (L9), **Categories
+create/edit form** (L10), and the **Order create/edit form** (L11 — applies the guide's Context
+to pre-fill + disable the Staff dropdown; also re-adds the order Add/Edit affordances). The
+Categories labs are deliberately **terse** (students transfer their Menu Items / Staff code).
+**Role-gating** maintenance behind `isAdmin` is an **L11-lab stretch**. **Lesson 13** is a
+feature-folder *review of the app students built* (not a walkthrough of provided code). **L15**'s
+PRS "Request Create/Edit" reference points at the **Order form**.
 
 **`verbatimModuleSyntax` is turned OFF (Lesson 3 setup).** Current Vite's `react-ts` template
 scaffolds `tsconfig.app.json` with `"verbatimModuleSyntax": true`, which would force

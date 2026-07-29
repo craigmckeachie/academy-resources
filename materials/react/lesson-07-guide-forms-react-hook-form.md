@@ -37,11 +37,18 @@ in the app uses it. The pieces from `useForm`:
 import { useForm, SubmitHandler } from "react-hook-form";
 
 const {
-  register,               // connect an input to the form
+  register,               // wire an input into react-hook-form's tracking
   handleSubmit,           // wraps your submit handler; runs validation first
   formState: { errors },  // per-field validation errors
 } = useForm<IMenuItem>({ defaultValues: async () => { /* … */ } });
 ```
+
+> **`formState: { errors }` — that's *nested* destructuring, not a rename.** The `{ }` after
+> the colon means "reach **into** `formState` and pull out just `errors`" — you get an `errors`
+> variable, **not** a `formState` one. (A plain name would rename instead: `formState: fs` hands
+> you the whole object as `fs`.) And `errors` is shorthand for `errors: errors` — same property
+> and variable name, so you write it once. `useForm` returns `formState` with lots of fields
+> (`isSubmitting`, `touchedFields`, …); this grabs only the one you need.
 
 ---
 
@@ -72,14 +79,14 @@ Four things, each a piece the input needs:
 on the input yourself:
 
 ```tsx
-const nameField = register("name");   // { name, onChange, onBlur, ref }
+const nameFieldProps = register("name");   // { name, onChange, onBlur, ref }
 
 <input
   id="name"
-  name={nameField.name}
-  ref={nameField.ref}
-  onChange={nameField.onChange}
-  onBlur={nameField.onBlur}
+  name={nameFieldProps.name}
+  ref={nameFieldProps.ref}
+  onChange={nameFieldProps.onChange}
+  onBlur={nameFieldProps.onBlur}
 />
 ```
 
@@ -164,23 +171,9 @@ First add the CRUD calls to the API module:
 The form's **Category dropdown** fetches its options from *another* entity — Categories — so
 before the form, two small additions.
 
-**Extend `IMenuItem`** with the category fields you deferred in Lesson 3:
-
-```diff title="src/menuItems/IMenuItem.ts"
-+ import { ICategory } from "../categories/ICategory";
-+
-  export interface IMenuItem {
-    id: number | undefined;
-    name: string;
-    price: number | undefined;
-+   categoryId: number | undefined;
-+   category: ICategory | undefined;
-  }
-```
-
-**Create the minimal Categories files** the dropdown reads from — an interface and a `list()`.
-You build the *rest* of Categories (find, delete, the cards, the form) in the **Lesson 8–10
-labs**; here you need just enough to fill the dropdown:
+**First, create the minimal Categories files** the dropdown reads from — an interface and a
+`list()`. You build the *rest* of Categories (find, delete, the cards, the form) in the
+**Lesson 8–10 labs**; here you need just enough to fill the dropdown:
 
 ```ts title="src/categories/ICategory.ts"
 export interface ICategory {
@@ -200,6 +193,21 @@ export const categoryAPI = {
     return fetch(url).then((response) => response.json());
   },
 };
+```
+
+**Then extend `IMenuItem`** with the category fields you deferred in Lesson 3 — now that
+`ICategory` exists to import:
+
+```diff title="src/menuItems/IMenuItem.ts"
++ import { ICategory } from "../categories/ICategory";
++
+  export interface IMenuItem {
+    id: number | undefined;
+    name: string;
+    price: number | undefined;
++   categoryId: number | undefined;
++   category: ICategory | undefined;
+  }
 ```
 
 Now the form — one component for both create and edit:
@@ -327,31 +335,45 @@ Want to *see* what react-hook-form tracks as you interact with the form? Pull a 
 pieces from `useForm` and drop a debug `<pre>` inside the form. **This is a throwaway teaching
 aid — you'll delete it once it clicks.**
 
-Pull `watch` and two more `formState` fields (and, so errors show *as you go* instead of only
-after a submit, add `mode: "onTouched"`):
+So you don't lose your working form, **comment out your original `useForm` and paste this
+debug version right below it** — reverting is then just "delete this, uncomment that." It pulls
+`watch` and two more `formState` fields, and adds `mode: "onTouched"` so errors validate *as
+you go* instead of only on submit:
 
 ```tsx title="src/menuItems/MenuItemForm.tsx"
-const {
-  register, handleSubmit, watch,
-  formState: { errors, touchedFields, dirtyFields },
-} = useForm<IMenuItem>({
-  mode: "onTouched",   // validate on blur, then on change — so errors appear live
-  defaultValues: async () => {
-    /* … unchanged from above … */
-  },
-});
+function MenuItemForm() {
+  ...  // useParams, categories state, loadCategories — all unchanged
+
+  // ── TEMP debug view: comment out your original useForm, paste this below it ──
+  // const { register, handleSubmit, formState: { errors } } = useForm<IMenuItem>({
+  //   defaultValues: async () => { … },
+  // });
+  const {
+    register, handleSubmit, watch,                      // added: watch
+    formState: { errors, touchedFields, dirtyFields },  // added: touchedFields, dirtyFields
+  } = useForm<IMenuItem>({
+    mode: "onTouched",                                  // added: validate on blur/change → errors show live
+    defaultValues: async () => {
+      /* … same as your original … */
+    },
+  });
+
+  ...  // save handler, then the return (add the <pre> next)
+}
 ```
 
-Then add this just inside the `<form>` (above the first field):
+Then add a debug `<pre>` just inside the `<form>` return, above the first field:
 
-```tsx
-{/* 🔎 TEMPORARY — delete once you've seen how rhf tracks the form */}
-<pre className="bg-light border rounded p-3 small w-100">
+```tsx title="src/menuItems/MenuItemForm.tsx"
+return (
+  <form className="d-flex flex-wrap w-75 gap-2" onSubmit={handleSubmit(save)}>
+    {/* 🔎 TEMPORARY — delete once you've seen how rhf tracks the form */}
+    <pre className="bg-light border rounded p-3 small w-100">
 {JSON.stringify(
   {
     values: watch(),                       // updates as you TYPE (onChange)
-    touched: Object.keys(touchedFields),   // a field lands here when you BLUR (leave) it
-    dirty: Object.keys(dirtyFields),       // lands here once its value differs from the default
+    touched: Object.keys(touchedFields),   // appears when you BLUR (leave) a field
+    dirty: Object.keys(dirtyFields),       // appears once a value differs from the default
     errors: Object.fromEntries(
       Object.entries(errors).map(([field, e]) => [field, e?.message]),
     ),
@@ -359,7 +381,11 @@ Then add this just inside the `<form>` (above the first field):
   null,
   2,
 )}
-</pre>
+    </pre>
+
+    ...  {/* your Name, Price, and Category fields — unchanged */}
+  </form>
+);
 ```
 
 Open the form (after the next section wires the routes) and interact with it while watching
@@ -374,8 +400,8 @@ the `<pre>`:
 That's the difference between **change** (value tracking → `values`/`dirty`) and **blur**
 (→ `touched`, where errors first appear), live — the `onChange`/`onBlur` from the `register`
 object in §2, doing their jobs. (`watch()` is the same hook you'll use for real in Lesson 10's
-derived fields.) **Remove the `<pre>`, the extra `formState` fields, and `mode` when you're
-done** — the reference form validates on submit, without them.
+derived fields.) **To revert when you're done:** delete the `<pre>` and the debug `useForm`,
+then **uncomment your original** — the reference form validates on submit, without any of this.
 
 **Save and check:** you can't reach the form until its routes exist (next section) — for now
 confirm the editor shows **no red errors** in `MenuItemForm.tsx` and `MenuItemAPI.ts`.
