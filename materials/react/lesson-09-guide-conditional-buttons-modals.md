@@ -124,9 +124,28 @@ a **Served** order shows none.
 ## 3. ▶ Code along — Call the endpoints and re-fetch
 
 The buttons' `onClick` handlers call the API's **custom workflow endpoints** (from the API
-pass), then **re-load the order** so the page reflects the new status. Add them **inside the
-`OrderDetailPage` component, above the `return`** — alongside the `loadOrder` you wrote in
-Lesson 8:
+pass), then **re-load the order** so the page reflects the new status.
+
+**Add the endpoints to `OrderAPI.ts` first** — the handlers you write next call them, so they
+must exist or the handler code won't compile. They're plain PUTs to the id-before-verb routes
+(plain `fetch` for now — Lesson 12 adds the shared `checkStatus`/`parseJSON` helpers):
+
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, find, delete (Lessons 6–8)
+
++   startPreparing(id: number) {
++     return fetch(`${url}/${id}/startpreparing`, { method: "PUT" });
++   },
++   markReady(id: number)  { return fetch(`${url}/${id}/markready`,  { method: "PUT" }); },
++   markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" }); },
+  };
+```
+
+Now the three handlers, **inside the `OrderDetailPage` component, above the `return`** —
+alongside the `loadOrder` from Lesson 8. Each hits its endpoint, toasts, then
+`await loadOrder()` to re-fetch. `markReady` and `markServed` are `startPreparing` with the
+endpoint swapped:
 
 ```diff title="src/orders/OrderDetailPage.tsx"
   function OrderDetailPage() {
@@ -145,32 +164,40 @@ Lesson 8:
 +       setLoading(false);
 +     }
 +   }
++
++   async function markReady() {
++     if (!order?.id) return;
++     setLoading(true);
++     try {
++       await orderAPI.markReady(order.id);
++       toast.success("Successfully saved.");
++       await loadOrder();
++     } catch (error: any) {
++       toast.error(error.message);
++     } finally {
++       setLoading(false);
++     }
++   }
++
++   async function markServed() {
++     if (!order?.id) return;
++     setLoading(true);
++     try {
++       await orderAPI.markServed(order.id);
++       toast.success("Successfully saved.");
++       await loadOrder();
++     } catch (error: any) {
++       toast.error(error.message);
++     } finally {
++       setLoading(false);
++     }
++   }
 
     useEffect(() => {
       loadOrder();
     }, []);
     ...
   }
-```
-
-`markReady` and `markServed` are the **same function** with the endpoint swapped — add both
-(`orderAPI.markReady(order.id)` / `orderAPI.markServed(order.id)`) right below
-`startPreparing`.
-
-Then add the three endpoints **to the `orderAPI` object** (alongside `find`/`delete` from
-Lessons 6–8). They're plain PUTs to the id-before-verb routes (plain `fetch` for now —
-Lesson 12 adds the shared `checkStatus`/`parseJSON` helpers):
-
-```diff title="src/orders/OrderAPI.ts"
-  export const orderAPI = {
-    ...  // list, find, delete (Lessons 6–8)
-
-+   startPreparing(id: number) {
-+     return fetch(`${url}/${id}/startpreparing`, { method: "PUT" });
-+   },
-+   markReady(id: number)  { return fetch(`${url}/${id}/markready`,  { method: "PUT" }); },
-+   markServed(id: number) { return fetch(`${url}/${id}/markserved`, { method: "PUT" }); },
-  };
 ```
 
 **Re-fetching after the action** is the key idea: the server owns the status, so after it
@@ -186,8 +213,8 @@ re-rendering). Network shows the PUT to `…/startpreparing`.
 ## 4. ▶ Code along — The Cancel modal (required reason)
 
 Cancelling needs a **reason**, so the modal holds a small react-hook-form with a required
-textarea. This adds four pieces to `OrderDetailPage.tsx` — a form type, some component
-state/handlers, and the `<Modal>` markup — plus one API method.
+textarea. This adds four pieces, **in dependency order** so each compiles as you add it — the
+form type, the `cancel` API method, the modal's state and handlers, then the `<Modal>` markup.
 
 **(a) The form type** — at the **top of the file** (module scope, above the component), by
 the imports:
@@ -204,7 +231,24 @@ the imports:
   }
 ```
 
-**(b) Modal state, open/close handlers, the form hook, and the submit handler** — **inside
+**(b) The `cancel` API method** — add it **to the `orderAPI` object** *before* the submit
+handler below, which calls it; it sends the reason as a **plain string** body:
+
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, find, delete, startPreparing, markReady, markServed
+
++   cancel(id: number, cancellationReason: string) {
++     return fetch(`${url}/${id}/cancel`, {
++       method: "PUT",
++       body: JSON.stringify(cancellationReason),   // plain string, not { reason: … }
++       headers: { "Content-Type": "application/json" },
++     });
++   },
+  };
+```
+
+**(c) Modal state, open/close handlers, the form hook, and the submit handler** — **inside
 the component, above the `return`** (this is the modal-state pattern from section 1, now made
 real). Also add the imports `import { Modal } from "react-bootstrap";` and
 `import { useForm, SubmitHandler } from "react-hook-form";`:
@@ -234,7 +278,7 @@ real). Also add the imports `import { Modal } from "react-bootstrap";` and
   }
 ```
 
-**(c) The modal markup** — **inside the `return`, as the first child of the `<section>`** (a
+**(d) The modal markup** — **inside the `return`, as the first child of the `<section>`** (a
 modal can live anywhere in the JSX; putting it first keeps it out of the layout flow, and it
 only appears when `isCancelOpen` is `true`):
 
@@ -280,23 +324,6 @@ only appears when `isCancelOpen` is `true`):
 - On valid submit, `orderAPI.cancel(id, reason)` PUTs the reason as a **plain string
   body** to `/orders/{id}/cancel`, then the modal closes and the order re-loads (now
   `CANCELLED`, showing the reason via the `OrderHeader` conditional from Lesson 8).
-
-**(d) The `cancel` API method** — add it **to the `orderAPI` object**; it sends the reason as
-a **plain string** body:
-
-```diff title="src/orders/OrderAPI.ts"
-  export const orderAPI = {
-    ...  // list, find, delete, startPreparing, markReady, markServed
-
-+   cancel(id: number, cancellationReason: string) {
-+     return fetch(`${url}/${id}/cancel`, {
-+       method: "PUT",
-+       body: JSON.stringify(cancellationReason),   // plain string, not { reason: … }
-+       headers: { "Content-Type": "application/json" },
-+     });
-+   },
-  };
-```
 
 > **This modal is the rehearsal for PRS's Reject modal** — a required `rejectionReason`
 > textarea before a status change, PUT as a plain string to `/requests/{id}/reject`.

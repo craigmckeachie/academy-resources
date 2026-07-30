@@ -80,36 +80,58 @@ export const orderItemAPI = {
 };
 ```
 
+The next several snippets are pieces of a new file, `src/orderItems/OrderItemForm.tsx` —
+each is shown as a `diff` with the enclosing `function OrderItemForm()` (and `...` for the
+code you're not touching) so you can see exactly where it nests. **Section 5 lists the
+finished file whole** if you'd rather read it than assemble it.
+
 The Order Item form is reached from an order's detail page and always belongs to that
 order. Two route params carry the context — the parent order `id` and (on edit) the
-item's `itemId`:
+item's `itemId`. The routes themselves you add to the router in section 7; they're shown
+here for the two params they carry:
 
-```tsx
+```tsx title="src/main.tsx"
 { path: "orders/detail/:id/orderitem/create", element: <OrderItemCreatePage /> },
 { path: "orders/detail/:id/orderitem/edit/:itemId", element: <OrderItemEditPage /> },
 ```
 
-```tsx
-let { itemId, id } = useParams<{ itemId: string; id: string }>();
-const orderItemId = Number(itemId);
-const orderId = Number(id);
+Read both params at the top of the component with `useParams`:
+
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
++   let { itemId, id } = useParams<{ itemId: string; id: string }>();
++   const orderItemId = Number(itemId);
++   const orderId = Number(id);
+    ...
+  }
 ```
 
 The blank child pre-fills its `orderId` from the route, so a new item knows its parent:
 
-```tsx
-let emptyOrderItem: IOrderItem = {
-  id: undefined, quantity: 0, notes: undefined,
-  orderId: orderId,          // ← from the parent route param
-  menuItemId: 0, menuItem: undefined, order: undefined,
-};
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...  // useParams, orderId
++   let emptyOrderItem: IOrderItem = {
++     id: undefined, quantity: 0, notes: undefined,
++     orderId: orderId,          // ← from the parent route param
++     menuItemId: 0, menuItem: undefined, order: undefined,
++   };
+    ...
+  }
 ```
 
 And **Cancel returns to the parent detail**, not a top-level list — the signature of a
-nested form:
+nested form. It lives in the `return`:
 
-```tsx
-<Link to={`/orders/detail/${orderId}`} className="btn btn-outline-primary me-2">Cancel</Link>
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
+    return (
+      ...
++     <Link to={`/orders/detail/${orderId}`} className="btn btn-outline-primary me-2">Cancel</Link>
+      ...
+    );
+  }
 ```
 
 ---
@@ -117,25 +139,42 @@ nested form:
 ## 2. ▶ Code along — The FK dropdown, again
 
 Menu Item is an FK dropdown just like Category on the Menu form (Lesson 7) — options
-fetched from another entity:
+fetched from another entity. Add the `menuItems` state and its loader **inside
+`OrderItemForm`, above the `return`** (it's called from `defaultValues`, like the category
+dropdown — you'll see that in the whole file in section 5):
 
-```tsx
-const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
-async function loadMenuItems() {
-  const data = await menuItemAPI.list();
-  setMenuItems(data);
-}
-// loaded in defaultValues, like the category dropdown
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...  // useParams, orderId, emptyOrderItem (section 1)
++   const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
++
++   async function loadMenuItems() {
++     const data = await menuItemAPI.list();
++     setMenuItems(data);
++   }
+    ...
+  }
+```
 
-<select
-  {...register("menuItemId", { valueAsNumber: true, required: "Menu item is required" })}
-  className={`form-select ${errors?.menuItemId && "is-invalid"}`}
->
-  <option value="0">Select…</option>
-  {menuItems.map((m) => (
-    <option key={m.id} value={m.id}>{m.name}</option>
-  ))}
-</select>
+Then the `<select>` itself goes **inside the `return`**, as the Menu Item field:
+
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
+    return (
+      ...
++     <select
++       {...register("menuItemId", { valueAsNumber: true, required: "Menu item is required" })}
++       className={`form-select ${errors?.menuItemId && "is-invalid"}`}
++     >
++       <option value="0">Select…</option>
++       {menuItems.map((m) => (
++         <option key={m.id} value={m.id}>{m.name}</option>
++       ))}
++     </select>
+      ...
+    );
+  }
 ```
 
 The new part is what happens *after* you pick one.
@@ -145,13 +184,23 @@ The new part is what happens *after* you pick one.
 ## 3. `watch` — reacting to a field's current value
 
 react-hook-form's **`watch`** returns a field's current value and **re-renders the
-component whenever it changes**. That's how a derived field stays live:
+component whenever it changes**. That's how a derived field stays live. Add `watch` to the
+`useForm` destructure, then read the two fields you'll derive from:
 
-```tsx
-const { register, handleSubmit, watch, formState: { errors } } = useForm<IOrderItem>({ … });
-
-let menuItemId = watch("menuItemId");
-let quantity = watch("quantity");
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
+    const {
+      register,
+      handleSubmit,
++     watch,
+      formState: { errors },
+    } = useForm<IOrderItem>({ ... });
++
++   let menuItemId = watch("menuItemId");
++   let quantity = watch("quantity");
+    ...
+  }
 ```
 
 Now `menuItemId` and `quantity` update on every change to those inputs — and because
@@ -162,13 +211,17 @@ Now `menuItemId` and `quantity` update on every change to those inputs — and b
 When the chosen `menuItemId` changes, look up that menu item (for its price). Track it
 in state via an effect keyed on `menuItemId`:
 
-```tsx
-const [selectedMenuItem, setSelectedMenuItem] = useState<IMenuItem | undefined>(undefined);
-
-useEffect(() => {
-  let currentMenuItem = menuItems.find((m) => m?.id === menuItemId);
-  setSelectedMenuItem(currentMenuItem);
-}, [menuItemId]);
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
++   const [selectedMenuItem, setSelectedMenuItem] = useState<IMenuItem | undefined>(undefined);
+    ...
++   useEffect(() => {
++     let currentMenuItem = menuItems.find((m) => m?.id === menuItemId);
++     setSelectedMenuItem(currentMenuItem);
++   }, [menuItemId]);
+    ...
+  }
 ```
 
 This is a **non-empty dependency array** again (like the Orders filter): the effect
@@ -179,39 +232,46 @@ re-runs whenever `menuItemId` changes, refreshing which menu item is selected.
 ## 4. ▶ Code along — Derived display fields (read-only, not inputs)
 
 Price and Amount are **computed**, so they're rendered as **text**, not `<input>`s — a
-user can't type them:
+user can't type them. These go **inside the `return`**, after the Menu Item `<select>`:
 
-```tsx
-{/* Price — from the selected menu item */}
-<div className="mb-3">
-  <label className="form-label">Price</label>
-  <div className="form-label">
-    {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-      .format(selectedMenuItem?.price ?? 0)}
-  </div>
-</div>
-
-{/* Quantity — a real input */}
-<div className="mb-3">
-  <label htmlFor="quantity" className="form-label">Quantity</label>
-  <input id="quantity" type="number"
-    {...register("quantity", {
-      required: "Quantity is required",
-      min: { value: 1, message: "Quantity must be at least 1" },
-      valueAsNumber: true,
-    })}
-    className={`form-control ${errors?.quantity && "is-invalid"}`} />
-  <div className="invalid-feedback">{errors?.quantity?.message}</div>
-</div>
-
-{/* Amount — Price × Quantity, recomputed live */}
-<div className="mb-3">
-  <label className="form-label">Amount</label>
-  <div className="form-label">
-    {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-      .format((selectedMenuItem?.price ?? 0) * quantity)}
-  </div>
-</div>
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
+    return (
+      ...  // Menu Item select (section 2)
++     {/* Price — from the selected menu item */}
++     <div className="mb-3">
++       <label className="form-label">Price</label>
++       <div className="form-label">
++         {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
++           .format(selectedMenuItem?.price ?? 0)}
++       </div>
++     </div>
++
++     {/* Quantity — a real input */}
++     <div className="mb-3">
++       <label htmlFor="quantity" className="form-label">Quantity</label>
++       <input id="quantity" type="number"
++         {...register("quantity", {
++           required: "Quantity is required",
++           min: { value: 1, message: "Quantity must be at least 1" },
++           valueAsNumber: true,
++         })}
++         className={`form-control ${errors?.quantity && "is-invalid"}`} />
++       <div className="invalid-feedback">{errors?.quantity?.message}</div>
++     </div>
++
++     {/* Amount — Price × Quantity, recomputed live */}
++     <div className="mb-3">
++       <label className="form-label">Amount</label>
++       <div className="form-label">
++         {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
++           .format((selectedMenuItem?.price ?? 0) * quantity)}
++       </div>
++     </div>
+      ...
+    );
+  }
 ```
 
 - **Price** shows `selectedMenuItem?.price` — fills in the moment you pick an item.
@@ -230,22 +290,27 @@ stands alone.
 
 ## 5. ▶ Code along — Saving (the parent total recalculates)
 
-Save POSTs (no id) or PUTs (has id), then returns to the parent detail:
+Save POSTs (no id) or PUTs (has id), then returns to the parent detail. It's the last
+piece added **inside the component, above the `return`**:
 
-```tsx
-const save: SubmitHandler<IOrderItem> = async (orderItem) => {
-  try {
-    if (!orderItem.id) {
-      orderItem = await orderItemAPI.post(orderItem);
-    } else {
-      await orderItemAPI.put(orderItem);
-    }
-    toast.success("Successfully saved.");
-    navigate(`/orders/detail/${orderItem.orderId}`);
-  } catch (error: any) {
-    toast.error(error.message);
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...
++   const save: SubmitHandler<IOrderItem> = async (orderItem) => {
++     try {
++       if (!orderItem.id) {
++         orderItem = await orderItemAPI.post(orderItem);
++       } else {
++         await orderItemAPI.put(orderItem);
++       }
++       toast.success("Successfully saved.");
++       navigate(`/orders/detail/${orderItem.orderId}`);
++     } catch (error: any) {
++       toast.error(error.message);
++     }
++   };
+    ...
   }
-};
 ```
 
 You don't recompute `Order.Total` in the front end — **the API does it** as a

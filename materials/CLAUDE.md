@@ -461,9 +461,26 @@ not React-only.
    **Lesson 9 is the worked example** of the diff shape — every build block in §2–§4 uses it;
    match it when reworking other lessons.
 
+9. **Order code blocks so each compiles when added — dependency before dependent.** A student
+   pastes snippets top to bottom, so every step should type-check on its own. Put the thing
+   being *called* before the code that calls it: the **API method before the handler** that
+   invokes it, the **interface before the `useForm<T>`** that uses it, a **helper before its
+   first use**. Don't show a handler that references `orderAPI.cancel` and only add `cancel` to
+   the module three blocks later — that's a "property does not exist" error while typing along.
+   Also **show every sibling a step introduces** — if a section adds `startPreparing`,
+   `markReady`, and `markServed`, show all three, not one with the others described in prose.
+   **Exception — deliberate view-first teaching:** a lesson may show the JSX (buttons, a table)
+   that wires up handlers *before* the handlers exist when that wiring is the concept being
+   taught (Lesson 9 §2's status-driven buttons; Lesson 10 §6's items table). When you do,
+   **flag the transient error in the Save-and-check** ("your editor will flag these as *not
+   defined* until section 3") so it reads as expected, not a mistake. **Lesson 9 §3–§4 are the
+   worked examples:** the `OrderAPI` workflow methods come before the handlers that call them,
+   and the `cancel` method before the `saveCancel` that calls it.
+
 The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of principles
-1–7; **Lesson 9** is the worked example of principle 8 — use them as the template when writing
-new React material. **All React lessons
+1–7; **Lesson 9** is the worked example of principles 8 and 9 (the diff shape, and
+dependency-first code-block ordering) — use them as the template when writing new React
+material. **All React lessons
 1–16 have now been reworked to these principles** (guides + labs, plus the L13–15 review/
 bridge lessons and the L16 Copilot tooling lesson), so any React guide/lab is a valid model;
 match whichever is closest in shape to what you're writing. A few lesson-specific decisions
