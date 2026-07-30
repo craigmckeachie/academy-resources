@@ -313,6 +313,11 @@ real patterns; never invent plausible-but-wrong code, markup, or class names.
     `<address>`. A menu/staff card isn't contact info, so guides and labs teach `<div>`;
     `<address>` is reserved for a *real* address block (a stretch). The reference apps
     keep `<address>` and are **not** being changed to match.
+  - **`OrderHeader` (React Lesson 8) takes a single `order` prop** — the guide's version reads
+    `order.staff?.firstName` off the passed order. The reference `orders/OrderHeader.tsx` adds
+    a redundant second `staff?: IStaff` prop and is called `<OrderHeader order={order}
+    staff={order.staff} />`. The one-prop form is cleaner and self-consistent; teach it and
+    **don't** "correct" it toward the reference's two-prop shape.
 
 ### HTML/CSS by-hand lessons (Lessons 1–2) — workflow conventions
 

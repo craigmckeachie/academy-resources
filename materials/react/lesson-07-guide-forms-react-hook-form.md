@@ -329,82 +329,10 @@ The three ideas that make it one form for both modes:
 > `{ name, onChange, onBlur, ref }` object that `{...register("name")}` spreads onto the
 > input — the manual wiring from §2, now live. Delete the log once you've seen it.
 
-### Optional: watch react-hook-form work (a temporary debug view)
-
-Want to *see* what react-hook-form tracks as you interact with the form? Pull a few extra
-pieces from `useForm` and drop a debug `<pre>` inside the form. **This is a throwaway teaching
-aid — you'll delete it once it clicks.**
-
-So you don't lose your working form, **comment out your original `useForm` and paste this
-debug version right below it** — reverting is then just "delete this, uncomment that." It pulls
-`watch` and two more `formState` fields, and adds `mode: "onTouched"` so errors validate *as
-you go* instead of only on submit:
-
-```tsx title="src/menuItems/MenuItemForm.tsx"
-function MenuItemForm() {
-  ...  // useParams, categories state, loadCategories — all unchanged
-
-  // ── TEMP debug view: comment out your original useForm, paste this below it ──
-  // const { register, handleSubmit, formState: { errors } } = useForm<IMenuItem>({
-  //   defaultValues: async () => { … },
-  // });
-  const {
-    register, handleSubmit, watch,                      // added: watch
-    formState: { errors, touchedFields, dirtyFields },  // added: touchedFields, dirtyFields
-  } = useForm<IMenuItem>({
-    mode: "onTouched",                                  // added: validate on blur/change → errors show live
-    defaultValues: async () => {
-      /* … same as your original … */
-    },
-  });
-
-  ...  // save handler, then the return (add the <pre> next)
-}
-```
-
-Then add a debug `<pre>` just inside the `<form>` return, above the first field:
-
-```tsx title="src/menuItems/MenuItemForm.tsx"
-return (
-  <form className="d-flex flex-wrap w-75 gap-2" onSubmit={handleSubmit(save)}>
-    {/* 🔎 TEMPORARY — delete once you've seen how rhf tracks the form */}
-    <pre className="bg-light border rounded p-3 small w-100">
-{JSON.stringify(
-  {
-    values: watch(),                       // updates as you TYPE (onChange)
-    touched: Object.keys(touchedFields),   // appears when you BLUR (leave) a field
-    dirty: Object.keys(dirtyFields),       // appears once a value differs from the default
-    errors: Object.fromEntries(
-      Object.entries(errors).map(([field, e]) => [field, e?.message]),
-    ),
-  },
-  null,
-  2,
-)}
-    </pre>
-
-    ...  {/* your Name, Price, and Category fields — unchanged */}
-  </form>
-);
-```
-
-Open the form (after the next section wires the routes) and interact with it while watching
-the `<pre>`:
-
-- **Type** in a field → `values` updates on every keystroke (that's `onChange`), and the field
-  name appears in `dirty`.
-- **Click into a field, then click out** without a valid value → the field name appears in
-  `touched` (that's `onBlur`), and `errors` gains its message (because `mode: "onTouched"`).
-- **Fix the field** → its error disappears.
-
-That's the difference between **change** (value tracking → `values`/`dirty`) and **blur**
-(→ `touched`, where errors first appear), live — the `onChange`/`onBlur` from the `register`
-object in §2, doing their jobs. (`watch()` is the same hook you'll use for real in Lesson 10's
-derived fields.) **To revert when you're done:** delete the `<pre>` and the debug `useForm`,
-then **uncomment your original** — the reference form validates on submit, without any of this.
-
 **Save and check:** you can't reach the form until its routes exist (next section) — for now
 confirm the editor shows **no red errors** in `MenuItemForm.tsx` and `MenuItemAPI.ts`.
+(Want to *watch* react-hook-form track the form as you type? Section 7 is an optional look
+under the hood once the form is working.)
 
 ---
 
@@ -542,6 +470,93 @@ You've checked each piece as you built it; this is the full pass. With your API 
 4. (Optional) Disable JavaScript and submit an empty form — the client checks vanish (the
    section 5 point).
 5. Console clean.
+
+---
+
+## 7. Under the hood — watch react-hook-form work (optional)
+
+*(Optional. The form is built, reachable, and verified — this is a look **inside** it. Skip it
+if you're satisfied and move on to the pattern recap.)*
+
+Now that you can open the form, you can *see* what react-hook-form is doing as you interact
+with it — the `register` object from §2 and the value/touched/error tracking, live.
+
+**See what `register` returns (ties back to §2).** Temporarily drop a
+`console.log(register("name"))` just above the `return`, open the form, and the DevTools
+**Console** shows the `{ name, onChange, onBlur, ref }` object that `{...register("name")}`
+spreads onto the input — the manual wiring from §2, now live. Delete the log once you've seen
+it.
+
+**Watch the form's state change as you type.** To see what rhf tracks moment to moment, pull a
+few extra pieces from `useForm` and drop a debug `<pre>` inside the form. **This is a throwaway
+teaching aid — you'll delete it once it clicks.**
+
+So you don't lose your working form, **comment out your original `useForm` and paste this
+debug version right below it** — reverting is then just "delete this, uncomment that." It pulls
+`watch` and two more `formState` fields, and adds `mode: "onTouched"` so errors validate *as
+you go* instead of only on submit:
+
+```tsx title="src/menuItems/MenuItemForm.tsx"
+function MenuItemForm() {
+  ...  // useParams, categories state, loadCategories — all unchanged
+
+  // ── TEMP debug view: comment out your original useForm, paste this below it ──
+  // const { register, handleSubmit, formState: { errors } } = useForm<IMenuItem>({
+  //   defaultValues: async () => { … },
+  // });
+  const {
+    register, handleSubmit, watch,                      // added: watch
+    formState: { errors, touchedFields, dirtyFields },  // added: touchedFields, dirtyFields
+  } = useForm<IMenuItem>({
+    mode: "onTouched",                                  // added: validate on blur/change → errors show live
+    defaultValues: async () => {
+      /* … same as your original … */
+    },
+  });
+
+  ...  // save handler, then the return (add the <pre> next)
+}
+```
+
+Then add a debug `<pre>` just inside the `<form>` return, above the first field:
+
+```tsx title="src/menuItems/MenuItemForm.tsx"
+return (
+  <form className="d-flex flex-wrap w-75 gap-2" onSubmit={handleSubmit(save)}>
+    {/* 🔎 TEMPORARY — delete once you've seen how rhf tracks the form */}
+    <pre className="bg-light border rounded p-3 small w-100">
+{JSON.stringify(
+  {
+    values: watch(),                       // updates as you TYPE (onChange)
+    touched: Object.keys(touchedFields),   // appears when you BLUR (leave) a field
+    dirty: Object.keys(dirtyFields),       // appears once a value differs from the default
+    errors: Object.fromEntries(
+      Object.entries(errors).map(([field, e]) => [field, e?.message]),
+    ),
+  },
+  null,
+  2,
+)}
+    </pre>
+
+    ...  {/* your Name, Price, and Category fields — unchanged */}
+  </form>
+);
+```
+
+Interact with the form while watching the `<pre>`:
+
+- **Type** in a field → `values` updates on every keystroke (that's `onChange`), and the field
+  name appears in `dirty`.
+- **Click into a field, then click out** without a valid value → the field name appears in
+  `touched` (that's `onBlur`), and `errors` gains its message (because `mode: "onTouched"`).
+- **Fix the field** → its error disappears.
+
+That's the difference between **change** (value tracking → `values`/`dirty`) and **blur**
+(→ `touched`, where errors first appear), live — the `onChange`/`onBlur` from the `register`
+object in §2, doing their jobs. (`watch()` is the same hook you'll use for real in Lesson 10's
+derived fields.) **To revert when you're done:** delete the `<pre>` and the debug `useForm`,
+then **uncomment your original** — the reference form validates on submit, without any of this.
 
 ---
 

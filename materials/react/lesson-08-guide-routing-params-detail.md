@@ -46,89 +46,10 @@ const { id } = useParams<{ id: string }>();
 
 ---
 
-## 2. ▶ Code along — Fetch the one record
+## 2. ▶ Code along — The definition-list summary
 
-With the id in hand, fetch that single order into state and render it. Because the record is
-one object (not a list), initialize state as `undefined` and guard the render until it
-arrives. First add `find(id)` to the API module:
-
-```diff title="src/orders/OrderAPI.ts"
-  export const orderAPI = {
-    ...  // list, delete (Lesson 6)
-
-+   find(id: number): Promise<IOrder> {
-+     return fetch(`${url}/${id}`).then((response) => response.json());
-+   },
-  };
-```
-
-```tsx title="src/orders/OrderDetailPage.tsx"
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import toast from "react-hot-toast";
-import { IOrder } from "./IOrder";
-import { orderAPI } from "./OrderAPI";
-import OrderHeader from "./OrderHeader";
-
-function OrderDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const [loading, setLoading] = useState(false);
-  const [order, setOrder] = useState<IOrder | undefined>(undefined);
-
-  async function loadOrder() {
-    setLoading(true);
-    try {
-      setOrder(await orderAPI.find(Number(id)));
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadOrder();
-  }, []);
-
-  return (
-    <section className="content container-fluid mx-5 my-2 py-4">
-      <div className="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">
-        <h2>Order</h2>
-      </div>
-      {loading && <p>Loading…</p>}
-      {order && <OrderHeader order={order} />}
-    </section>
-  );
-}
-
-export default OrderDetailPage;
-```
-
-- **`{order && <OrderHeader … />}`** guards the first render, when `order` is still
-  `undefined` (the fetch hasn't returned). Conditional rendering (Lesson 6) again.
-- `orderAPI.find(id)` GETs `/api/orders/{id}`, which returns the order with its nested
-  `staff` and `orderItems`.
-
-Finally, **register the route** so `/orders/detail/:id` reaches this page — add it under the
-`Layout` route in `main.tsx` and import the page. This is the route Lesson 6's **⋮ → View**
-link points at:
-
-```diff title="src/main.tsx"
-+ import OrderDetailPage from "./orders/OrderDetailPage";
-  ...
-  children: [
-    { path: "orders", element: <OrdersPage /> },
-+   { path: "orders/detail/:id", element: <OrderDetailPage /> },
-    ...
-  ],
-```
-
-**Check:** the page imports `OrderHeader`, which you build next — so it won't render until
-section 3. For now confirm the editor shows no *other* errors.
-
----
-
-## 3. ▶ Code along — The definition-list summary
+Build the summary component **first** — `OrderDetailPage` (next section) imports it, so having
+`OrderHeader` in place means that import resolves the moment you write the page.
 
 The order's fields render as a **definition list** — the right semantic element for
 label/value pairs. Three `<dl>` columns sit in a flex row:
@@ -196,8 +117,100 @@ export default OrderHeader;
 - The columns lay out with **flex utilities** (`d-flex flex-wrap gap-4`) — no custom CSS
   needed (recall `App.css` is empty; Bootstrap does the layout).
 
-> **Note:** `IOrder` needs a `cancellationReason?: string` field for the last pair. If your
-> `IOrder` from Lesson 6 doesn't have it yet, add it now (optional string).
+That last pair reads `order.cancellationReason`, but the `IOrder` you built in Lesson 6
+doesn't have that field yet. Add it now — same `string | undefined` shape as the other
+optional fields:
+
+```diff title="src/orders/IOrder.ts"
+  export interface IOrder {
+    ...  // id, tableNumber, notes, status, total, staffId, staff (Lesson 6)
++   cancellationReason: string | undefined;
+  }
+```
+
+**Save and check:** nothing appears on screen yet — no page imports `OrderHeader` until the
+next section wires it into `OrderDetailPage`. For now just confirm the editor shows no errors
+in `OrderHeader.tsx` or `IOrder.ts`.
+
+---
+
+## 3. ▶ Code along — Fetch the one record
+
+Now the page that reads the id, fetches the order, and renders the `OrderHeader` you just
+built. Because the record is one object (not a list), initialize state as `undefined` and
+guard the render until it arrives. First add `find(id)` to the API module:
+
+```diff title="src/orders/OrderAPI.ts"
+  export const orderAPI = {
+    ...  // list, delete (Lesson 6)
+
++   find(id: number): Promise<IOrder> {
++     return fetch(`${url}/${id}`).then((response) => response.json());
++   },
+  };
+```
+
+```tsx title="src/orders/OrderDetailPage.tsx"
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { IOrder } from "./IOrder";
+import { orderAPI } from "./OrderAPI";
+import OrderHeader from "./OrderHeader";
+
+function OrderDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState<IOrder | undefined>(undefined);
+
+  async function loadOrder() {
+    setLoading(true);
+    try {
+      setOrder(await orderAPI.find(Number(id)));
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadOrder();
+  }, []);
+
+  return (
+    <section className="content container-fluid mx-5 my-2 py-4">
+      <div className="d-flex justify-content-between pb-4 mb-4 border-bottom border-2">
+        <h2>Order</h2>
+      </div>
+      {loading && <p>Loading…</p>}
+      {order && <OrderHeader order={order} />}
+    </section>
+  );
+}
+
+export default OrderDetailPage;
+```
+
+- **`{order && <OrderHeader … />}`** guards the first render, when `order` is still
+  `undefined` (the fetch hasn't returned). Conditional rendering (Lesson 6) again — and
+  `OrderHeader` already exists, so this import resolves right away.
+- `orderAPI.find(id)` GETs `/api/orders/{id}`, which returns the order with its nested
+  `staff` and `orderItems`.
+
+Finally, **register the route** so `/orders/detail/:id` reaches this page — add it under the
+`Layout` route in `main.tsx` and import the page. This is the route Lesson 6's **⋮ → View**
+link points at:
+
+```diff title="src/main.tsx"
++ import OrderDetailPage from "./orders/OrderDetailPage";
+  ...
+  children: [
+    { path: "orders", element: <OrdersPage /> },
++   { path: "orders/detail/:id", element: <OrderDetailPage /> },
+    ...
+  ],
+```
 
 **Save and check:** from `/orders`, open a row's **⋮ → View** → `/orders/detail/{id}` shows
 the three `<dl>` columns for *that* order, with the right status badge color and a
@@ -263,13 +276,14 @@ definition-list summary with a status badge, and (Lesson 9) workflow buttons.
 
 ## Build Steps
 
-1. Add `find(id)` to `OrderAPI.ts` (GET `/api/orders/{id}`).
-2. Build `OrderDetailPage`: read `:id` with `useParams`, fetch the order into
-   `useState<IOrder | undefined>(undefined)` via a `useEffect`, guard with `{order && …}`.
-3. Build `OrderHeader` (prop `order`): three `<dl>` columns in a `d-flex flex-wrap gap-4`
+1. Build `OrderHeader` (prop `order`): three `<dl>` columns in a `d-flex flex-wrap gap-4`
    row, with a **status badge**, an `Intl.NumberFormat` **Total**, and a
-   `{status === "CANCELLED" && <>…</>}` reason pair (add `cancellationReason?` to `IOrder` if
-   needed). **Check** a View link renders the summary.
+   `{status === "CANCELLED" && <>…</>}` reason pair; add `cancellationReason: string |
+   undefined` to `IOrder`.
+2. Add `find(id)` to `OrderAPI.ts` (GET `/api/orders/{id}`).
+3. Build `OrderDetailPage`: read `:id` with `useParams`, fetch the order into
+   `useState<IOrder | undefined>(undefined)` via a `useEffect`, guard with `{order && …}`,
+   and render `<OrderHeader order={order} />`.
 4. **Register the `orders/detail/:id` route** under `Layout` (import `OrderDetailPage`) — the
    **⋮ → View** item from Lesson 6 now reaches it.
 5. Verify using section 5 — a different id loads a different order; the cancelled-only field

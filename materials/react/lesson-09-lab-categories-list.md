@@ -32,7 +32,8 @@ Same arc as every list page you've built: **API module → card → page → rou
 2. **`CategoryCard`** — a card showing **name** and **sort order**, with the same **⋮
    `Dropdown`** as `StaffCard`: an **Edit** link (→ `/categories/edit/:id`) and a
    **Delete**-with-`confirm` that calls `categoryAPI.delete` then the `onRemove` prop. (Edit
-   404s until the Lesson 10 lab builds the form.)
+   404s until the Lesson 10 lab builds the form.) *If you built the Category detail page in the
+   Lesson 8 lab, add a **View** item (→ `/categories/detail/:id`) as the first dropdown entry.*
 3. **`CategoriesPage`** — fetch into state in a `useEffect`, `.map()` the cards, show
    **skeletons** while loading (`CategoryCardSkeleton`, a card copy with `skeleton
    skeleton-text` bars), a `removeCategory` that filters state after a delete, and an

@@ -15,7 +15,7 @@ Lesson 10, alongside the items table it acts on.)
 
 **The general pattern you're learning:** **which actions are available depends on the
 record's current status** — you render different buttons per status with conditional
-rendering. A **modal** is a dialog held in state (`show`/`setShow`) and rendered on top
+rendering. A **modal** is a dialog held in state (an `isOpen` boolean) and rendered on top
 of the page; use a **confirmation** modal for destructive actions and a **reason**
 modal (required textarea) before a state change. After any action, **re-fetch** the
 record so the page shows the new truth.
@@ -42,11 +42,11 @@ data attributes:
 ```tsx
 import { Modal } from "react-bootstrap";
 
-const [showCancelModal, setShowCancelModal] = useState(false);
-const handleShowCancelModal = () => setShowCancelModal(true);
-const handleCloseCancelModal = () => setShowCancelModal(false);
+const [isCancelOpen, setIsCancelOpen] = useState(false);
+const openCancel = () => setIsCancelOpen(true);
+const closeCancel = () => setIsCancelOpen(false);
 
-<Modal show={showCancelModal} onHide={handleCloseCancelModal}>
+<Modal show={isCancelOpen} onHide={closeCancel}>
   <Modal.Header closeButton>
     <Modal.Title>Cancel Order</Modal.Title>
   </Modal.Header>
@@ -54,7 +54,7 @@ const handleCloseCancelModal = () => setShowCancelModal(false);
 </Modal>
 ```
 
-- `show={showCancelModal}` — the boolean state decides visibility. A button sets it
+- `show={isCancelOpen}` — the boolean state decides visibility. A button sets it
   `true` to open; `onHide` (the ✕ or backdrop) sets it `false`.
 - The modal markup always sits in the page; state is what reveals it. This is
   conditional rendering (Lesson 6) driving a dialog.
@@ -86,7 +86,7 @@ you add:
 +         {order?.status === "PREPARING" && (
 +           <>
 +             <button className="btn btn-primary" onClick={markReady}>Mark Ready</button>
-+             <button className="btn btn-outline-danger" onClick={handleShowCancelModal}>
++             <button className="btn btn-outline-danger" onClick={openCancel}>
 +               Cancel Order
 +             </button>
 +           </>
@@ -114,7 +114,7 @@ Order** doesn't act directly — it opens the Cancel modal, because cancelling r
 reason (section 4).
 
 **Save and check:** the buttons call handlers you add next — `startPreparing`, `markReady`,
-and `markServed` in section 3, and `handleShowCancelModal` (with its `showCancelModal` state)
+and `markServed` in section 3, and `openCancel` (with its `isCancelOpen` state)
 in section 4 — so your editor will flag those names as *not defined* for now; that's expected.
 Once section 3's handlers are in, open a **Placed** order → only **Start Preparing** shows, and
 a **Served** order shows none.
@@ -213,9 +213,9 @@ real). Also add the imports `import { Modal } from "react-bootstrap";` and
   function OrderDetailPage() {
     ...  // useParams, loading/order state, loadOrder, and the §3 workflow handlers
 
-+   const [showCancelModal, setShowCancelModal] = useState(false);
-+   const handleShowCancelModal = () => setShowCancelModal(true);   // ← the Cancel Order button (§2) calls this
-+   const handleCloseCancelModal = () => setShowCancelModal(false);
++   const [isCancelOpen, setIsCancelOpen] = useState(false);
++   const openCancel = () => setIsCancelOpen(true);   // ← the Cancel Order button (§2) calls this
++   const closeCancel = () => setIsCancelOpen(false);
 +
 +   const { register, handleSubmit, formState: { errors } } = useForm<ICancelForm>({
 +     defaultValues: async () => ({ cancellationReason: undefined }),
@@ -224,7 +224,7 @@ real). Also add the imports `import { Modal } from "react-bootstrap";` and
 +   const saveCancel: SubmitHandler<ICancelForm> = async (form) => {
 +     if (!order?.id || !form.cancellationReason) return;
 +     await orderAPI.cancel(order.id, form.cancellationReason);
-+     setShowCancelModal(false);
++     setIsCancelOpen(false);
 +     await loadOrder();
 +   };
 
@@ -236,14 +236,14 @@ real). Also add the imports `import { Modal } from "react-bootstrap";` and
 
 **(c) The modal markup** — **inside the `return`, as the first child of the `<section>`** (a
 modal can live anywhere in the JSX; putting it first keeps it out of the layout flow, and it
-only appears when `showCancelModal` is `true`):
+only appears when `isCancelOpen` is `true`):
 
 ```diff title="src/orders/OrderDetailPage.tsx"
   function OrderDetailPage() {
     ...
     return (
       <section className="content container-fluid mx-5 my-2 py-4">
-+       <Modal show={showCancelModal} onHide={handleCloseCancelModal}>
++       <Modal show={isCancelOpen} onHide={closeCancel}>
 +         <Modal.Header closeButton>
 +           <Modal.Title>Cancel Order</Modal.Title>
 +         </Modal.Header>
@@ -259,7 +259,7 @@ only appears when `showCancelModal` is `true`):
 +               <div className="invalid-feedback">{errors?.cancellationReason?.message}</div>
 +             </div>
 +             <div className="d-flex justify-content-end gap-2">
-+               <button type="button" className="btn btn-outline-primary" onClick={handleCloseCancelModal}>Cancel</button>
++               <button type="button" className="btn btn-outline-primary" onClick={closeCancel}>Cancel</button>
 +               <button type="submit" className="btn btn-primary">Confirm</button>
 +             </div>
 +           </form>
@@ -354,7 +354,7 @@ On PRS: Request Detail shows Send-for-Review (New) / Approve + Reject (Review), 
 2. On `OrderDetailPage`, add the **workflow buttons** in the heading row, each gated by
    `{order?.status === "…" && …}`, calling an async handler that hits the endpoint,
    toasts, and `await loadOrder()`.
-3. Add the **Cancel modal**: `showCancelModal` state, a react-hook-form with a required
+3. Add the **Cancel modal**: `isCancelOpen` state, a react-hook-form with a required
    `cancellationReason` textarea, `saveCancel` → `orderAPI.cancel` → close + re-fetch.
 4. Verify using section 5 — buttons change per status, and the Cancel modal blocks an empty
    reason then flips the status to CANCELLED.
