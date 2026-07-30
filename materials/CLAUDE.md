@@ -318,6 +318,12 @@ real patterns; never invent plausible-but-wrong code, markup, or class names.
     a redundant second `staff?: IStaff` prop and is called `<OrderHeader order={order}
     staff={order.staff} />`. The one-prop form is cleaner and self-consistent; teach it and
     **don't** "correct" it toward the reference's two-prop shape.
+  - **`money(amount)` helper (React Lesson 10 §6)** — the guide lifts the repeated
+    `Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(...)` into a
+    `money` helper in `utility/formatUtilities.ts`, imported into `OrderDetailPage`. The
+    reference **inlines** that call everywhere. The helper is a deliberate DRY teaching step
+    (the Order Item form teaches the inline call first in §4; §6 refactors it into `money`) —
+    keep it; don't "correct" it back to inline to match the reference.
 
 ### HTML/CSS by-hand lessons (Lessons 1–2) — workflow conventions
 

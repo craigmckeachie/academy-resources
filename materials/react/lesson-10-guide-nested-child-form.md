@@ -120,17 +120,28 @@ The blank child pre-fills its `orderId` from the route, so a new item knows its 
   }
 ```
 
-And **Cancel returns to the parent detail**, not a top-level list — the signature of a
-nested form. It lives in the `return`:
+Finally, give the component its **`return`** — the `<form>` and **Item** card the fields drop
+into (sections 2 and 4), with the **Cancel** and **Save** buttons beneath. **Cancel returns to
+the parent detail** — not a top-level list, the signature of a nested form; **Save** is a
+submit button whose `onSubmit` you wire up in section 5:
 
 ```diff title="src/orderItems/OrderItemForm.tsx"
   function OrderItemForm() {
-    ...
-    return (
-      ...
-+     <Link to={`/orders/detail/${orderId}`} className="btn btn-outline-primary me-2">Cancel</Link>
-      ...
-    );
+    ...  // useParams, orderId, emptyOrderItem
++   return (
++     <form className="form w-50">
++       <div className="card p-4">
++         <h5 className="card-title"><strong>Item</strong></h5>
++
++         {/* Menu Item, Price, Quantity, Notes, Amount fields — sections 2 and 4 */}
++
++         <div className="d-flex justify-content-end mt-4">
++           <Link to={`/orders/detail/${orderId}`} className="btn btn-outline-primary me-2">Cancel</Link>
++           <button type="submit" className="btn btn-primary">Save item</button>
++         </div>
++       </div>
++     </form>
++   );
   }
 ```
 
@@ -140,8 +151,8 @@ nested form. It lives in the `return`:
 
 Menu Item is an FK dropdown just like Category on the Menu form (Lesson 7) — options
 fetched from another entity. Add the `menuItems` state and its loader **inside
-`OrderItemForm`, above the `return`** (it's called from `defaultValues`, like the category
-dropdown — you'll see that in the whole file in section 5):
+`OrderItemForm`, above the `return`** (the loader is called from the form's `defaultValues`,
+which you set up in the next step):
 
 ```diff title="src/orderItems/OrderItemForm.tsx"
   function OrderItemForm() {
@@ -156,23 +167,58 @@ dropdown — you'll see that in the whole file in section 5):
   }
 ```
 
-Then the `<select>` itself goes **inside the `return`**, as the Menu Item field:
+Next, set up **`useForm`** — the source of the form's fields, validation, and initial values.
+Its **async `defaultValues`** loads the menu items, then returns the blank `emptyOrderItem`
+(create) or the fetched item (edit) — the same create-vs-edit switch as the other forms. It
+has to exist **before** the `<select>` below, which pulls `register` and `errors` from it:
+
+```diff title="src/orderItems/OrderItemForm.tsx"
+  function OrderItemForm() {
+    ...  // useParams, orderId, emptyOrderItem, menuItems state, loadMenuItems
++   const {
++     register,
++     handleSubmit,
++     formState: { errors },
++   } = useForm<IOrderItem>({
++     defaultValues: async () => {
++       await loadMenuItems();
++       if (!itemId) {
++         return Promise.resolve(emptyOrderItem);          // create: blank child
++       } else {
++         const orderItem = await orderItemAPI.find(orderItemId);
++         return Promise.resolve(orderItem);               // edit: fetch the item
++       }
++     },
++   });
+    ...
+  }
+```
+
+Then the **Menu Item field** — a `<select>` with its label and validation message — drops into
+the **Item** card, where the fields placeholder is:
 
 ```diff title="src/orderItems/OrderItemForm.tsx"
   function OrderItemForm() {
     ...
     return (
       ...
-+     <select
-+       {...register("menuItemId", { valueAsNumber: true, required: "Menu item is required" })}
-+       className={`form-select ${errors?.menuItemId && "is-invalid"}`}
-+     >
-+       <option value="0">Select…</option>
-+       {menuItems.map((m) => (
-+         <option key={m.id} value={m.id}>{m.name}</option>
-+       ))}
-+     </select>
-      ...
+      <div className="card p-4">
+        ...  // Item heading (section 1)
++       <div className="mb-3">
++         <label htmlFor="menuItemId" className="form-label">Menu Item</label>
++         <select
++           {...register("menuItemId", { valueAsNumber: true, required: "Menu item is required" })}
++           className={`form-select ${errors?.menuItemId && "is-invalid"}`}
++         >
++           <option value="0">Select…</option>
++           {menuItems.map((m) => (
++             <option key={m.id} value={m.id}>{m.name}</option>
++           ))}
++         </select>
++         <div className="invalid-feedback">{errors?.menuItemId?.message}</div>
++       </div>
+        ...  // Cancel / Save buttons (section 1)
+      </div>
     );
   }
 ```
@@ -231,45 +277,57 @@ re-runs whenever `menuItemId` changes, refreshing which menu item is selected.
 
 ## 4. ▶ Code along — Derived display fields (read-only, not inputs)
 
-Price and Amount are **computed**, so they're rendered as **text**, not `<input>`s — a
-user can't type them. These go **inside the `return`**, after the Menu Item `<select>`:
+Price and Amount are **computed**, so they render as **text**, not `<input>`s — a user can't
+type them; **Notes** is a normal optional input. All three drop into the **Item** card after
+the Menu Item field:
 
 ```diff title="src/orderItems/OrderItemForm.tsx"
   function OrderItemForm() {
     ...
     return (
-      ...  // Menu Item select (section 2)
-+     {/* Price — from the selected menu item */}
-+     <div className="mb-3">
-+       <label className="form-label">Price</label>
-+       <div className="form-label">
-+         {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-+           .format(selectedMenuItem?.price ?? 0)}
-+       </div>
-+     </div>
-+
-+     {/* Quantity — a real input */}
-+     <div className="mb-3">
-+       <label htmlFor="quantity" className="form-label">Quantity</label>
-+       <input id="quantity" type="number"
-+         {...register("quantity", {
-+           required: "Quantity is required",
-+           min: { value: 1, message: "Quantity must be at least 1" },
-+           valueAsNumber: true,
-+         })}
-+         className={`form-control ${errors?.quantity && "is-invalid"}`} />
-+       <div className="invalid-feedback">{errors?.quantity?.message}</div>
-+     </div>
-+
-+     {/* Amount — Price × Quantity, recomputed live */}
-+     <div className="mb-3">
-+       <label className="form-label">Amount</label>
-+       <div className="form-label">
-+         {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-+           .format((selectedMenuItem?.price ?? 0) * quantity)}
-+       </div>
-+     </div>
       ...
+      <div className="card p-4">
+        ...  // Item heading + Menu Item field (sections 1–2)
++       {/* Price — from the selected menu item */}
++       <div className="mb-3">
++         <label className="form-label">Price</label>
++         <div className="form-label">
++           {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
++             .format(selectedMenuItem?.price ?? 0)}
++         </div>
++       </div>
++
++       {/* Quantity — a real input */}
++       <div className="mb-3">
++         <label htmlFor="quantity" className="form-label">Quantity</label>
++         <input id="quantity" type="number"
++           {...register("quantity", {
++             required: "Quantity is required",
++             min: { value: 1, message: "Quantity must be at least 1" },
++             valueAsNumber: true,
++           })}
++           className={`form-control ${errors?.quantity && "is-invalid"}`} />
++         <div className="invalid-feedback">{errors?.quantity?.message}</div>
++       </div>
++
++       {/* Notes — optional text (TableServe's addition over PRS's RequestLine) */}
++       <div className="mb-3">
++         <label htmlFor="notes" className="form-label">Notes</label>
++         <input id="notes" type="text" {...register("notes")}
++           className="form-control"
++           placeholder="Enter any notes for this item (optional)" />
++       </div>
++
++       {/* Amount — Price × Quantity, recomputed live */}
++       <div className="mb-3">
++         <label className="form-label">Amount</label>
++         <div className="form-label">
++           {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
++             .format((selectedMenuItem?.price ?? 0) * quantity)}
++         </div>
++       </div>
+        ...  // Cancel / Save buttons (section 1)
+      </div>
     );
   }
 ```
@@ -279,8 +337,6 @@ user can't type them. These go **inside the `return`**, after the Menu Item `<se
   `watch("quantity")` re-renders. Change the quantity → Amount updates instantly, no
   submit needed.
 - `?? 0` guards the pre-selection state (nothing chosen yet → `$0.00`).
-- **Notes** is a normal optional text input — TableServe's addition over PRS's
-  RequestLine.
 
 This "pick a dropdown value → a related field fills → a third field recomputes from it"
 is the dropdown-triggers-derived-field mechanic, and it's the whole reason this lesson
@@ -288,7 +344,7 @@ stands alone.
 
 ---
 
-## 5. ▶ Code along — Saving (the parent total recalculates)
+## 5. ▶ Code along — Saving, then wire the routes and run the form
 
 Save POSTs (no id) or PUTs (has id), then returns to the parent detail. It's the last
 piece added **inside the component, above the `return`**:
@@ -296,6 +352,8 @@ piece added **inside the component, above the `return`**:
 ```diff title="src/orderItems/OrderItemForm.tsx"
   function OrderItemForm() {
     ...
++   const navigate = useNavigate();
++
 +   const save: SubmitHandler<IOrderItem> = async (orderItem) => {
 +     try {
 +       if (!orderItem.id) {
@@ -311,6 +369,18 @@ piece added **inside the component, above the `return`**:
 +   };
     ...
   }
+```
+
+Connect `save` to the form — add `onSubmit={handleSubmit(save)}` to the `<form>` tag you wrote
+in section 1:
+
+```diff title="src/orderItems/OrderItemForm.tsx"
+    return (
+-     <form className="form w-50">
++     <form className="form w-50" onSubmit={handleSubmit(save)}>
+        ...
+      </form>
+    );
 ```
 
 You don't recompute `Order.Total` in the front end — **the API does it** as a
@@ -468,18 +538,100 @@ function OrderItemForm() {
 export default OrderItemForm;
 ```
 
-**Save and check:** you can't reach the form yet (its routes and the "Add Order Item" link
-come in section 6). For now confirm the editor shows no errors in `OrderItemForm.tsx`.
+With the form built, **wire its two routes so you can run it now** — before building the table.
+Two thin page components wrap the form (create and edit), each rendering `<OrderItemForm />`
+under a heading (the same create/edit page pattern as Menu Items and Staff):
+
+```tsx title="src/orderItems/OrderItemCreatePage.tsx"
+import OrderItemForm from "./OrderItemForm";
+
+function OrderItemCreatePage() {
+  return (
+    <section className="content container-fluid mx-5 my-2 py-4">
+      <div className="d-flex justify-content-between pb-4 mb-5 border-bottom border-2">
+        <h2>New Order Item</h2>
+      </div>
+      <OrderItemForm />
+    </section>
+  );
+}
+
+export default OrderItemCreatePage;
+```
+
+```tsx title="src/orderItems/OrderItemEditPage.tsx"
+import OrderItemForm from "./OrderItemForm";
+
+function OrderItemEditPage() {
+  return (
+    <section className="content container-fluid mx-5 my-2 py-4">
+      <div className="d-flex justify-content-between pb-4 mb-5 border-bottom border-2">
+        <h2>Edit Order Item</h2>
+      </div>
+      <OrderItemForm />
+    </section>
+  );
+}
+
+export default OrderItemEditPage;
+```
+
+Add the two nested routes under `Layout` in the router — the ones previewed in section 1. The
+pages exist now, so the `element`s resolve:
+
+```diff title="src/main.tsx"
+  ...  // existing routes under Layout
++ { path: "orders/detail/:id/orderitem/create", element: <OrderItemCreatePage /> },
++ { path: "orders/detail/:id/orderitem/edit/:itemId", element: <OrderItemEditPage /> },
+  ...
+```
+
+**✅ Checkpoint — run the form on its own.** There's no **Add Order Item** link yet (that's
+section 6), so reach it by typing the URL. With your API running and `npm run dev` up:
+
+1. Go to **`/orders/detail/1/orderitem/create`** (any real order id) — the form renders; Price
+   and Amount read **`$0.00`**.
+2. Pick a **menu item** → **Price** fills in immediately (the derived field).
+3. Change **Quantity** → **Amount** recomputes on each keystroke (Price × Quantity). Set it to
+   0 and Save → **"Quantity must be at least 1"** blocks it.
+4. Save a valid item → you land back on the order detail. **Network** shows a `POST
+   /api/orderitems`, then a `GET /api/orders/{id}` with the recalculated total. (You won't
+   *see* the new row until the items table in section 6 — but the derived fields and the
+   round-trip are already working.)
+5. Type an edit URL — `/orders/detail/1/orderitem/edit/{itemId}` — the form **pre-fills** (menu
+   item selected, so Price shows). Console clean.
 
 ---
 
 ## 6. ▶ Code along — The items table on the detail page (and the delete modal)
 
-The form needs somewhere to launch from. On `OrderDetailPage`, below `<OrderHeader />`, add a
+The form works, but so far you reach it by typing URLs — the **items table** on the order
+detail lists the order's items and gives the form in-app **Add Order Item** / **Edit** links.
+On `OrderDetailPage`, below `<OrderHeader />`, add a
 **card holding the items table** — one row per `order.orderItems`, a footer **Add Order Item**
 link and running **Total**, and per-row **Edit** / **trash** actions. The trash button opens a
 **delete-confirmation modal** — the same state-driven `Modal` you built for Cancel in Lesson 9,
 now for a destructive action.
+
+First, the rows format currency three times (Price, Amount, and the footer Total), so lift the
+`Intl.NumberFormat` you wrote inline in the form into a small **`money`** helper in
+`formatUtilities.ts`, beside `getTextBackgroundByStatus` from Lesson 6:
+
+```diff title="src/utility/formatUtilities.ts"
+  ...  // formatPhoneNumber, getTextBackgroundByStatus (Lesson 6)
+
++ export function money(amount: number) {
++   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
++ }
+```
+
+Import it at the top of `OrderDetailPage.tsx` so the table can call it:
+
+```tsx title="src/orders/OrderDetailPage.tsx"
+import { money } from "../utility/formatUtilities";
+```
+
+Now the items-table card — it uses `money(...)` for Price, Amount, and the footer Total:
 
 ```diff title="src/orders/OrderDetailPage.tsx"
   function OrderDetailPage() {
@@ -531,13 +683,11 @@ now for a destructive action.
   }
 ```
 
-> `money(...)` is shorthand here for the `Intl.NumberFormat("en-US", { style: "currency",
-> currency: "USD" }).format(...)` you've been writing — inline the full call, or (nicer) lift
-> it into a small helper in `formatUtilities` and import it. Swap the plain `Edit`/`Delete`
-> text for the pencil/trash SVG icons from the design if you want the finished look (same
-> sprite + `xlinkHref` pattern as Lesson 6).
+> Swap the plain `Edit`/`Delete` text for the pencil/trash SVG icons from the design if you
+> want the finished look (same sprite + `xlinkHref` pattern as Lesson 6).
 
-Now the **trash button** calls `handleShowDeleteItemModal(orderItem)`. Add its state,
+The table's **trash button** calls `handleShowDeleteItemModal(orderItem)`, which doesn't
+exist yet — your editor flags it as *not defined* until you add it now. Add its state,
 handlers, and the confirm modal — storing the *item* to delete (not just a boolean) so the
 confirm handler knows exactly which one to remove:
 
@@ -588,16 +738,17 @@ confirm handler knows exactly which one to remove:
   save).
 
 **Save and check:** open an order's detail — the items table shows each line's Amount and a
-footer Total. Click a row's **Delete** → the confirm modal opens; **Delete** removes the row
-and the Total drops. The **Add Order Item** and **Edit** links now have somewhere to go (the
-form routes you add in section 7).
+footer Total. Click **Add Order Item** → the create form opens (wired in section 5); Cancel
+back. Click a row's **Delete** → the confirm modal opens; **Delete** removes the row and the
+Total drops.
 
 ---
 
-## 7. ▶ Code along — Wire the routes and pages, then verify in the browser
+## 7. Verify in the browser — the full round-trip
 
-Add the two nested routes and the thin create/edit pages, then do the full pass. With your
-API running and `npm run dev` up:
+You've tested the form on its own (section 5) and the items table (section 6); now the full
+end-to-end pass, this time driving it from the **Add Order Item** link instead of typed URLs.
+With your API running and `npm run dev` up:
 
 1. From an order's detail, click **Add Order Item** → the URL is
    `/orders/detail/{id}/orderitem/create`. Price and Amount read `$0.00`.
@@ -648,9 +799,11 @@ Notes field**.
    for Amount).
 6. `save`: POST/PUT by `!id`, then `navigate('/orders/detail/${orderId}')`; make Cancel
    a `Link` back to the parent detail.
-7. On `OrderDetailPage`, add the **items table** card (rows from `order.orderItems`, footer
+7. Add the thin `OrderItemCreatePage` / `OrderItemEditPage` and the two nested routes, then
+   **run the form by URL** — Price fills on select, Amount recomputes live, and a valid save
+   round-trips to the detail page (Network shows the `POST` + recalculated `GET`).
+8. On `OrderDetailPage`, add the **items table** card (rows from `order.orderItems`, footer
    **Add Order Item** link + **Total**, per-row Edit/trash), and wire the **delete-confirm
    modal** (`orderItemToDelete` state, `removeOrderItem` → `orderItemAPI.delete` → re-fetch).
-8. Add the two nested routes and thin `OrderItemCreatePage` / `OrderItemEditPage`.
 9. Verify in the browser using section 7 — Price fills on select, Amount recomputes live,
    the parent Total updates after save, and delete removes a row and drops the Total.
