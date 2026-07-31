@@ -396,9 +396,11 @@ this is the fast pre-flight):
    shown elsewhere or genuinely unchanged — **never** code the reader still has to write.
 5. **Dependencies exist first.** Everything the block references is already defined: the API
    method before the handler that calls it, `useForm` before JSX using `register`, a helper
-   before its first use, a component before the route that renders it. An unavoidable forward
-   reference (view-first) must be **flagged in the Save-and-check** ("your editor flags X as
-   *not defined* until section N").
+   before its first use, a component before the route that renders it, and **an interface
+   property before code reads it off the typed object** (`order.orderItems` needs `orderItems`
+   on `IOrder`; `menuItem.category` needs it on `IMenuItem`) — extend the interface in a diff
+   *before* the usage. An unavoidable forward reference (view-first) must be **flagged in the
+   Save-and-check** ("your editor flags X as *not defined* until section N").
 6. **Identifiers are current.** Every name matches the latest decision (`openCancel`, not a
    since-renamed `handleShowCancelModal`). After any rename, grep the whole pass.
 

@@ -613,7 +613,20 @@ link and running **Total**, and per-row **Edit** / **trash** actions. The trash 
 **delete-confirmation modal** — the same state-driven `Modal` you built for Cancel in Lesson 9,
 now for a destructive action.
 
-First, the rows format currency three times (Price, Amount, and the footer Total), so lift the
+First, the table maps `order.orderItems` and shows `order.total`, but the `IOrder` from Lesson 6
+(extended with `cancellationReason` in Lesson 8) has no `orderItems` array yet — add it,
+importing the `IOrderItem` you created in §1:
+
+```diff title="src/orders/IOrder.ts"
++ import { IOrderItem } from "../orderItems/IOrderItem";
+  ...
+  export interface IOrder {
+    ...
++   orderItems: IOrderItem[];
+  }
+```
+
+The rows also format currency three times (Price, Amount, and the footer Total), so lift the
 `Intl.NumberFormat` you wrote inline in the form into a small **`money`** helper in
 `formatUtilities.ts`, beside `getTextBackgroundByStatus` from Lesson 6:
 
@@ -802,8 +815,9 @@ Notes field**.
 7. Add the thin `OrderItemCreatePage` / `OrderItemEditPage` and the two nested routes, then
    **run the form by URL** — Price fills on select, Amount recomputes live, and a valid save
    round-trips to the detail page (Network shows the `POST` + recalculated `GET`).
-8. On `OrderDetailPage`, add the **items table** card (rows from `order.orderItems`, footer
-   **Add Order Item** link + **Total**, per-row Edit/trash), and wire the **delete-confirm
-   modal** (`orderItemToDelete` state, `removeOrderItem` → `orderItemAPI.delete` → re-fetch).
+8. Extend `IOrder` with `orderItems: IOrderItem[]`, then on `OrderDetailPage` add the **items
+   table** card (rows from `order.orderItems`, footer **Add Order Item** link + **Total**,
+   per-row Edit/trash), and wire the **delete-confirm modal** (`orderItemToDelete` state,
+   `removeOrderItem` → `orderItemAPI.delete` → re-fetch).
 9. Verify in the browser using section 7 — Price fills on select, Amount recomputes live,
    the parent Total updates after save, and delete removes a row and drops the Total.
