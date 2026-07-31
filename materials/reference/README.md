@@ -27,6 +27,10 @@ here is a step-by-step build — these are lookups.
   **React Lesson 3–4** and throughout the capstone.
 - [C# naming conventions](csharp-naming-conventions.md) — the PascalCase / camelCase /
   `_field` rules, and how casing hints at what a token is. Pairs with Anatomy of C# Code.
+- [TypeScript / React naming conventions](typescript-naming-conventions.md) — the
+  PascalCase / camelCase / `I`-prefix / `use`-hook / `on`-prop rules, casing-as-a-clue, and
+  the **three flips from C#** (methods and properties go camelCase; interfaces keep `I`).
+  Pairs with Anatomy of TypeScript Code; useful from **React Lesson 3** and the capstone.
 
 ## images/
 

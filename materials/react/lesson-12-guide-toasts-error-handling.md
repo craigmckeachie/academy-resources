@@ -30,23 +30,24 @@ polish that makes the app feel finished.
 
 ## 1. ▶ Code along — Mounting the Toaster
 
-`react-hot-toast` needs one `<Toaster />` mounted near the app root (you added it in
-Lesson 11's `App.tsx`). It renders whatever toasts you fire from anywhere:
+`react-hot-toast` needs one `<Toaster />` mounted near the app root — you already added it in
+Lesson 11's `App.tsx`. Fill in its **`toastOptions`** now to theme the toasts (the brand orange
+check):
 
-```tsx title="src/App.tsx"
-import { Toaster } from "react-hot-toast";
-
-// inside App's provider:
-<Toaster
-  toastOptions={{
-    success: { iconTheme: { primary: "#FF7A00", secondary: "white" } },
-    style: { maxWidth: 500 },
-  }}
-/>
+```diff title="src/App.tsx"
+    <StaffContext.Provider value={{ staff, setStaff }}>
+-     <Toaster /* … */ />
++     <Toaster
++       toastOptions={{
++         success: { iconTheme: { primary: "#FF7A00", secondary: "white" } },
++         style: { maxWidth: 500 },
++       }}
++     />
+      <Outlet />
+    </StaffContext.Provider>
 ```
 
-`toastOptions` themes the toasts (the brand orange check). Mount it once; you never
-render toasts directly — you *call* them.
+Mount it once; you never render toasts directly — you *call* them (next).
 
 **Save and check:** nothing visible yet (no toast is firing) — confirm the app still loads
 and the console is clean. You'll see toasts once you fire them in section 4.
@@ -123,8 +124,11 @@ Every API method chains these, so errors are consistent everywhere:
 -     return fetch(url).then((response) => response.json());
 +     return fetch(url).then(checkStatus).then(parseJSON);
     },
-    ...  // find/post/put get the same .then(checkStatus).then(parseJSON);
-         // the bodiless delete gets just .then(checkStatus)
+    ...  // find, post, put: the identical change — end each with .then(checkStatus).then(parseJSON)
+    delete(id: number) {
+-     return fetch(`${url}/${id}`, { method: "DELETE" });
++     return fetch(`${url}/${id}`, { method: "DELETE" }).then(checkStatus);   // no parseJSON — no body
+    },
   };
 ```
 
@@ -151,61 +155,78 @@ page still fetches.
 
 ## 4. ▶ Code along — Wiring toasts into CRUD
 
-With `checkStatus` throwing and `toast` available, each action follows one shape:
-**`try` the API call → `toast.success` → (navigate/update); `catch` → `toast.error`.**
+With `checkStatus` throwing and the `<Toaster />` mounted, every CRUD action follows one shape:
+**`try` the API call → `toast.success` → (navigate/update); `catch` → `toast.error`.** Here you
+finish that for Menu Items: the **List** catch swaps its `console.error` placeholder for a
+toast, the form's **save** already has toasts (Lesson 7) and now they fire, and **Delete** is
+new.
 
-### List (load errors)
+### List — swap the placeholder log for a toast
 
-```tsx
-async function loadMenuItems() {
-  setLoading(true);
-  try {
-    const data = await menuItemAPI.list();
-    setMenuItems(data);
-  } catch (error: any) {
-    toast.error(error.message, { duration: 6000 });
-  } finally {
-    setLoading(false);
+`loadMenuItems` (Lesson 4) catches errors with a `console.error` placeholder. Now that toasts
+work, surface the error to the user instead (and import `toast`):
+
+```diff title="src/menuItems/MenuItemsPage.tsx"
++ import toast from "react-hot-toast";
+  ...
+  async function loadMenuItems() {
+    setLoading(true);
+    try {
+      const data = await menuItemAPI.list();
+      setMenuItems(data);
+    } catch (error: any) {
+-     console.error(error);
++     toast.error(error.message, { duration: 6000 });
+    } finally {
+      setLoading(false);
+    }
   }
-}
 ```
 
-### Create / Edit (in the form's `save`)
+### Create / Edit — already wired
 
-```tsx
-const save: SubmitHandler<IMenuItem> = async (menuItem) => {
-  try {
-    delete menuItem.category;
-    if (!menuItem.id) menuItem = await menuItemAPI.post(menuItem);
-    else await menuItemAPI.put(menuItem);
-  } catch (error: any) {
-    toast.error(error.message, { duration: 6000 });
-    return;                       // stay on the form on failure
-  }
-  toast.success("Successfully saved.");
-  navigate("/menuitems");
-};
-```
+`MenuItemForm`'s `save` (Lesson 7) already has this shape — `toast.error(error.message)` in the
+`catch` (with a `return` to stay on the form) and `toast.success("Successfully saved.")` after
+the save. It did nothing visible before; with the `<Toaster />` mounted (Lesson 11) and
+`checkStatus` throwing a friendly `error.message` (§3), those toasts now fire. **No change
+needed** — just confirm it's there.
 
 ### Delete — add it to the `MenuItemCard` ⋮ dropdown (built in Lesson 7)
 
-Lesson 7 gave `MenuItemCard` a **⋮** dropdown with an **Edit** item; now add a **Delete**
-item beside it. Give `MenuItemCard` an `onRemove` prop (like `StaffCard`) so it can tell
-`MenuItemsPage` to drop the deleted card from state:
+Lesson 7 gave `MenuItemCard` a **⋮** dropdown with an **Edit** item; now add a **Delete** item
+beside it. Like `StaffCard` (Lesson 6), give the card an **`onRemove`** prop so it can tell
+`MenuItemsPage` to drop the deleted card, and import `toast` + `menuItemAPI`:
 
 ```diff title="src/menuItems/MenuItemCard.tsx"
-  <Dropdown.Menu>
-    <Dropdown.Item as={Link} to={`/menuitems/edit/${menuItem.id}`}>Edit</Dropdown.Item>
-+   <Dropdown.Item as="a" href="#" onClick={async (event) => {
-+     event.preventDefault();
-+     if (confirm("Are you sure you want to delete this menu item?") && menuItem.id) {
-+       await menuItemAPI.delete(menuItem.id);
-+       onRemove(menuItem);                     // update parent state
-+       toast.success("Successfully deleted.");
-+     }
-+   }}>Delete</Dropdown.Item>
-  </Dropdown.Menu>
++ import { menuItemAPI } from "./MenuItemAPI";
++ import toast from "react-hot-toast";
+  ...  // Card, Dropdown, Link, IMenuItem, bootstrapIcons (Lesson 7)
+
+  interface IMenuItemCardProps {
+    menuItem: IMenuItem;
++   onRemove: (menuItem: IMenuItem) => void;
+  }
+
+- function MenuItemCard({ menuItem }: IMenuItemCardProps) {
++ function MenuItemCard({ menuItem, onRemove }: IMenuItemCardProps) {
+    ...
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to={`/menuitems/edit/${menuItem.id}`}>Edit</Dropdown.Item>
++         <Dropdown.Item as="a" href="#" onClick={async (event) => {
++           event.preventDefault();
++           if (confirm("Are you sure you want to delete this menu item?") && menuItem.id) {
++             await menuItemAPI.delete(menuItem.id);
++             onRemove(menuItem);                     // update parent state
++             toast.success("Successfully deleted.");
++           }
++         }}>Delete</Dropdown.Item>
+        </Dropdown.Menu>
+    ...
+  }
 ```
+
+`MenuItemsPage` passes `onRemove` as a `removeMenuItem` that filters the deleted item out of
+state — exactly like `StaffPage`'s `removeStaff` from Lesson 6.
 
 The `error.message` you toast is exactly the friendly string `checkStatus` threw — that
 handshake between the utility and the `catch` is the whole point.
@@ -262,7 +283,8 @@ Requests, and RequestLines.
 4. **Repeat that retrofit across `OrderAPI`, `OrderItemAPI`, `StaffAPI`, and `CategoryAPI`** —
    `BASE_URL` + `.then(checkStatus).then(parseJSON)`; replace Lesson 11's inline
    `if (!response.ok) throw` in `findByAccount` with `.then(checkStatus)`.
-5. Add `toast.success` after successful save/delete and `toast.error(error.message)` in
-   every `catch` across the Menu Item list, form, and delete.
+5. Wire toasts: change `loadMenuItems`'s `console.error` to `toast.error(error.message)`; add
+   a **Delete** item to `MenuItemCard` (with an `onRemove` prop + `toast.success`); the Lesson-7
+   `save` toasts already fire (nothing to add there).
 6. Verify in the browser using section 5 — success toasts, a forced error toast + the
    `checkStatus` console log, form stays on failure.
