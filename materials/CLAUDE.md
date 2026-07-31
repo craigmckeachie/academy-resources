@@ -373,6 +373,44 @@ Surfaced by teaching **React Lesson 3** live and reworking its guide + lab. They
 any React guide/lab. Several generalize to the other passes too; treat them as React-first,
 not React-only.
 
+### Code-block checklist — run this on EVERY code block before finalizing
+
+Guide reviews keep surfacing the **same handful of misses**. Before a guide code block is
+done, verify all of these (principles 1–9 below give the full rationale and worked examples —
+this is the fast pre-flight):
+
+1. **Title.** The fence carries `title="src/…"`. *Exception:* a cross-file **concept** snippet
+   that illustrates an idea rather than "add this here now" stays plain — no title, no diff.
+   Never a `// path` comment inside the fence.
+2. **Create → full block; modify → `diff`.** A file is *existing* (→ diff) if it was created in
+   an earlier section, an earlier lesson, **or handed over as provided scaffold**
+   (`Header`/`AppNav` from Lesson 5). If you're about to reprint a whole existing file to change
+   a few lines, stop and write a diff.
+3. **Placement is unambiguous.** A diff shows the enclosing `function`/object/`return` with
+   `...` for untouched code. JSX fields diff into a `return` **that already exists** — if the
+   component has no shell yet, an *earlier* block must build the `<form>`/card/table first.
+4. **Nothing the student must type is missing.** Show every **import** (new file: the full
+   list; modify: `+` the added ones), every **field/element** (no "…other inputs", no "see the
+   static page" hand-off for react-wired markup), and every **sibling** a step introduces (all
+   three of `startPreparing`/`markReady`/`markServed`, not one + prose). `...` is only ever code
+   shown elsewhere or genuinely unchanged — **never** code the reader still has to write.
+5. **Dependencies exist first.** Everything the block references is already defined: the API
+   method before the handler that calls it, `useForm` before JSX using `register`, a helper
+   before its first use, a component before the route that renders it. An unavoidable forward
+   reference (view-first) must be **flagged in the Save-and-check** ("your editor flags X as
+   *not defined* until section N").
+6. **Identifiers are current.** Every name matches the latest decision (`openCancel`, not a
+   since-renamed `handleShowCancelModal`). After any rename, grep the whole pass.
+
+Two section-level checks belong here too:
+
+7. **A new concept gets a "read this" explanation before its first code-along** (principle 4).
+8. **Verification isn't hoarded at the end** — every ▶ section ends with a quick check, and a
+   feature is made runnable as soon as its dependencies allow, not only in a final section
+   (principle 7).
+
+---
+
 1. **Signpost code-along vs. read.** Every React build lesson (3+) marks build-section
    headers with **`▶ Code along`**, leaves concept/orientation/verification sections
    unmarked, opens with a "How to use this guide" blockquote, and **labels each code block
@@ -455,6 +493,16 @@ not React-only.
    - **elides untouched code with `...`** — a short `// what's here` note is fine in JS/TS
      statement positions; use a bare `...` inside JSX;
    - marks **added lines with `+`** (removed with `-`), indented to their real nesting.
+
+   Two clarifications that keep getting missed. **(a) A file is "existing" — modify it with a
+   diff, don't reprint it whole — if it was built in an earlier section, an earlier lesson, or
+   handed over as provided scaffold** (`Header`/`AppNav` from Lesson 5). Adding three lines to a
+   provided component is a `diff`, not a fresh full block. **(b) A block that adds JSX
+   fields/elements needs the component's `return` shell to already exist** — build the
+   `<form>`/card/table in an earlier block so each field diffs into a real place; never nest a
+   field into a `return ( ... )` that hasn't been created yet. (Lesson 10 §1 builds the
+   `OrderItemForm` shell before §2–§4 drop fields in; Lesson 11 §4's `Header` is a diff over the
+   Lesson-5 provided component.)
 
    Genuine *code* comments (`// plain string, not { reason: … }`) stay; only the file-path
    banner moves to the `title=`. Concept/"(Read this.)" snippets that illustrate an idea across
