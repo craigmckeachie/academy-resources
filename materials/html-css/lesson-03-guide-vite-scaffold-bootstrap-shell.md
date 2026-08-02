@@ -136,6 +136,7 @@ lab. Every other page you *open and fill*, not create.
 ```
 
 Three packages, that's it:
+
 - **bootstrap** — the CSS framework (installed via npm, **not** a CDN `<link>`).
 - **vite** — the dev server. It serves your pages with instant reload as you save.
 - **vite-plugin-handlebars** — lets you write `{{> header}}` in a page and have the
@@ -343,6 +344,7 @@ structure, so you'll recognize it everywhere:
 ```
 
 Notice:
+
 - Bootstrap's CSS is linked from `node_modules` (installed package), then
   `styles.css` **after** it so our overrides win. (Same idea as Lesson 1, where your
   own `.css` came after any reset — the later rule wins.)

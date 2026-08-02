@@ -115,6 +115,7 @@ names the content:
 | `<div>` | a generic block wrapper with no other meaning |
 
 Rules of thumb:
+
 - Exactly **one `<main>`** per page.
 - Pick heading levels by **rank, not size** — `<h1>` for the page title, `<h2>` for a
   major section — and let CSS decide how big they look.

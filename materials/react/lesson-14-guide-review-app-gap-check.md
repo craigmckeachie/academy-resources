@@ -23,7 +23,8 @@ Walk the app the way a user would, naming the pattern behind each screen:
 | Staff form | shared create/edit, **no FK**, checkboxes | 7 |
 | Categories | card grid + no-FK form (you built it) | 9–10 |
 | Orders list | **table**, status badges, **`useSearchParams` filter**, 3-dots | 6 |
-| Order Detail | `useParams`, definition-list, **status workflow buttons**, **modals** | 8, 9 |
+| Order form | shared create/edit, **Staff FK pre-filled from Context** and disabled | 11 |
+| Order Detail | `useParams`, definition-list, **status workflow buttons**, **modals**, items table | 8, 9, 10 |
 | Order Item form | **nested child**, **derived fields** (`watch`), parent total | 10 |
 
 If any row is shaky, re-open that lesson's guide.
@@ -42,6 +43,7 @@ capstone's blueprint:
 | Vendors list + form | Categories | simple no-FK entity |
 | Products list + form | Menu Items list + form | **FK dropdown** (Vendor ↔ Category) |
 | Requests list | Orders list | **table**, status badges, status **filter** |
+| Request Create/Edit | Order create/edit form | shared form, **User FK** pre-filled from Context (like the Order form's Staff FK); status set by the workflow, not the form |
 | Request Detail | Order Detail | `useParams`, workflow buttons, **Reject modal** |
 | RequestLine create/edit | Order Item form | **nested**, **derived Amount**, parent total |
 | Toasts + errors everywhere | Lesson 12 | `checkStatus` + `toast` |
@@ -56,8 +58,10 @@ TableServe page, know the PRS page it rehearses.
 Three PRS patterns have **no TableServe equivalent** and are taught directly on PRS.
 Know now that you'll meet them fresh in the capstone (Lesson 15 covers them in detail):
 
-1. **Dual-role FK on Request** — a Request has a submitter (`UserId`) *and* a reviewer
-   relationship via `IsReviewer`. Orders had only one staff FK — no rehearsal.
+1. **Dual-role user on Request** — one `User` is both the submitter (the `UserId` FK) and,
+   via the `IsReviewer` flag, a potential reviewer of that same request. **One FK only —
+   there's no `ReviewerId` column.** Orders had a single `staffId` and no second role, so
+   nothing rehearsed this.
 2. **$50 auto-approve rule** — sending a Request with total ≤ $50 for review
    auto-approves it. TableServe's linear workflow has no business-rule branch like this.
 3. **Avatar-circle-with-initials** on User cards — left for you to solve (it was a
@@ -80,8 +84,9 @@ different fields/workflow**:
   plain-string body).
 - **Role flags:** `isManager/isAdmin` → `isReviewer/isAdmin` — `isAdmin` hides maintenance
   screens in both apps; the workflow flag gates one action. The **Cancel check**
-  (`isOwnOrder || isManager` enables) → Approve/Reject **disabled** on your own request: same
-  comparison, opposite sign.
+  (`isOwnOrder || isManager` *enables*) → Approve/Reject **disabled** on your own request:
+  identical comparison, opposite effect — a match turns the button on in one app, off in the
+  other. Lesson 15 §4 shows both lines side by side.
 - **Fields differ** (a Vendor has address/city/state/zip; a Product has part
   number/unit) — the *form pattern* is unchanged; only the fields change.
 
@@ -99,7 +104,10 @@ With your API running and `npm run dev` up, do a final pass:
    cancel another with a reason.
 3. Add, edit, and delete order items; watch the Total recompute.
 4. Sign out and back in; confirm the Cancel ownership check and any role-gated UI.
-5. Keep the **Console** and **Network** open — no errors, correct status codes
+5. **Stop the API** and load each list page in turn — every one shows a **red error toast**,
+   never a blank screen or an empty table. Restart it and confirm they all recover. This is the
+   Lesson 12 sweep; a page that fails silently is one you missed.
+6. Keep the **Console** and **Network** open — no errors, correct status codes
    throughout.
 
 A clean full pass here means TableServe is a complete, working reference you can lean on
@@ -109,8 +117,9 @@ for every PRS screen.
 
 ## The General Pattern (what to take away)
 
-- The finished app is **eight repetitions of one feature-folder pattern**, plus a shared
-  shell, auth/Context, and a detail/workflow page.
+- The finished app is **five repetitions of one feature-folder pattern** (Staff, Categories,
+  Menu Items, Orders, Order Items), plus a shared shell, auth/Context, and a detail/workflow
+  page.
 - **Every PRS page has a TableServe precedent** — except the three named exceptions.
 - The capstone changes **entities, fields, and workflow words**, not concepts.
 

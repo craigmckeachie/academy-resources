@@ -22,16 +22,25 @@ orders as yourself.
 
 ## Steps
 
-The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-fill** and the
-**disabled** fields.
+The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-fill**, the
+**disabled** fields, and **redirecting to the new record** (every form so far went back to a
+list, where the new id didn't matter).
 
 1. Add `post(order)` and `put(order)` to `OrderAPI.ts` (`find` and the workflow endpoints
    already exist).
 2. **`OrderForm`** — `useForm<IOrder>`, read `:id` with `useParams`, and read the signed-in
    user at the **top of the component**: `const { staff } = useStaffContext();`. It's a hook,
-   so it can't go inside the `defaultValues` callback — read it up top, use it below. Start
-   from this blank order (`IOrder` picked up `cancellationReason` in Lesson 8 and `orderItems`
-   in Lesson 10):
+   so it can't go inside the `defaultValues` callback — read it up top, use it below. You also
+   need the dropdown's options in state, as in the Lesson 7 form:
+   ```tsx
+   const [staffList, setStaffList] = useState<IStaff[]>([]);
+
+   async function loadStaff() {
+     setStaffList(await staffAPI.list());
+   }
+   ```
+   Start from this blank order (`IOrder` picked up `cancellationReason` in Lesson 8 and
+   `orderItems` in Lesson 10):
    ```tsx
    let emptyOrder: IOrder = {
      id: undefined,
@@ -47,9 +56,20 @@ The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-
    ```
    Then in async `defaultValues`: `await loadStaff()` (options for the dropdown), set
    `emptyOrder.staffId = staff?.id`, and return `emptyOrder` (create) or
-   `orderAPI.find(Number(id))` (edit). `save`: POST/PUT, then
-   ``navigate(`/orders/detail/${order.id}`)``.
-   - **Table Number** and **Notes** register like any form fields.
+   `orderAPI.find(Number(id))` (edit).
+   - **`save`** — both branches land on the order's **detail** page, but only edit already
+     knows the id. On create you have to read it back off the POST response:
+     ```tsx
+     if (!order.id) {
+       const newOrder = await orderAPI.post(order);   // the response carries the new id
+       navigate(`/orders/detail/${newOrder.id}`);
+     } else {
+       await orderAPI.put(order);
+       navigate(`/orders/detail/${order.id}`);
+     }
+     ```
+   - **Table Number** (`required`, `valueAsNumber`) and **Notes** register like any form
+     fields, each with the `is-invalid` + `invalid-feedback` display from Lesson 7.
    - **Staff `<select>`** — options from your `staffList`, plus `disabled` (it's pre-set to you):
      ```tsx
      <select id="staffId" {...register("staffId", { required: "Staff is required" })}
@@ -60,7 +80,10 @@ The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-
      </select>
      ```
    - **Status `<select>`** — the five status options and `defaultValue="PLACED"`, disabled on
-     create only: `const isEdit = Boolean(id);` then `disabled={!isEdit}`.
+     create only: `const isEdit = Boolean(id);` then `disabled={!isEdit}`. Both disabled fields
+     still submit their values — react-hook-form sends what's in *its* state, not what the DOM
+     would post — so a created order arrives as **PLACED**, assigned to **you**. (Stretch #3
+     digs into why that differs from a plain HTML form.)
    - A **Cancel** `Link` back to `/orders` and a **Save order** submit button, as on every form
      since Lesson 7.
    - Lay the fields out with **flex utilities** (`d-flex flex-wrap gap-4`, `w-75`/`w-50`) — the
@@ -84,6 +107,9 @@ With your API running, `npm run dev` up, and signed in:
 2. **⋮ → Edit** an order → the form pre-fills and **Status is now editable** (it was disabled on
    create); change Notes, Save → **200** `PUT`.
 3. Console clean; **Network** shows the `POST` / `PUT`.
+4. Open the order you just created and advance it to **Preparing** — **Cancel Order** is
+   enabled, because the order is **yours**. That's the guide's `isOwnOrder || isManager` check,
+   now demonstrable on a record you own rather than on seed data.
 
 This is the last CRUD screen — **TableServe is now a complete app**. On PRS this is the
 **Request** create/edit form (a **User** FK instead of Staff, `description` / `justification`

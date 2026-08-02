@@ -15,3 +15,14 @@
   padding: 0.2rem 0.45rem;
   box-sizing: content-box;
 }
+
+/* Task-list checkboxes ---------------------------------------------------
+   An unchecked `- [ ]` box is a single check-circle glyph painted in
+   --md-default-fg-color--lightest (rgba(0,0,0,.07)) — the "white check" is
+   just the page showing through the mask, not a separate color. At 7% it
+   nearly vanishes, worst inside the tinted panel of an admonition, which is
+   exactly where the lessons' "your turn" checklists live. Repaint it with
+   the --light token (54%); it follows the light/dark scheme automatically. */
+.md-typeset .task-list-indicator::before {
+  background-color: var(--md-default-fg-color--light);
+}

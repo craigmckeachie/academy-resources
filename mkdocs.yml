@@ -59,3 +59,5 @@ markdown_extensions:
   - pymdownx.magiclink         # auto-link bare URLs (https://…) site-wide
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.tasklist:         # `- [ ]` renders as a checkbox (lesson checklists, prework)
+      custom_checkbox: true

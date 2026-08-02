@@ -8,15 +8,18 @@ each item.
 ## ✅ Quick checklist
 
 **HTML**
+
 - [ ] **Global attributes** (usable on *any* element) vs. **element-specific attributes** (only on certain tags)
 - [ ] **Void / self-closing elements** — know that *not* every tag needs a closing tag
 
 **CSS**
+
 - [ ] The **`display`** property and the **several ways to put elements side-by-side** (`inline`, `inline-block`, `flex`)
 - [ ] Making an element (e.g. a table) **fill the page width**
 - [ ] Which CSS **property** turns text *italic* (the property, not the value)
 
 **JavaScript**
+
 - [ ] The **core data types** — and which common type is *not* one of them
 - [ ] **`==` vs `===`** — loose vs. strict equality and type coercion
 - [ ] The **loops**: classic `for`, `for...of`, `for...in`, and the `Array.forEach` method (and how they differ)

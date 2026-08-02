@@ -108,6 +108,38 @@ the day.
 
 ---
 
+## Markdown rendering — what the docs site supports, and two gotchas
+
+The site is Material for MkDocs, so guides can use more than plain Markdown. Extensions
+already enabled in `academy-resources/mkdocs.yml` — use them, don't hand-roll substitutes:
+
+- **`admonition`** — `!!! warning "Title"` / `!!! note` / `!!! tip` callout boxes. **The body
+  must be indented 4 spaces**, blank line after the title. This is how "Your turn" repeat-work
+  instructions are marked (React principle 10).
+- **`pymdownx.tasklist`** (with `custom_checkbox`) — `- [ ]` renders as a real checkbox. Used
+  for the "Your turn" file lists, the L13 review checklist, and the prework packets. The
+  unchecked box is restyled in `materials/stylesheets/extra.css`; Material's default is 7%
+  black and effectively invisible, especially inside a tinted admonition.
+- **`pymdownx.details`** (`??? note` collapsibles), **`pymdownx.tabbed`**, **`attr_list`**,
+  **`tables`**, and **`pymdownx.superfences`** (which is what makes code-block `title=` work).
+
+**Gotcha 1 — a list needs a blank line before it.** Python-Markdown swallows a list that
+follows a paragraph line directly:
+
+```markdown
+Settings to choose:          ← no blank line…
+- Framework: .NET 8          ← …so this renders as literal text in that paragraph
+```
+
+It renders as one run-on paragraph with visible `- ` characters, and it is invisible in the
+source — you only see it on the built site. Always leave a blank line between a lead-in
+sentence (or a bold `**Label**`) and the list under it. This had silently broken eight lists
+across the API, HTML/CSS, and reference pages before it was caught.
+
+**Gotcha 2 — see the wrapped-list rule below.**
+
+---
+
 ## Markdown formatting — wrapped list items
 
 When a list item or a numbered build/verify step **wraps** onto a second line, make sure the
@@ -195,6 +227,7 @@ run neither creates nor overwrites them. Maintain them by hand.
 ### Guides (`lesson-{N}-guide-*.md`)
 Concept reference (I do). Written for students to read alongside the
 instructor-led session. Should include:
+
 - A goal statement ("by the end of this lesson you will have...")
 - A general pattern callout ("the general pattern you're learning is...")
 - Numbered concept sections with code examples
@@ -210,6 +243,7 @@ catch up independently — the build steps section enables independent catch-up.
 ### Labs (`lesson-{N}-lab-*.md`)
 Hands-on exercise (You do). Written to be terse — students have just seen
 the concept in the guide and the I-do session. Should include:
+
 - The entity/model being built (C# class with properties)
 - Terse numbered steps (no explanatory prose)
 - Seed SQL for that entity so Insomnia returns real data
@@ -383,7 +417,12 @@ this is the fast pre-flight):
 
 1. **Title.** The fence carries `title="src/…"`. *Exception:* a cross-file **concept** snippet
    that illustrates an idea rather than "add this here now" stays plain — no title, no diff.
-   Never a `// path` comment inside the fence.
+   Never a `// path` comment inside the fence. **Inside a ▶ Code along section, an untitled
+   snippet must say in words that it isn't a step** — "an illustration to read, not a step",
+   "already in your `main.tsx` — nothing to add", "you only *type* phase 3". In a section whose
+   whole premise is "type this," a bare fence reads as an instruction; the missing `title=` is
+   far too subtle a signal on its own. Same for an inline code span offering a variation
+   (`toast.success("Saved.", { duration: 6000 })`) — either name it as an example or cut it.
 2. **Create → full block; modify → `diff`.** A file is *existing* (→ diff) if it was created in
    an earlier section, an earlier lesson, **or handed over as provided scaffold**
    (`Header`/`AppNav` from Lesson 5). If you're about to reprint a whole existing file to change
@@ -418,6 +457,8 @@ Two section-level checks belong here too:
 8. **Verification isn't hoarded at the end** — every ▶ section ends with a **`Save and check`**
    (bulleted when there's more than one observable, inline when there's one — see principle 7),
    and a feature is made runnable as soon as its dependencies allow, not only in a final section.
+9. **Work the student must repeat across the app is a `!!! warning "Your turn — …"` callout
+   with a file checklist** — never a bold sentence in a paragraph (principle 10).
 
 ---
 
@@ -555,6 +596,76 @@ Two section-level checks belong here too:
    defined* until section 3") so it reads as expected, not a mistake. **Lesson 9 §3–§4 are the
    worked examples:** the `OrderAPI` workflow methods come before the handlers that call them,
    and the `cancel` method before the `saveCancel` that calls it.
+
+10. **Sweep work lives in the lab; the guide shows one example and points at it.** When a
+    change has to be repeated across the app — retrofit five API modules, add a `catch` to
+    every list page — the guide walks **one** instance and the **lab does the rest**. That's
+    the I do / You do split applied to mechanical repetition: instructor-led time goes to the
+    idea, not to the fourth identical edit, and the lab is already an action list, which is the
+    right shape for a checklist of files. A guide may therefore end with the app **deliberately
+    half-converted** — say so plainly, so a student doesn't read the inconsistency as their own
+    mistake (**L12 §3** does this in one line). Never instruct the same sweep in both files:
+    L12 briefly had `StaffAPI` in the guide's checklist *and* in the lab's steps.
+
+    **Neither half may be prose** — students skim, the sentence gets missed, and the app stays
+    half-converted in a way that only surfaces lessons later. Each half has its own shape:
+    in a **guide**, a short `!!! warning` pointer (a guide is mostly prose, so the callout is
+    what breaks the page); in a **lab**, its own `## Part N` heading with the `- [ ]` file
+    checklists (a lab is already an action list, so an admonition inside it is redundant
+    packaging). The admonition form — `admonition` is enabled in `mkdocs.yml`, body indented
+    **4 spaces**:
+
+    ```markdown
+    !!! warning "Your turn — every API module, not just Menu Items"
+
+        <one line of stakes — what stays broken until they do it>
+
+        - [ ] `OrderAPI.ts`
+        - [ ] `StaffAPI.ts`
+
+        1. <the steps, in words — no code; they just watched the code>
+    ```
+
+    Four things make it work:
+
+    - **A checklist of the actual files** (`- [ ]`; `pymdownx.tasklist` is enabled, so these
+      render as real checkboxes) — a student can track what's left. Name every file; "and the
+      others" is what gets skipped.
+    - **Steps in words, not code.** They just typed the identical change in the walked example;
+      re-printing it invites paste-without-reading and buries the one case that differs.
+    - **State the stakes in the first line** — "these stay broken until you convert them",
+      "any screen without a `catch` now fails silently". A checklist with no consequence reads
+      as optional.
+    - **List what's already done and what to leave alone.** A conscientious student will
+      otherwise re-edit files that are already correct, or "fix" something that was
+      deliberate (L12 §4 protects `ErrorPage`'s `console.error` this way). Both lists are as
+      much a part of the callout as the to-do.
+
+    **Placement — decided by what the section's `Save and check` actually verifies:**
+
+    - **Check first, then the callout** when the check confirms the *walked example*. Never
+      strand a build from its own verification: finish it, prove it works, then extend. Bridge
+      the two with a line like "That's Menu Items finished, end to end. Now carry it across the
+      app:" so the callout reads as the next step, not a topic change. (**L12 §4** — the check
+      is about Menu Items saving and deleting.)
+    - **Callout first, then the check** when the check only means something *after* the sweep.
+      (**L12 §3** — "every page still fetches and saves" passes trivially before the retrofit,
+      since the unconverted modules work fine on the happy path.)
+
+    Either way, **the swept files need a check too** — usually one line inside the callout
+    reusing what they just did ("check each the same way: with the API stopped, load `/orders`
+    and `/categories`"). Sweep work that's never verified is sweep work that silently didn't
+    happen.
+
+    **Build Steps get a one-line pointer** to the callout, not a copy of it — and if the sweep
+    is the lab's, the guide's Build Steps **omit it entirely** rather than carry a placeholder
+    step; close the list with a sentence handing off to the lab.
+
+    **Worked example: Lesson 12.** The guide converts `MenuItemAPI` + the Menu Items screens
+    and carries two short "the lab takes the rest" callouts; the **lab** is in two parts —
+    *Part 1 Staff* (the parallel-entity You do) then *Part 2 the rest of the app* (the file
+    checklists, the already-correct list, and the `ErrorPage` exclusion), each part with its own
+    ✅ checkpoint.
 
 The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of principles
 1–7; **Lesson 9** is the worked example of principles 8 and 9 (the diff shape, and
@@ -718,8 +829,10 @@ what they're rehearsing.
 These patterns have no TableServe equivalent and should be called out explicitly
 when they appear in PRS guides or capstone directions:
 
-1. **Dual-role FK** — PRS Request has both a submitter (`UserId`) and an implied
-   reviewer role via `IsReviewer`. No TableServe equivalent.
+1. **Dual-role user on Request** — one `User` is both the submitter (the `UserId` FK) and,
+   via the `IsReviewer` flag, a potential reviewer of the same record. **One FK only — there
+   is no `ReviewerId` column**; don't let a regeneration invent one. No TableServe equivalent
+   (an Order has a single `staffId` and no second role).
 2. **$50 auto-approve rule** — Review endpoint auto-approves if `Total <= 50`.
    No TableServe equivalent.
 3. **Avatar-circle-with-initials** — User card UI pattern. Left for students
@@ -847,6 +960,7 @@ The TableServe Insomnia collection (`tableserve-insomnia.json`) has:
   and show the Staff object shape.
 
 When writing guide verification sections, always:
+
 - Reference the specific **folder name** in the collection (e.g. "expand the
   **Staff** folder") rather than describing raw HTTP requests
 - Reference the specific **request name** (e.g. "run **Get All Staff**")

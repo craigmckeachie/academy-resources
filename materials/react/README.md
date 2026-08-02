@@ -33,7 +33,7 @@ guide and what you built alongside it as your model.
 | 9 | [Status-driven workflow buttons and modals](lesson-09-guide-conditional-buttons-modals.md) | [The Categories list](lesson-09-lab-categories-list.md) |
 | 10 | [The nested child form with derived fields](lesson-10-guide-nested-child-form.md) | [The Categories create/edit form](lesson-10-lab-categories-form.md) |
 | 11 | [Sign In, localStorage, and Context](lesson-11-guide-auth-context.md) | [The Order create/edit form](lesson-11-lab-order-form.md) |
-| 12 | [Toasts and centralized error handling](lesson-12-guide-toasts-error-handling.md) | [Toasts and error handling for Staff CRUD](lesson-12-lab-staff-crud-toasts.md) |
+| 12 | [Toasts and centralized error handling](lesson-12-guide-toasts-error-handling.md) | [Toasts and error handling — Staff, then the rest of the app](lesson-12-lab-staff-crud-toasts.md) |
 | 13 | [Review/Buffer: the feature-folder pattern across your app](lesson-13-guide-review-categories-crud.md) | *Review — no lab* |
 | 14 | [Review/Buffer: full-app review and PRS gap-check](lesson-14-guide-review-app-gap-check.md) | *Review — no lab* |
 | 15 | [Capstone bridge: building the PRS front end](lesson-15-guide-capstone-bridge.md) | *Bridge — no lab* |

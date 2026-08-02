@@ -13,7 +13,7 @@ agent-mode diff).
 
 ## Part A — Chat: generate a component and diff it against yours
 
-1. Pick a Staff file you built — `StaffCard.tsx`, `StaffList.tsx`, or the `StaffAPI.ts`
+1. Pick a Staff file you built — `StaffCard.tsx`, `StaffPage.tsx`, or the `StaffAPI.ts`
    module.
 2. In Chat, ask Copilot to generate that piece **from a description** — first with **no
    reference file** (e.g. *"Write a StaffAPI module with list, find, post, put, and delete
@@ -34,12 +34,12 @@ agent-mode diff).
 
 ## Part B — Agent mode: review a cross-file change like a PR
 
-5. Use **agent mode** to make a small change across the Staff feature folder — for example:
+1. Use **agent mode** to make a small change across the Staff feature folder — for example:
    *"Add a `title` field to Staff: update `#IStaff.ts`, `#StaffForm.tsx`, and the API
    payload. Match the existing patterns."*
-6. **Review the proposed diff hunk by hunk** (guide section 5). Accept only hunks that match
+2. **Review the proposed diff hunk by hunk** (guide section 5). Accept only hunks that match
    house style; reject or fix the rest. **Do not "Accept All" unread.**
-7. **Verify in the browser** — `npm run dev`, open the Staff pages, and confirm they render
+3. **Verify in the browser** — `npm run dev`, open the Staff pages, and confirm they render
    with a clean DevTools **Console** and the expected **Network** calls. Revert anything that
    errors or drifts.
 

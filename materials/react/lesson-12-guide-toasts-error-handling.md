@@ -5,14 +5,15 @@
 place** that turns a failed HTTP response into a thrown `Error` your components can
 catch and toast. You'll retrofit the Menu Item CRUD (list/create/edit/delete) with this
 feedback and the shared fetch helpers. (The `<Toaster />` that renders them went into `App` in
-Lesson 11 — here you theme it and make the feedback systematic.)
+Lesson 11 — here you restyle its toasts in the app's orange and make the feedback systematic.)
 
 **The general pattern you're learning:** a **toast** is a small, auto-dismissing
 message for success/error feedback. You call `toast.success(...)` after a successful
 action and `toast.error(...)` in a `catch`. Underneath, the API module runs every
-response through a shared **`checkStatus`** that throws a friendly `Error` on non-2xx,
-so components have a consistent thing to catch. Feedback + centralized errors are the
-polish that makes the app feel finished.
+response through a shared **`checkStatus`** that turns a non-2xx status into a message a
+**user** can understand, while the technical detail goes to the console for the **developer**.
+Feedback the user can act on, plus one place that decides how failures read, is the polish
+that makes an app feel finished.
 
 > **How to use this guide.** Sections headed **▶ Code along** are ones you build into your
 > project (each ends with a quick **Save and check**); unmarked sections are concept. Each
@@ -24,16 +25,18 @@ polish that makes the app feel finished.
 > **This lesson pays off a running promise.** Since Lesson 6 your API modules have used
 > plain `fetch` with a hardcoded URL and (in a couple of spots) an inline
 > `if (!response.ok) throw` guard. Here you build the shared **`fetchUtilities`** once and
-> retrofit **every** module (Menu Items, Orders, OrderItems, Staff, Categories) to it — the
-> guide walks Menu Items; you repeat the same three-line change across the rest.
+> retrofit every module to it. **The guide converts one — Menu Items — and the lab converts
+> the rest of the app**, so expect to finish this guide with the app half-converted on purpose.
 
 ---
 
-## 1. ▶ Code along — Theming the Toaster
+## 1. ▶ Code along — Restyling the toasts
 
 `react-hot-toast` needs one `<Toaster />` mounted near the app root — you added it bare in
-Lesson 11's `App.tsx`, which is why toasts started appearing there. Give it **`toastOptions`**
-now to theme them (the brand orange check):
+Lesson 11's `App.tsx`, which is why toasts started appearing there. Its toasts currently use
+the library's stock look: a **green** success check. Pass **`toastOptions`** to restyle every
+toast at once — TableServe orange, and a width cap so a long error message wraps instead of
+stretching across the screen:
 
 ```diff title="src/App.tsx"
     <StaffContext.Provider value={{ staff, setStaff }}>
@@ -48,12 +51,22 @@ now to theme them (the brand orange check):
     </StaffContext.Provider>
 ```
 
-Mount it once; you never render toasts directly — you *call* them (next).
+- **`success.iconTheme`** sets the checkmark's colors — `primary` is the check itself, `secondary`
+  the shape behind it. There's an `error` key alongside `success` if you ever want to recolor
+  that icon too.
+- **`style`** is plain CSS applied to every toast, camelCased like any React `style` object
+  (Lesson 3).
+
+**That's the only edit in this section.** One thing to know before moving on: these are
+defaults for *all* toasts, and any individual call can override them — the `{ duration: 6000 }`
+you'll pass to a single `toast.error` in section 4 wins over what's set here. That's why the
+`<Toaster />` is mounted once and never rendered by hand: you configure it here, and everywhere
+else you just *call* toasts (next).
 
 **Save and check**
 
-- Save a menu item — the success toast's check is now **brand orange** instead of the default
-  green.
+- Save a menu item — the success toast's check is now **TableServe orange** instead of the
+  default green.
 - Console is clean.
 
 ---
@@ -110,9 +123,11 @@ export function parseJSON(response: Response) {
 }
 ```
 
-- **`checkStatus`** returns the response if `ok`, otherwise logs the detail and
-  **throws** a friendly `Error` (the message a toast will show). This is the single
-  place error text is decided.
+- **`checkStatus`** returns the response if `ok`. If not, it **splits the failure between two
+  audiences**: the raw status, URL, and response body go to the **console, for you** — that's
+  what you need to debug — while the `Error` it throws carries a **plain-language sentence for
+  the user**, who can't act on a 500 and shouldn't be shown one. This is the single place that
+  wording is decided, which is why every screen fails in the same voice.
 - **`parseJSON`** parses the body — only reached for good responses.
 
 Every API method chains these, so errors are consistent everywhere:
@@ -129,31 +144,40 @@ Every API method chains these, so errors are consistent everywhere:
 +     return fetch(url).then(checkStatus).then(parseJSON);
     },
     ...  // find, post, put: the identical change — end each with .then(checkStatus).then(parseJSON)
-    delete(id: number) {
--     return fetch(`${url}/${id}`, { method: "DELETE" });
++   delete(id: number) {
 +     return fetch(`${url}/${id}`, { method: "DELETE" }).then(checkStatus);   // no parseJSON — no body
-    },
++   },
   };
 ```
 
-Now a component doesn't inspect status codes — it just `try`s the call and `catch`es a
-ready-made `Error`.
+**`delete` is brand new here** — Lesson 7 built the Menu Item form and deferred deleting to
+this lesson, so your module has had `list`, `find`, `post`, and `put` until now. It's also the
+one method that ends at `checkStatus`: a `204 No Content` has no body, so there's nothing for
+`parseJSON` to parse. Section 4 wires it to a **Delete** menu item.
+
+Now a component doesn't inspect status codes at all — it `try`s the call and `catch`es an
+error whose `message` is **already written for the user**, so it can go straight into a toast
+without translation.
 
 > **No `401` to chase in practice** — this course has no auth enforcement, so you won't
 > hit 401/403 from the API. The messages exist for completeness; the `default`
 > ("error saving or retrieving data") is what you'll actually see, e.g. when the API is
 > down.
 
-**Now retrofit every other module the same way.** `OrderAPI`, `OrderItemAPI`, `StaffAPI`, and
-`CategoryAPI` were all written with plain `fetch` and a hardcoded URL. In each: import
-`{ BASE_URL, checkStatus, parseJSON }`, change `const url` to `` `${BASE_URL}/orders` `` (etc.),
-and chain `.then(checkStatus).then(parseJSON)` on every method (a bodiless `delete`/`put`
-uses just `.then(checkStatus)`). The inline `if (!response.ok) throw` you wrote in Lesson 11's
-`findByAccount` becomes a plain `.then(checkStatus)` too — that's the guard, now shared.
+!!! warning "Your turn — the other four modules are the lab"
+
+    You've converted **one** module. `OrderAPI`, `OrderItemAPI`, `CategoryAPI`, and `StaffAPI`
+    are all still on plain `fetch` with a hardcoded URL — **this lesson's lab converts every
+    one of them**, using the same three edits you just made.
+
+    So the app is deliberately **half-converted** when this guide ends. That's not a bug to
+    chase: an unconverted module still works on the happy path, it just fails silently. The lab
+    is where the app becomes consistent.
 
 **Save and check**
 
-- Every page still fetches and saves — you changed *how* errors surface, not the happy path.
+- The Menu Items pages still load and save — you changed *how* a failure surfaces, not the
+  happy path.
 - Console is clean.
 
 ---
@@ -220,9 +244,13 @@ beside it. Like `StaffCard` (Lesson 6), give the card an **`onRemove`** prop so 
 +         <Dropdown.Item as="a" href="#" onClick={async (event) => {
 +           event.preventDefault();
 +           if (confirm("Are you sure you want to delete this menu item?") && menuItem.id) {
-+             await menuItemAPI.delete(menuItem.id);
-+             onRemove(menuItem);                     // update parent state
-+             toast.success("Successfully deleted.");
++             try {
++               await menuItemAPI.delete(menuItem.id);
++               onRemove(menuItem);                     // update parent state
++               toast.success("Successfully deleted.");
++             } catch (error: any) {
++               toast.error(error.message, { duration: 6000 });
++             }
 +           }
 +         }}>Delete</Dropdown.Item>
         </Dropdown.Menu>
@@ -230,18 +258,61 @@ beside it. Like `StaffCard` (Lesson 6), give the card an **`onRemove`** prop so 
   }
 ```
 
-`MenuItemsPage` passes `onRemove` as a `removeMenuItem` that filters the deleted item out of
-state — exactly like `StaffPage`'s `removeStaff` from Lesson 6.
+The `try`/`catch` matters here: now that `delete` runs through `checkStatus`, a failed DELETE
+**throws**. Without the `catch` you'd get an unhandled rejection in the console and — worse —
+`onRemove` would never run, or would run on a delete that didn't happen. Inside the `try`,
+the card only leaves the list once the server confirms.
 
-The `error.message` you toast is exactly the friendly string `checkStatus` threw — that
-handshake between the utility and the `catch` is the whole point.
+`onRemove` is a **required** prop, so `MenuItemsPage` won't compile until it passes one. Add
+the remover and hand it down — exactly like `StaffPage`'s `removeStaff` from Lesson 6:
+
+```diff title="src/menuItems/MenuItemsPage.tsx"
+  function MenuItemsPage() {
+    ...  // menuItems/loading state, loadMenuItems, useEffect
+
++   function removeMenuItem(deleted: IMenuItem) {
++     setMenuItems(menuItems.filter((menuItem) => menuItem.id !== deleted.id));
++   }
++
+    return (
+      ...
+        {menuItems.map((menuItem) => (
+-         <MenuItemCard key={menuItem.id} menuItem={menuItem} />
++         <MenuItemCard key={menuItem.id} menuItem={menuItem} onRemove={removeMenuItem} />
+        ))}
+      ...
+    );
+  }
+```
+
+Deleting updates state locally rather than re-fetching the list — one round trip, not two.
+
+The `error.message` you toast is the sentence `checkStatus` wrote for the user — *"There was an
+error saving or retrieving data."*, never `500 Internal Server Error` or a stack trace. The
+status code, URL, and response body are already in the console for you. That division of labour
+— **the user gets a message they can act on, the developer gets the detail** — is the whole
+point of routing every call through one helper.
 
 **Save and check**
 
 - Save a valid menu item — a green **"Successfully saved."** toast.
-- Delete one — **"Successfully deleted."**
+- Delete one — confirm the dialog, the card **disappears from the grid**, and
+  **"Successfully deleted."** shows.
 - Stop the API and reload `/menuitems` — a **red error toast**, plus the `http error status`
   console log from `checkStatus`.
+
+That's Menu Items finished, end to end.
+
+!!! warning "Your turn — the other screens are the lab too"
+
+    Section 3 made every API call throw on failure, so a screen whose fetch has no `catch` now
+    fails **silently**. Menu Items is handled (above); **the lab takes the rest** — the Staff
+    screens, plus the two still missing a `catch`.
+
+    One thing to know before you go looking: not every `console.error` is a bug. `ErrorPage`'s
+    (Lesson 5) is the **router's error boundary**, not a fetch `catch` — logging for the
+    developer while the page shows the user "Oops!" is exactly the split you want. Leave that
+    one alone.
 
 ---
 
@@ -267,11 +338,13 @@ You've checked each piece as you built it; this is the full pass. With your API 
 
 - **Toasts** = user feedback: `toast.success` after a good action, `toast.error` in a
   `catch`. Mount one `<Toaster />` at the root.
-- **`fetch` doesn't reject on 4xx/5xx** — a shared **`checkStatus`** throws a friendly
-  `Error` on non-`ok`, so every API method (`.then(checkStatus).then(parseJSON)`) fails
-  consistently.
-- Components don't read status codes — they `try` the call and `catch` a ready-made
-  `error.message` to toast.
+- **`fetch` doesn't reject on 4xx/5xx** — a shared **`checkStatus`** throws on non-`ok`, so
+  every API method (`.then(checkStatus).then(parseJSON)`) fails consistently.
+- **Two audiences, one failure.** Technical detail (status, URL, body) goes to the **console
+  for the developer**; the thrown `Error` carries a **plain-language message for the user**.
+  Deciding that wording in one helper is what keeps the whole app failing in the same voice.
+- Components don't read status codes — they `try` the call and toast `error.message` as-is,
+  because it was written for the person reading it.
 - Every CRUD action is the same shape: try → success toast → proceed; catch → error
   toast.
 
@@ -283,16 +356,19 @@ Requests, and RequestLines.
 
 ## Build Steps
 
-1. Ensure `<Toaster />` is mounted in `App.tsx` (from Lesson 11).
+1. Pass `toastOptions` to the `<Toaster />` in `App.tsx` (mounted in Lesson 11) so every toast
+   picks up the app's colors — an orange success check and a max width.
 2. Create `src/utility/fetchUtilities.ts` with `BASE_URL`, `translateStatusToErrorMessage`,
    `checkStatus` (throws on non-`ok`), and `parseJSON`.
-3. Refactor `MenuItemAPI.ts` so every method chains `.then(checkStatus).then(parseJSON)`
-   (delete just `.then(checkStatus)`), using `BASE_URL` for the URL.
-4. **Repeat that retrofit across `OrderAPI`, `OrderItemAPI`, `StaffAPI`, and `CategoryAPI`** —
-   `BASE_URL` + `.then(checkStatus).then(parseJSON)`; replace Lesson 11's inline
-   `if (!response.ok) throw` in `findByAccount` with `.then(checkStatus)`.
-5. Wire toasts: change `loadMenuItems`'s `console.error` to `toast.error(error.message)`; add
-   a **Delete** item to `MenuItemCard` (with an `onRemove` prop + `toast.success`); the Lesson-7
+3. Refactor `MenuItemAPI.ts` so every method chains `.then(checkStatus).then(parseJSON)`,
+   using `BASE_URL` for the URL — and **add the new `delete(id)`** method, which ends at
+   `.then(checkStatus)` (no body to parse).
+4. Wire toasts: change `loadMenuItems`'s `console.error` to `toast.error(error.message)`; add
+   a **Delete** item to `MenuItemCard` (an `onRemove` prop, a `try`/`catch`, and success/error
+   toasts), and give `MenuItemsPage` a `removeMenuItem` to pass as that prop; the Lesson-7
    `save` toasts already fire (nothing to add there).
-6. Verify in the browser using section 5 — success toasts, a forced error toast + the
+5. Verify in the browser using section 5 — success toasts, a forced error toast + the
    `checkStatus` console log, form stays on failure.
+
+**Then the lab**, which converts every other API module and screen so the whole app fails the
+same way. The guide stops at Menu Items on purpose.

@@ -79,6 +79,14 @@ Two Chat uses beyond generation, both high-value:
   ask Copilot to convert it to a component — then audit the conversion. (This is literally
   the capstone's job; see the stretch.)
 
+    **Which tool, though?** [Lesson 15](lesson-15-guide-capstone-bridge.md) points you at the
+    **HTML to JSX extension** for this, and that's still the right first pass: it's
+    deterministic, so `class`→`className` and the camelCased SVG attributes come out the same
+    way every time, with nothing to audit. Copilot earns its keep on the part the extension
+    *can't* do — wiring the converted markup to props, state, `Link`s, and react-hook-form,
+    and rebuilding `data-bs-toggle` widgets as react-bootstrap. **Mechanical renames → the
+    extension; judgment → Copilot, audited.**
+
 ---
 
 ## 4. ⚠️ The house-style guardrails Copilot will cross
@@ -98,10 +106,10 @@ sheet, now for React:
 | Modals via `data-bs-toggle` / jQuery-style | **modals driven by React state** (`show={!!state}`) | `data-bs-toggle="modal"` in JSX |
 | `alert()` / inline error text | **toasts** via `react-hot-toast` (`toast.success` / `toast.error`) | `alert(` or bespoke error banners |
 | Loose or `any` typing | a typed **interface** per entity (`IStaff`), used everywhere | missing `I{Entity}` import, stray `any` |
-| The feature spread into one big file | the **feature-folder** split (interface, API, page, list, card/row, skeleton, form, thin create/edit wrappers) | everything in a single component |
+| The feature spread into one big file | the **feature-folder** split (interface, API, page, card/row, skeleton, form, thin create/edit wrappers — the **page** owns the fetch, state, and `.map()`; there's no separate `List` file in this app) | everything in a single component |
 
 If a generation trips any "tell," that's Copilot not knowing your app — not a better idea.
-Redo it the house way; you know it, you built it eight times.
+Redo it the house way; you know it, you built it five times.
 
 ---
 

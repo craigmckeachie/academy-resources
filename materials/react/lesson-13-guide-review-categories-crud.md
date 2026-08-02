@@ -32,11 +32,15 @@ Every entity you built follows the same shape. Here it is for Categories — ope
 | `CategoryForm.tsx` | Shared create/edit form (no FK), react-hook-form | 7, 10 |
 | `CategoryCreatePage.tsx` / `CategoryEditPage.tsx` | Thin wrappers around the form | 7, 10 |
 
-Read them interface → API → page → card → form. Each file is the pattern from its lesson,
-applied to Categories.
+**The table is in reading order** — open `ICategory.ts` first and work down it. Each file leans
+on the one above: the API returns objects in the interface's shape, the page calls the API, the
+card renders one of the items the page maps over, and the form writes back through the API.
+Every file is just its lesson's pattern applied to Categories.
 
 > The **page fetches and maps directly** — like your `MenuItemsPage` / `StaffPage` /
-> `OrdersPage`. There's no separate `List` component in this app; the page owns the state.
+> `OrdersPage`. There's no separate `List` component in **this** app; the page owns the state.
+> *(The PRS spec does split the `.map()` into a `{Entity}List` component — one extra props
+> hand-off, no new idea. Lesson 15 covers the swap.)*
 
 ---
 
@@ -67,7 +71,13 @@ Every entity is reachable the same way — routes under `Layout` plus a nav item
 { path: "categories/edit/:id", element: <CategoryEditPage /> },
 ```
 
-…plus its **`Nav.Link`** in `AppNav`. Confirm all five entities have both.
+…plus its **`Nav.Link`** in `AppNav`. Confirm the four **top-level** entities — Orders, Menu
+Items, Categories, Staff — have routes *and* a nav link.
+
+**Order Items is the deliberate exception:** it has routes
+(`orders/detail/:id/orderitem/create` and `…/edit/:itemId`) but **no nav link**, because a
+child collection is only reachable *through its parent* — you get there from an order's detail
+page, never from the sidebar. On PRS, RequestLines works exactly the same way.
 
 ---
 

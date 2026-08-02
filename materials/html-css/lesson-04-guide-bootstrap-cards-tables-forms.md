@@ -150,6 +150,7 @@ the top:
 ```
 
 Things to notice:
+
 - The card has a fixed `width: 23rem` (inline style — one of the rare cases a utility
   class doesn't cover cleanly). Fixed width + `flex-wrap` is what makes the grid tidy.
 - The thin `.progress` bar at the top is a decorative accent — `styles.css` pins it
@@ -407,6 +408,7 @@ attributes filled in. (In React they'll literally be one component.)
 ```
 
 The Bootstrap form anatomy — memorize these three:
+
 - **`.form-label`** on the `<label>`, with its `for` matching the input's `id`.
   Clicking the label focuses the field, and screen readers pair them.
 - **`.form-control`** on text/number inputs; **`.form-select`** on `<select>`. These

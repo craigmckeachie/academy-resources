@@ -455,7 +455,8 @@ remove an item. You'll use that pattern in Lesson 12's CRUD.)
 
 When a component takes many props, `{...obj}` **spreads** an object's properties as
 individual props — shorthand you'll see in library code and route definitions. With two or
-more props it earns its keep: one `{...cardProps}` instead of listing each by hand:
+more props it earns its keep: one `{...cardProps}` instead of listing each by hand. This one is
+an illustration to read, not a step — your card keeps passing props by name:
 
 ```tsx
 const cardProps = { menuItem: item, onRemove: removeMenuItem };

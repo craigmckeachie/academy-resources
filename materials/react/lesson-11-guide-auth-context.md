@@ -139,8 +139,8 @@ a message to the library's queue; without a `<Toaster />` mounted somewhere in t
 queue has nowhere to render and **nothing appears**. You've been writing those calls since
 Lesson 7 (the Menu Item form's save and error handlers, then Lessons 8–10) and seeing no
 pop-ups — this is why. Mount it **once**, near the root, and every call anywhere in the app
-renders through it. Lesson 12 is the full treatment: it themes this `<Toaster />` with
-`toastOptions` and pairs it with centralized fetch error handling.
+renders through it. Lesson 12 is the full treatment: it restyles this `<Toaster />` in the
+app's colors and pairs it with centralized fetch error handling.
 
 `App` is about to be back in the route tree, so its CSS imports run again — **take the two you
 parked in `Layout` in Lesson 5 back out**, or every page loads Bootstrap twice:
@@ -237,7 +237,7 @@ shell). `errorElement` moves up to the `App` route.
 
 Sign In sits **outside** the `Layout` (no header/nav) — the `signin` route you added to
 the router in §2 is a **sibling** of the `Layout` route, so it renders in `App`'s `Outlet`
-without the shell:
+without the shell. That's this line, already in your `main.tsx` — nothing to add:
 
 ```tsx
 { path: "signin", element: <SignInPage /> },
@@ -552,10 +552,11 @@ signed-in staff's `id` **or** that staff member is a manager. Signed out, both a
 it's disabled.
 
 This is the **same mechanism** PRS uses for Approve/Reject — compare the record's user id to
-the signed-in user's, combine with a role flag — though watch the **polarity**: PRS *disables*
-Approve/Reject on your **own** request (a reviewer can't approve their own spending), while
-TableServe *enables* Cancel on your own order (you clean up your own mistakes). Same check,
-opposite sign; the pattern transfers, the business rule doesn't.
+the signed-in user's, combine with a role flag — but watch what the answer is *used for*: PRS
+**disables** Approve/Reject on your **own** request (a reviewer can't approve their own
+spending), while TableServe **enables** Cancel on your own order (you clean up your own
+mistakes). Identical comparison, opposite effect: the pattern transfers, the business rule
+doesn't.
 
 **Save and check**
 

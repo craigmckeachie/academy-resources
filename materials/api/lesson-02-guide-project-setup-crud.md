@@ -33,6 +33,7 @@ React App  ──HTTP request──▶  Web API  ──query──▶  SQL Serve
 In Visual Studio: **File → New → Project → ASP.NET Core Web API**
 
 Settings to choose:
+
 - Framework: **.NET 8**
 - Authentication: **None**
 - Configure for HTTPS: **yes**
@@ -101,6 +102,7 @@ public class Staff
 ```
 
 A few things to notice:
+
 - `string.Empty` as the default value avoids null warnings on required strings
 - `string?` (with the `?`) marks a property as nullable — optional in the database
 - `bool` defaults to `false` automatically — no explicit default needed
