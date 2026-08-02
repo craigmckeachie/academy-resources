@@ -115,7 +115,7 @@ export default OrderHeader;
 - The **Cancellation Reason** pair renders only when status is `CANCELLED` — a `<>` fragment
   inside `{cond && …}` so two elements are conditional together.
 - The columns lay out with **flex utilities** (`d-flex flex-wrap gap-4`) — no custom CSS
-  needed (recall `App.css` is empty; Bootstrap does the layout).
+  needed (`App.css` holds only the Lesson 6 skeleton rules; Bootstrap does the layout).
 
 That last pair reads `order.cancellationReason`, but the `IOrder` you built in Lesson 6
 doesn't have that field yet. Add it now — same `string | undefined` shape as the other
@@ -128,9 +128,11 @@ optional fields:
   }
 ```
 
-**Save and check:** nothing appears on screen yet — no page imports `OrderHeader` until the
-next section wires it into `OrderDetailPage`. For now just confirm the editor shows no errors
-in `OrderHeader.tsx` or `IOrder.ts`.
+**Save and check**
+
+- Nothing on screen yet — no page imports `OrderHeader` until the next section wires it into
+  `OrderDetailPage`.
+- Check the editor — **no errors** in `OrderHeader.tsx` or `IOrder.ts`.
 
 ---
 
@@ -212,9 +214,11 @@ link points at:
   ],
 ```
 
-**Save and check:** from `/orders`, open a row's **⋮ → View** → `/orders/detail/{id}` shows
-the three `<dl>` columns for *that* order, with the right status badge color and a
-currency-formatted total.
+**Save and check**
+
+- From `/orders`, open a row's **⋮ → View** — `/orders/detail/{id}` shows the three `<dl>`
+  columns for **that** order.
+- The status badge is the right color and the total is **currency-formatted**.
 
 ---
 

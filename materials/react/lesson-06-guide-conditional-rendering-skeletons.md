@@ -233,9 +233,11 @@ Three small conditional-rendering idioms in `OrderRow`:
 (`onRemove` is declared in the props but not used yet — the delete action arrives with the
 dropdown in section 5.)
 
-**Save and check:** open `/orders` — the table fills with rows, and each **Status** shows in
-its badge color (grey / yellow / blue / green / red). Check **DevTools → Network** for a
-**200** on `orders`.
+**Save and check**
+
+- Open `/orders` — the table **fills with rows**.
+- Each **Status** shows in its badge color (grey / yellow / blue / green / red).
+- **DevTools → Network** — a **200** on `orders`.
 
 ---
 
@@ -306,9 +308,12 @@ The key idea: **the `useEffect` now depends on `searchParams.get("status")`** �
 re-runs, and the list re-fetches. `orderAPI.list(status)` appends `?status=…` when a status
 is given.
 
-**Save and check:** pick a status — the URL gains `?status=PREPARING`, and the table
-re-fetches to just those orders. **Reload** the page — the filter *sticks* (it's in the
-URL). Set it back to **All**.
+**Save and check**
+
+- Pick a status — the URL gains **`?status=PREPARING`** and the table re-fetches to just
+  those orders.
+- **Reload** the page — the filter **sticks** (it lives in the URL).
+- Set it back to **All**.
 
 ---
 
@@ -368,8 +373,10 @@ Bootstrap JS). Add the imports, destructure `onRemove`, and replace the placehol
   supplies it as `removeOrder`. A `window.confirm(...)` guards it for now; **Lesson 9**
   replaces that with a modal.
 
-**Save and check:** open a row's **⋮** menu → **View** navigates (or 404 for now);
-**Delete** confirms, removes the row, and **Network** shows a `DELETE`.
+**Save and check**
+
+- Open a row's **⋮** menu — **View** navigates (or 404s for now).
+- Choose **Delete** — you get a confirm, the row disappears, and **Network** shows a `DELETE`.
 
 ---
 
@@ -398,8 +405,8 @@ export default MenuItemCardSkeleton;
 
 The empty `<span>`s carry no text — the **`skeleton skeleton-text`** classes give them a fixed
 size and the shimmering grey animation. Those classes aren't Bootstrap; add them to
-**`App.css`** (which you emptied in Lesson 3 — this is the one bit of custom CSS the pass
-needs):
+**`App.css`** (which you emptied in Lesson 3 — one of only two small bits of custom CSS this
+pass needs; the other is the Sign In page's background in Lesson 11):
 
 ```css title="src/App.css"
 .skeleton {
@@ -454,8 +461,11 @@ needs):
 The Orders **table** can use a simpler `{loading && <p>Loading…</p>}`; the skeleton *cards*
 are what matter on the grids.
 
-**Save and check:** throttle the network (**DevTools → Network → Slow 3G**) and reload
-`/menuitems` — the **skeleton cards** show during the fetch, then swap for the real cards.
+**Save and check**
+
+- Throttle the network — **DevTools → Network → Slow 3G**.
+- Reload `/menuitems` — the **skeleton cards** show during the fetch, then swap for the real
+  cards.
 
 ---
 

@@ -7,10 +7,11 @@ Quantity changes, a Notes field, and a parent **Order.Total** that updates after
 change. This is a dedicated lesson because the derived-field mechanic — one field
 reacting to another — is new.
 
-> **This is a worked-example lesson — there is no paired lab.** OrderItem is the
+> **The guide is a worked example — the lab builds something different.** OrderItem is the
 > *child-collection CRUD* pattern, and its PRS analog (RequestLine) is built directly
-> during the capstone. It's a named exception with no second TableServe entity to
-> repeat it on, so you build it once here alongside the instructor.
+> during the capstone. It's a *named exception* with no second TableServe entity to
+> repeat it on, so you build it once here alongside the instructor. This lesson's **lab**
+> then builds the **Categories create/edit form**, reusing patterns you already know.
 
 **The general pattern you're learning:** a **nested child form** is scoped to a parent
 (reached from the parent's detail page, Cancel returns there). It has **derived display
@@ -750,10 +751,12 @@ confirm handler knows exactly which one to remove:
   and the footer **Total** drops, because the **API** recalculated it (same side-effect as
   save).
 
-**Save and check:** open an order's detail — the items table shows each line's Amount and a
-footer Total. Click **Add Order Item** → the create form opens (wired in section 5); Cancel
-back. Click a row's **Delete** → the confirm modal opens; **Delete** removes the row and the
-Total drops.
+**Save and check**
+
+- Open an order's detail — the items table shows each line's **Amount** and a footer **Total**.
+- Click **Add Order Item** — the create form opens (wired in section 5); Cancel back.
+- Click a row's **Delete** — the confirm modal opens.
+- Confirm **Delete** — the row disappears and the **Total drops**.
 
 ---
 

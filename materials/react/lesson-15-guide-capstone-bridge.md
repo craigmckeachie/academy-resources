@@ -129,8 +129,12 @@ The other workflow buttons map cleanly too:
 | `REVIEW` | Approve + Reject (disabled on your own request) | Mark Ready + Cancel |
 | `APPROVED` / `REJECTED` | *(none — terminal)* | Served / Cancelled |
 
-The **ownership check** — Approve/Reject disabled when `request.userId === currentUser.id`
-— is the Cancel ownership check (Lesson 11) with different fields.
+The **ownership check** — Approve/Reject disabled when `request.userId === currentUser.id` —
+is the Cancel check (Lesson 11) with different fields, **and the comparison flipped**. On
+TableServe you may cancel an order you took (`isOwnOrder || isManager` *enables*); on PRS a
+reviewer may **not** approve their own request (owning it *disables*). Copy the mechanism, not
+the sign — and note PRS gates the buttons on `isReviewer` where TableServe gates Cancel on
+`isManager`.
 
 ---
 

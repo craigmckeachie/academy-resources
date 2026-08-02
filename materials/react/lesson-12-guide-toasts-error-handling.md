@@ -4,7 +4,8 @@
 **success and error toasts** via `react-hot-toast` — and your API modules share **one
 place** that turns a failed HTTP response into a thrown `Error` your components can
 catch and toast. You'll retrofit the Menu Item CRUD (list/create/edit/delete) with this
-feedback and the shared fetch helpers.
+feedback and the shared fetch helpers. (The `<Toaster />` that renders them went into `App` in
+Lesson 11 — here you theme it and make the feedback systematic.)
 
 **The general pattern you're learning:** a **toast** is a small, auto-dismissing
 message for success/error feedback. You call `toast.success(...)` after a successful
@@ -28,15 +29,15 @@ polish that makes the app feel finished.
 
 ---
 
-## 1. ▶ Code along — Mounting the Toaster
+## 1. ▶ Code along — Theming the Toaster
 
-`react-hot-toast` needs one `<Toaster />` mounted near the app root — you already added it in
-Lesson 11's `App.tsx`. Fill in its **`toastOptions`** now to theme the toasts (the brand orange
-check):
+`react-hot-toast` needs one `<Toaster />` mounted near the app root — you added it bare in
+Lesson 11's `App.tsx`, which is why toasts started appearing there. Give it **`toastOptions`**
+now to theme them (the brand orange check):
 
 ```diff title="src/App.tsx"
     <StaffContext.Provider value={{ staff, setStaff }}>
--     <Toaster /* … */ />
+-     <Toaster />
 +     <Toaster
 +       toastOptions={{
 +         success: { iconTheme: { primary: "#FF7A00", secondary: "white" } },
@@ -49,8 +50,11 @@ check):
 
 Mount it once; you never render toasts directly — you *call* them (next).
 
-**Save and check:** nothing visible yet (no toast is firing) — confirm the app still loads
-and the console is clean. You'll see toasts once you fire them in section 4.
+**Save and check**
+
+- Save a menu item — the success toast's check is now **brand orange** instead of the default
+  green.
+- Console is clean.
 
 ---
 
@@ -147,9 +151,10 @@ and chain `.then(checkStatus).then(parseJSON)` on every method (a bodiless `dele
 uses just `.then(checkStatus)`). The inline `if (!response.ok) throw` you wrote in Lesson 11's
 `findByAccount` becomes a plain `.then(checkStatus)` too — that's the guard, now shared.
 
-**Save and check:** the app behaves exactly as before (lists load, saves work) — you've
-changed *how* errors surface, not the happy path. Confirm the console is clean and every
-page still fetches.
+**Save and check**
+
+- Every page still fetches and saves — you changed *how* errors surface, not the happy path.
+- Console is clean.
 
 ---
 
@@ -231,9 +236,12 @@ state — exactly like `StaffPage`'s `removeStaff` from Lesson 6.
 The `error.message` you toast is exactly the friendly string `checkStatus` threw — that
 handshake between the utility and the `catch` is the whole point.
 
-**Save and check:** save a valid menu item → a green **"Successfully saved."** toast; delete
-one → **"Successfully deleted."** Stop the API and reload `/menuitems` → a red error toast and
-the `http error status` console log from `checkStatus`.
+**Save and check**
+
+- Save a valid menu item — a green **"Successfully saved."** toast.
+- Delete one — **"Successfully deleted."**
+- Stop the API and reload `/menuitems` — a **red error toast**, plus the `http error status`
+  console log from `checkStatus`.
 
 ---
 

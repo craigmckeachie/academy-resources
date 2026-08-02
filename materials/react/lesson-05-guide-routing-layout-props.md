@@ -81,9 +81,12 @@ routes, one path per page:
   `AppNav` around it, and pasting them into each page would be repetitive — that's what
   `Link`, nested routes, and `Outlet` are for next.
 
-**Save and check:** open **`/menuitems`** in the browser — your Menu page renders (no shell
-yet), and `/orders` shows the stub heading. There's no nav to click yet; type the paths in
-the address bar.
+**Save and check**
+
+- Open **`/menuitems`** — your Menu page renders, **no shell yet**.
+- Open **`/orders`** — the stub heading shows.
+
+*There's no nav to click yet — type the paths in the address bar.*
 
 ---
 
@@ -212,9 +215,12 @@ export default Header;
 >   above). (`xlinkHref` is React's name for SVG's `xlink:href`; plain `href` also works in
 >   React 18.)
 
-**Check:** nothing new on screen yet — `AppNav` and `Header` don't render until `Layout`
-wraps them (next section). For now confirm the editor shows **no red import/type errors**,
-and that `src/assets/bootstrap-icons.svg` exists so the `AppNav` import resolves.
+**Save and check**
+
+- Nothing new on screen yet — `AppNav` and `Header` don't render until `Layout` wraps them
+  (next section).
+- Check the editor — **no red import/type errors**.
+- Confirm `src/assets/bootstrap-icons.svg` exists, so the `AppNav` import resolves.
 
 ---
 
@@ -247,7 +253,7 @@ export default Layout;
 
 > **Where did the Bootstrap import go?** In Lesson 3 it lived in `App.tsx`. `App` is no
 > longer in the route tree — `main.tsx` renders the router directly — so its imports
-> wouldn't run. Put the CSS imports in `Layout` for now; Lesson 11 brings `App` back as the
+> wouldn't run. Put the CSS imports in `Layout` for now (Lesson 11 moves them back); Lesson 11 brings `App` back as the
 > app-wide wrapper.
 
 Now nest the page routes as **children** of a `Layout` route:
@@ -280,9 +286,10 @@ Now nest the page routes as **children** of a `Layout` route:
 Right now there's just **one `Outlet`** in the whole app — the one in `Layout`. Hold onto
 that: a *second* one appears in Lesson 11, for a specific reason (below).
 
-**Save and check:** open **`/menuitems`** — now the `Header` bar and `AppNav` sidebar wrap
-the page, and clicking **Menu** / **Orders** swaps the content **without a full reload** (the
-shell stays put).
+**Save and check**
+
+- Open **`/menuitems`** — the `Header` bar and `AppNav` sidebar now **wrap the page**.
+- Click **Menu** / **Orders** — the content swaps **without a full reload**; the shell stays put.
 
 ---
 

@@ -78,8 +78,10 @@ different fields/workflow**:
 - **Workflow words:** `Placed/Preparing/Ready/Served/Cancelled` →
   `New/Review/Approved/Rejected`; **Cancel modal → Reject modal** (required reason,
   plain-string body).
-- **Role flags:** `isManager/isAdmin` → `isReviewer/isAdmin`; the **Cancel ownership
-  check** → Approve/Reject disabled on your **own** request.
+- **Role flags:** `isManager/isAdmin` → `isReviewer/isAdmin` — `isAdmin` hides maintenance
+  screens in both apps; the workflow flag gates one action. The **Cancel check**
+  (`isOwnOrder || isManager` enables) → Approve/Reject **disabled** on your own request: same
+  comparison, opposite sign.
 - **Fields differ** (a Vendor has address/city/state/zip; a Product has part
   number/unit) — the *form pattern* is unchanged; only the fields change.
 

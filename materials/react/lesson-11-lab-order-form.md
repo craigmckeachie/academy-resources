@@ -13,9 +13,10 @@ orders as yourself.
 
 - **Table Number** — required, `valueAsNumber`.
 - **Notes** — optional textarea.
-- **Status** — a `<select>` (Placed … Cancelled) defaulting to **PLACED** and **disabled**: a
-  new order is always Placed, and status advances through the **Lesson 9 workflow buttons**,
-  not this form.
+- **Status** — a `<select>` (Placed … Cancelled) defaulting to **PLACED**, **disabled on
+  create** and editable on edit: a new order is always Placed, and day to day the status
+  advances through the **Lesson 9 workflow buttons**, not this form. *(Same rule PRS's Request
+  form uses — Status disabled on Create, editable on Edit.)*
 - **Staff** — an FK `<select>` of staff (options from `staffAPI.list()`), **pre-filled from the
   signed-in user and disabled** — you place orders as yourself.
 
@@ -26,11 +27,28 @@ The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-
 
 1. Add `post(order)` and `put(order)` to `OrderAPI.ts` (`find` and the workflow endpoints
    already exist).
-2. **`OrderForm`** — `useForm<IOrder>`, read `:id` with `useParams`. In async `defaultValues`:
-   `loadStaff()` (options for the dropdown), read `const { staff } = useStaffContext()` and set
-   the blank order's `staffId` to `staff?.id`, then return the blank order (create) or
+2. **`OrderForm`** — `useForm<IOrder>`, read `:id` with `useParams`, and read the signed-in
+   user at the **top of the component**: `const { staff } = useStaffContext();`. It's a hook,
+   so it can't go inside the `defaultValues` callback — read it up top, use it below. Start
+   from this blank order (`IOrder` picked up `cancellationReason` in Lesson 8 and `orderItems`
+   in Lesson 10):
+   ```tsx
+   let emptyOrder: IOrder = {
+     id: undefined,
+     tableNumber: undefined,
+     notes: undefined,
+     status: "PLACED",
+     cancellationReason: undefined,
+     total: 0,
+     orderedAt: new Date().toISOString(),
+     staffId: undefined,
+     orderItems: [],
+   };
+   ```
+   Then in async `defaultValues`: `await loadStaff()` (options for the dropdown), set
+   `emptyOrder.staffId = staff?.id`, and return `emptyOrder` (create) or
    `orderAPI.find(Number(id))` (edit). `save`: POST/PUT, then
-   `navigate(`/orders/detail/${order.id}`)`.
+   ``navigate(`/orders/detail/${order.id}`)``.
    - **Table Number** and **Notes** register like any form fields.
    - **Staff `<select>`** — options from your `staffList`, plus `disabled` (it's pre-set to you):
      ```tsx
@@ -41,9 +59,12 @@ The form is the Lesson 7 pattern; the genuinely new parts are the **context pre-
        ))}
      </select>
      ```
-   - **Status `<select>`** — the five status options, `disabled`, `defaultValue="PLACED"`.
-   - Lay the fields out with **flex utilities** (`d-flex flex-wrap gap-4`, `w-75`/`w-50`) — no
-     custom CSS (`App.css` is empty).
+   - **Status `<select>`** — the five status options and `defaultValue="PLACED"`, disabled on
+     create only: `const isEdit = Boolean(id);` then `disabled={!isEdit}`.
+   - A **Cancel** `Link` back to `/orders` and a **Save order** submit button, as on every form
+     since Lesson 7.
+   - Lay the fields out with **flex utilities** (`d-flex flex-wrap gap-4`, `w-75`/`w-50`) — the
+     only custom CSS in this app is the skeleton and Sign In rules you already added.
 3. Thin **`OrderCreatePage`** / **`OrderEditPage`** (heading + `<OrderForm />`) and routes
    `orders/create` and `orders/edit/:id` under `Layout`.
 4. **Wire it up** — add an **Add Order** button on `OrdersPage` (→ `/orders/create`), and the
@@ -60,7 +81,8 @@ With your API running, `npm run dev` up, and signed in:
 1. `/orders` → **Add Order** → the form; Staff shows **your** name (disabled), Status **PLACED**
    (disabled). Save with Table Number empty → inline error. Fill it, Save → the new order's
    **detail** page, **201** `POST`, and a new row in the list.
-2. **⋮ → Edit** an order → the form pre-fills; change Notes, Save → **200** `PUT`.
+2. **⋮ → Edit** an order → the form pre-fills and **Status is now editable** (it was disabled on
+   create); change Notes, Save → **200** `PUT`.
 3. Console clean; **Network** shows the `POST` / `PUT`.
 
 This is the last CRUD screen — **TableServe is now a complete app**. On PRS this is the
@@ -72,19 +94,24 @@ fields, status likewise set by the workflow).
 Optional — for when you finish early. Not needed for the capstone.
 **[Reinforce]** builds on what you've done; **[Reach]** goes past it and needs some research.
 
-- **Role-gate the maintenance screens** — [Reinforce] — the payoff of Lesson 11's role flags.
-  Using `isAdmin` on the signed-in staff (`useStaffContext`), **hide the Categories / Staff /
-  Menu Items management** from non-admins: wrap those `AppNav` items and their **Add** / **Edit**
-  buttons in `{staff?.isAdmin && …}`. Sign in as an admin vs. a non-admin (seed data) and
-  confirm the maintenance UI appears only for admins. *(This is the exact client-side role rule
-  PRS uses — admins get the maintenance pages; reviewers get Approve/Reject.)*
+- **Finish role-gating the maintenance screens** — [Reinforce] — the payoff of Lesson 11's role
+  flags. The guide wrapped the **Staff** nav link in `{staff?.isAdmin && …}`; do the same for
+  **Menu Items** and **Categories**, then for the **Add** and **Edit** buttons on those three
+  pages (a non-admin shouldn't see a create button for a screen they can't navigate to). Sign in
+  as an admin vs. a non-admin from the seed data and confirm the maintenance UI appears only for
+  admins. *(This is the exact client-side role rule PRS uses — admins get the maintenance pages;
+  reviewers get Approve/Reject.)*
 - **Cancel returns to the list** — [Reinforce] — confirm the form's **Cancel** link goes back to
   `/orders` (not the detail page) on create, and consider sending edit's Cancel to the order's
   detail instead — a small UX call about where "cancel" should land.
 - **Order the staff dropdown** — [Reach] — even though it's disabled, sort `staffList` by last
-  name before rendering so the (pre-selected) option reads naturally, and read why a disabled
-  `<select>`'s value still submits. Reference:
-  [MDN — the disabled attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select#disabled).
+  name before rendering so the (pre-selected) option reads naturally. Then work out why your
+  `staffId` still reaches the server: MDN says a **disabled control's value is not submitted**,
+  yet your POST carries it. (Hint: react-hook-form submits its own form state, not the DOM's —
+  and note that RHF's `register(name, { disabled: true })` *option* behaves differently from the
+  plain HTML attribute you used.) References:
+  [MDN — the `disabled` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/disabled)
+  and [react-hook-form — `register` options](https://react-hook-form.com/docs/useform/register).
 
 Finished these and want more? See
 [stretch-react-challenges.md](stretch-react-challenges.md) for bigger challenges that span

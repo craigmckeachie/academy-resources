@@ -329,10 +329,13 @@ The three ideas that make it one form for both modes:
 > `{ name, onChange, onBlur, ref }` object that `{...register("name")}` spreads onto the
 > input — the manual wiring from §2, now live. Delete the log once you've seen it.
 
-**Save and check:** you can't reach the form until its routes exist (next section) — for now
-confirm the editor shows **no red errors** in `MenuItemForm.tsx` and `MenuItemAPI.ts`.
-(Want to *watch* react-hook-form track the form as you type? Section 7 is an optional look
-under the hood once the form is working.)
+**Save and check**
+
+- Nothing to open yet — the form has no routes until the next section.
+- Check the editor — **no red errors** in `MenuItemForm.tsx` or `MenuItemAPI.ts`.
+
+*Want to* watch *react-hook-form track the form as you type? Section 7 is an optional look
+under the hood, once the form is working.*
 
 ---
 
@@ -427,11 +430,16 @@ The `:id` in the edit path is what `useParams` reads in the form.
 (A **Delete** item joins this same ⋮ dropdown in **Lesson 12**, where `menuItemAPI.delete` +
 toasts are added.)
 
-**Save and check:** from `/menuitems`, click **Add Item** → `/menuitems/create` shows an empty
-form with the **Category** dropdown listing your seeded categories. Save with Name empty → the
-field turns red and "Name is required" shows (no network call); fill it in + a price + a
-category, Save → back to the list with the new card (**Network** shows a **201** `POST`). Open
-a card's **⋮ → Edit** → the form is **pre-filled**; change the price, Save → **200** `PUT`.
+**Save and check**
+
+- From `/menuitems`, click **Add Item** — `/menuitems/create` shows an empty form, with the
+  **Category** dropdown listing your seeded categories.
+- Save with Name empty — the field turns **red** with "Name is required", and **no network
+  call** fires.
+- Fill in a name, price, and category, then Save — back to the list with the new card;
+  **Network** shows a **201** `POST`.
+- Open a card's **⋮ → Edit** — the form is **pre-filled**; change the price and Save for a
+  **200** `PUT`.
 
 ---
 

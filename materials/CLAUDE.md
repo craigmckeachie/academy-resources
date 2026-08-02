@@ -355,7 +355,9 @@ signposting convention so students know when to type versus when to just read:
   see X" so a mistake surfaces immediately, not only at the end. When a piece isn't visible
   on its own yet (a component not wired in until later), say so honestly. The lesson's final
   *Verifying …* section still does the full pass. (Full rationale and examples: **React pass
-  — authoring lessons** → principle 7, below.)
+  — authoring lessons** → principle 7, below. The bulleted **`Save and check`** format defined
+  there is **React-pass-only for now** — html-css guides keep their one-line checks until
+  that pass is swept.)
 
 > **Also piloted in React Lesson 3.** `react/lesson-03-guide-components-jsx-typescript.md`
 > now uses this same `▶ Code along` convention and the "How to use this guide" blockquote,
@@ -400,16 +402,22 @@ this is the fast pre-flight):
    property before code reads it off the typed object** (`order.orderItems` needs `orderItems`
    on `IOrder`; `menuItem.category` needs it on `IMenuItem`) — extend the interface in a diff
    *before* the usage. An unavoidable forward reference (view-first) must be **flagged in the
-   Save-and-check** ("your editor flags X as *not defined* until section N").
+   Save-and-check** ("your editor flags X as *not defined* until section N"). If the missing
+   piece stops the **whole app compiling** (e.g. the router imports a page you build two
+   sections later), never leave a can't-happen "open the page and…" check. **Prefer a one-line
+   placeholder/stub** for the missing file so the section stays runnable (replace it for real
+   in the later section); or, if a stub doesn't fit, say plainly "the app won't compile until
+   §N" and move the *runnable* check to the section where it can actually run. (Lesson 11 §2
+   stubs `SignInPage` so its router change runs; §3 replaces it with the real form.)
 6. **Identifiers are current.** Every name matches the latest decision (`openCancel`, not a
    since-renamed `handleShowCancelModal`). After any rename, grep the whole pass.
 
 Two section-level checks belong here too:
 
 7. **A new concept gets a "read this" explanation before its first code-along** (principle 4).
-8. **Verification isn't hoarded at the end** — every ▶ section ends with a quick check, and a
-   feature is made runnable as soon as its dependencies allow, not only in a final section
-   (principle 7).
+8. **Verification isn't hoarded at the end** — every ▶ section ends with a **`Save and check`**
+   (bulleted when there's more than one observable, inline when there's one — see principle 7),
+   and a feature is made runnable as soon as its dependencies allow, not only in a final section.
 
 ---
 
@@ -470,13 +478,28 @@ Two section-level checks belong here too:
    (`.map()`, the badges, the fetch), not on inventing data. (The Lesson 3 lab hands over a
    5-member `IStaff[]` and is built one-card → list → badges → styling, matching the guide.)
 
-7. **Each ▶ Code along section ends with a quick check.** After a build step, tell students
-   the one thing to do and see to confirm it worked — "save; open `/menuitems` and the shell
-   now wraps the page" — so a mistake surfaces immediately, not only at the end. One or two
-   lines. When a piece isn't visible on its own yet (a component not wired in until a later
-   section), say so honestly ("nothing on screen yet — it renders once `Layout` wraps it;
-   confirm no editor errors"). The final **Verifying in the browser** section still does the
-   full pass; the per-section checks are the incremental confirmations along the way.
+7. **Each ▶ Code along section ends with a `Save and check`.** After a build step, tell
+   students what to do and see to confirm it worked, so a mistake surfaces immediately rather
+   than only at the end. When a piece isn't visible on its own yet (a component not wired in
+   until a later section), say so honestly ("nothing on screen yet — it renders once `Layout`
+   wraps it; confirm no editor errors"). The final **Verifying in the browser** section still
+   does the full pass; the per-section checks are the incremental confirmations along the way.
+
+   **Format — never a run-on sentence.** Multiple checks chained with semicolons and arrows
+   are unreadable at the keyboard. So:
+   - **Two or more observables → a bulleted list.** The bold label **`Save and check`** sits on
+     its own line (no colon), followed by a blank line and **2–5 bullets**. Each bullet is
+     **one action — one observable**, phrased *do this — see that*, em dash between, with the
+     thing to look for in **bold**. Never chain two actions into one bullet.
+   - **A single observable → stays inline** as `**Save and check:** …`. A one-bullet list is
+     noise, and these often run straight into teaching prose that explains what was just seen.
+   - **Deferred verification goes in one trailing italic line**, after a blank line, not in the
+     bullets: *"Not yet: the signed-**in** → `/orders` redirect — you'll see that in §3."*
+     This is also where a **flagged transient error** goes when a section teaches view-first
+     (principle 9).
+   - The label is always **`Save and check`** — not "Check", not "Quick check".
+
+   **Lesson 11 is the worked example**; Lessons 5–10 and 12 follow it.
 
 8. **Label every code block with a `title=`, and show *where* edited code goes — full block to
    create, `diff` to modify.** The file name goes in a **Material for MkDocs code-block title**

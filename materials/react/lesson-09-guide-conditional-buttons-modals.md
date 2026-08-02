@@ -6,12 +6,13 @@ required-reason textarea. You call the API's custom workflow endpoints and re-fe
 order to reflect the new state. (The order-item **delete-confirmation modal** comes in
 Lesson 10, alongside the items table it acts on.)
 
-> **This is a worked-example lesson — there is no paired lab.** The Cancel-with-reason
-> modal directly rehearses PRS's **Reject** modal, and the status-driven buttons
-> rehearse PRS's Send-for-Review / Approve / Reject. Because this pattern is a *named
+> **The guide is a worked example — the lab builds something different.** The
+> Cancel-with-reason modal directly rehearses PRS's **Reject** modal, and the status-driven
+> buttons rehearse PRS's Send-for-Review / Approve / Reject. Because this pattern is a *named
 > exception* (its closest PRS analog is taught directly on PRS), you build it once, in
 > the guide, alongside the instructor — there's no second entity to repeat it on in
-> TableServe. Follow along and build it on the Order Detail page.
+> TableServe. Follow along and build it on the Order Detail page. This lesson's **lab**
+> then builds the **Categories list**, reusing patterns you already know.
 
 **The general pattern you're learning:** **which actions are available depends on the
 record's current status** — you render different buttons per status with conditional
@@ -113,11 +114,13 @@ Each `{order?.status === "X" && …}` shows its buttons only in that state. **Ca
 Order** doesn't act directly — it opens the Cancel modal, because cancelling requires a
 reason (section 4).
 
-**Save and check:** the buttons call handlers you add next — `startPreparing`, `markReady`,
-and `markServed` in section 3, and `openCancel` (with its `isCancelOpen` state)
-in section 4 — so your editor will flag those names as *not defined* for now; that's expected.
-Once section 3's handlers are in, open a **Placed** order → only **Start Preparing** shows, and
-a **Served** order shows none.
+**Save and check**
+
+- Your editor flags `startPreparing`, `markReady`, `markServed`, and `openCancel` as **not
+  defined** — expected; you add them in sections 3 and 4.
+
+*Not yet: the buttons themselves. Once section 3's handlers are in, a **Placed** order shows
+only **Start Preparing**, and a **Served** order shows none.*
 
 ---
 
@@ -204,9 +207,11 @@ endpoint swapped:
 changes you reload to get the truth rather than guessing locally. The new status flips which
 buttons render.
 
-**Save and check:** click **Start Preparing** on a Placed order — the badge flips to
-PREPARING and the buttons become **Mark Ready** + **Cancel Order** (the re-fetch
-re-rendering). Network shows the PUT to `…/startpreparing`.
+**Save and check**
+
+- Click **Start Preparing** on a Placed order — the badge flips to **PREPARING**.
+- The buttons become **Mark Ready** and **Cancel Order** — that's the re-fetch re-rendering.
+- **Network** shows the `PUT` to `…/startpreparing`.
 
 ---
 
@@ -329,10 +334,13 @@ only appears when `isCancelOpen` is `true`):
 > textarea before a status change, PUT as a plain string to `/requests/{id}/reject`.
 > Same shape, different words.
 
-**Save and check:** on a Preparing order, click **Cancel Order** → the modal opens. Click
-**Confirm** with the textarea empty → the required error shows and the modal stays open.
-Enter a reason, Confirm → the modal closes, the status is CANCELLED, and the reason shows in
-the summary.
+**Save and check**
+
+- On a Preparing order, click **Cancel Order** — the **modal opens**.
+- Click **Confirm** with the textarea empty — the required error shows and the modal **stays
+  open**.
+- Enter a reason and Confirm — the modal closes, the status is **CANCELLED**, and the reason
+  shows in the summary.
 
 ---
 
