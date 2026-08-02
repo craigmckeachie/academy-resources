@@ -1,12 +1,12 @@
 # Lesson 16 Lab — Generate a Staff Feature with Copilot, Then Audit It
 
 Use Copilot to **generate** a piece of the Staff feature you already built by hand, then
-**audit** what it produced against your working version and this app's house style. Because
+**audit** what it produced against your working version and this project's conventions. Because
 you built Staff across Lessons 3–12, you have a ground-truth reference to judge Copilot's
 output against — that's the whole point.
 
 Keep the [Copilot quick-start](../reference/copilot-quickstart.md) open for the guardrails,
-and refer back to the guide's section 4 (the house-style table) and section 5 (reviewing an
+and refer back to the guide's section 4 (the conventions table) and section 5 (reviewing an
 agent-mode diff).
 
 ---
@@ -18,7 +18,7 @@ agent-mode diff).
 2. In Chat, ask Copilot to generate that piece **from a description** — first with **no
    reference file** (e.g. *"Write a StaffAPI module with list, find, post, put, and delete
    for a `/staff` endpoint"*).
-3. **Diff it against your real file.** List every difference, and bucket each: house-style
+3. **Diff it against your real file.** List every difference, and bucket each: convention
    match, or **guardrail crossed**. Expect at least some of:
    - `axios` (or a raw `fetch`) instead of `fetch(...).then(checkStatus).then(parseJSON)`
    - fetch calls inline in a component instead of an **API module object**
@@ -38,7 +38,7 @@ agent-mode diff).
    *"Add a `title` field to Staff: update `#IStaff.ts`, `#StaffForm.tsx`, and the API
    payload. Match the existing patterns."*
 2. **Review the proposed diff hunk by hunk** (guide section 5). Accept only hunks that match
-   house style; reject or fix the rest. **Do not "Accept All" unread.**
+   project conventions; reject or fix the rest. **Do not "Accept All" unread.**
 3. **Verify in the browser** — `npm run dev`, open the Staff pages, and confirm they render
    with a clean DevTools **Console** and the expected **Network** calls. Revert anything that
    errors or drifts.
@@ -50,8 +50,8 @@ agent-mode diff).
 
 ## The one thing to hand in — your "guardrails Copilot crossed" list
 
-Write a short list (aim for 3–5) of house-style violations Copilot introduced when you
-didn't steer it, each with the house-style fix. For example:
+Write a short list (aim for 3–5) of convention violations Copilot introduced when you
+didn't steer it, each with the convention-matching fix. For example:
 
 - *Generated `import axios` — replaced with `fetch(...).then(checkStatus).then(parseJSON)`.*
 - *Built the form with a `useState` per field — this app uses react-hook-form (`register`/`handleSubmit`).*
@@ -89,7 +89,7 @@ research.
   flexbox-only layout and the feature-folder split. (This is exactly the capstone's job.)
 - **Agent-mode a whole feature folder** — [Reach] — have agent mode scaffold a small new
   entity's feature folder (interface, API, page, list, card, form) end to end, then review
-  the entire diff against house style before keeping any of it. Research agent mode:
+  the entire diff against our conventions before keeping any of it. Research agent mode:
   [Copilot Chat in VS Code](https://code.visualstudio.com/docs/copilot/overview).
 - **Copilot as tutor** — [Reinforce] — ask Copilot to **explain** a generated hook or the
   async `defaultValues` pattern, and confirm its explanation matches what the code does.

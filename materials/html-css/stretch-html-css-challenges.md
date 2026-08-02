@@ -139,12 +139,12 @@ in the `<use href>`.
 
 ---
 
-## 7. Generate a page with Copilot — then audit it against house style — [Reach]
+## 7. Generate a page with Copilot — then audit it against our conventions — [Reach]
 
 In the API pass you used **GitHub Copilot** to *review* code
 ([API Lesson 7](../api/lesson-07-guide-copilot-code-review.md)). Here, try the harder
-direction — using it to *generate* markup — and see how hard it fights this course's house
-style.
+direction — using it to *generate* markup — and see how hard it fights this course's
+conventions.
 
 1. In VS Code, open **Copilot Chat** and ask it to generate a Bootstrap page from a
    description — e.g. *"a responsive menu-item card grid in Bootstrap"* or *"a Bootstrap
@@ -157,7 +157,7 @@ style.
      utilities only**
    - a Bootstrap **CDN `<link>`** — our Bootstrap comes from **npm** via Vite
    - `<div>` soup where a **semantic** tag (`<address>`, `<section>`, `<dl>`) belongs
-3. **Rewrite every violation by hand** in house style: `row`/`col` → `d-flex flex-wrap gap-*`
+3. **Rewrite every violation by hand** to our conventions: `row`/`col` → `d-flex flex-wrap gap-*`
    with width utilities, the CDN link → the `/node_modules/bootstrap/...` link the shell
    already uses, and semantic tags where they fit.
 4. Re-ask **with one of your finished pages as a `#` reference** (*"match the structure of
@@ -185,7 +185,7 @@ see.
    API lesson:
    - **Accept** the real ones — a missing `alt`, a skipped heading level, a `<label>`
      without a matching `for`, a landmark you could add.
-   - **Reject** anything that crosses house style — if it suggests the `row`/`col` grid, a
+   - **Reject** anything that crosses project conventions — if it suggests the `row`/`col` grid, a
      CDN link, or a JS framework, that's Copilot not knowing your rules.
 3. Fix the accepted items and confirm the page still renders and behaves in the browser
    (DevTools → Elements/Accessibility panes).

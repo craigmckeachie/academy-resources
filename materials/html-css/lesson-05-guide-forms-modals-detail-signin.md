@@ -101,6 +101,14 @@ crucially, opens the Cancel modal via `data-bs-toggle="modal"
 data-bs-target="#cancelModal"` — it doesn't act directly, because cancelling
 **requires a reason** (section 5).
 
+**Save and check**
+
+- The **Order** heading sits left, the buttons right, on one row above a bottom border.
+- Only the buttons for **this order's status** render — a Preparing order shows Mark Ready
+  and Cancel Order, not Start Preparing.
+- **Cancel Order** is the red-outlined one. Clicking it does nothing yet — the modal
+  arrives in section 5.
+
 ---
 
 ## 3. ▶ Code along — the summary: `.detail-header` with definition lists
@@ -142,6 +150,14 @@ the right semantic element for label/value pairs. Three `<dl>`s sit side by side
   status color.
 - When status is **Cancelled**, also show the **Cancellation Reason** as a `<dt>/<dd>`
   pair — it's only meaningful in that state.
+
+**Save and check**
+
+- The summary reads as **columns of label-over-value pairs**, not one long list — that's
+  `.detail-header` doing the flex layout.
+- The **Status** value is a colored badge matching the order's status.
+- Narrow the window — the columns **wrap** instead of squashing.
+- Cancellation Reason shows **only** on a Cancelled order.
 
 ---
 
@@ -200,6 +216,14 @@ a table with a running **Total** in the footer:
 - The **`<tfoot>`** holds the **Add Order Item** button (links to the nested create
   form) and the order **Total** aligned under the Amount column. Footer = "add more"
   and "running total" — a recognizable child-table convention.
+
+**Save and check**
+
+- The items table lists one row per order item, with **Amount** filled in per row.
+- The footer holds **Add Order Item** on the left and the **Total** aligned under the
+  Amount column.
+- Each row has icon-only **Edit** and **Delete** buttons. Neither goes anywhere useful
+  yet — Delete's modal is next, and the form comes in section 6.
 
 ---
 
@@ -288,6 +312,15 @@ This is the pattern PRS's **Reject modal** uses exactly — a required
 `rejectionReason` before a status change. Cancel-Order here *is* the rehearsal for
 Reject-Request there.
 
+**Save and check**
+
+- **Cancel Order** now opens the modal over a dimmed page; **Cancel** and the close button
+  both dismiss it.
+- The delete-confirm modal opens from a row's trash button and reads as a *confirmation*,
+  not a form.
+- If nothing opens, the **Bootstrap JS bundle** at the end of `<body>` (Lesson 3) is
+  missing — modals are the first thing on these pages that needs it.
+
 ![The Cancel Order modal open over the Order Detail page: a Cancellation Reason textarea and Cancel and Confirm buttons](screenshots/tableserve/order-detail-cancelModal.png)
 
 ---
@@ -358,6 +391,14 @@ depend on the chosen menu item and quantity.
   reached *from* the order, not from a top-level list. That parent-scoping is the
   signature of a nested form.
 
+**Save and check**
+
+- The form renders inside a card titled **Item**, reached from the order's **Add Order
+  Item** button.
+- **Price** and **Amount** are display-only text, not inputs — you can't type into them.
+- **Cancel** goes back to the **order detail** page, not to a list. That parent-scoping is
+  the whole point of a nested form.
+
 On PRS this is the **RequestLine** form (Product dropdown, Quantity, derived
 Amount) — minus the Notes field.
 
@@ -410,6 +451,15 @@ radial gradient from `styles.css`):
 - In the static pass the Sign in button is an `<a>` straight to `/orders.html` — no
   real auth. (In React, Lesson 9, this posts to the login endpoint and stores the
   Staff object in localStorage.)
+
+**Save and check**
+
+- Sign In fills the whole window on the gradient, with **no header or nav** — it's outside
+  the shell every other page shares.
+- The logo sits above a centered card, and the **Sign in** button spans the card's full
+  width (`d-grid`).
+- Clicking **Sign in** lands on `/orders.html` — no credentials checked, which is correct
+  for the static pass.
 
 ![Finished TableServe Sign In page: the brand logo above a centered card titled "Sign in" with Username and Password fields, a Forgot It link, and a full-width Sign in button, on an orange gradient background](screenshots/tableserve/signin.png)
 

@@ -86,6 +86,6 @@ or **[Reach]** (goes past it, with a reference link to research).
   you'll need the same pattern on PRS's Users cards.
 - **GitHub Copilot** (TQL's preferred AI assistant) appears in this pass only as optional
   [stretch challenges](stretch-html-css-challenges.md) — generating markup and auditing it
-  against the flexbox-and-npm house style. Keep the
+  against the flexbox-and-npm conventions. Keep the
   [Copilot quick-start](../reference/copilot-quickstart.md) handy; the required Copilot
   lessons are in the API and React passes.

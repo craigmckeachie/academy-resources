@@ -3,7 +3,7 @@
 **Goal:** by the end of this lesson you can use **GitHub Copilot** to *generate* React
 code — from a single autocompleted line, to a component scaffolded in Chat, to a
 multi-file feature drafted in **agent mode** — and, crucially, hold every line of it to
-**this app's house style** before you keep it. In the lab you generate a Staff feature and
+**this project's conventions** before you keep it. In the lab you generate a Staff feature and
 audit it against the version you already built by hand.
 
 > **This is a tooling lesson, not a build lesson.** There's no new TableServe feature to
@@ -31,7 +31,7 @@ it match how this app is already built?**
 | Surface | In React, use it to… | How much review it needs |
 |---|---|---|
 | **Inline autocomplete** | finish a `.map()`, a repetitive form field, an import, the next line of a hook | Low — you read each line as it appears |
-| **Copilot Chat** | scaffold one thing: a component, a `use…` hook, an API module | Medium — review the whole block against house style |
+| **Copilot Chat** | scaffold one thing: a component, a `use…` hook, an API module | Medium — review the whole block against our conventions |
 | **Agent mode** | draft a change across several files (a new field through the interface, form, and API) | High — review it like a teammate's pull request |
 
 You've met autocomplete since Lesson 3. Chat and agent mode are the new gears — and the
@@ -53,7 +53,7 @@ correctly, because your own file is its context.
 ```
 
 Press **Tab** to accept, **Esc** to dismiss, keep typing to ignore. Because you read each
-line as it lands, autocomplete rarely drifts off house style — the danger grows as the
+line as it lands, autocomplete rarely drifts away from our conventions — the danger grows as the
 generations get bigger.
 
 ---
@@ -67,7 +67,7 @@ ask for one component or module. For example:
 > `#StaffCard.tsx`.
 
 Referencing a real file from the app is the single biggest thing you can do to get
-house-style output — you're handing Copilot the template instead of hoping it guesses.
+convention-matching output — you're handing Copilot the template instead of hoping it guesses.
 Even so, **review the result against section 4 before you keep it.** Copilot's default
 React is not this app's React.
 
@@ -89,11 +89,11 @@ Two Chat uses beyond generation, both high-value:
 
 ---
 
-## 4. ⚠️ The house-style guardrails Copilot will cross
+## 4. ⚠️ The conventions Copilot will break
 
 This app is built a specific way. Copilot, trained on all of GitHub, will confidently
 produce the *common* way instead. Every item below is something it's likely to generate
-that you must **reject and redo in house style** — the same watch-list idea from the cheat
+that you must **reject and redo to our conventions** — the same watch-list idea from the cheat
 sheet, now for React:
 
 | Copilot tends to generate… | This app uses… | Tell |
@@ -109,7 +109,7 @@ sheet, now for React:
 | The feature spread into one big file | the **feature-folder** split (interface, API, page, card/row, skeleton, form, thin create/edit wrappers — the **page** owns the fetch, state, and `.map()`; there's no separate `List` file in this app) | everything in a single component |
 
 If a generation trips any "tell," that's Copilot not knowing your app — not a better idea.
-Redo it the house way; you know it, you built it five times.
+Redo it the way this project does it; you know it, you built it five times.
 
 ---
 
@@ -123,7 +123,7 @@ multiple files** as a **diff you approve or reject, hunk by hunk.** For example:
 
 What comes back is exactly a pull request — and you review it exactly like [Lesson 7](../api/lesson-07-guide-copilot-code-review.md):
 
-1. **Read every hunk.** Bucket each: accept (matches house style, correct), reject (crosses
+1. **Read every hunk.** Bucket each: accept (matches our conventions, correct), reject (crosses
    a section-4 guardrail), or fix-then-accept.
 2. **Reject the whole change if you can't review it.** Never "Accept All" on a diff you
    haven't read — that's how `axios` and a `row`/`col` grid quietly enter your codebase.
@@ -145,7 +145,7 @@ guardrail violations out of the diff before they appear:
 There's no test suite here; you verify by **observation and review**, and it scales with how
 much Copilot wrote:
 
-- **Every generated line is triaged** — you read it and it either matches house style or you
+- **Every generated line is triaged** — you read it and it either matches our conventions or you
   fixed it. Nothing was kept just because it appeared.
 - **No section-4 guardrail is crossed** in what you keep — no `axios`, no `row`/`col`, no
   inline `fetch`, no `useState`-per-field form, no `data-bs-toggle` modal.
@@ -169,11 +169,11 @@ same scrutiny you'd give a colleague's PR, because that's what it is.
   More generated ⇒ more review.
 - **Autocomplete** you eyeball; **Chat** output you review as a block; **agent-mode** diffs
   you review as a pull request — never "Accept All" unread.
-- **House style is the yardstick.** Copilot's default React uses `axios`, inline fetches,
+- **Our conventions are the yardstick.** Copilot's default React uses `axios`, inline fetches,
   `useState` forms, and the `row`/`col` grid; this app uses fetch helpers + API modules,
   react-hook-form, and flexbox utilities. Redo anything that drifts.
 - **Steer with a reference file** (`match #StaffForm.tsx`) and constraints — it's the
-  cheapest way to get house-style output.
+  cheapest way to get convention-matching output.
 - **Verify in the browser**, every time — a clean-looking diff that errors in the Console is
   still wrong.
 
@@ -193,10 +193,10 @@ keep.
    real file** (`#StaffCard.tsx`); review the output against the section-4 table and note
    every guardrail it crossed.
 4. Re-ask with a **reference file + constraints** in the prompt and see how much closer to
-   house style the second attempt is.
+   project conventions the second attempt is.
 5. **Agent mode:** give it a small cross-file task (e.g. add a field through the interface,
-   form, and API); **review the diff hunk by hunk**, accepting only what matches house
-   style, rejecting or fixing the rest.
+   form, and API); **review the diff hunk by hunk**, accepting only what matches our
+   conventions, rejecting or fixing the rest.
 6. **Verify in the browser** — `npm run dev`, open the page, and confirm it renders with a
    clean Console and the expected Network calls.
 7. Try one **explain** prompt on a pattern you're about to reuse (the async `defaultValues`,

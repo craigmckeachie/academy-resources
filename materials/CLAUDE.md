@@ -389,9 +389,21 @@ signposting convention so students know when to type versus when to just read:
   see X" so a mistake surfaces immediately, not only at the end. When a piece isn't visible
   on its own yet (a component not wired in until later), say so honestly. The lesson's final
   *Verifying …* section still does the full pass. (Full rationale and examples: **React pass
-  — authoring lessons** → principle 7, below. The bulleted **`Save and check`** format defined
-  there is **React-pass-only for now** — html-css guides keep their one-line checks until
-  that pass is swept.)
+  — authoring lessons** → principle 7, below — the bulleted **`Save and check`** format
+  applies here too.)
+
+**Two cues, and the line between them.** This pass uses both:
+
+- **`▶ Save and look`** — the *mid-build micro-cue*, used only where CSS/markup is handed out
+  **incrementally** (L1 §8 builds a card rule by rule; L2 §4–5; L6 §2's toggle-it-by-hand
+  experiment). One thing to see, narrative, often followed by *why* it changed. This is the
+  by-hand workflow described above; don't replace it with a checklist.
+- **`Save and check`** — the *section-closing verification*, same bulleted format as the React
+  pass. Used at the end of every ▶ Code along section in **Lessons 3–6**, where the section
+  builds a whole component rather than one rule at a time.
+
+Roughly: Lessons 1–2 (hand-written CSS) close their sections with `▶ Save and look`;
+Lessons 3–6 (Bootstrap and the validation script) close with `Save and check`.
 
 > **Also piloted in React Lesson 3.** `react/lesson-03-guide-components-jsx-typescript.md`
 > now uses this same `▶ Code along` convention and the "How to use this guide" blockquote,
@@ -538,9 +550,12 @@ Two section-level checks belong here too:
      bullets: *"Not yet: the signed-**in** → `/orders` redirect — you'll see that in §3."*
      This is also where a **flagged transient error** goes when a section teaches view-first
      (principle 9).
-   - The label is always **`Save and check`** — not "Check", not "Quick check".
+   - The label is always **`Save and check`** — not "Check", not "Quick check". (The
+     html-css pass additionally keeps **`▶ Save and look`** for mid-build micro-cues — see
+     the HTML/CSS section above.)
 
-   **Lesson 11 is the worked example**; Lessons 5–10 and 12 follow it.
+   **Lesson 11 is the worked example**; React Lessons 5–10 and 12 follow it, as do
+   html-css Lessons 3–6.
 
 8. **Label every code block with a `title=`, and show *where* edited code goes — full block to
    create, `diff` to modify.** The file name goes in a **Material for MkDocs code-block title**
@@ -706,7 +721,7 @@ guides/labs use a **plain `import { IMenuItem }`** for interfaces — matching t
 guide/lab imports to `import type`, and don't drop the tsconfig step — keeping the flag off is
 the intentional choice (minimize incidental complexity; one config line beats `import type`
 noise on ~40 imports). Copilot/agent-mode output will use `import type`; that's a fine triage
-example, not a house-style correction to adopt.
+example, not a convention correction to adopt.
 
 ---
 
@@ -779,16 +794,16 @@ GitHub Copilot — **TQL's preferred AI assistant** — is woven through the cur
 bolted on. Keep these facts straight when editing or regenerating any Copilot material:
 
 - **Cheat sheet.** `reference/copilot-quickstart.md` is the evergreen, cross-pass reference
-  (the three surfaces, set-up per editor, the verify-don't-trust discipline, the house-style
+  (the three surfaces, set-up per editor, the verify-don't-trust discipline, the convention
   watch-list, and how to hand Copilot files). Every Copilot lesson/stretch links to it; keep
   it editor-neutral except where it deliberately contrasts Visual Studio vs. VS Code.
 - **Two required lessons, sequenced review-before-generate:**
   - **API Lesson 7** (`api/lesson-07-guide-copilot-code-review.md` + lab) — code **review**:
     attach a controller to Copilot Chat and *triage* its suggestions (accept real bugs /
-    reject house-style violations / ignore noise). Guide demos on TableServe; lab reviews the
+    reject convention violations / ignore noise). Guide demos on TableServe; lab reviews the
     student's **PRS backend capstone**.
   - **React Lesson 16** (`react/lesson-16-guide-building-with-copilot.md` + lab) — code
-    **generation**: autocomplete → Chat → agent mode, audited against house style. Lab
+    **generation**: autocomplete → Chat → agent mode, audited against our conventions. Lab
     generates a Staff feature; a capstone stretch (challenge #8 in
     `stretch-react-challenges.md`) builds a PRS feature with agent mode against a rubric.
 - **Pass 2 (HTML/CSS) is intentionally stretch-only** — no required Copilot lesson (it would

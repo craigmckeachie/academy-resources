@@ -73,7 +73,7 @@ drafting test data, and remembering syntax you half-know. Lean on it there.
 
 ---
 
-## ⚠️ House-style watch-list — where Copilot will fight this course
+## ⚠️ Conventions watch-list — where Copilot will fight this course
 
 This course makes deliberate **teaching simplifications**. Copilot, trained on
 production code from everywhere, will confidently suggest the "real-world" version and
@@ -107,7 +107,7 @@ Copilot is only as good as the context you give it:
   *How* you attach that reference matters — see **How to hand Copilot Chat your files**
   below.
 - **Be specific about constraints.** "Use flexbox utilities, not the grid" or "no DTOs —
-  use the model directly" steers it back toward house style before it drifts.
+  use the model directly" steers it back toward project conventions before it drifts.
 - **Ask it to explain, not just produce.** "Explain what this `Include()` does" turns
   Copilot into a tutor for code you're reading — a great use that isn't generation at all.
 - **Work in small steps.** Ask for one method, review it, then the next — not a whole

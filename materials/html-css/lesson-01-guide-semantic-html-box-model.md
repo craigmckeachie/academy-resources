@@ -92,6 +92,13 @@ Your browser opens at a `http://127.0.0.1:5500/…` address. Leave it open — e
 you save a file, the page refreshes itself. That's the loop you'll use the whole pass:
 edit, save, glance at the browser.
 
+**Save and check**
+
+- The browser is at a **`127.0.0.1:5500`** address, not `file:///…` — that's Live Server
+  serving the page rather than your file system opening it.
+- Type anything inside `<body>`, save, and the page **updates on its own** — no refresh.
+- The page is otherwise blank. Nothing's wrong: `styles.css` is still empty.
+
 ---
 
 ## 2. Semantic HTML — tags that mean something

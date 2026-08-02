@@ -242,7 +242,7 @@ browser. You've already done every part of it once.
 
 > **One lesson left before you start.** [Lesson 16](lesson-16-guide-building-with-copilot.md)
 > is a tooling lesson on **building with GitHub Copilot** — autocomplete → Chat → agent mode,
-> and how to audit generated code against this app's house style. It's deliberately last:
+> and how to audit generated code against this project's conventions. It's deliberately last:
 > you now have a complete, hand-built app to judge Copilot's output against, and a capstone
 > ahead where the temptation to let it write whole features is real. It also pairs with a
 > **capstone stretch goal** — build one PRS feature in agent mode against a review rubric.

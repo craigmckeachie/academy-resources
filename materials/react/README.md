@@ -52,7 +52,7 @@ students finish with a complete TableServe — the **Categories** list (L9) and 
 the **Order** create/edit form (L11, which applies the Context from the guide).
 Lessons 13–15 are review, gap-check, and the capstone bridge. **Lesson 16 is a tooling
 lesson** on **GitHub Copilot** (TQL's preferred AI assistant) — generating React code and
-auditing it against this app's house style; verified by observation in the browser, and
+auditing it against this project's conventions; verified by observation in the browser, and
 building on the API pass's Copilot code-review lesson.
 
 ## Prework — optional head start
@@ -93,5 +93,5 @@ guide) or **[Reach]** (goes past it, with a reference link to research).
   list, card/row, skeleton, shared form, thin create/edit wrappers) — learn it once,
   repeat it per entity, then again across all of PRS.
 - **GitHub Copilot** is TQL's preferred AI assistant; Lesson 16 covers using it to
-  *generate* React code and audit it against this app's house style. Keep the
+  *generate* React code and audit it against this project's conventions. Keep the
   [Copilot quick-start](../reference/copilot-quickstart.md) open for the guardrails.

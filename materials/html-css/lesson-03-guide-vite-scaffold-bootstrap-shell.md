@@ -354,6 +354,15 @@ Notice:
 - Bootstrap's **JS bundle** is the last line in `<body>`. It powers the dropdowns
   and modals you'll add later. Every page needs it.
 
+**Save and check**
+
+- Load `/orders.html` — the **header bar** is across the top and the **nav** runs down the
+  left, even though you didn't type either one. That's the partials being pulled in.
+- The area right of the nav is **empty** — correct, `section.content` holds only a comment
+  so far.
+- The font is Bootstrap's, not the browser's default Times — proof the `node_modules`
+  stylesheet link resolved.
+
 ---
 
 ## 7. ▶ Code along — the page-heading pattern
@@ -387,6 +396,15 @@ both.
 For this lesson, the content **below** the heading stays empty — a placeholder
 comment. Filling it with a card grid or table is next lesson's job. This is a
 *skeleton*: shell + heading, nothing more.
+
+**Save and check**
+
+- **Orders** sits hard left and the blue **Create Order** button hard right, on one row —
+  that's `justify-content-between`.
+- A **2px rule** runs under the row, with space above and below it (`pb-4 mb-4`).
+- The button shows a **+ icon** before its label. A missing icon means the `<use href>`
+  path to `assets/bootstrap-icons.svg` is wrong — check it before moving on, because every
+  icon in the app uses this same pattern.
 
 ---
 

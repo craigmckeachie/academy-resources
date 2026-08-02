@@ -84,10 +84,14 @@ a hidden `.invalid-feedback` message:
 Save and look — **nothing changed**, because the messages are hidden. Now prove the
 mechanism to yourself:
 
-**▶ Save and look.** Add `is-invalid` to the username input by hand —
-`class="form-control is-invalid"` — save, and the field turns red with "Username is
-required" beneath it. Delete `is-invalid`, save, and it's gone. That single class is
-the entire error state.
+**Save and check**
+
+- Add `is-invalid` to the username input by hand — `class="form-control is-invalid"` —
+  save, and the field turns **red with "Username is required"** beneath it.
+- Delete `is-invalid`, save, and it's **gone**.
+
+That single class is the entire error state — everything from here just adds and removes
+it for you.
 
 That hand-toggle is how you *understand* it. It's not how a real form should work —
 you can't ask a user (or a peer reviewer) to edit HTML to see the error. Delete any
@@ -167,10 +171,12 @@ right after the Bootstrap bundle:
    </div>
    ```
 
-**▶ Save and look.** Click **Sign in** with both fields empty — both turn red with
-their messages. Type a username and password, click again — it navigates to
-`/orders.html`. That's the whole loop, and it's exactly what `react-hook-form` will do
-in React Lesson 7.
+**Save and check**
+
+- Click **Sign in** with both fields empty — **both turn red** with their messages.
+- Type a username and password, click again — it navigates to `/orders.html`.
+
+That's the whole loop, and it's exactly what `react-hook-form` will do in React Lesson 7.
 
 ![The TableServe Sign In page after submitting empty: both the Username and Password fields have a red border and a warning icon, each with a red "… is required" message below, on the orange gradient background](screenshots/tableserve/signin-invalid.png)
 
@@ -218,11 +224,13 @@ Then wire the form the same way as Sign In — but the **Save staff** button is 
 <form class="d-flex flex-wrap w-75 gap-2" novalidate data-success="/staff.html">
 ```
 
-**▶ Save and look.** Click **Save staff** with the form empty — First Name, Last Name,
-Username, and Password go red; Email and Phone stay clean. Fill the four required
-fields and save — it navigates to `/staff.html`. Try typing past 50 characters in
-Username — the field simply stops accepting input (that's `maxlength`; more in
-section 7).
+**Save and check**
+
+- Click **Save staff** with the form empty — First Name, Last Name, Username, and Password
+  go red; **Email and Phone stay clean** (they're optional).
+- Fill the four required fields and save — it navigates to `/staff.html`.
+- Try typing past 50 characters in Username — the field simply **stops accepting input**.
+  That's `maxlength`, not the script; section 7 explains why it behaves differently.
 
 ![The New Staff form after submitting empty: First Name, Last Name, Username, and Password are red with "… is required" messages, while the optional Email and Phone fields stay clean](screenshots/tableserve/staff-create-invalid.png)
 
@@ -245,11 +253,14 @@ one inside a modal, so wiring it is the same two attributes on the modal's form:
 <form novalidate data-success="/orders.html">
 ```
 
-**▶ Save and look.** Open **Cancel Order**, leave the reason empty, and click
-**Confirm** — the textarea turns red with its message and the modal stays open. Type a
-reason and confirm — it navigates to `/orders.html`. This is the pattern PRS's **Reject
-modal** uses exactly (a required `rejectionReason` before a status change), so wiring it
-here *is* the rehearsal for the capstone.
+**Save and check**
+
+- Open **Cancel Order**, leave the reason empty, and click **Confirm** — the textarea turns
+  red with its message and the **modal stays open**.
+- Type a reason and confirm — it navigates to `/orders.html`.
+
+This is the pattern PRS's **Reject modal** uses exactly (a required `rejectionReason` before
+a status change), so wiring it here *is* the rehearsal for the capstone.
 
 ![The Cancel Order modal after clicking Confirm with an empty reason: the textarea has a red border and a "Cancellation reason is required" message, and the modal stays open over the Order Detail page](screenshots/tableserve/order-detail-cancelModal-invalid.png)
 

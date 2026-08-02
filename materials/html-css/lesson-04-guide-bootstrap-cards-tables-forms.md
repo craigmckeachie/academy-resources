@@ -175,6 +175,15 @@ five categories. (In React, one card becomes a `.map()` over fetched data.)
 > of a framework, and you can see exactly what it's doing because you did it the long
 > way first.
 
+**Save and check**
+
+- The cards sit in a **wrapping grid**, not a single column — narrow the window and they
+  reflow. If they're stacked full-width, the `d-flex flex-wrap` wrapper is missing.
+- Each card shows the name large, the price lighter beneath it, and the category as a
+  **soft pill badge**.
+- Compare it against your hand-styled Lesson 1 card — it should look near-identical, with
+  none of the CSS written by you.
+
 ---
 
 ## 3. Badges
@@ -346,6 +355,15 @@ input; `flex-column` stacks the label above it.
 Hardcode a handful of orders across the full status range (a Placed, a Preparing, a
 Ready, a Served, a Cancelled) so every badge color appears.
 
+**Save and check**
+
+- The table renders with **all five badge colors** visible down the Status column — grey,
+  yellow, blue, green, red.
+- **Hover a row** and it highlights; that's `table-hover` earning its place.
+- The Notes column **wraps** and stays muted rather than stretching the table wide.
+- Each row's **⋮** menu opens with **View / Edit / Delete** — three items here, not the
+  two on a menu card.
+
 ![Finished TableServe Orders table: rows of orders with colored status badges (grey/yellow/blue/green/red), muted wrapping notes, a status filter above, and a three-dots menu per row](screenshots/tableserve/orders.png)
 
 ---
@@ -432,6 +450,16 @@ what PRS's Product form needs for its Vendor dropdown.
 The **Cancel** button is an `<a>` back to the list; **Save** is the `type="submit"`
 button (it won't actually submit in the static pass — no backend wired — but the
 markup is correct for React to take over).
+
+**Save and check**
+
+- Name and Price share a row and the Category dropdown sits below — all from flex
+  utilities, no `row`/`col`.
+- Open the **Category** dropdown — your seeded category names are listed.
+- **Click a label** (say "Name") and the cursor jumps into its input. If it doesn't, that
+  label's `for` doesn't match the input's `id` — worth fixing now, since every form in the
+  pass repeats this pairing.
+- **Cancel** returns to the list. **Save** does nothing yet — expected, there's no backend.
 
 ![Finished TableServe Menu Item form: Name and Price fields sharing a row, a Category dropdown below, and right-aligned Cancel and Save buttons](screenshots/tableserve/menuitem-create.png)
 

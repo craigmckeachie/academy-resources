@@ -21,7 +21,7 @@ Reviewing code you own is the safest, highest-value way to start using AI: it ca
 the work for you, it can only give you a second opinion to judge.
 
 > **Prerequisite:** skim the [GitHub Copilot quick-start](../reference/copilot-quickstart.md)
-> first — especially **The discipline: verify, don't trust**, the **house-style
+> first — especially **The discipline: verify, don't trust**, the **convention
 > watch-list**, and **How to hand Copilot Chat your files**. This lesson puts all three to
 > work.
 
@@ -40,7 +40,7 @@ Two things make a review useful:
   contents of a specific file, even one you don't have open. Pasting works too, but it's a
   snapshot that goes stale the moment you edit. (See the cheat sheet's *How to hand Copilot
   Chat your files*.)
-- **Tell it the rules of the house.** Copilot doesn't know this project's conventions, so
+- **Tell it the rules up front.** Copilot doesn't know this project's conventions, so
   it will suggest the "normal" production version of everything. You can head that off by
   putting the constraints in the prompt (section 4).
 
@@ -69,7 +69,7 @@ them.
 - *"The response doesn't include the `Staff` navigation property, so it's `null` in the
   JSON."* → **Accept** — you forgot an `Include(o => o.Staff)`. Real bug.
 
-### Bucket B — reject: a house-style violation
+### Bucket B — reject: a convention violation
 
 These are the ones that separate a student who understands the material from one who
 doesn't. Copilot is confidently recommending the production-grade pattern this course
@@ -93,7 +93,7 @@ doesn't. Copilot is confidently recommending the production-grade pattern this c
   loading stays visible.
 
 Every one of these is Copilot **not knowing your rules** — not a gap in your code. (This is
-the whole **house-style watch-list** from the cheat sheet, showing up live.)
+the whole **conventions watch-list** from the cheat sheet, showing up live.)
 
 ### Bucket C — ignore: noise or a misread
 
@@ -137,7 +137,7 @@ suggesting the things you'd only reject:
 
 That single paragraph moves most of Bucket B out of the response before it appears, leaving
 a review that's mostly real bugs. Notice this is the same "give it a reference / give it
-the constraints" idea from the cheat sheet — you're teaching Copilot the house style one
+the constraints" idea from the cheat sheet — you're teaching Copilot the project conventions one
 prompt at a time.
 
 Two other high-value review prompts:
@@ -153,7 +153,7 @@ There's no "wall of green" for the review itself; you verify by **observation**:
 
 1. **Every suggestion is triaged.** You can point at each item and say accept / reject /
    ignore **and why.** None were accepted just because Copilot sounded confident.
-2. **You rejected the house-style violations** — and could explain the course's reason for
+2. **You rejected the convention violations** — and could explain the course's reason for
    each (no DTOs, no JWT, `SetValues` not `EntityState.Modified`, …). Catching these is the
    clearest sign you understand the material.
 3. **Every change you accepted still passes Insomnia.** For any fix you applied, re-run
@@ -162,7 +162,7 @@ There's no "wall of green" for the review itself; you verify by **observation**:
    change that reds a test gets reverted or fixed.
 
 If Copilot found a real bug you'd missed, that's a win — you fixed it *and* you now know
-what to watch for. If it found nothing but house-style "improvements," that's also a win —
+what to watch for. If it found nothing but convention "improvements," that's also a win —
 you correctly rejected all of them.
 
 ---
@@ -170,7 +170,7 @@ you correctly rejected all of them.
 ## The General Pattern (what to take away)
 
 - An AI review is **opinions to judge, not fixes to apply.** You own every accept/reject.
-- Sort every suggestion into **accept** (real bug), **reject** (house-style violation), or
+- Sort every suggestion into **accept** (real bug), **reject** (convention violation), or
   **ignore** (noise) — **with a one-line reason each.**
 - The rejects are the tell: Copilot will push DTOs, repositories, JWT, `EntityState.Modified`,
   tighter CORS, `virtual` nav properties — the exact simplifications this course made on
@@ -187,13 +187,13 @@ good as the engineer triaging it.
 ## Build Steps
 
 1. Open your TableServe API in the editor with **Copilot Chat** available, and open the
-   [Copilot quick-start](../reference/copilot-quickstart.md) alongside for the house-style
+   [Copilot quick-start](../reference/copilot-quickstart.md) alongside for the convention
    watch-list.
 2. In Chat, attach a controller with a **`#` file reference** (e.g. `#StaffController.cs`)
    and ask for a review of bugs and correctness issues.
 3. Read the response and **sort every item** into accept / reject / ignore, writing a
    one-line reason for each.
-4. Confirm at least the obvious house-style suggestions land in **reject**, and that you
+4. Confirm at least the obvious convention violations land in **reject**, and that you
    can state the course's reason (no DTOs, no `[Authorize]`, `SetValues` not
    `EntityState.Modified`, etc.).
 5. Re-run the review with the **constraints paragraph** from section 4 and notice how many

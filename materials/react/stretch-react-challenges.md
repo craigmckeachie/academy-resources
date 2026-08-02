@@ -186,7 +186,7 @@ then review it against a rubric before keeping a line.
    pages render, the Console is clean, and Network shows calls to your PRS API.
 
 Agent mode can draft a feature in one shot, but shipping it is a **review you own** — the
-rubric is just the house-style guardrails written down. Research agent mode:
+rubric is just this project's conventions written down. Research agent mode:
 [Copilot Chat in VS Code](https://code.visualstudio.com/docs/copilot/overview).
 
 ---

@@ -14,7 +14,7 @@ here is a step-by-step build — these are lookups.
   **API Lesson 1**.
 - [GitHub Copilot quick-start](copilot-quickstart.md) — TQL's preferred AI assistant:
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
-  discipline, and the house-style watch-list. Backs the Copilot lessons and stretch
+  discipline, and the conventions watch-list. Backs the Copilot lessons and stretch
   challenges across all three passes.
 - [Anatomy of C# Code](anatomy-of-csharp-code.md) — an annotated model and controller that
   name every part: class, object, method, parameter, field, local variable, property, and
