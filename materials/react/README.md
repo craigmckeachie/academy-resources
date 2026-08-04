@@ -73,6 +73,14 @@ utilities — see [Stretch challenges](stretch-react-challenges.md). None of it 
 for the capstone; it's optional extra practice, tagged **[Reinforce]** (builds on the
 guide) or **[Reach]** (goes past it, with a reference link to research).
 
+## Optional polish
+
+[**The ⋮ menu's orange ring and caret**](polish-dropdown-menus.md) — react-bootstrap's
+`Dropdown.Toggle` adds a `btn-primary` variant and a ▾ caret you never typed, so the
+three-dots menus pick up an orange focus ring and an extra glyph the static design doesn't
+have. A one-line fix per menu, plus one CSS rule. Optional and not required for the
+capstone; apply it any time after Lesson 6.
+
 ## Tips
 
 - Every guide and lab uses the **TableServe** domain (Staff, Categories, MenuItems,
