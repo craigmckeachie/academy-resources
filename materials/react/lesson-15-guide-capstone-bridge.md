@@ -240,9 +240,16 @@ table for every rule and message.
 Build PRS the way you built TableServe — one feature folder at a time, verified in the
 browser. You've already done every part of it once.
 
-> **One lesson left before you start.** [Lesson 16](lesson-16-guide-building-with-copilot.md)
-> is a tooling lesson on **building with GitHub Copilot** — autocomplete → Chat → agent mode,
-> and how to audit generated code against this project's conventions. It's deliberately last:
-> you now have a complete, hand-built app to judge Copilot's output against, and a capstone
-> ahead where the temptation to let it write whole features is real. It also pairs with a
-> **capstone stretch goal** — build one PRS feature in agent mode against a review rubric.
+> **The capstone starts now — and AI has a line drawn through it.** Read the
+> [AI use policy](../reference/ai-policy.md) before you begin. During the capstone, **AI
+> reads code with you; it doesn't write code for you**: explaining code, researching syntax,
+> debugging an error, and reviewing code *you* wrote are all fair game — generating a
+> component or a feature folder, and agent mode, are not. The test is *"did I already know
+> what I wanted to write?"*
+>
+> **[Lesson 16](lesson-16-guide-building-with-copilot.md) comes after the capstone**, not
+> before it. It's the tooling lesson on **building with GitHub Copilot** — autocomplete →
+> Chat → agent mode, and how to audit generated code against this project's conventions. It
+> sits there on purpose: by then you'll have built two complete apps by hand, which is the
+> only thing that makes you able to judge what Copilot hands you. You can't review code you
+> never understood.

@@ -39,10 +39,16 @@ Across the passes you build the **Purchase Request System (PRS)** independently.
 authoritative requirements — data model, endpoints, pages, and business rules — are
 in [PRS requirements](specs/prs-requirements.md).
 
+**Before you start a capstone, read the [AI use policy](reference/ai-policy.md).** During a
+capstone, AI reads code with you; it doesn't write code for you — explaining, researching,
+debugging, and reviewing your own code are allowed; generating components and agent mode
+wait until afterwards.
+
 ## Reference cheat sheets
 
 Evergreen references to keep open throughout:
 
+- [AI use policy](reference/ai-policy.md)
 - [HTTP, REST, JSON & Status Codes](reference/http-rest-status-codes.md)
 - [Insomnia quick-start](reference/insomnia-quickstart.md)
 

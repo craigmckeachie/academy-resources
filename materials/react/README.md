@@ -5,8 +5,9 @@ with two JavaScript/TypeScript intro lessons for C# developers** (run in a throw
 vanilla-ts scratch project), then a **React orientation** — components, JSX, and
 rendering lists — before building the TableServe front end one concept at a time (data
 fetching, routing, forms, detail pages, modals, auth/context, toasts), then review lessons
-and a **capstone bridge** into PRS, and closes with a **tooling lesson** on building with
-GitHub Copilot.
+and a **capstone bridge** into PRS. **Lesson 16 — the tooling lesson on building with GitHub
+Copilot — comes *after* the PRS capstone**, not before it: see the
+[AI use policy](../reference/ai-policy.md).
 
 ## File types
 
@@ -37,7 +38,7 @@ guide and what you built alongside it as your model.
 | 13 | [Review/Buffer: the feature-folder pattern across your app](lesson-13-guide-review-categories-crud.md) | *Review — no lab* |
 | 14 | [Review/Buffer: full-app review and PRS gap-check](lesson-14-guide-review-app-gap-check.md) | *Review — no lab* |
 | 15 | [Capstone bridge: building the PRS front end](lesson-15-guide-capstone-bridge.md) | *Bridge — no lab* |
-| 16 | [Building with GitHub Copilot: autocomplete, Chat, agent mode](lesson-16-guide-building-with-copilot.md) | [Generate a Staff feature and audit it](lesson-16-lab-generate-and-audit-staff.md) |
+| 16 *(after the capstone)* | [Building with GitHub Copilot: autocomplete, Chat, agent mode](lesson-16-guide-building-with-copilot.md) | [Generate a Staff feature and audit it](lesson-16-lab-generate-and-audit-staff.md) |
 
 **Lessons 1–2 are JavaScript/TypeScript intro lessons** for students coming straight from
 the C# API pass — the language mapped onto what they already know, run and verified by
@@ -50,10 +51,13 @@ TableServe entity to repeat them on, so they're built once alongside the instruc
 **labs** don't repeat those exact patterns; instead they **build out the rest of the app** so
 students finish with a complete TableServe — the **Categories** list (L9) and form (L10), and
 the **Order** create/edit form (L11, which applies the Context from the guide).
-Lessons 13–15 are review, gap-check, and the capstone bridge. **Lesson 16 is a tooling
-lesson** on **GitHub Copilot** (TQL's preferred AI assistant) — generating React code and
-auditing it against this project's conventions; verified by observation in the browser, and
-building on the API pass's Copilot code-review lesson.
+Lessons 13–15 are review, gap-check, and the capstone bridge — and the capstone follows
+them. **Lesson 16 is a tooling lesson** on **GitHub Copilot** (TQL's preferred AI assistant)
+— generating React code and auditing it against this project's conventions; verified by
+observation in the browser, and building on the API pass's Copilot code-review lesson. It
+is taught **after you finish the PRS capstone**, because generating whole features is
+exactly what the [AI use policy](../reference/ai-policy.md) holds back until the app has
+been built by hand.
 
 ## Prework — optional head start
 
@@ -106,6 +110,11 @@ capstone — pick them up whenever you have time.
 - Each entity uses the same **feature folder** pattern (interface, API module, page,
   list, card/row, skeleton, shared form, thin create/edit wrappers) — learn it once,
   repeat it per entity, then again across all of PRS.
-- **GitHub Copilot** is TQL's preferred AI assistant; Lesson 16 covers using it to
-  *generate* React code and audit it against this project's conventions. Keep the
-  [Copilot quick-start](../reference/copilot-quickstart.md) open for the guardrails.
+- **Read the [AI use policy](../reference/ai-policy.md) before the capstone.** During a
+  capstone, AI reads code with you; it doesn't write code for you — explaining, researching,
+  debugging, and reviewing your own code are allowed; generating components and agent mode
+  wait until after.
+- **GitHub Copilot** is TQL's preferred AI assistant; Lesson 16 — taught **after** the
+  capstone — covers using it to *generate* React code and audit it against this project's
+  conventions. Keep the [Copilot quick-start](../reference/copilot-quickstart.md) open for
+  the guardrails.

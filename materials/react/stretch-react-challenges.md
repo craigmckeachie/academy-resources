@@ -163,12 +163,20 @@ status-badge-color function. Reference:
 
 ---
 
-## 8. Build a PRS feature with Copilot's agent mode — [Reach]
+## 8. Build a PRS feature with Copilot's agent mode — [Reach] · *after the capstone only*
 
-You built the whole TableServe front end by hand and — in **Lesson 16** — learned to
-*generate* and *audit* with Copilot. Put both together: use **agent mode** to build **one**
-PRS feature end to end (say the **Vendors** feature folder — the analog of Staff/Categories),
-then review it against a rubric before keeping a line.
+!!! warning "Not a capstone challenge — save this one for afterwards"
+
+    Agent mode is deferred until the PRS capstone is finished. See the
+    [AI use policy](../reference/ai-policy.md): during a capstone, AI reads code with you;
+    it doesn't write code for you. This challenge unlocks alongside **Lesson 16**, which is
+    taught after the capstone.
+
+You built the whole TableServe front end by hand, built PRS by hand in the capstone, and —
+in **Lesson 16** — learned to *generate* and *audit* with Copilot. Put all three together:
+use **agent mode** to build **one** additional PRS feature end to end (say a **Vendors**
+rebuild, or a feature the capstone didn't call for), then review it against a rubric before
+keeping a line.
 
 1. Point Copilot at a finished TableServe feature folder as the template (`#StaffAPI.ts`,
    `#StaffForm.tsx`, …) and describe the Vendors feature: interface, API module, page, list,

@@ -12,6 +12,10 @@ here is a step-by-step build — these are lookups.
 - [Insomnia quick-start](insomnia-quickstart.md) — what Insomnia is, importing the
   TableServe collection, setting `baseUrl`, and reading responses. First taught in
   **API Lesson 1**.
+- [AI use policy](ai-policy.md) — **read this before every capstone.** During a capstone,
+  AI reads code with you; it doesn't write code for you. Explaining, researching, debugging,
+  and reviewing your own code are allowed; generating components and agent mode wait until
+  after. Includes the allowed/deferred table and the one test that settles most cases.
 - [GitHub Copilot quick-start](copilot-quickstart.md) — TQL's preferred AI assistant:
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
   discipline, and the conventions watch-list. Backs the Copilot lessons and stretch

@@ -155,11 +155,18 @@ much Copilot wrote:
 The bigger the generation, the more this matters — a whole agent-mode feature deserves the
 same scrutiny you'd give a colleague's PR, because that's what it is.
 
-> **Looking ahead — the capstone.** The PRS front end is the ideal place to use this well:
-> you have a finished TableServe app as the template and a static PRS markup pass to convert.
-> A **capstone stretch goal** has you build one PRS feature with agent mode against a review
-> rubric — see [stretch-react-challenges.md](stretch-react-challenges.md). It's optional and
-> never required to finish the capstone.
+> **Why this lesson is here and not earlier.** You've now built two full front ends by
+> hand — TableServe across this pass, PRS in the capstone. That's deliberate: the
+> [AI use policy](../reference/ai-policy.md) holds generation back until the capstone is
+> done, because **you can't review code you never understood.** Everything in this lesson
+> was off-limits a week ago; it isn't now, and the reason it isn't is the two apps behind
+> you.
+>
+> **What to do with it next.** Challenge #8 in
+> [stretch-react-challenges.md](stretch-react-challenges.md) has you build one more PRS
+> feature with agent mode against a review rubric — optional, and now unlocked. Beyond
+> that, the **team development block** puts agent mode in a shared repository where every
+> generated line passes a teammate's pull-request review before it merges.
 
 ---
 

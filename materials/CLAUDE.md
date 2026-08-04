@@ -187,6 +187,7 @@ materials/
     http-rest-status-codes.md
     insomnia-quickstart.md
     copilot-quickstart.md
+    ai-policy.md                       # reads-not-writes during capstones; allowed/deferred table
     csharp-naming-conventions.md
     anatomy-of-csharp-code.md
     anatomy-of-csharp-code-quiz.md
@@ -797,6 +798,15 @@ bolted on. Keep these facts straight when editing or regenerating any Copilot ma
   (the three surfaces, set-up per editor, the verify-don't-trust discipline, the convention
   watch-list, and how to hand Copilot files). Every Copilot lesson/stretch links to it; keep
   it editor-neutral except where it deliberately contrasts Visual Studio vs. VS Code.
+- **AI use policy.** `reference/ai-policy.md` is the evergreen, cross-pass rulebook:
+  **during a capstone, AI reads code with you; it doesn't write code for you.** Explaining,
+  researching, debugging, and reviewing your own code are allowed; generating
+  components/features and agent mode are deferred until after the capstone. The governing
+  test is *"did I already know what I wanted to write?"* — which is why autocomplete
+  finishing a decided-on line is allowed and autocomplete writing an unplanned block is not.
+  The rationale is that **you can't review code you never understood**, so the hand-built
+  reps must come first. Don't soften this into "use AI responsibly"; the allowed/deferred
+  table is the point.
 - **Two required lessons, sequenced review-before-generate:**
   - **API Lesson 7** (`api/lesson-07-guide-copilot-code-review.md` + lab) — code **review**:
     attach a controller to Copilot Chat and *triage* its suggestions (accept real bugs /
@@ -804,8 +814,12 @@ bolted on. Keep these facts straight when editing or regenerating any Copilot ma
     student's **PRS backend capstone**.
   - **React Lesson 16** (`react/lesson-16-guide-building-with-copilot.md` + lab) — code
     **generation**: autocomplete → Chat → agent mode, audited against our conventions. Lab
-    generates a Staff feature; a capstone stretch (challenge #8 in
-    `stretch-react-challenges.md`) builds a PRS feature with agent mode against a rubric.
+    generates a Staff feature. **Taught *after* the PRS React capstone, not at the capstone
+    bridge** — it keeps the number 16 but opens the post-capstone period, because agent mode
+    and whole-feature generation are exactly what the AI policy defers. A future regeneration
+    must not move it back before the capstone.
+  - Challenge #8 in `stretch-react-challenges.md` (build a PRS feature with agent mode
+    against a rubric) is therefore a **post-capstone** challenge, not a capstone stretch.
 - **Pass 2 (HTML/CSS) is intentionally stretch-only** — no required Copilot lesson (it would
   undercut the hand-building focus). Copilot appears there as challenges #7–#8 in
   `stretch-html-css-challenges.md` (generate-and-audit markup; review your markup).

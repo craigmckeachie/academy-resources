@@ -76,7 +76,7 @@ guide and Lesson 4. Confirm:
 
 ## Stretch challenges
 
-Optional — for when you finish early. Not needed for the capstone.
+Optional — for when you finish early. Not required.
 **[Reinforce]** builds on what you just did; **[Reach]** goes past the guide and needs some
 research.
 
@@ -86,7 +86,8 @@ research.
   context is the lever.
 - **Convert a static page** — [Reinforce] — take one finished Bootstrap page from the
   HTML/CSS pass and ask Copilot to convert it into a component, then audit the conversion for
-  flexbox-only layout and the feature-folder split. (This is exactly the capstone's job.)
+  flexbox-only layout and the feature-folder split. (You did exactly this by hand in the
+  capstone — compare.)
 - **Agent-mode a whole feature folder** — [Reach] — have agent mode scaffold a small new
   entity's feature folder (interface, API, page, list, card, form) end to end, then review
   the entire diff against our conventions before keeping any of it. Research agent mode:
@@ -94,11 +95,13 @@ research.
 - **Copilot as tutor** — [Reinforce] — ask Copilot to **explain** a generated hook or the
   async `defaultValues` pattern, and confirm its explanation matches what the code does.
 
-For the bigger, capstone-facing challenge — building a whole PRS feature with agent mode
-against a review rubric — see [stretch-react-challenges.md](stretch-react-challenges.md).
+For the bigger challenge — building a whole PRS feature with agent mode against a review
+rubric — see challenge #8 in [stretch-react-challenges.md](stretch-react-challenges.md).
+It's unlocked now that the capstone is behind you.
 
 ---
 
-Same generate-then-triage discipline, now on code an AI wrote: on the PRS capstone you can
-lean on Copilot to move fast, as long as *you* remain the engineer who decides what's good
-enough to keep.
+Same generate-then-triage discipline, now on code an AI wrote. You built TableServe and PRS
+by hand first, and that's the whole reason you can judge this output at all — from here you
+can lean on Copilot to move fast, as long as *you* remain the engineer who decides what's
+good enough to keep.
