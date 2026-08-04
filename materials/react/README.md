@@ -75,11 +75,17 @@ guide) or **[Reach]** (goes past it, with a reference link to research).
 
 ## Optional polish
 
-[**The ⋮ menu's orange ring and caret**](polish-dropdown-menus.md) — react-bootstrap's
-`Dropdown.Toggle` adds a `btn-primary` variant and a ▾ caret you never typed, so the
-three-dots menus pick up an orange focus ring and an extra glyph the static design doesn't
-have. A one-line fix per menu, plus one CSS rule. Optional and not required for the
-capstone; apply it any time after Lesson 6.
+Small, self-contained improvements to the app you built. None of it is required for the
+capstone — pick them up whenever you have time.
+
+- [**The ⋮ menu's orange ring and caret**](polish-dropdown-menus.md) — react-bootstrap's
+  `Dropdown.Toggle` adds a `btn-primary` variant and a ▾ caret you never typed, so the
+  three-dots menus pick up an orange focus ring and an extra glyph the static design
+  doesn't have. A one-line fix per menu, plus one CSS rule. Any time after Lesson 6.
+- [**A loading splash while the bundle downloads**](polish-loading-splash.md) — the blank
+  white page before React's first render is an empty `<div id="root">`. Fill it with markup
+  and inline CSS and it paints immediately, then clears itself when the app mounts. Any
+  time after Lesson 3.
 
 ## Tips
 
