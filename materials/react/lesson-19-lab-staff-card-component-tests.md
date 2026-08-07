@@ -148,6 +148,6 @@ research.
   before you write anything; *"nothing useful"* is a legitimate conclusion and knowing why is
   the point.
 - **Past the boundary** — [Reach] — `MenuItemList` fetches its data, so testing it means faking
-  `fetch`. Research `vi.mock` or **MSW**, and get one test passing that renders the list with a
-  fake response. You're outside the course here — notice how much more setup it takes, and how
-  much more there is to get subtly wrong.
+  the network. Try it before you're shown how: research **MSW**, and get one test passing that
+  renders the list from a fake response. Then compare what you came up with against
+  [Lesson 20](lesson-20-guide-testing-pages-that-fetch.md).

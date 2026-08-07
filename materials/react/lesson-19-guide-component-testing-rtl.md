@@ -385,19 +385,23 @@ import userEvent from "@testing-library/user-event";
 
 ---
 
-## 6. What this lesson deliberately does not test
+## 6. Where this lesson stops — and what's next
 
 Click **Delete** on that card and it calls `confirm()`, then `menuItemAPI.delete(id)`, which is
-a real `fetch` at a real API. In a test, that means either standing up a server or **replacing
-`fetch` with a fake** — `vi.mock`, or a library like MSW.
+a real `fetch` at a real API. There isn't one running, so that test would hang or blow up.
 
-**That's out of scope for this course, and it's a boundary rather than an omission.** Mocking is
-a whole topic: what to fake, how much, and how to avoid tests that pass against a fake that
-stopped resembling the real thing years ago. It deserves more room than a nineteenth lesson has.
+**So this lesson stops at components you hand props to, plus interactions that stay inside the
+component.** That's `MenuItemCard`'s dropdown opening. It isn't `MenuItemList` fetching its
+data, and it isn't Delete.
 
-So the rule to leave with: **test components that take props and render them, plus interactions
-that don't leave the component.** That's `MenuItemCard`'s dropdown opening. It isn't
-`MenuItemList` fetching its data.
+That's a real boundary, and it's a narrower one than it sounds — cards, rows, badges, headers,
+form fields, empty states, anything conditional on a prop. Those are most of the components in
+this app, they're where the visual bugs live, and they need nothing beyond what you've
+installed.
+
+To cross it you need a fake API, which is one more library and one more idea:
+**[Lesson 20](lesson-20-guide-testing-pages-that-fetch.md)** does exactly that, and finishes
+the Delete flow you just stopped short of.
 
 That's not a small category. Cards, rows, badges, headers, form fields, empty states, anything
 conditional on a prop — those are most of the components in this app, they're where the visual
@@ -425,8 +429,8 @@ bugs live, and they need nothing you haven't got.
   click did anything.
 - **A component that throws in a test but works in the app is usually missing context** — a
   router, a provider.
-- **Fetching components are out of scope**, on purpose. Props in, DOM out, plus a local
-  interaction, covers most of what you'd want to pin down.
+- **Props in, DOM out, plus a local interaction** covers most of what you'd want to pin down.
+  Components that fetch need a fake API — that's Lesson 20.
 
 ---
 

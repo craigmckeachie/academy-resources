@@ -920,6 +920,7 @@ Added at the end deliberately: purely additive, so no existing lesson number mov
 | **17** *(required)* | First unit tests: Vitest setup, `describe`/`it`/`expect`, watch mode, **red before green** — **built** | `getTextBackgroundByStatus` in `utility/formatUtilities.ts` | `formatPhoneNumber` |
 | **18** *(required)* | Edge cases; a function that **throws**; async tests; `await expect(...).rejects.toThrow()`; a fake `new Response("", { status: 404 })`; **generating tests and what that gets wrong** — **built** | `translateStatusToErrorMessage` + `checkStatus` in `utility/fetchUtilities.ts` | `parseJSON` + `formatPhoneNumber` edge cases |
 | **19** *(**optional**)* | React Testing Library: `render`, `screen.getByRole` vs `getByText`, `user-event`, assert what the **user sees** — **built** | `MenuItemCard` (props, then a ⋮ click revealing Edit/Delete) | `StaffCard` |
+| **20** *(**optional**)* | A fake API with **MSW**: handlers, `setupServer`, the listen/reset/close lifecycle, `findBy…` for data that hasn't arrived, `server.use()` for a 500, `vi.spyOn` for `confirm` — **built** | `MenuItemList` (list, loading skeletons, error toast) | `StaffList` + the delete flow |
 
 Conventions specific to these — carry them through on any regeneration:
 
@@ -945,9 +946,19 @@ Conventions specific to these — carry them through on any regeneration:
   explicitly (unit tests assert what a function returns; component tests assert what a user
   reads; when two tests disagree, check whether they're asking different questions). Don't cut
   that note — it's what ties L17, L18 and L19 together.
-- **Mocking `fetch` is out of scope** — that means `vi.mock` or MSW, a whole further topic.
-  L19 stops at presentational components with props plus one interaction, and **says so**, so
-  the boundary reads as deliberate. Data-loading component tests are a `[Reach]` stretch.
+- **L19 stops at props-in/DOM-out plus a local interaction; L20 crosses that line.** L19 §6 is
+  the hand-off and links forward — keep the two in sync if either is regenerated.
+- **L20 teaches MSW, not `vi.mock`, and the reasoning is course-specific**: mocking the API
+  module would skip `checkStatus` and `parseJSON`, the two functions L18 unit-tested, whereas
+  intercepting the network runs them for real — so a 500 handler exercises the actual throw
+  path and the actual `translateStatusToErrorMessage`. `vi.spyOn` is taught alongside for the
+  non-HTTP case (`window.confirm` in the delete flow). Rule as stated: **network → MSW,
+  everything else → `vi.mock`/`vi.spyOn`.** Don't swap L20 to module mocking.
+- **MSW v2 API only** — `http` + `HttpResponse` from `msw`, `setupServer` from `msw/node`.
+  Never `rest.get` / `res(ctx.json())`, which is v1.
+- **L20's handler URLs use `http://localhost:5556/api`** — TableServe's `BASE_URL`. 5555 is
+  PRS. And `menuItemAPI.list()`'s `.then(delay(200))` is what makes the loading-state
+  assertion possible; don't remove it from the reference app.
 - **Use the targets' real quirks rather than tidying them.** TableServe's `formatPhoneNumber`
   returns a **trailing space** (`` `…-${last3Digits} ` ``), so a student's first assertion
   fails on whitespace — a genuine lesson in asserting exactly. Its `last3Digits` variable
