@@ -963,12 +963,20 @@ Conventions specific to these — carry them through on any regeneration:
   in `formatUtilities.ts`.
 - **AI is explicitly off in L17 and comes back in L18.** L17 says so in a callout, with the
   reason: you cannot see how generated tests fail if you've never written one or watched one
-  go red. L18's **§6 owns the generated-tests material** — its thesis is *generated tests
+  go red. L18's **§7 owns the generated-tests material** — its thesis is *generated tests
   **describe** current behaviour; hand-written tests **specify** intended behaviour*, demoed
   on Copilot faithfully asserting `formatPhoneNumber`'s trailing space, plus the
   you-decide/it-drafts split and *a generated test you've never seen red is unverified*.
   Don't move that section into L17 and don't drop L17's callout — it's the one lesson after
   L16 that closes the door again, so it has to justify itself.
+- **Coverage is taught once, in L18 §6, and kept deliberately short** — run it, read the
+  uncovered line numbers, open `coverage/index.html`, gitignore the folder, one caveat. It was
+  trimmed from a much longer version on purpose (these are first-time testers); **don't let a
+  regeneration grow it back** into branch-vs-statement coverage, thresholds, or CI gates.
+  Placed immediately before the generated-tests section because the two share one warning —
+  *executed ≠ verified* — and §7 calls back to it. The concrete finding is real and verified:
+  after L17 + L18, `fetchUtilities.ts` is short of 100% because **`delay` is exported, used by
+  `MenuItemAPI` and `CategoryAPI`, and never tested**. Re-check that if those files change.
 - **🔒 `translateStatusToErrorMessage` differs between the two apps ON PURPOSE.** TableServe
   says `"Please sign in again."` (**correct**); PRS says `"Please sigin again."` (**the
   typo**). L18 teaches this function on TableServe, so the typo stays undiscovered until the

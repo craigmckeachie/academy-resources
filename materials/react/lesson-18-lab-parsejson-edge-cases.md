@@ -6,7 +6,9 @@ left out: the empty string, the `null` that TypeScript says can't happen, and a 
 too short.
 
 > **Prerequisite:** the guide's `src/utility/fetchUtilities.test.ts`, green. Leave `npm test`
-> running in watch mode.
+> running in watch mode. The Vitest snippets from Lesson 17 earn their keep here — **`ia`** is
+> the async `it` you'll want for every test in Part 1, and **`te`** gives you
+> `expect().toEqual()`.
 
 ---
 
@@ -49,7 +51,35 @@ One line, and it can still fail in a way your users would see.
     the test fail on someone else's machine for no reason. This is exactly the guide's
     section 5 call: assert the message when the message *is* the behaviour, and don't when it
     isn't.
-4. Add one more malformed case — a body that's plainly not JSON, like `"Not found"`.
+4. Add one more malformed case, and make it a realistic one: **an HTML error page.** When a
+   proxy or a crashed server answers a request meant for your API, this is what comes back
+   instead of JSON:
+
+    ```ts
+    it("rejects when the body is HTML rather than JSON", async () => {
+      await expect(
+        parseJSON(new Response("<!DOCTYPE html><h1>502 Bad Gateway</h1>"))
+      ).rejects.toThrow();
+    });
+    ```
+
+    If you've ever seen *"Unexpected token '<' … is not valid JSON"* in a browser console,
+    that's this exact test, happening for real.
+
+!!! note "Wait — isn't a plain string valid JSON?"
+
+    Only in quotes, and that's a distinction worth getting straight now.
+
+    JSON's top level can be a string, but it has to be **double-quoted**: `"Not found"` is valid
+    JSON and parses to the string `Not found`. Bare `Not found` is not valid JSON at all.
+
+    The catch is that `new Response("Not found")` doesn't send quotes. Those quotes are
+    **JavaScript's**, marking where the string literal starts and ends — the bytes in the body
+    are just `Not found`, so `.json()` chokes on the `N`. To send a body that really is a quoted
+    JSON string you'd need the quotes *inside* the value: `new Response('"Not found"')`.
+
+    Same reason the happy-path test above uses `'{"id": 1, "name": "Fries"}'` — single quotes
+    outside so the double quotes survive into the body.
 
 ✅ **Checkpoint:** `parseJSON` has three tests, and you can say in one sentence why one of them
 asserts a message and the others don't.

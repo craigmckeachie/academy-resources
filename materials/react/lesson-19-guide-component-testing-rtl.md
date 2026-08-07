@@ -16,12 +16,16 @@ survive you rewriting how it works.**
 
 > **Prerequisite:** Lessons 17 and 18 — Vitest installed and both utility test files green.
 
-!!! note "This lesson is optional, and it's the only one that installs anything"
+!!! note "This lesson is optional, and it carries its own setup"
 
-    Lessons 17 and 18 needed one package. This one needs four, plus a config change, because
-    rendering a component means giving Node something that pretends to be a browser. That's
-    exactly why it's the optional one and why it's last: **skip it and nothing you already
-    have breaks.** Lessons 17–18 keep running in plain Node, untouched.
+    Lesson 17 installed one package and needed no configuration; Lesson 18 added one more for
+    coverage. This lesson needs **four packages, a new setup file, and a change to
+    `vite.config.ts`** — because rendering a component means giving Node something that
+    pretends to be a browser, and that doesn't come for free.
+
+    All of it lives here and nowhere earlier, which is what makes "optional" real: **skip this
+    lesson and nothing you already have breaks.** Lessons 17–18 keep running in plain Node,
+    untouched.
 
 !!! warning "Still the terminal, not the browser"
 
@@ -56,6 +60,27 @@ And one thing deliberately doesn't change: **you still assert what's on screen.*
 props object, not internal state, not which hook ran. If you rename a state variable and a test
 breaks, that test was testing the wrong thing.
 
+That isn't a house rule — it's the library's stated reason for existing:
+
+> The more your tests resemble the way your software is used, the more confidence they can
+> give you.
+>
+> — **Kent C. Dodds**, [Testing Library's guiding principle](https://testing-library.com/docs/)
+
+Which is why its queries are the ones a *person* would use — find the text, find the button —
+and why there's no API for reaching inside a component. Nobody using TableServe knows what your
+state variables are called; a test that knows is testing something your users can't experience,
+and it'll break on a refactor that changed nothing they'd notice.
+
+It has a second payoff you get for free: because those queries lean on **roles and accessible
+names**, they're the same handles a screen reader uses — so writing tests this way quietly
+pushes your markup toward being usable by people who can't see it. Section 4 shows where that
+bites on this card.
+
+That goes for the **names** too — Lesson 17's rule with a different subject. The `it` finishes
+a sentence about what a user sees: *renders the price*, *shows the Manager badge for a
+manager*, *reveals Edit and Delete when the menu is opened*. Never *sets `showMenu` to true*.
+
 | Testing Library asks | It never asks |
 |---|---|
 | Is this text on the screen? | What's in `useState` right now? |
@@ -88,19 +113,23 @@ import "@testing-library/jest-dom/vitest";
 
 And point Vitest at it:
 
-```ts title="TableServe.Web/vite.config.ts"
-/// <reference types="vitest" />
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+```diff title="TableServe.Web/vite.config.ts"
++ /// <reference types="vitest" />
+  import { defineConfig } from "vite";
+  import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    setupFiles: "./vitest.setup.ts",
-  },
-});
+  // https://vitejs.dev/config/
+  export default defineConfig({
+    plugins: [react()],
++   test: {
++     setupFiles: "./vitest.setup.ts",
++   },
+  });
 ```
+
+Two insertions, and the first one is easy to miss: the `/// <reference types="vitest" />` line
+goes **above the imports**. Without it TypeScript doesn't know `defineConfig` accepts a `test`
+key and will flag it, even though the config works.
 
 **Save and check**
 
@@ -190,6 +219,12 @@ npm test
   prints the **entire rendered DOM** when a query finds nothing, which is long, and is the
   fastest way to see that you asserted text that was never there. Put it back.
 
+!!! tip "Run one test at a time from here on"
+
+    A failing component test dumps the whole rendered DOM, so two failures at once bury the
+    one you're reading. Use the **`Run`** link above the individual `it` — Lesson 17,
+    section 6 — and you get one component's markup instead of several.
+
 ---
 
 ## 4. `getByRole`, `getByText`, and `queryBy…`
@@ -208,6 +243,22 @@ whatsoever**, so there's nothing for `getByText` to match — but it's a real `<
 `getByRole("button")` finds it immediately. A query that works because the element is a button
 keeps working when the icon changes.
 
+!!! tip "Your tests and your screen-reader users are asking the same question"
+
+    Roles and accessible names aren't a testing invention — they're what assistive technology
+    navigates by. A screen reader announces *"Edit, link"* because the element is an `<a>` with
+    the text "Edit"; `getByRole("link", { name: "Edit" })` finds it for exactly the same reason.
+
+    Which turns test friction into a useful signal. **If there's no sensible role or name to
+    query by, someone using a screen reader has the same problem you do.** The ⋮ toggle is the
+    example on this very card: it works as `getByRole("button")` only because there happens to
+    be one button here. Give it an `aria-label="Menu item actions"` and it becomes queryable by
+    name *and* announced as something other than "button, blank".
+
+    One change, two wins — and that's not a coincidence, it's the guiding principle from
+    section 1 doing its job. Tests written the way software is used push you toward software
+    that's usable.
+
 **And `get` vs `query`** — the difference is what happens when nothing matches:
 
 | | Finds nothing | Use it to assert |
@@ -217,6 +268,78 @@ keeps working when the icon changes.
 
 `expect(screen.getByText("Nope")).not.toBeInTheDocument()` can never pass — `getByText` throws
 before `expect` ever runs. Absence is always `queryBy…`. You'll want it in the next section.
+
+### ▶ Don't guess the query — ask the playground
+
+When a query isn't matching, you have three ways to see what actually rendered:
+
+```tsx
+screen.debug();                     // prints the rendered DOM in your terminal
+screen.logTestingPlaygroundURL();   // prints a URL that opens that DOM in a tool
+```
+
+…and the **`Debug`** link the Vitest Runner extension puts above each `it` (Lesson 17,
+section 6), which runs that one test with the debugger attached — so a breakpoint inside the
+component stops with the props sitting in front of you.
+
+The first two are print statements: they go in while you're stuck and come out before you
+commit. Try the second one now — add it to your first test, right after `render(...)`:
+
+1. **Run just that test** — the `Run` link above the `it` (Lesson 17, section 6). Otherwise
+   you'll be hunting for the URL among several DOM dumps.
+2. **Copy the URL** from the output and open it.
+   [testing-playground.com](https://testing-playground.com/) loads with your card in it.
+
+You get four panes: your **markup** top-left, the **rendered result** top-right, a **query
+editor** bottom-left, and **suggestions** bottom-right.
+
+3. **Click an element in the rendered pane** — the item name, the badge, the ⋮ button.
+4. Read the green **suggested query** box, which has a copy button:
+
+    ```js
+    getByRole('button', { name: /submit/i })
+    ```
+
+    It often adds a note — *"you could make the query a bit more specific by adding the name
+    option"* — which is real advice, not filler.
+
+5. Look underneath it, at the numbered breakdown. **This is the part worth the detour:**
+
+    | | | What it shows |
+    |---|---|---|
+    | **1.** | Queries Accessible to Everyone | Role, LabelText, PlaceholderText, Text |
+    | **2.** | Semantic Queries | AltText, Title |
+    | **3.** | Test IDs | TestId |
+
+    That numbering **is** the priority order from earlier in this section, and each row shows
+    what that query would actually be for the element you clicked — or `n/a` if it isn't
+    available. Seeing `Role: button` filled in and `TestId: n/a` beneath it teaches the
+    hierarchy faster than being told it.
+
+6. Type your own attempt in the **query editor** and watch the matched element appear at the
+   bottom of that pane. That's the fastest way to find out why a query you wrote isn't matching.
+7. Paste the query you settled on into your test, and **delete the
+   `logTestingPlaygroundURL()` line.** It's a print statement, not an assertion.
+
+Click the ⋮ toggle while you're in there. Its accessible-name row comes back empty — the
+playground can't suggest a `name` option for a button that doesn't announce anything, which is
+section 4's accessibility point showing up as a blank field.
+
+You can scope it to one element rather than the whole card:
+
+```tsx
+screen.logTestingPlaygroundURL(screen.getByRole("button"));
+```
+
+!!! note "You'll need this less than you expect"
+
+    It's a learning tool, and it works by making you fluent enough not to need it. After a
+    dozen components you'll be guessing the same query it would have suggested. Keep it for the
+    times you're stuck on markup someone else wrote.
+
+    One judgement call worth naming: it puts your rendered markup into a URL on a third-party
+    site. TableServe is sample data, so it doesn't matter here — on a real product, check what
+    your team's policy is before pasting a screen full of customer information into anything.
 
 ---
 
@@ -291,7 +414,13 @@ bugs live, and they need nothing you haven't got.
 - `render()` mounts it, `screen` queries it the way a person would look at it.
 - **Prefer `getByRole`** — it's what the element *is*, not what it currently says. An
   icon-only button has no text and is still findable.
+- **A hard query is an accessibility signal.** Roles and accessible names are what screen
+  readers navigate by, so markup that's awkward to test is usually markup that's awkward to
+  hear. Fixing one fixes both.
 - **`getBy…` throws when absent; `queryBy…` returns `null`.** Asserting absence needs `queryBy`.
+- **`screen.logTestingPlaygroundURL()` when you're unsure** — click an element and its
+  suggestion panel lists the query types in priority order, filled in or `n/a`. You learn the
+  hierarchy by using it. Delete the line before you commit.
 - **`await user.click(...)`**, always — and assert the before state, or you haven't shown the
   click did anything.
 - **A component that throws in a test but works in the app is usually missing context** — a
@@ -314,6 +443,9 @@ bugs live, and they need nothing you haven't got.
    `onRemove`.
 7. Assert the name, price, and category are on screen.
 8. Break one assertion, read the printed DOM, and restore it.
-9. Add the interaction test: assert Edit is **absent**, `await user.click` the toggle found by
-   `getByRole("button")`, then assert Edit and Delete are present.
+9. Add `screen.logTestingPlaygroundURL()` after `render(...)`, run that one test, and open the
+   URL. Click the category badge and then the ⋮ button, and compare their suggestion panels —
+   one has a role *and* a name, the other doesn't. Delete the line afterwards.
+10. Add the interaction test: assert Edit is **absent**, `await user.click` the toggle found by
+    `getByRole("button")`, then assert Edit and Delete are present.
 10. Delete an `await` to see it fail, and put it back.

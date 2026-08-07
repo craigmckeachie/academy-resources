@@ -228,6 +228,9 @@ produces a test that passes no matter what the code does, and nothing about it l
   `console.log` firing on every failing status. It's noise, not a problem: the function logs
   for the developer's benefit and your test just triggered it three times. **Tests surface
   side effects you'd forgotten were there.**
+
+    This is the first place Lesson 17's editor extension earns its keep: hit **Run** above a
+    single `it` and you get that test's output and one log line, instead of the whole file's.
 - Delete the `await` from one of the `rejects` tests. It still passes. Put it back. That's the
   trap, seen once.
 
@@ -247,7 +250,66 @@ want a copy edit turning fifty tests red.
 
 ---
 
-## 6. Generating tests with Copilot — and the one thing it gets wrong
+## 6. ▶ Code along — did you actually get every branch?
+
+So far you've answered that by reading the code and counting. Vitest can answer it by watching
+which lines actually ran:
+
+```bash
+npm i -D @vitest/coverage-v8
+npx vitest run --coverage
+```
+
+You get a table per file. **The column worth reading is the last one, `Uncovered Line #s`** —
+not the percentages:
+
+```
+File                | % Stmts | Uncovered Line #s
+--------------------|---------|-------------------
+ formatUtilities.ts |     100 |
+ fetchUtilities.ts  |   85.71 | 34-37
+```
+
+Go and look at lines 34–37. It's `delay` — exported, used by `MenuItemAPI` and `CategoryAPI`,
+and never once called by a test. You didn't know that; the tool did.
+
+That run also wrote an HTML version, with no configuring needed. Open **`coverage/index.html`**
+in a browser (right-click it in VS Code → *Reveal in File Explorer*, or `start
+coverage/index.html`), click into `src/utility/fetchUtilities.ts`, and you get the source with
+a colour down the side: **green ran, red never did.** `delay` is solid red.
+
+Add `coverage` to your `.gitignore` — it's regenerated on every run, and committing a few
+hundred generated files makes a pull request unreadable:
+
+```diff title="TableServe.Web/.gitignore"
+  node_modules
+  dist
++ coverage
+```
+
+!!! warning "Covered doesn't mean checked"
+
+    A line counts as covered because a test *ran* it — nobody asked whether you asserted
+    anything about it. This reports **100%** and verifies nothing:
+
+    ```ts
+    it("formats a phone number", () => {
+      formatPhoneNumber("8005551234");   // no expect() at all
+    });
+    ```
+
+    So it's a **checklist of what you missed**, never a score to chase.
+
+**Save and check**
+
+- `coverage/index.html` opens, and `delay` is red.
+- `git status` doesn't mention `coverage`.
+- Most of `src/` shows no coverage at all — **expected**, it's all components, which are
+  Lesson 19.
+
+---
+
+## 7. Generating tests with Copilot — and the one thing it gets wrong
 
 Lesson 17 kept AI switched off, and here's the debt being paid: you now know what a test is,
 you've watched one go red, and that's the minimum needed to see the mistake that follows.
@@ -273,6 +335,12 @@ it read the code and wrote down what the code does.
     *does* and turn that into assertions. So a generated suite over code with a defect in it
     goes **green**, and now the defect is pinned in place — anyone who fixes it breaks a test
     and, more often than you'd like, "fixes" the test instead.
+
+    **And it will score beautifully on the coverage you just ran** — every branch executed,
+    every assertion agreeing with the defect. That's section 6's warning and this one being
+    the same warning: *executed* and *verified* are different words, and neither a coverage
+    percentage nor a green generated suite can tell them apart. Only you deciding the expected
+    value can.
 
     That's not a reason to avoid generation. It's the reason **you** have to decide the
     expected values. The assertions are the specification, and specifying is your job.
@@ -316,8 +384,12 @@ paragraph of decoration.
   most common bug in async tests and it's invisible.
 - **Split the `default` branch by the cases you actually hit**, so a future change turns exactly
   one named test red.
+- **`--coverage` is a map of what you didn't run** — read the uncovered line numbers, or open
+  `coverage/index.html` and look for red. Never chase the percentage: a test with no `expect`
+  in it still reports 100%.
 - **Generated tests describe current behaviour; they can't specify intended behaviour.** Let AI
-  suggest the inputs; you decide the expected outputs.
+  suggest the inputs; you decide the expected outputs — and note that a generated suite scores
+  *well* on coverage while agreeing with the bug.
 
 ---
 
@@ -332,6 +404,9 @@ paragraph of decoration.
 5. Assert the ok path with `await expect(...).resolves.toBe(response)`.
 6. Assert the 404 and 401 paths with `await expect(...).rejects.toThrow("…")`.
 7. **Delete one `await`**, watch the test pass anyway, and put it back.
-8. Ask Copilot to generate tests for `#formatUtilities.ts` and find the assertion that pins
+8. `npm i -D @vitest/coverage-v8`, then `npx vitest run --coverage`. Open
+   `coverage/index.html`, find the red block in `fetchUtilities.ts`, and add `coverage` to
+   `.gitignore`.
+9. Ask Copilot to generate tests for `#formatUtilities.ts` and find the assertion that pins
    the trailing space. Don't keep it.
-9. Re-ask for **edge cases you're missing** instead, and write the expected values yourself.
+10. Re-ask for **edge cases you're missing** instead, and write the expected values yourself.
