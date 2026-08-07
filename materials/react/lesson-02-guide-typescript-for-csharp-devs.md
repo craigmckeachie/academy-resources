@@ -167,22 +167,42 @@ string or null"; you'll also see it for ids that don't exist until the server as
 
 ```ts
 id: number | undefined;         // a number, or not set yet
-status: "Placed" | "Preparing" | "Ready";   // a literal union — one of these exact strings
+status: "PLACED" | "PREPARING" | "READY";   // a literal union — one of these exact strings
 ```
 
 > **▶ Try it** — declare a status with the literal-union type and give it a bad value:
 > ```ts
-> let status: "Placed" | "Preparing" | "Ready" = "Done";
+> let status: "PLACED" | "PREPARING" | "READY" = "Placed";
 > ```
-> **You'll see:** *Type '"Done"' is not assignable to type '"Placed" | "Preparing" |
-> "Ready"'.* Change `"Done"` to `"Placed"` and it clears.
+> **You'll see:** *Type '"Placed"' is not assignable to type '"PLACED" | "PREPARING" |
+> "READY"'.* Change `"Placed"` to `"PLACED"` and it clears.
+
+!!! warning "The uppercase is not a style choice"
+
+    `"PLACED"` is the value your API actually sends. It's declared as
+    `OrderStatus.Placed = "PLACED"` in C#, stored uppercase in SQL Server, and serialised
+    uppercase into JSON — and **every string comparison along that path is case-sensitive.**
+    A component that checks `order.status === "Placed"` compiles, renders, and is simply
+    never true: no badge colour, no workflow button, an empty filter. Nothing throws.
+
+    So: **never change the case of the value.** Not when you compare it, not when you send
+    it, not when you store it. Casing is a *display* decision only, made at the point of
+    display — which is why the reference app writes
+    `<option value="PLACED">Placed</option>`: the value the browser submits matches the API,
+    while the label reads like English. (The status *badge* goes the other way and prints the
+    raw `"PLACED"` — a caps chip reads as a state. Both are fine; neither changes the value.)
+
+    Notice that the deliberately-bad value above is `"Placed"` rather than `"Done"`: the
+    mistake you'll actually make isn't inventing a status, it's typing a real one in the
+    wrong case.
 
 That last form — a **literal union** — is TypeScript's lightweight alternative to an
 enum: it pins a value to a fixed set of strings with no separate `enum` declaration.
 TypeScript has an `enum` keyword too, but this course never uses it — and the reference
 app goes lighter still, typing `status` as plain `string`. Treat the literal union as the
-stricter option you *could* reach for, not what the app actually does. Optional `?` and
-`| undefined` overlap; you'll see both in the reference code.
+stricter option you *could* reach for, not what the app actually does — though it's worth
+noticing that the stricter version is exactly what would have caught the casing bug above.
+Optional `?` and `| undefined` overlap; you'll see both in the reference code.
 
 ---
 

@@ -20,6 +20,20 @@ embed won't resolve.
 | `api-status-codes-cheat-sheet.png` | "API Status Codes Cheat Sheet" (mailbox metaphor, CRUD verbs) | `http-rest-status-codes.md` |
 | `insomnia-cheat-sheet.png` | "Insomnia Cheat Sheet" (why Insomnia, CRUD operations, tips) | `insomnia-quickstart.md` |
 | `application-ui-patterns.png` | Wireframe map of the CRUD page types — list (rows / card grid) / detail / create / edit / delete-confirm, linked by navigation | HTML/CSS Lesson 3 guide |
+| `github-pr-compare-and-pull-request.png` | GitHub's yellow "recently pushed branch" banner with the **Compare & pull request** button | `git-collaboration-quickstart.md` |
+| `github-pr-files-changed-tab.png` | The pull request tab bar with **Files changed** selected | `git-collaboration-quickstart.md` |
+| `github-pr-line-comment-icon.png` | Hovering a diff line reveals the blue **+** gutter button for a line comment | `git-collaboration-quickstart.md` |
+| `github-pr-review-changes-button.png` | The **Review changes** button and the Comment / Approve / Request changes options | `git-collaboration-quickstart.md` |
+
+> **The four `github-pr-*.png` files are from [GitHub Docs](https://docs.github.com) and are
+> used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)** (the `github/docs`
+> repository licenses its content and assets under CC-BY-4.0; only its code is MIT). The
+> attribution line lives at the end of the *Pull requests* section of
+> `git-collaboration-quickstart.md`. They were downloaded rather than hotlinked because
+> GitHub's asset URLs are content-hashed and change. **GitHub's UI moves** — when a
+> screenshot stops matching, re-download from the matching docs page rather than editing the
+> image, and keep the prose describing button *labels* so the text survives a UI change even
+> when the picture doesn't.
 
 ---
 

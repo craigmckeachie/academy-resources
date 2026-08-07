@@ -44,11 +44,20 @@ capstone, AI reads code with you; it doesn't write code for you — explaining, 
 debugging, and reviewing your own code are allowed; generating components and agent mode
 wait until afterwards.
 
+## After the capstone — the team project
+
+The course closes with a **[team development block](team-project/README.md)**: teams of
+three work a ticket backlog in a shared GitHub repository, using branches, pull requests,
+code review, and Git worktrees — and this is where AI generation and agent mode open up,
+gated by a teammate's review. Start with the
+[team charter](team-project/team-charter.md).
+
 ## Reference cheat sheets
 
 Evergreen references to keep open throughout:
 
 - [AI use policy](reference/ai-policy.md)
+- [Git collaboration quick-start](reference/git-collaboration-quickstart.md)
 - [HTTP, REST, JSON & Status Codes](reference/http-rest-status-codes.md)
 - [Insomnia quick-start](reference/insomnia-quickstart.md)
 

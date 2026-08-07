@@ -106,6 +106,20 @@ the day.
   "(5 days, estimate)", "estimated 4 days") — but never a fixed date or date
   range. Concept-teaching sections count **lessons**, not days.
 
+- **The ban targets *scheduling* language, not every use of the words.** What it exists to
+  prevent is a lesson assuming the academy calendar — "we'll cover this tomorrow," "by the end of
+  today." Three uses in `team-project/` are deliberate and **reviewed as keepers**; don't
+  "correct" them:
+
+  | Where | Text | Why it stays |
+  |---|---|---|
+  | `team-charter.md` | "Stand up for five minutes **each morning**" | A daily standup is a real practice with a real time of day — it's describing the team's ritual, not the course schedule |
+  | `lesson-01-guide-…` | "break everyone else's **afternoon**" | Figurative — the cost of breaking `main`, not a session reference |
+  | `lesson-01-guide-…` | "a team stalls on the first **morning**" | Describing when a real failure bites, in the repo-owner setup box |
+
+  The test to apply: **is it telling a student when something happens in the course?** If yes,
+  reword it. If it's idiom, or a description of the team's own working rhythm, leave it.
+
 ---
 
 ## Markdown rendering — what the docs site supports, and two gotchas
@@ -137,6 +151,29 @@ sentence (or a bold `**Label**`) and the list under it. This had silently broken
 across the API, HTML/CSS, and reference pages before it was caught.
 
 **Gotcha 2 — see the wrapped-list rule below.**
+
+**Gotcha 3 — inside a list item, indent EVERYTHING 4 spaces, not 3.** A numbered item's
+marker (`1. `) is three characters wide, so it's natural to indent its continuation content
+three spaces. Python-Markdown wants **four**, and mixing the two silently breaks admonitions
+nested in list items — they render as a literal `!!! tip "…"` paragraph, or worse, get
+swallowed into a code block with no visible error at all. Verified by rendering each variant:
+
+| Inside a `1. ` item | Result |
+|---|---|
+| `!!!` at 3 spaces, body at 7 | **fails** — renders as literal text |
+| `!!!` at 4, body at 8, plain text before it | works |
+| `!!!` at 4, body at 8, but the item's other content at 3 | **fails** — silently becomes a code block |
+| Everything in the item at 4 (text, fences, `!!!`), body at 8 | works |
+
+So the rule is **consistency, not just the admonition**: every continuation paragraph,
+fenced code block, and admonition inside a list item sits at **4 spaces**, and admonition
+bodies at **8**. `team-project/configuring-git.md` is the pattern to copy — it has six
+admonitions inside one numbered list.
+
+To check a page actually rendered, build and grep the output rather than trusting the
+source: `grep -c '<div class="admonition' <built-page>` should match
+`grep -c '^ *!!! ' <source>`. A literal `<p>!!!` in the built HTML means it failed loudly;
+equal counts of neither means it failed silently.
 
 ---
 
@@ -181,13 +218,29 @@ materials/
     lesson-01-guide-javascript-for-csharp-devs.md
     lesson-01-lab-...
     ...
+    lesson-16-guide-building-with-copilot.md            # post-capstone (see AI section)
+    lesson-17-guide-*.md / lesson-17-lab-*.md           # PLANNED — first unit tests (Vitest, pure functions)
+    lesson-18-guide-*.md / lesson-18-lab-*.md           # PLANNED — edge cases, throw, async
+    lesson-19-guide-*.md / lesson-19-lab-*.md           # PLANNED — React Testing Library (OPTIONAL lesson)
     stretch-react-challenges.md
+  team-project/                        # post-capstone team development block (see below)
+    README.md
+    configuring-git.md                 # one-time global Git setup — script file + chmod, not paste
+    team-charter.md                    # student-facing working agreement
+    lesson-01-guide-collaborating-in-a-shared-repo.md
+    lesson-01-lab-first-pull-request.md
+    lesson-02-guide-*.md / lesson-02-lab-*.md   # PLANNED — depth in a shared codebase (Sprint 2)
+    lesson-03-guide-*.md               # supervising an agent in a worktree (Sprint 3) — RENAME from 02
+    lesson-03-lab-*.md                 # PLANNED — Sprint 3 runbook
+    lesson-04-guide-*.md               # working a bug ticket (Sprint 4) — RENAME from 03
+    lesson-04-lab-*.md                 # PLANNED — Sprint 4 runbook
   reference/                           # evergreen cheat sheets + shared images (cross-pass)
     README.md
     http-rest-status-codes.md
     insomnia-quickstart.md
     copilot-quickstart.md
     ai-policy.md                       # reads-not-writes during capstones; allowed/deferred table
+    git-collaboration-quickstart.md    # branches, PRs, review, conflicts, worktrees
     csharp-naming-conventions.md
     anatomy-of-csharp-code.md
     anatomy-of-csharp-code-quiz.md
@@ -214,12 +267,123 @@ run neither creates nor overwrites them. Maintain them by hand.
   intro/overview lessons and ends with a mini-exercise against the student's own
   PRS work. There is intentionally **no API prework** (the API pass is first). Keep
   each in sync with the intro lessons it previews.
+- **Team project** (`team-project/`) — the **post-capstone team development block**: teams
+  of three work a ticket backlog in a shared GitHub repository seeded from the PRS reference
+  implementation. See the dedicated section below.
 - **Extra reference cheat sheets** (`reference/`) — beyond the three cross-pass
   quickstarts, `csharp-naming-conventions.md`, `anatomy-of-csharp-code.md`, and its
   companion `anatomy-of-csharp-code-quiz.md` support the API pass; the parallel
   `anatomy-of-typescript-code.md` and `anatomy-of-typescript-code-quiz.md` support the
   React pass (same "name every token" exercise, on an interface / API module / component).
   Evergreen; linked from lessons and the `reference/README.md` manifest.
+
+---
+
+## Team project (`team-project/`) — the post-capstone block
+
+Teams of three work a ticket backlog in a shared GitHub repository seeded from the PRS
+reference implementation. It runs **after** the React capstone and after React Lesson 16.
+
+**It is not a pass.** No TableServe entity mapping, no reference implementation to teach
+from, no `stretch-team-project-challenges.md` — the backlog *is* the stretch work, and it's
+deliberately larger than any team can finish. Verified by **observation**: branches, pull
+requests, reviews, and merges on GitHub.
+
+### Where it sits in the sequence
+
+```
+React L1–15 → PRS React capstone → React L16 → team-project block
+                AI: reads, not writes    ↑ generation + agent mode unlock here
+```
+
+React **Lesson 16** is the prerequisite: it's where generation and agent mode become
+permitted at all (see `reference/ai-policy.md`). The block then applies that under review.
+
+**The block uses AI in two distinct modes, and only one of them is L16's.** The agentic
+tickets are L16 applied directly — generate a feature, audit it against conventions. The
+**bug work is the opposite skill**: using AI to *comprehend* code you didn't write, then
+verifying its explanation against the running app. L16 doesn't teach that, and it's arguably
+the more valuable of the two for a first job. Don't collapse them into one thing.
+
+### Lesson plan — four lessons, guide + lab each
+
+| Lesson | Shape | Status | Why |
+|---|---|---|---|
+| **1 — Collaborating in a shared repo** | guide + lab | **built** | Repo setup, branches, PRs, review, conflicts |
+| **2 — Depth in a shared codebase** | guide + lab | guide **built**, lab **to write** | Schema owner and migrations in a team; a conflict where "keep both" isn't obvious; extending an endpoint without breaking its contract; reviewing a vertical slice |
+| **3 — Supervising an agent in a worktree** | guide + lab | guide **built**, lab **to write** | Worktrees, scoping a ticket for handoff, the audit passes, the review rubric, keeping the diff reviewable |
+| **4 — Working a bug ticket** | guide + lab | guide **built**, lab **to write** | Reproduce before diagnosing, narrow before fixing, failing test first, root cause before the PR |
+
+**Worktrees belong to Lesson 3, not Lesson 1** — moved deliberately. L1's own framing names
+*three* things that change in a shared repo (protected `main`, branches, review) and worktrees
+aren't one of them; nothing between L1 and L3 uses one (Sprints 1 and 2 are hand-built,
+one branch each); and L1 could only motivate them hypothetically, since agent mode isn't in use
+yet. L1 keeps a one-line forward pointer and the *isolation makes parallelism safe* takeaway.
+Don't move them back.
+
+**Each lesson is a briefing placed immediately before the work it describes:**
+
+```
+L1 → Sprint 1 → L2 → Sprint 2 → L3 → Sprint 3 → L4 → Sprint 4 → cross-team review
+```
+
+**One agentic ticket and two defects are reserved for the guides to walk through** — planted in
+the starter, but never filed as issues, because walking a ticket you also assigned hands a
+student their work. **This file ships to the public `academy-resources` repo, so the specific
+IDs live only in the instructor-side planning docs** — see *Instructor-side companions* below.
+Two authoring rules follow from it: a reserved item must be **invisible unless you go looking**
+and must sit in **files no other ticket touches** (otherwise a sprint student finds or fixes it
+first), and a guide must never name which items are reserved.
+
+**Every lesson is a guide plus a lab, and Lesson N briefs Sprint N.** Four lessons, four sprints,
+no exceptions. **Four lessons is the ceiling** — don't invent Lesson 5.
+
+!!! warning "This reverses an earlier decision — don't reinstate it"
+
+    An earlier version had only **three** lessons, the last two **guide-only on purpose**, "because the practice
+    *is* the ticket work, so a lab would duplicate the backlog." That reasoning was wrong in a
+    specific way: **the backlog is instructor-only.** Students never see it. So it justified the
+    absence of student-facing directions by pointing at a document students can't read — leaving
+    them, for three of four sprints, with a GitHub issue and nothing else.
+
+    The labs are **sprint runbooks**, not re-teaches of the loop: take your ticket → the work
+    specific to this sprint → verify → the pull request's three sections → review a teammate's.
+    They point at the charter for the definition of done and at their guide for the reasoning, so
+    they duplicate neither.
+
+    Full plan and remaining TODO: `planning/team-project/README.md` → *Lesson plan*.
+
+**Labs in this block carry no stretch-challenge section.** Every other pass's labs end with one;
+here the backlog *is* the stretch work, which is why there's no `stretch-team-project-challenges.md`.
+Each lab says so in a closing line.
+
+**One deliberate exception: the L1 lab ends with `## Git drills`** — force a harder conflict, read
+the history, recover a bad merge, measure branch drift. It survives the rule for a reason specific
+to its position: L1 is the only lab whose students **have no backlog yet** (Part 4 is where they
+take their first ticket), and the drills are Git mechanics rather than invented app features, so
+they compete with nothing. The section explains its own exception in-place. **Don't rename it back
+to "Stretch challenges" and don't delete it** — and don't add one to L2, L3 or L4.
+
+**Testing is deliberately NOT taught here.** It's **React Lessons 17–18**, which run before
+the block, so the backlog's TEST tickets assume the skill rather than teach it. That ordering
+is also what lets the bug bash ask for a **failing test first** on any defect that's a pure
+function, rather than retrofitting a test onto a fix already made. The starter repo still
+needs Vitest installed with one finished reference test committed — see the backlog's seed-contents
+table.
+
+### Instructor-side companions — never publish these
+
+Everything instructor-side lives in **`planning/team-project/`** — start at its `README.md`, which
+maps the four sprints and links every file. The pieces: `sprint-1-the-loop.md` …
+`sprint-4-bugs.md` (the tickets), `defects.md` (the seventeen planted defects with plant
+instructions and answers), `tests.md`, `alternates.md`, `starter-repo.md` (the one-time build),
+`running-the-block.md` (assignment grid, merge order, auditing), and `proposal.md` (management
+summary). The whole folder lives outside `materials/` precisely so a publish step can't sweep it up.
+
+**The block is four sprints**, renamed from an earlier scheme where the last two were called the
+"agentic exercise" and the "bug bash": **Sprint 1** learn the loop, **Sprint 2** depth, **Sprint 3**
+agentic work, **Sprint 4** bugs. **Lesson N briefs Sprint N** — four lessons, four sprints, one
+to one.
 
 ---
 
@@ -303,8 +467,29 @@ Conventions for these lessons:
 
 - They are the deliberate **exception** to "teach from the finished reference
   implementation" (next section) — there is usually no TableServe reference code or
-  markup for them, so don't force one. State this in the guide so a later regeneration
-  doesn't "correct" them back into building the app.
+  markup for them, so don't force one. Record this in the guide so a later regeneration
+  doesn't "correct" them back into building the app — but **in an HTML comment, not in
+  student-facing prose** (see below).
+
+!!! warning "Authoring notes go in HTML comments, never in the lesson text"
+
+    Instructions aimed at a *future author* — "don't turn this into an entity build on a
+    regeneration," "this lesson is guide-only on purpose," "don't move this section back" —
+    are meaningless to a student and make the guide read like internal scaffolding. They were
+    leaking into the student-facing blockquotes of every tooling lesson.
+
+    Put the student-facing half in the prose (*"this is a tooling lesson; verify by
+    observation"*) and the authoring half in an `<!-- Authoring note (not student-facing): … -->`
+    comment immediately after it. The three `team-project/` guides are the pattern to copy.
+
+    **Verified: MkDocs does *not* strip HTML comments — they pass through into the built page's
+    source.** A reader never sees one on the page, but *View Source* on the published site shows
+    it verbatim. So a comment is the right home for **authoring/shape** instructions ("guide-only
+    on purpose," "don't turn this into an entity build") and the **wrong** home for anything
+    instructor-only: no answers, no planted-defect IDs, no paths into `planning/`. Those belong
+    in the planning docs, which are never published. Same caution applies to this file — it's
+    excluded from the built site by `exclude_docs` in `mkdocs.yml`, but it is still copied to the
+    **public** `academy-resources` repo.
 - **Verify by observation**, matched to the pass — browser DevTools, Insomnia against a
   public API, or hand-written throwaway files — rather than against `tableserve/`.
 - They **may still have a lab** (a hands-on exploration or fundamentals exercise) or be
@@ -425,7 +610,7 @@ not React-only.
 ### Code-block checklist — run this on EVERY code block before finalizing
 
 Guide reviews keep surfacing the **same handful of misses**. Before a guide code block is
-done, verify all of these (principles 1–9 below give the full rationale and worked examples —
+done, verify all of these (principles 1–9 below give the full rationale and examples —
 this is the fast pre-flight):
 
 1. **Title.** The fence carries `title="src/…"`. *Exception:* a cross-file **concept** snippet
@@ -555,7 +740,7 @@ Two section-level checks belong here too:
      html-css pass additionally keeps **`▶ Save and look`** for mid-build micro-cues — see
      the HTML/CSS section above.)
 
-   **Lesson 11 is the worked example**; React Lessons 5–10 and 12 follow it, as do
+   **Lesson 11 is the pattern to copy**; React Lessons 5–10 and 12 follow it, as do
    html-css Lessons 3–6.
 
 8. **Label every code block with a `title=`, and show *where* edited code goes — full block to
@@ -593,8 +778,8 @@ Two section-level checks belong here too:
    `console.log`, a swapped-in `useForm` for a demo) is shown NOT as a diff but by **commenting
    out the original and pasting the replacement below it** — with `// added:` notes on the new
    pieces and `...` for the enclosing context — so reverting is just "delete this, uncomment
-   that." (Worked example: the L7 §3 *optional debug-view* step.)
-   **Lesson 9 is the worked example** of the diff shape — every build block in §2–§4 uses it;
+   that." (Pattern to copy: the L7 §3 *optional debug-view* step.)
+   **Lesson 9 is the pattern to copy** for the diff shape — every build block in §2–§4 uses it;
    match it when reworking other lessons.
 
 9. **Order code blocks so each compiles when added — dependency before dependent.** A student
@@ -610,7 +795,7 @@ Two section-level checks belong here too:
    taught (Lesson 9 §2's status-driven buttons; Lesson 10 §6's items table). When you do,
    **flag the transient error in the Save-and-check** ("your editor will flag these as *not
    defined* until section 3") so it reads as expected, not a mistake. **Lesson 9 §3–§4 are the
-   worked examples:** the `OrderAPI` workflow methods come before the handlers that call them,
+   pattern to copy:** the `OrderAPI` workflow methods come before the handlers that call them,
    and the `cancel` method before the `saveCancel` that calls it.
 
 10. **Sweep work lives in the lab; the guide shows one example and points at it.** When a
@@ -677,16 +862,15 @@ Two section-level checks belong here too:
     is the lab's, the guide's Build Steps **omit it entirely** rather than carry a placeholder
     step; close the list with a sentence handing off to the lab.
 
-    **Worked example: Lesson 12.** The guide converts `MenuItemAPI` + the Menu Items screens
+    **Pattern to copy: Lesson 12.** The guide converts `MenuItemAPI` + the Menu Items screens
     and carries two short "the lab takes the rest" callouts; the **lab** is in two parts —
     *Part 1 Staff* (the parallel-entity You do) then *Part 2 the rest of the app* (the file
     checklists, the already-correct list, and the `ErrorPage` exclusion), each part with its own
     ✅ checkpoint.
 
-The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the worked examples of principles
-1–7; **Lesson 9** is the worked example of principles 8 and 9 (the diff shape, and
-dependency-first code-block ordering) — use them as the template when writing new React
-material. **All React lessons
+The reworked **Lesson 3–5 guides** (and the L3/L4 labs) are the pattern to copy for principles
+1–7; **Lesson 9** for principles 8 and 9 (the diff shape, and dependency-first code-block
+ordering) — use them as the template when writing new React material. **All React lessons
 1–16 have now been reworked to these principles** (guides + labs, plus the L13–15 review/
 bridge lessons and the L16 Copilot tooling lesson), so any React guide/lab is a valid model;
 match whichever is closest in shape to what you're writing. A few lesson-specific decisions
@@ -723,6 +907,80 @@ guide/lab imports to `import type`, and don't drop the tsconfig step — keeping
 the intentional choice (minimize incidental complexity; one config line beats `import type`
 noise on ~40 imports). Copilot/agent-mode output will use `import type`; that's a fine triage
 example, not a convention correction to adopt.
+
+---
+
+## Testing lessons — React 17–19 (planned)
+
+Three lessons at the **end of the React pass, after the capstone**, alongside Lesson 16.
+Added at the end deliberately: purely additive, so no existing lesson number moves.
+
+| Lesson | Topic | I do (TableServe) | Lab |
+|---|---|---|---|
+| **17** *(required)* | First unit tests: Vitest setup, `describe`/`it`/`expect`, watch mode, **red before green** — **built** | `getTextBackgroundByStatus` in `utility/formatUtilities.ts` | `formatPhoneNumber` |
+| **18** *(required)* | Edge cases; a function that **throws**; async tests; `await expect(...).rejects.toThrow()`; a fake `new Response("", { status: 404 })`; **generating tests and what that gets wrong** — **built** | `translateStatusToErrorMessage` + `checkStatus` in `utility/fetchUtilities.ts` | `parseJSON` + `formatPhoneNumber` edge cases |
+| **19** *(**optional**)* | React Testing Library: `render`, `screen.getByRole` vs `getByText`, `user-event`, assert what the **user sees** — **built** | `MenuItemCard` (props, then a ⋮ click revealing Edit/Delete) | `StaffCard` |
+
+Conventions specific to these — carry them through on any regeneration:
+
+- **Verification is the terminal, not the browser.** These are the only React lessons where
+  that's true; the whole pass otherwise verifies in DevTools. State it in the guides so a
+  regeneration doesn't "correct" them back. The observable is **red → green**, not a page.
+- **Lesson 19 carries its own setup, and that's what makes "optional" real.** L17 installs
+  plain `vitest` in the default node environment — all a pure function needs. jsdom,
+  `vitest.setup.ts`, `@testing-library/react`, `@testing-library/user-event` and
+  `@testing-library/jest-dom` arrive **only in L19**. A cohort that skips it never installs
+  them and 17–18 still pass.
+- **L19 opts into jsdom PER FILE**, with the `@vitest-environment jsdom` docblock, and
+  `vite.config.ts` gets only `setupFiles`. **Do not "simplify" this to a global
+  `environment: "jsdom"`** — L18's tests build real `new Response(...)` objects, which are
+  Node's, and a global switch puts that at risk. The guide teaches the per-file choice as
+  *pay for what you use*, which also keeps the utility tests fast.
+- **L19's two components both render a `<Link>`**, so every `render()` is wrapped in
+  `MemoryRouter`. The guide makes the general point from it — *a component that throws in a
+  test but works in the app is usually missing context it normally gets from a parent.*
+- **The L19 lab's payoff is the trailing space returning, and passing.** Testing Library
+  normalizes whitespace, so `getByText("(800) 555-1234")` matches output that really ends in a
+  space — the same reason it was never visible in the browser. The lab draws the conclusion
+  explicitly (unit tests assert what a function returns; component tests assert what a user
+  reads; when two tests disagree, check whether they're asking different questions). Don't cut
+  that note — it's what ties L17, L18 and L19 together.
+- **Mocking `fetch` is out of scope** — that means `vi.mock` or MSW, a whole further topic.
+  L19 stops at presentational components with props plus one interaction, and **says so**, so
+  the boundary reads as deliberate. Data-loading component tests are a `[Reach]` stretch.
+- **Use the targets' real quirks rather than tidying them.** TableServe's `formatPhoneNumber`
+  returns a **trailing space** (`` `…-${last3Digits} ` ``), so a student's first assertion
+  fails on whitespace — a genuine lesson in asserting exactly. Its `last3Digits` variable
+  takes **four** digits; the name was wrong long before a test existed. Don't fix either in
+  the reference app. **The L17 lab is built on both**: Parts 1–2 are the trailing-space
+  discovery (including *why* nobody saw it — `StaffCard` is the only caller and HTML collapses
+  trailing whitespace), and the misnamed variable is its first stretch, used to show that a
+  green suite is what lets you refactor without being brave.
+- **L17 runs red-before-green on correct code, so it inverts the drill**: you can't reproduce
+  a bug that isn't there, so the guide has students *break the assertion on purpose* to prove
+  the test executes at all, and to teach reading Vitest's Expected/Received output. The real
+  red-before-green-on-a-defect version is team-project L4. Don't "fix" L17 by planting a bug
+  in `formatUtilities.ts`.
+- **AI is explicitly off in L17 and comes back in L18.** L17 says so in a callout, with the
+  reason: you cannot see how generated tests fail if you've never written one or watched one
+  go red. L18's **§6 owns the generated-tests material** — its thesis is *generated tests
+  **describe** current behaviour; hand-written tests **specify** intended behaviour*, demoed
+  on Copilot faithfully asserting `formatPhoneNumber`'s trailing space, plus the
+  you-decide/it-drafts split and *a generated test you've never seen red is unverified*.
+  Don't move that section into L17 and don't drop L17's callout — it's the one lesson after
+  L16 that closes the door again, so it has to justify itself.
+- **🔒 `translateStatusToErrorMessage` differs between the two apps ON PURPOSE.** TableServe
+  says `"Please sign in again."` (**correct**); PRS says `"Please sigin again."` (**the
+  typo**). L18 teaches this function on TableServe, so the typo stays undiscovered until the
+  team block's **TEST-04**, where a student writing the obvious assertion finds a real bug
+  nobody knew about. **Never sync these two `fetchUtilities.ts` files in either direction**,
+  and never mention the typo in React materials. L18's authoring comment repeats this
+  warning in-file. See `planning/team-project/tests.md`.
+- **No C# tests anywhere in the program.** There's no pure C# logic in PRS or TableServe to
+  unit test — every behaviour lives in a controller with an injected `DbContext`. Deliberate;
+  don't add an xUnit project.
+
+These feed the **team-project** block: its TEST tickets assume this skill and don't teach it.
 
 ---
 
@@ -813,11 +1071,39 @@ bolted on. Keep these facts straight when editing or regenerating any Copilot ma
     reject convention violations / ignore noise). Guide demos on TableServe; lab reviews the
     student's **PRS backend capstone**.
   - **React Lesson 16** (`react/lesson-16-guide-building-with-copilot.md` + lab) — code
-    **generation**: autocomplete → Chat → agent mode, audited against our conventions. Lab
-    generates a Staff feature. **Taught *after* the PRS React capstone, not at the capstone
-    bridge** — it keeps the number 16 but opens the post-capstone period, because agent mode
-    and whole-feature generation are exactly what the AI policy defers. A future regeneration
-    must not move it back before the capstone.
+    **generation**: autocomplete → Chat → **the conventions file** → agent mode, audited
+    against our conventions. Lab generates a Staff feature. **Taught *after* the PRS React
+    capstone, not at the capstone bridge** — it keeps the number 16 but opens the
+    post-capstone period, because agent mode and whole-feature generation are exactly what the
+    AI policy defers. A future regeneration must not move it back before the capstone.
+  - **§5 of that guide owns `.github/copilot-instructions.md`** and the lab's Part B has
+    students write one from the violations they just collected, then re-measure. Don't drop
+    it on a regeneration and don't relocate it: it sits immediately after the conventions
+    table because that table *is* the file, and the payoff is stated in team-project terms —
+    a shared conventions file is the one thing in the block that makes review **cheaper**
+    rather than merely more careful. The team starter repo ships the PRS equivalent
+    (`planning/team-project/starter-repo.md`) and the charter asks teams to maintain it.
+  - **§6 owns prompting** — the four ingredients (task, reference, scope, constraints), *ask
+    small*, and the **repair loop** with its two exit conditions (restart on the fourth
+    correction; hand-write when editing is slower than writing). The four ingredients are the
+    same four the team-project L3 guide uses for an agentic ticket; L16 teaches them, L3
+    applies them at ticket scale. Keep them worded consistently across the two.
+  - **The L16 lab's Part C targets a real, verified gap** — `MenuItemList` renders
+    `MenuItemCardSkeleton`s while loading; `StaffList` has no `loading` state and no
+    `StaffCardSkeleton` exists. Don't swap the target for an invented one: the value is that
+    the thing being matched is real code two folders away, and the ten-row rubric is written
+    against it (rows 4 and 6 — no new dependency, `loading` cleared in a `finally` — are the
+    ones generated code actually fails). Orders is the documented fallback; it has no loading
+    state either. **Deliberately not the products/vendors filter shape**, which is team-project
+    AG-0's reserved walked example.
+  - **Two kinds of wrong, and they're split across two files on purpose.**
+    *Convention-wrong* (runs fine, doesn't belong here) is L16 §4, because it's
+    app-specific. *Just-wrong* is the four failure modes in `reference/copilot-quickstart.md`
+    → **Where it goes wrong** — evergreen and cross-pass, so the API and HTML/CSS passes can
+    point at it too. The ordering there is by **cost**: invention and stale patterns are
+    caught by the tooling; plausible-but-wrong logic and confident wrong diagnosis are the
+    expensive pair, because the code runs and the answer reads well. Don't merge the two
+    tables — the distinction is the teaching point.
   - Challenge #8 in `stretch-react-challenges.md` (build a PRS feature with agent mode
     against a rubric) is therefore a **post-capstone** challenge, not a capstone stretch.
 - **Pass 2 (HTML/CSS) is intentionally stretch-only** — no required Copilot lesson (it would
@@ -955,6 +1241,18 @@ because students will use earlier guides as models when writing later code.
 - Status constants in a static class, never magic strings:
   - TableServe: `OrderStatus.Placed`, `OrderStatus.Cancelled` etc.
   - PRS: `RequestStatus.New`, `RequestStatus.Approved` etc.
+- **Constant names are PascalCase; constant VALUES are UPPERCASE.** `public const string
+  Placed = "PLACED";` — never `"Placed"`. The value crosses C# → SQL Server → JSON → the
+  React app, and every comparison on that path is case-sensitive, so a single mixed-case
+  value produces a filter that matches nothing and a badge with no colour, silently. Holds
+  in both apps, the seed scripts, the Insomnia collections, and the front end
+  (`order.status === "PLACED"`). **Casing is a display decision made at the point of display,
+  and the reference app is deliberately not uniform about it:** the filter `<select>` uses
+  `<option value="PLACED">Placed</option>` (uppercase value, Title Case label), while the
+  status **badge prints the raw `{order.status}`** — caps, because a caps chip reads as a
+  state. Don't "fix" the badge to Title Case and don't add a display-mapping helper; the rule
+  is *never re-case the value*, not *always Title Case the label*. Rationale for students is
+  in **API Lesson 4's lab** and **React Lesson 2's guide**.
 
 ### HTTP response conventions
 | Verb | Success | Not Found | Bad Request |

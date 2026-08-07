@@ -16,6 +16,10 @@ here is a step-by-step build — these are lookups.
   AI reads code with you; it doesn't write code for you. Explaining, researching, debugging,
   and reviewing your own code are allowed; generating components and agent mode wait until
   after. Includes the allowed/deferred table and the one test that settles most cases.
+- [Git collaboration quick-start](git-collaboration-quickstart.md) — working in a shared
+  repository: the branch → pull request → review → merge loop, staying current with `main`,
+  resolving conflicts, and Git **worktrees** (including why an autonomous agent needs its
+  own). Used throughout the **team development block**.
 - [GitHub Copilot quick-start](copilot-quickstart.md) — TQL's preferred AI assistant:
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
   discipline, and the conventions watch-list. Backs the Copilot lessons and stretch

@@ -91,6 +91,18 @@ Two Chat uses beyond generation, both high-value:
 
 ## 4. ⚠️ The conventions Copilot will break
 
+Generated code goes wrong in **two different ways**, and they need different eyes.
+
+**Convention-wrong** is code that works perfectly and doesn't belong here — `axios` instead of
+our fetch helpers, a `row`/`col` grid instead of flexbox. Nothing fails. It runs, it renders,
+and it quietly makes the codebase two codebases. That's this section, and it's the kind you
+can only catch because you built the app by hand.
+
+**Just-wrong** is code that doesn't work: an invented prop, a stale API, a dependency array
+missing an entry. The compiler catches some of it and running it catches the rest — see
+*Where it goes wrong* in the
+[Copilot quick-start](../reference/copilot-quickstart.md) for the four shapes it takes.
+
 This app is built a specific way. Copilot, trained on all of GitHub, will confidently
 produce the *common* way instead. Every item below is something it's likely to generate
 that you must **reject and redo to our conventions** — the same watch-list idea from the cheat
@@ -113,7 +125,138 @@ Redo it the way this project does it; you know it, you built it five times.
 
 ---
 
-## 5. Agent mode — review it like a pull request
+## 5. Teach it your conventions once — `.github/copilot-instructions.md`
+
+Look at that table again and notice what it really is: a list of things you would otherwise
+have to say **in every single prompt**. You don't have to. Copilot reads a file at the root of
+your repository and applies it to every Chat and agent-mode request in that project:
+
+```
+tableserve/
+  .github/
+    copilot-instructions.md     ← plain markdown, no special syntax
+  TableServe.Web/
+  TableServe.Api/
+```
+
+It's just prose, and **short and specific beats long and aspirational** — the file is sent
+along with your request, so a rambling one spends context and dilutes the rules that matter.
+Section 4's table, compressed:
+
+```markdown
+# Project conventions
+
+React 18 + TypeScript + Vite. Bootstrap 5 via npm. ASP.NET Core 8 Web API, EF Core.
+
+## Always
+- Fetch through `utility/fetchUtilities` — `fetch(...).then(checkStatus).then(parseJSON)`
+- One API module object per entity, in that entity's feature folder (`StaffAPI.ts`)
+- Forms with react-hook-form: `useForm`, `register`, `handleSubmit`, async `defaultValues`
+- Layout with Bootstrap flexbox utilities — `d-flex`, `flex-wrap`, `gap-*`, `w-50`
+- A typed interface per entity (`IStaff`), imported as `import { IStaff }`
+- Success and error feedback with react-hot-toast
+- Models used directly in controllers; `DbContext` injected into the controller
+
+## Never
+- `axios`, or a raw `fetch` inside a component
+- Bootstrap `row`/`col` grid classes, or CSS Grid
+- A `useState` per form field
+- `data-bs-toggle` modals — modals are driven by React state
+- `alert()` for feedback
+- `import type` for interfaces
+- DTOs, a repository layer, `[Authorize]`, or JWT
+- New dependencies without being asked
+```
+
+Three things worth knowing:
+
+- **It shapes Chat and agent mode.** Inline autocomplete is driven mostly by the file you're
+  sitting in, which is why section 2's advice — establish the pattern first — still holds.
+- **It is not a guarantee.** It moves *most* violations out of the diff before they appear. It
+  does not remove the audit; section 4 is still the checklist you read the output against.
+- **It's a living file.** The moment you find yourself correcting the same thing twice, that
+  correction belongs in here rather than in a third prompt.
+
+For finer control you can scope rules to particular files with `.github/instructions/*.instructions.md`
+— worth knowing exists, and covered in the
+[Copilot documentation](https://docs.github.com/en/copilot). One repo-root file is plenty for a
+project this size.
+
+!!! tip "This is a team artifact, not a personal one"
+
+    The value compounds the moment you're not working alone. In the **team development block**
+    you share a repository, and the charter names the real constraint there: not how fast anyone
+    can generate code, but **how much code three people can honestly review.**
+
+    A conventions file in the shared repo attacks that directly — every violation it prevents is
+    one a reviewer never has to catch. When a teammate flags the same drift twice in review, the
+    fix isn't a third review comment. It's one line in this file, and now it's fixed for all
+    three of you.
+
+---
+
+## 6. Writing the request — and what to do when it comes back wrong
+
+The conventions file handles the rules that never change. The *request* is everything else,
+and it's where most of the quality difference lives. A good one has **four ingredients**:
+
+| | | Example |
+|---|---|---|
+| **The task** | One thing, stated as an outcome | *Generate a `MenuItemCard` that renders name, price, and category, with the ⋮ dropdown.* |
+| **The reference** | The file that already solves something similar | *Match `#StaffCard.tsx`.* |
+| **The scope** | Which files may change | *Only `menuItems/MenuItemCard.tsx`.* |
+| **The constraints** | The rules this particular job is likely to break | *No new dependencies. The card is presentational — the page owns the fetch.* |
+
+The **reference** is the one people skip and it's the highest-value of the four. Describing
+your conventions in prose asks Copilot to imagine them; naming a file *shows* it. And the two
+steering tools do different jobs — the conventions file says what the rules **are**,
+`#StaffCard.tsx` shows what they **look like**. Use both.
+
+Compare:
+
+> ❌ Write a card component for menu items.
+
+> ✅ Generate a `MenuItemCard` component that renders the menu item's name, price, and
+> category name, plus the ⋮ dropdown with Edit and Delete. Match `#StaffCard.tsx` — same
+> structure, same Bootstrap utilities, same props shape. Only create
+> `menuItems/MenuItemCard.tsx`. It's presentational; the page owns the fetch and the state.
+
+The second one takes twenty seconds longer to type and saves the ten minutes you'd have spent
+undoing the first one's answer.
+
+### Ask small
+
+One component, review it, then the next. A 200-line generation you have to untangle is slower
+than three 40-line ones you accepted in sequence — and if something's wrong in the middle of
+the big one, you often can't tell which part to keep.
+
+### The repair loop
+
+Most generations come back roughly right and specifically wrong. Don't start over and don't
+hand-fix silently — **correct it in the same conversation**, where it still has the context:
+
+1. **One correction at a time.** Bundled corrections get partially applied and you lose track
+   of which stuck.
+2. **Name the rule, not the symptom.** *"Use our `fetchUtilities` helpers — `fetch(...)
+   .then(checkStatus).then(parseJSON)`"* works. *"That's not how we do it"* doesn't.
+3. **Re-point at the reference** if it drifted: *"`#StaffCard.tsx` doesn't do it that way —
+   look again at how it renders the dropdown."*
+4. **Ask it to explain itself** when a line surprises you: *"why did you use a `useEffect`
+   there?"* Sometimes there's a good reason; sometimes the question is enough to make the
+   problem obvious.
+
+And two exit conditions, both of them fine:
+
+- **On the fourth correction, restart.** Four rounds means the *prompt* was wrong, not the
+  output. Write a new one with all four corrections folded into it — you'll get there faster
+  than continuing to negotiate.
+- **When editing its code is slower than writing yours, write yours.** That's a judgement,
+  not a defeat, and the team block's Lesson 3 treats it as a named skill rather than a
+  fallback.
+
+---
+
+## 7. Agent mode — review it like a pull request
 
 Agent mode is the powerful gear: you describe a change and Copilot proposes edits **across
 multiple files** as a **diff you approve or reject, hunk by hunk.** For example:
@@ -131,16 +274,14 @@ What comes back is exactly a pull request — and you review it exactly like [Le
    page, and check the **DevTools Console and Network** tabs. A change that renders wrong or
    throws in the console gets reverted, no matter how confident the agent was.
 
-**Steer it up front.** Naming a reference file and the constraints in the prompt moves most
-guardrail violations out of the diff before they appear:
-
-> …match `#StaffForm.tsx`: use **react-hook-form**, **flexbox utilities** (no `row`/`col`),
-> our **`fetchUtilities`** helpers, and **react-hot-toast** — no `axios`, no new
-> dependencies.
+**Section 6's four ingredients matter more here than anywhere else**, because the cost of a
+vague prompt scales with how many files the answer touches. **Scope** in particular stops
+being optional — *"only `#IStaff.ts`, `#StaffForm.tsx`, and `#StaffAPI.ts`"* is the difference
+between a diff you can review and one you'll approve out of fatigue.
 
 ---
 
-## 6. Verifying — how you know a generation is good
+## 8. Verifying — how you know a generation is good
 
 There's no test suite here; you verify by **observation and review**, and it scales with how
 much Copilot wrote:
@@ -151,9 +292,18 @@ much Copilot wrote:
   inline `fetch`, no `useState`-per-field form, no `data-bs-toggle` modal.
 - **It runs clean in the browser** — the page renders, the Console is error-free, and the
   Network tab shows the expected calls to your API (with CORS enabled, as in Lesson 4).
+- **You exercised the case that isn't the happy path** — the empty list, the missing field,
+  the form submitted blank. Plausible-but-wrong logic survives every check above this one.
 
 The bigger the generation, the more this matters — a whole agent-mode feature deserves the
 same scrutiny you'd give a colleague's PR, because that's what it is.
+
+!!! warning "Reading the diff is not verification"
+
+    Two of the four failure modes — the expensive two — produce code that reads perfectly.
+    Generated code is *unusually* convincing to read: consistent naming, no typos, a comment
+    on every block. **Polish is not correctness.** The only thing that separates a good
+    generation from a plausible one is running it, on the input you didn't want to try.
 
 > **Why this lesson is here and not earlier.** You've now built two full front ends by
 > hand — TableServe across this pass, PRS in the capstone. That's deliberate: the
@@ -181,6 +331,15 @@ same scrutiny you'd give a colleague's PR, because that's what it is.
   react-hook-form, and flexbox utilities. Redo anything that drifts.
 - **Steer with a reference file** (`match #StaffForm.tsx`) and constraints — it's the
   cheapest way to get convention-matching output.
+- **Write the rules down once**, in `.github/copilot-instructions.md`, instead of retyping
+  them every prompt. The conventions file says what the rules *are*; a reference file shows
+  what they *look like*. Use both.
+- **Four ingredients in every request:** task, reference, scope, constraints. Ask small, and
+  correct **in the same conversation** — one thing at a time, naming the rule rather than the
+  symptom. On the fourth correction the prompt was wrong; restart with them folded in.
+- **Two kinds of wrong.** *Convention-wrong* runs perfectly and doesn't belong here — only
+  you can catch it. *Just-wrong* doesn't work — and the half of it that still compiles is
+  found by running the code, never by reading the diff.
 - **Verify in the browser**, every time — a clean-looking diff that errors in the Console is
   still wrong.
 
@@ -201,10 +360,17 @@ keep.
    every guardrail it crossed.
 4. Re-ask with a **reference file + constraints** in the prompt and see how much closer to
    project conventions the second attempt is.
-5. **Agent mode:** give it a small cross-file task (e.g. add a field through the interface,
-   form, and API); **review the diff hunk by hunk**, accepting only what matches our
-   conventions, rejecting or fixing the rest.
-6. **Verify in the browser** — `npm run dev`, open the page, and confirm it renders with a
+5. **Write `.github/copilot-instructions.md`** at the root of your TableServe repo, from the
+   section-4 table and the violations you just watched Copilot commit. Keep it to an
+   *Always* list and a *Never* list.
+6. Re-run step 3's prompt **with the file in place** and count the violations again. That
+   drop is what you bought.
+7. Practise the **repair loop** on one generation that came back nearly right: correct it in
+   the same conversation, one rule at a time, and notice how many rounds it takes.
+8. **Agent mode:** give it a small cross-file task (e.g. add a field through the interface,
+   form, and API), **with the files it may change named in the prompt**; **review the diff
+   hunk by hunk**, accepting only what matches our conventions, rejecting or fixing the rest.
+8. **Verify in the browser** — `npm run dev`, open the page, and confirm it renders with a
    clean Console and the expected Network calls.
-7. Try one **explain** prompt on a pattern you're about to reuse (the async `defaultValues`,
+9. Try one **explain** prompt on a pattern you're about to reuse (the async `defaultValues`,
    the `checkStatus`/`parseJSON` chain) — Copilot as tutor, not just generator.

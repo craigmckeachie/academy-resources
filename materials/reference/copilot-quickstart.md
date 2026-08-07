@@ -71,6 +71,23 @@ Copilot is genuinely good at: repetitive boilerplate (a fourth CRUD controller t
 mirrors three you wrote), **explaining** unfamiliar code, **reviewing** code you wrote,
 drafting test data, and remembering syntax you half-know. Lean on it there.
 
+### Where it goes wrong — the four failure modes
+
+"Wrong" isn't one thing, and the four kinds cost wildly different amounts to find:
+
+| Failure mode | What it looks like | How you catch it |
+|---|---|---|
+| **Invention** | A prop, method, or option that doesn't exist — an `onSuccess` option `react-hook-form` doesn't take, a `Response` method that was never in the API | It won't compile, or the editor underlines it. **Trust the red squiggle over the confident explanation** |
+| **Stale patterns** | Class components, `componentDidMount`, react-router's old `useHistory`/`Switch`, `EntityState.Modified` | Training data is years of the internet. If it doesn't look like the rest of your app, it isn't your app's version of the answer |
+| **Plausible-but-wrong logic** | A `useEffect` dependency array missing an entry, an off-by-one, a filter that silently matches everything, a `.map()` that drops the empty case | **Nothing flags it.** Only running the thing does — and only if you try the case that breaks |
+| **Confident wrong diagnosis** | You ask *"why is this broken?"* and get a fluent answer naming a real file and a real line — and it's wrong | It has never run your app or seen your database. An explanation is a **hypothesis**; confirm it before you act |
+
+**The first two are cheap** — the tooling finds them in seconds, which is why they feel like
+the whole problem and aren't. **The last two are the expensive ones**, because in both cases
+everything looks fine: the code runs, the answer reads well, and you stop looking. A confident
+wrong diagnosis is the single most costly thing an assistant produces, because it doesn't just
+fail to help — it sends you somewhere else.
+
 ---
 
 ## ⚠️ Conventions watch-list — where Copilot will fight this course
@@ -112,6 +129,25 @@ Copilot is only as good as the context you give it:
   Copilot into a tutor for code you're reading — a great use that isn't generation at all.
 - **Work in small steps.** Ask for one method, review it, then the next — not a whole
   file you then have to untangle.
+
+### Better than a prompt: a conventions file
+
+Everything above is per-prompt. The rules that never change — *this project uses flexbox
+utilities, never `row`/`col`* — belong in a file instead, so you stop retyping them:
+
+```
+your-repo/
+  .github/
+    copilot-instructions.md
+```
+
+Plain markdown at the repository root, applied to every Chat and agent-mode request in that
+project. Keep it short and specific — it's sent along with your request, so a long file
+dilutes the rules that matter. An **Always** list and a **Never** list is enough. **React
+Lesson 16** walks writing one from this course's watch-list; **inline autocomplete** is
+driven mostly by the file you're in rather than by this, so the two still work differently.
+
+It doesn't remove the audit — it just means most violations never reach it.
 
 ### How to hand Copilot Chat your files
 

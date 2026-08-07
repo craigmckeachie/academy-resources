@@ -1,0 +1,13 @@
+title: Team Project
+nav:
+  - README.md
+  - configuring-git.md
+  - team-charter.md
+  - lesson-01-guide-collaborating-in-a-shared-repo.md
+  - lesson-01-lab-first-pull-request.md
+  - lesson-02-guide-depth-in-a-shared-codebase.md
+  - lesson-02-lab-working-a-vertical-slice.md
+  - lesson-03-guide-supervising-an-agent-in-a-worktree.md
+  - lesson-03-lab-handing-off-a-ticket.md
+  - lesson-04-guide-working-a-bug-ticket.md
+  - lesson-04-lab-reproduce-narrow-fix.md

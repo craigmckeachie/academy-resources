@@ -35,11 +35,15 @@ Practice TypeScript by giving types to the kind of data the app is built from. S
 6. **A typed array.** Declare `const menu: IMenuItem[] = [ ... ]` with two or three items.
    Log `menu.length`.
 
-7. **A literal union.** Add `status: "Placed" | "Preparing" | "Ready"` to a small `order`
-   object — TypeScript's lightweight alternative to an enum. Assign `"Placed"` — fine.
-   Assign `"Done"` — confirm the compiler rejects it (it's not one of the allowed
-   strings). (The reference app types `status` as plain `string`; this literal union is
-   the stricter option.)
+7. **A literal union.** Add `status: "PLACED" | "PREPARING" | "READY"` to a small `order`
+   object — TypeScript's lightweight alternative to an enum. Assign `"PLACED"` — fine.
+   Now assign `"Placed"` and confirm the compiler rejects it. **Uppercase is what the API
+   actually sends** (`OrderStatus.Placed = "PLACED"` in C#), and every comparison from SQL
+   Server to your components is case-sensitive — so `"Placed"` is the mistake that compiles,
+   renders, and is silently never true. **Never re-case the value**; casing is a display
+   choice made at the point of display (`<option value="PLACED">Placed</option>`). (The
+   reference app types `status` as plain `string`; this literal union is the stricter option —
+   and the one that would have caught this.)
 
 ---
 

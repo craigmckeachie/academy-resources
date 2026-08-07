@@ -80,6 +80,18 @@ public static class OrderStatus
 }
 ```
 
+> **The names are PascalCase; the values are UPPERCASE. Both on purpose.**
+> `OrderStatus.Placed` is a C# identifier and follows C# naming. `"PLACED"` is the value
+> that goes in the database, comes back as JSON, and gets compared in the React app later
+> — and **string comparison is case-sensitive on every one of those hops.** One
+> `"Placed"` slipped in somewhere and the status filter silently matches nothing, the
+> badge renders with no colour, and the workflow button never appears. Nothing throws.
+>
+> Picking one case and holding it everywhere is what makes that class of bug impossible.
+> This course uses **UPPERCASE for every status value**, in both apps, in the seed data,
+> in Insomnia, and in the front end. Use the constants and you get it for free — which is
+> the actual reason the constants exist.
+
 ---
 
 ## Steps

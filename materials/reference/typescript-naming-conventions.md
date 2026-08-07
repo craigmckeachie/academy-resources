@@ -25,6 +25,7 @@ how to write each one. Match these and your code reads like the reference implem
 | **Local event handlers** | `handle…` / a verb | `handleSubmit`, `handleStatusChange`, `openCancel` |
 | **Callback props** (passed to a child) | `on…` | `onRemove`, `onHide` |
 | **App-wide constants** | UPPER_SNAKE_CASE | `BASE_URL` (ordinary `const`s stay camelCase: `url`, `emptyStaff`) |
+| **Route paths** | lowercase, plural | `/menuitems`, `/orders`, `/orders/detail/:id` |
 
 ---
 
@@ -46,6 +47,36 @@ upper — it's `MenuItemAPI`, not `MenuItemApi`.)
 
 ---
 
+## Singular vs plural
+
+Casing tells you *what* an identifier is. **Plurality** tells you whether it handles **one** item
+or **the whole collection** — and it's the rule that trips people up most, because the singular
+and plural forms sit right next to each other in the same folder.
+
+| Plural | Singular |
+|---|---|
+| Feature folder — `menuItems/`, `orders/`, `orderItems/` | Interface — `IMenuItem.ts`, `IOrder.ts` |
+| Route path — `/menuitems`, `/orders`, `/categories` | API module — `MenuItemAPI.ts`, `OrderAPI.ts` |
+| API endpoint — `/api/menuitems`, `/api/orders` | List and table components — `MenuItemList`, `OrderTable`, `OrderRow` |
+| The route-target page — `MenuItemsPage.tsx`, `OrdersPage.tsx` | Every other component — `MenuItemCard`, `MenuItemForm`, `OrderCreatePage`, `OrderEditPage`, `OrderDetailPage`, `OrderHeader` |
+| A variable holding an array — `const menuItems`, `orders` | A variable holding one item — `menuItem`, `order` |
+
+**The heuristic: the page is named after the URL, everything else after the entity it handles.**
+That's why `MenuItemList` is **singular** even though it renders many — it's *one* list, of menu
+items. `MenuItemsPage` is plural because it's the target of `/menuitems`.
+
+Three details that look like violations and aren't:
+
+- **Route paths are lowercase**, even when the folder is camelCase. The `menuItems/` folder is
+  served at `/menuitems`, and PRS's `requestLines/` at `requestline`.
+- **`StaffPage`, not `StaffsPage`.** "Staff" is already plural, so it doesn't take another `s` —
+  the same reason the endpoint is `/api/staff`. The folder is `staff/` and the route is `/staff`.
+- **The nested child route is singular** — `orders/detail/:id/orderitem/create` (PRS:
+  `requests/detail/:id/requestline/create`). It reads as "this one order's item," so it doesn't
+  match its `orderItems/` folder. It's the one place the plural-route rule doesn't hold.
+
+---
+
 ## Key takeaways
 
 - **PascalCase** — **types and components**: interfaces (`IMenuItem`), type/shape names
@@ -59,6 +90,9 @@ upper — it's `MenuItemAPI`, not `MenuItemApi`.)
   `on…` marks a **callback prop** (versus `handle…` for the local handler behind it).
 - **UPPER_SNAKE_CASE** is reserved for a true app-wide constant like `BASE_URL`; an ordinary
   `const` that just holds data stays camelCase.
+- **Plural means "the collection."** The feature folder, the route path, and the
+  `{Entity}sPage` are plural; the interface, the API module, and every other component are
+  singular — see **Singular vs plural** above.
 
 ---
 

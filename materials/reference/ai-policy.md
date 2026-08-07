@@ -69,14 +69,34 @@ Prompts to save for later:
     browser console before you act on it. A confident, plausible, wrong diagnosis is the
     most expensive thing an assistant produces.
 
-## Where this shows up in the course
+## The AI thread, end to end
 
-| | AI content |
-|---|---|
-| **API Lesson 7** | Copilot **code review** — triage its suggestions on code you wrote |
-| **HTML/CSS pass** | Optional stretch challenges only — the fundamentals are hand-built |
-| **React Lesson 16** | Copilot **generation** — autocomplete, Chat, agent mode, all audited. Taught **after** the PRS capstone |
-| **Post-capstone block** | Agentic workflows in a team repository, under pull-request review |
+AI isn't one lesson in this course. It's five touchpoints teaching **four different skills**, in
+a deliberate order — and notice that none of the four verbs is *"let it write the code."*
+
+| Where | The skill | What you actually do | Verified by |
+|---|---|---|---|
+| **API Lesson 7** | **Judge** | Point Copilot at a controller **you wrote**, and triage its review — accept, reject, ignore, with a reason for each | Insomnia, on anything you accepted |
+| **HTML/CSS pass** | *(none required)* | Fundamentals are hand-built. Copilot appears only as optional stretch work — see the note below | — |
+| **React Lesson 16** | **Generate** | Autocomplete → Chat → agent mode, plus the repo conventions file that keeps output on-convention | The browser and DevTools |
+| **React Lessons 17–18** | **Specify** | Write tests by hand first — then watch what a *generated* suite does to code that's already broken | The terminal: red, then green |
+| **Team block Lesson 3** | **Supervise** | Scope a ticket, isolate an agent in its own worktree, audit the diff twice, and own every line of it in review | The diff, the app, a teammate's review |
+| **Team block Lesson 4** | **Comprehend** | Use AI to read code you didn't write — and treat its diagnosis as a hypothesis, never a finding | The running app, Insomnia, SSMS |
+
+**The order is the argument.** You judge output before you generate any, because triaging a review
+of your own code is the lowest-risk place to discover that a confident answer can be wrong. You
+generate only after two front ends built by hand, because the conventions you're auditing against
+have to be ones you already hold. You supervise an agent only once you can generate and audit
+alone. And the last skill — using AI to comprehend unfamiliar code — is deliberately last, because
+it's the one with the most expensive failure mode and the least visible one: an explanation that
+sounds right, names a real file, and is entirely wrong.
+
+!!! note "Why the HTML/CSS pass has no required AI lesson"
+
+    It's the one pass where generation would undercut the point. You're learning the box model and
+    flexbox by writing them, and an assistant that produces working layout removes exactly the
+    struggle that teaches it. Copilot returns in the React pass, on the same markup, once you can
+    tell good output from output that merely renders.
 
 Keep the [Copilot quick-start](copilot-quickstart.md) open — it has the setup steps, the
 three surfaces, and the conventions watch-list of things Copilot will suggest that are

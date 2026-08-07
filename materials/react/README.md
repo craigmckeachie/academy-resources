@@ -39,6 +39,9 @@ guide and what you built alongside it as your model.
 | 14 | [Review/Buffer: full-app review and PRS gap-check](lesson-14-guide-review-app-gap-check.md) | *Review — no lab* |
 | 15 | [Capstone bridge: building the PRS front end](lesson-15-guide-capstone-bridge.md) | *Bridge — no lab* |
 | 16 *(after the capstone)* | [Building with GitHub Copilot: autocomplete, Chat, agent mode](lesson-16-guide-building-with-copilot.md) | [Generate a Staff feature and audit it](lesson-16-lab-generate-and-audit-staff.md) |
+| 17 *(after the capstone)* | [Your first unit tests](lesson-17-guide-first-unit-tests.md) — Vitest, pure functions, red before green | [Testing `formatPhoneNumber`](lesson-17-lab-format-phone-number-tests.md) |
+| 18 *(after the capstone)* | [Edge cases, errors, and async tests](lesson-18-guide-edge-cases-async-tests.md) — throwing, `rejects.toThrow`, fake responses, generating tests | [Testing `parseJSON` and the edge cases](lesson-18-lab-parsejson-edge-cases.md) |
+| 19 *(**optional**)* | [Component testing with React Testing Library](lesson-19-guide-component-testing-rtl.md) | [Testing `StaffCard`](lesson-19-lab-staff-card-component-tests.md) |
 
 **Lessons 1–2 are JavaScript/TypeScript intro lessons** for students coming straight from
 the C# API pass — the language mapped onto what they already know, run and verified by
@@ -53,11 +56,18 @@ students finish with a complete TableServe — the **Categories** list (L9) and 
 the **Order** create/edit form (L11, which applies the Context from the guide).
 Lessons 13–15 are review, gap-check, and the capstone bridge — and the capstone follows
 them. **Lesson 16 is a tooling lesson** on **GitHub Copilot** (TQL's preferred AI assistant)
-— generating React code and auditing it against this project's conventions; verified by
+— generating React code, teaching Copilot this project's rules once via
+`.github/copilot-instructions.md`, and auditing what it produces; verified by
 observation in the browser, and building on the API pass's Copilot code-review lesson. It
 is taught **after you finish the PRS capstone**, because generating whole features is
 exactly what the [AI use policy](../reference/ai-policy.md) holds back until the app has
 been built by hand.
+
+**Lessons 17–19 are the testing lessons**, also after the capstone. 17 and 18 are required —
+your first unit tests, then edge cases and async code. **Lesson 19 is optional**: component
+testing with React Testing Library, which needs extra setup that 17 and 18 don't. These are
+the only lessons in the pass verified in the **terminal** rather than the browser; what
+you're watching for is a test going red and then green.
 
 ## Prework — optional head start
 
