@@ -47,7 +47,7 @@ correct them on an unrelated branch: it puts unexplained changes in a diff your 
 reading for something else, and some of what looks wrong is deliberate. **File it as an issue
 instead**, and let it be assigned. Noticing is valuable; the drive-by fix is what isn't.
 
-**One schema owner per sprint.** Only that person runs `Add-Migration`. Their migration
+**One database schema owner per sprint.** Only that person runs `Add-Migration`. Their migration
 merges first; everyone else pulls `main` and runs `Update-Database` before continuing.
 Parallel migrations against the same model produce a mess that costs half a day and teaches
 nothing.

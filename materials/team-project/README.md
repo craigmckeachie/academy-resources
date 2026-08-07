@@ -61,7 +61,7 @@ Your instructor assigns the tickets themselves as issues.
   database from the same migrations and the same seed script.
 - **All seeded passwords are the plaintext `test1234`.**
 - **Run the API on the `http` profile** — the same as the capstone.
-- **One schema owner per sprint.** Only that person runs `Add-Migration`. Everyone else
+- **One database schema owner per sprint.** Only that person runs `Add-Migration`. Everyone else
   pulls `main` and runs `Update-Database`.
 - **Short branches merge easily.** A branch open for a few hours rarely conflicts; one open
   for days always does.

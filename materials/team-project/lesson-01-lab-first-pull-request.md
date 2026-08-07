@@ -1,8 +1,8 @@
 ---
-title: "Lesson 1 Lab — Your first pull request, and your first conflict"
+title: "Lesson 1 Lab — Your first pull request, and your first conflict (Sprint 1)"
 ---
 
-# Lesson 1 Lab — Your First Pull Request, and Your First Conflict
+# Lesson 1 Lab — Your First Pull Request, and Your First Conflict (Sprint 1)
 
 You've watched the loop. Now run it yourself — and this time all three of you edit the same
 lines on purpose, so somebody has to resolve a real conflict.
@@ -132,14 +132,37 @@ conflict markers survived.
 
 ---
 
-## Part 4 — Now take your Sprint 1 ticket
+## Part 4 — Set up Sprint 1
 
-The drill is over. Same loop, on real code this time — and from here the block is ticket-driven
+The drill is over. Before anyone writes code, the team needs a board — and nobody has made one
+yet. **Do this part together, at one screen.** Guide section 7 has the reasoning.
+
+20. **One of you creates the issues.** On github.com, open the repository's **Actions** tab →
+    **Create sprint issues** → **Run workflow** → sprint **1** → **Run workflow**.
+21. Refresh the **Issues** tab. **Four issues**, each with a description, acceptance criteria,
+    and — for three of them — a mockup. They're **unassigned**; that's deliberate.
+
+    *(No Actions tab, or the run fails? The same text is in `tickets/sprint-1/`. Open a file
+    and paste it into a new issue by hand. Tell your instructor.)*
+
+22. **Read all four**, not just the one you expect to take.
+23. **Assign three of them, one each**, on GitHub. Leave the fourth — **S1-D** — unassigned:
+    it belongs to whoever finishes first. That's not a spare, it's the next thing.
+24. **Check the plan with your instructor** before anyone branches.
+
+✅ **Checkpoint:** four issues exist, three are assigned to three different people, one is
+deliberately unassigned, and your instructor has seen it.
+
+---
+
+## Part 5 — Now take your ticket
+
+Same loop as Parts 1–3, on real code this time — and from here the block is ticket-driven
 rather than lesson-driven.
 
-20. **Find your issue on GitHub.** Your instructor assigned one to each of you. Read it, including
-    every acceptance criterion, before you write anything.
-21. Branch from a fresh `main` — `feature/` now, not `chore/`, because this one changes behaviour
+25. **Open your issue** and read it again, including every acceptance criterion, before you
+    write anything.
+26. Branch from a fresh `main` — `feature/` now, not `chore/`, because this one changes behaviour
     a user can see:
 
     ```bash
@@ -147,18 +170,18 @@ rather than lesson-driven.
     git switch -c feature/<your-issue>-<short-slug>
     ```
 
-22. Build it. **Keep the branch short** — push and open the pull request while it's still small,
+27. Build it. **Keep the branch short** — push and open the pull request while it's still small,
     even as a draft.
-23. **"How I verified it" now means you ran it.** A README row could only be read; this can be
+28. **"How I verified it" now means you ran it.** A README row could only be read; this can be
     used. Say which page you loaded, what you clicked, and what you saw — and check every
     acceptance criterion on the issue against the running app. The bar is the charter's
     [definition of done](team-charter.md#definition-of-done).
-24. **Review a teammate's**, and **run it before you approve it**. If you only read the diff, say
+29. **Review a teammate's**, and **run it before you approve it**. If you only read the diff, say
     so in your review — that's honest, and it tells the author what they did and didn't get.
-25. Squash-merge, then the three commands from Part 2 to bring your local `main` up to date and
+30. Squash-merge, then the three commands from Part 2 to bring your local `main` up to date and
     tidy up.
-26. If you finish early, ask for the next ticket. There's more work in the backlog than the sprint
-    has room for, by design.
+31. **If you finish early, take S1-D** — the unassigned one. Assign it to yourself on GitHub
+    first, so the board stays true.
 
 !!! note "No conflict this time — that's deliberate"
 

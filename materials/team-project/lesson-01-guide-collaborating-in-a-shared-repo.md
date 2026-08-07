@@ -498,7 +498,61 @@ through both features — which is exactly what you'll do from Sprint 2 onwards.
 
 ---
 
-!!! note "Two branches at once — that's Lesson 3"
+## 7. The backlog, the sprint, and who takes what
+
+You've got the loop. The last thing you need before real work is where the work comes from.
+
+**The backlog is every ticket that exists.** Yours lives in your repository, as files, under
+`tickets/`. Nobody wrote them into GitHub for you — you'll do that, once per sprint.
+
+**A sprint is the slice of the backlog you're attempting next.** It is smaller than the
+backlog, and the gap between the two is not a problem to be solved.
+
+!!! note "There will be more tickets than you can finish. That's the design."
+
+    Every sprint in this block is deliberately oversubscribed. A team that finishes everything
+    was under-loaded, and a backlog that runs dry leaves fast finishers idle.
+
+    So **carrying tickets is normal, not failure.** What matters is that the ones you *did*
+    take are finished — merged, reviewed, done — rather than five things all at 80%. At the end
+    of a sprint you should be able to say which tickets landed and which didn't, without
+    apology.
+
+### Creating the issues
+
+Once per sprint, one person does this for the team:
+
+1. Open the repository's **Actions** tab on github.com.
+2. Choose **Create sprint issues**, click **Run workflow**, pick the sprint number, and run it.
+3. Refresh **Issues**. One issue per ticket, with the full description, the acceptance
+   criteria, and any mockup.
+
+They arrive **unassigned**, on purpose. Deciding who takes what is the planning, and it's
+yours.
+
+*(If Actions is unavailable, the same text is in `tickets/sprint-N/` — open a file, copy it
+into a new issue by hand.)*
+
+### Planning it
+
+Five minutes, standing at a screen, all three of you:
+
+- **Read every ticket in the sprint** — not just the one you expect to take. You need to know
+  what your teammates are building, because in later sprints their work and yours meet in the
+  same files.
+- **Respect the dependencies.** Some tickets say *depends on* another. That's a real ordering
+  constraint, not a suggestion, and getting it wrong means someone builds on something that
+  isn't there yet.
+- **One issue, one person.** Assign each on GitHub so the board says who's on what — no
+  guessing at standup.
+- **Leave the rest unassigned.** They're not forgotten, they're next. Whoever finishes first
+  pulls one.
+- **Then check with your instructor** before anyone branches. Some of the sequencing matters
+  more than it looks.
+
+**One issue, one branch, one pull request** — the charter's first rule — starts here. An issue
+you didn't create is an issue nobody's tracking, and a branch with two tickets on it is a
+review nobody can give properly.
 
     Everything above assumes one folder on one branch, which is all you need for a ticket you
     build by hand. When you hand a ticket to an AI agent you'll want **two** branches checked
@@ -511,6 +565,10 @@ through both features — which is exactly what you'll do from Sprint 2 onwards.
 
 - **The gate is the point.** Branches and conflicts are all in service of one idea: nothing
   reaches the shared branch without another person reading it.
+- **The backlog is bigger than the sprint on purpose.** Carrying tickets is normal; finishing
+  three properly beats having five at 80%.
+- **Create the issues, then plan, then branch** — in that order, and never a branch without an
+  issue behind it.
 - **Small branches merge easily; long branches hurt.** A branch open for four hours rarely
   conflicts. One open for three days always does.
 - **Always start from a fresh `main`.** `git switch main && git pull origin main` before every new
@@ -555,5 +613,9 @@ through both features — which is exactly what you'll do from Sprint 2 onwards.
     `git switch main && git pull origin main`, `git fetch --prune`, `git branch -d <branch>`.
 15. On a branch that's fallen behind, run `git pull origin main`; resolve any conflict in
     the merge editor, commit, push, then re-run the app.
+16. **Once per sprint:** Actions → **Create sprint issues** → Run workflow → the sprint
+    number. Then plan as a team — read every ticket, respect the dependencies, assign one
+    each, leave the rest unassigned, and check with your instructor before anyone branches.
 
-The lab takes you through the same loop on your own, with a conflict you create on purpose.
+The lab takes you through the same loop on your own, with a conflict you create on purpose —
+and then sets up Sprint 1 for real.

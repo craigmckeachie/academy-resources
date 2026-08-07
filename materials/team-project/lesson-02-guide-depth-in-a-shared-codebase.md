@@ -15,24 +15,38 @@ ticket reaches from the browser to SQL Server and back. The skill isn't any sing
 **working out what your change might break for someone else, before they find out.** Every section
 below is one version of that question.
 
-> **This is a briefing, not a build.** There's no walked example to type along with — the doing is
-> your Sprint 2 ticket, and the lab is the checklist for it. Read this first, then work the lab
-> beside your issue.
+> **This is mostly a briefing, not a build.** The doing is your Sprint 2 ticket, and the lab is
+> the checklist for it. The one exception is section 2's **▶ Code along** — five minutes with
+> the migration files, which everyone runs.
 
-<!-- Authoring note (not student-facing): concept-only by design — no ▶ Code along, because the
-     lab is the runbook and the ticket is the practice. Do NOT walk the S2-C/S2-D argument-list
-     conflict on the real files: it is Sprint 2's engineered conflict and must be discovered.
-     §4's snippet is deliberately generic. See planning/team-project/sprint-2-depth.md. -->
+<!-- Authoring note (not student-facing): near-concept-only by design. The ONLY ▶ Code along is
+     §2's, and it is deliberately read-and-inspect (plus one empty Add-Migration that is
+     immediately removed) — NOT building a table.
+     Do NOT walk the Comment entity here: S2-A is an ASSIGNED ticket (student 1, the schema
+     owner), so walking it hands them their first acceptance criterion. Walked items in this
+     block are planted-but-never-filed only — AG-0, BUG-05, BUG-14.
+     Also note two of three students must NOT run Add-Migration in Sprint 2 at all, so a
+     create-a-table walkthrough would teach the opposite of the rule §2 exists to establish.
+     Do NOT walk the S2-C/S2-D argument-list conflict on the real files: it is Sprint 2's
+     engineered conflict and must be discovered. §4's snippet is deliberately generic.
+     See planning/team-project/sprint-2-depth.md. -->
 
 Keep the [team charter](team-charter.md) and the
-[Git collaboration quick-start](../reference/git-collaboration-quickstart.md) open.
+[Git collaboration quick-start](../reference/git-collaboration-quickstart.md) open, and have
+`Prs.Api` open in Visual Studio for section 2.
 
 ---
 
 ## 1. What's different about a second sprint
 
-In Sprint 1 the three tickets touched no files in common. That was deliberate — you were learning
-the loop, and a conflict would have been noise. It is not how a real sprint looks.
+You've resolved a conflict already, in the Lesson 1 lab — but that was a **drill**, staged on a
+README table so it couldn't hurt anything. The three Sprint 1 **tickets** were the opposite:
+deliberately chosen to touch no files in common, so the real work merged in any order and nobody
+had to think about anyone else's branch.
+
+Both halves of that were on purpose. You met a conflict where the answer was obvious, and you
+met the ticket loop without one. **This sprint stops separating them**, which is how a real
+sprint actually looks.
 
 This sprint, three things change at once:
 
@@ -56,10 +70,10 @@ is where several of these tickets live. Section 4 is about what that costs and h
 
 ---
 
-## 2. Migrations in a team — the schema owner
+## 2. Migrations in a team — the database schema owner
 
-One ticket this sprint adds a database table. That student is the sprint's **schema owner**, and
-for the length of the sprint they are the only person who runs `Add-Migration`.
+One ticket this sprint adds a database table. That student is the sprint's **database schema
+owner**, and for the length of the sprint they are the only person who runs `Add-Migration`.
 
 This is not ceremony. Here's the failure it prevents:
 
@@ -71,13 +85,13 @@ it costs half a day and teaches nothing.
 
 **The rules for the sprint:**
 
-- **Only the schema owner runs `Add-Migration`.** Everyone else, nobody, not once.
+- **Only the database schema owner runs `Add-Migration`.** Everyone else, nobody, not once.
 - **The migration merges first.** Before anyone else's ticket lands.
 - **Everyone else pulls `main` and runs `Update-Database`** — the moment it merges, not when they
   next happen to need it.
 
 ```
-Package Manager Console, schema owner only:
+Package Manager Console, database schema owner only:
     Add-Migration AddComments
     Update-Database
 
@@ -86,9 +100,9 @@ Everyone else, after it merges:
     Update-Database
 ```
 
-**If you're not the schema owner and you think you need a migration, you're wrong or the ticket is.**
-Say so at standup rather than running the command. And one specific case worth knowing, because it
-looks like a schema change and isn't:
+**If you're not the database schema owner and you think you need a migration, you're wrong or
+the ticket is.** Say so at standup rather than running the command. And one specific case worth
+knowing, because it looks like a schema change and isn't:
 
 !!! tip "Adding a navigation property to an existing foreign key is not a schema change"
 
@@ -98,6 +112,84 @@ looks like a schema change and isn't:
 
     If it comes out non-empty, **stop and read it.** Something else changed, and you're about to
     commit it by accident.
+
+### ▶ Code along — look at what you're being protected from
+
+**Everyone does this, schema owner or not**, and it takes five minutes. The rule above only
+sounds like bureaucracy until you've seen the files it's protecting.
+
+**1. Read the migration you've been running all along.** Open `Prs.Api/Migrations/` — there's one
+migration in there, a timestamped file ending `_Init.cs`. You ran `Update-Database` in Lesson 1
+to apply it and never looked inside. Do that now:
+
+```csharp title="Prs.Api/Migrations/…_Init.cs"
+migrationBuilder.CreateTable(
+    name: "Users",
+    // …columns, keys
+```
+
+Five `CreateTable` calls, seven `CreateIndex` calls, and a `Down()` that drops it all again.
+This is what `Add-Migration` wrote by comparing your models to *nothing*. **It's generated C#,
+not something anyone typed** — which is why the golden rule is that you never hand-edit one.
+
+**2. Open `PrsDbContextModelSnapshot.cs`, in the same folder.** Scroll it. It's long, and this is
+the part that matters:
+
+> **It is one file, and it describes your entire schema.**
+
+That's the whole argument from three paragraphs ago, made concrete. `Add-Migration` doesn't just
+write a migration — it rewrites *this* file to be the new current state, then diffs against it
+next time. **Two people running `Add-Migration` on branches that don't know about each other
+produce two rewrites of one file, each correct on its own and neither aware of the other.** Git
+merges it, EF Core reads a snapshot that matches neither branch, and every subsequent migration
+is built on a lie.
+
+There is no clean way to resolve that conflict by hand. That's the half-day.
+
+**3. Run the command you were just told not to run — once, safely.** With your models untouched,
+in the Package Manager Console:
+
+```
+Add-Migration Scratch
+```
+
+Open what it produced. **`Up()` and `Down()` are empty**, because nothing changed. That's the
+tip above, seen for real rather than described — and it's how you'll recognise the
+nav-property case mid-sprint instead of panicking at it.
+
+Now take it back out:
+
+```
+Remove-Migration
+```
+
+`Remove-Migration` deletes the migration file *and* rolls `ModelSnapshot.cs` back to what it was.
+Confirm with `git status` — **your working tree should be clean.** If anything is left over,
+you've just learned something else useful about the tooling.
+
+**4. Do the thing you'll actually do all sprint.**
+
+```
+Update-Database
+```
+
+For two of the three of you, that's the *only* migration command you'll run in Sprint 2 — and
+you'll run it the moment the schema owner's work merges.
+
+**Save and check**
+
+- You've read a real `CreateTable` and a real `ModelSnapshot.cs`, and can say why one file being
+  rewritten twice is unfixable.
+- `Add-Migration Scratch` produced an **empty** migration, and `Remove-Migration` left
+  `git status` clean.
+- You know which of the three commands is yours this sprint.
+
+!!! warning "That was the exception, and it's over"
+
+    You ran `Add-Migration` once, on an unchanged model, before the sprint started, and removed
+    it immediately. From here the rule in this section holds without exception: **if you are not
+    the database schema owner, you do not run it** — not to check something, not on a branch you
+    plan to throw away. Say it at standup instead.
 
 ---
 
@@ -213,8 +305,9 @@ invisible in a diff and obvious in a browser.
 in the API module produces no error at all — the value just never arrives. Change the filter and
 watch the network request, don't infer it.
 
-**Was a migration involved, and was it the schema owner's?** If a non-owner's branch contains a
-migration file, that's a finding, not a detail.
+**Was a migration involved, and was it the database schema owner's?** If a non-owner's branch
+contains a migration file — or a changed `PrsDbContextModelSnapshot.cs` — that's a finding, not a
+detail. You've read that file now; you know what a second rewrite of it costs.
 
 Then the standing rule from the charter: **run it before you approve it**, and if you only read the
 diff, say so in your review.
@@ -225,7 +318,9 @@ diff, say so in your review.
 
 - **Ask what your change breaks for someone you can't see.** Old callers, other pages, the next
   person's merge. Every section above is that one question in a different costume.
-- **One person owns the schema per sprint.** Parallel migrations cost half a day and teach nothing.
+- **One person owns the schema per sprint**, because `ModelSnapshot.cs` is a single file
+  describing your whole schema, and two branches rewriting it produce a conflict with no correct
+  hand resolution. Parallel migrations cost half a day and teach nothing.
 - **Optional-with-a-default is how you extend an endpoint** — and the untouched call has to keep
   behaving exactly as it did.
 - **A missing `Include` fails silently.** When you touch a query, check that what the page displays
@@ -239,17 +334,20 @@ diff, say so in your review.
 
 ## Build Steps
 
-1. Find out **who the schema owner is** this sprint, and confirm it isn't you before you consider
-    running `Add-Migration`.
-2. When the migration merges, **pull `main` and run `Update-Database`** — then, not later.
-3. Read your ticket and work out **which layers it touches** — database, controller, API module,
+1. Read `Prs.Api/Migrations/…_Init.cs` and `PrsDbContextModelSnapshot.cs`. Run
+    `Add-Migration Scratch` on unchanged models, confirm it's **empty**, then `Remove-Migration`
+    and check `git status` is clean.
+2. Find out **who the database schema owner is** this sprint, and confirm it isn't you before you
+    consider running `Add-Migration` again.
+3. When the migration merges, **pull `main` and run `Update-Database`** — then, not later.
+4. Read your ticket and work out **which layers it touches** — database, controller, API module,
     component — before you write anything.
-4. If you're adding a parameter to an existing endpoint: **optional with a default**, filter inside
+5. If you're adding a parameter to an existing endpoint: **optional with a default**, filter inside
     an `if`, `Include` before the filter, and verify the **no-parameter** call is unchanged.
-5. **Keep the branch short.** Push and open the pull request while it's still small.
-6. On a conflict: **read the other ticket first**, resolve for both intents, then **run both
+6. **Keep the branch short.** Push and open the pull request while it's still small.
+7. On a conflict: **read the other ticket first**, resolve for both intents, then **run both
     features** and say in the pull request what you merged.
-7. Reviewing: send the endpoint's **old** request in Insomnia, load the page, change the filter and
+8. Reviewing: send the endpoint's **old** request in Insomnia, load the page, change the filter and
     watch the network tab, and check no unexpected migration file is in the diff.
 
 The lab is the same sequence as a checklist you work beside your issue.

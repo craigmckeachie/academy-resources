@@ -310,7 +310,7 @@ the more valuable of the two for a first job. Don't collapse them into one thing
 | Lesson | Shape | Status | Why |
 |---|---|---|---|
 | **1 — Collaborating in a shared repo** | guide + lab | **built** | Repo setup, branches, PRs, review, conflicts |
-| **2 — Depth in a shared codebase** | guide + lab | guide **built**, lab **to write** | Schema owner and migrations in a team; a conflict where "keep both" isn't obvious; extending an endpoint without breaking its contract; reviewing a vertical slice |
+| **2 — Depth in a shared codebase** | guide + lab | **built** | Database schema owner and migrations in a team; a conflict where "keep both" isn't obvious; extending an endpoint without breaking its contract; reviewing a vertical slice |
 | **3 — Supervising an agent in a worktree** | guide + lab | guide **built**, lab **to write** | Worktrees, scoping a ticket for handoff, the audit passes, the review rubric, keeping the diff reviewable |
 | **4 — Working a bug ticket** | guide + lab | guide **built**, lab **to write** | Reproduce before diagnosing, narrow before fixing, failing test first, root cause before the PR |
 

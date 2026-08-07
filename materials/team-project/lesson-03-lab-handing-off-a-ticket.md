@@ -1,8 +1,8 @@
 ---
-title: "Lesson 3 Lab — Handing off a ticket, and owning the result"
+title: "Lesson 3 Lab — Handing off a ticket, and owning the result (Sprint 3)"
 ---
 
-# Lesson 3 Lab — Handing Off a Ticket, and Owning the Result
+# Lesson 3 Lab — Handing Off a Ticket, and Owning the Result (Sprint 3)
 
 You watched a ticket go out to an agent and come back. Now do yours — in a worktree, audited
 before it's pushed, and defensible line by line in review.
@@ -25,21 +25,34 @@ Keep the [Lesson 3 guide](lesson-03-guide-supervising-an-agent-in-a-worktree.md)
 
 ---
 
+## Part 0 — Start the sprint
+
+Together, before anyone opens an agent. Same routine as Lesson 1, section 7.
+
+1. **Actions → Create sprint issues → Run workflow → `3`.** Three issues appear, unassigned.
+2. **One each.** These three touch no files in common, so there are no dependencies to
+   sequence and they can merge in any order — the only sprint where that's true twice.
+3. **Check the plan with your instructor**, then take your issue.
+
+✅ **Checkpoint:** three issues, one assigned to each of you.
+
+---
+
 ## Part 1 — Scope it, before the agent exists
 
-1. **Read the issue, then go look at the running app.** Click through the screen it's about and
+4. **Read the issue, then go look at the running app.** Click through the screen it's about and
     find the code behind it. Five minutes, by hand.
-2. **Write down the files you expect to change.** A list, on paper or in a scratch file. Mark any
+5. **Write down the files you expect to change.** A list, on paper or in a scratch file. Mark any
     file you expect the agent to *read but not modify*.
 
     This list is the whole exercise's foundation. Written first it's evidence; written afterwards
     it's an opinion you formed by looking at what the agent did —
     [guide §2](lesson-03-guide-supervising-an-agent-in-a-worktree.md#2-scope-the-ticket-before-you-start-it)
     makes that case at length.
-3. **Find the precedent** — the place in this codebase that already solves a similar problem, and
+6. **Find the precedent** — the place in this codebase that already solves a similar problem, and
     read it. A filter, a formatting helper, an endpoint that returns something unusual: whatever
     your ticket needs, something near it probably exists.
-4. **If your ticket could reasonably be built two ways, decide now**, and decide it the way the
+7. **If your ticket could reasonably be built two ways, decide now**, and decide it the way the
     app already does it. That's a design call, and it isn't the agent's to make — it has no way to
     know which of the plausible approaches your team already chose.
 
@@ -50,7 +63,7 @@ you have not opened Copilot yet.
 
 ## Part 2 — A worktree of its own
 
-5. **From the repository root** — not from inside `Prs.Web`, or the worktree lands inside your
+8. **From the repository root** — not from inside `Prs.Web`, or the worktree lands inside your
     repo:
 
     ```bash
@@ -61,17 +74,17 @@ you have not opened Copilot yet.
 
     `git worktree list` prints absolute paths. Read them and confirm the new folder is a
     **sibling** of your repo, not a child.
-6. A worktree contains only the files Git tracks, so two things are missing. In the worktree:
+9. A worktree contains only the files Git tracks, so two things are missing. In the worktree:
 
     - `npm install` in its `Prs.Web`
     - copy in your gitignored local config — `appsettings.Development.json` and its connection
       string
 
-7. **Stop the API in your original checkout before you start the one in the worktree.** Both bind
+10. **Stop the API in your original checkout before you start the one in the worktree.** Both bind
     `http://localhost:5555`, and `Prs.Web` has that address hard-coded. Two branches on disk is
     not two running apps — see the guide's §3 warning for the failure mode where everything
     *looks* fine and you're testing the agent's front end against your own back end.
-8. Open the worktree as **its own VS Code window**, so the agent's context is that folder and
+11. Open the worktree as **its own VS Code window**, so the agent's context is that folder and
     nothing else:
 
     ```bash
@@ -87,7 +100,7 @@ the worktree, and `git status` in your original folder is clean.
 
 ## Part 3 — Hand it over, and watch
 
-9. Prompt it with **four things** —
+12. Prompt it with **four things** —
     [guide §4](lesson-03-guide-supervising-an-agent-in-a-worktree.md#4-code-along-handing-the-ticket-over)
     has a worked example to adapt:
 
@@ -98,9 +111,9 @@ the worktree, and `git status` in your original folder is clean.
 
     **No open-ended invitations.** "Add any improvements you see" is how a three-file ticket
     becomes an eleven-file diff, and every extra file is yours to explain.
-10. **Read its first response before it gets going.** If it opens by naming a file you didn't
+13. **Read its first response before it gets going.** If it opens by naming a file you didn't
     expect, ask why *now* — not after it's finished.
-11. While it works, periodically, in the worktree:
+14. While it works, periodically, in the worktree:
 
     ```bash
     git diff --stat main...HEAD
@@ -108,9 +121,9 @@ the worktree, and `git status` in your original folder is clean.
 
     One line per file. Compare against your list. Three seconds, and it's the difference between
     catching scope creep and discovering it in review.
-12. **Commit checkpoints as it goes.** They're about to be squashed, so they cost nothing, and
+15. **Commit checkpoints as it goes.** They're about to be squashed, so they cost nothing, and
     they let you back out one step instead of all of them.
-13. When a file appears that isn't on your list, decide which happened:
+16. When a file appears that isn't on your list, decide which happened:
 
     - **The ticket genuinely needed it** — add it to your list and say so in the pull request. A
       documented scope change is a good sign.
@@ -120,7 +133,7 @@ the worktree, and `git status` in your original folder is clean.
         git restore <path/to/file>
         ```
 
-14. Read its summary of what it did, then **verify with `git`, not with the summary.**
+17. Read its summary of what it did, then **verify with `git`, not with the summary.**
 
 ✅ **Checkpoint:** `git diff --stat main...HEAD` lists only files on your list — or you can say
 out loud why each extra one is there.
@@ -132,13 +145,13 @@ out loud why each extra one is there.
 Two passes, in this order, **before** you run anything. A change can work perfectly and still be
 wrong for this codebase.
 
-15. **Pass one — conventions.** Work the table in
+18. **Pass one — conventions.** Work the table in
     [guide §6](lesson-03-guide-supervising-an-agent-in-a-worktree.md#6-the-audit-pass-before-you-open-the-pull-request)
     against the diff: DTOs, `[Authorize]`,
     a repository layer, `EntityState.Modified`, status string literals, `virtual` navigation
     properties, `row`/`col` grid classes, Bootstrap by CDN, `import type`, `axios` or an inline
     `fetch`. Each one is a mechanical check.
-16. **Pass two — consistency.** No watch-list covers this; it needs someone who has read the app.
+19. **Pass two — consistency.** No watch-list covers this; it needs someone who has read the app.
     Start with your ticket's shape:
 
     | If your ticket… | Check first | Then | The criterion an agent skips |
@@ -150,14 +163,14 @@ wrong for this codebase.
     Whatever your row, ask the question the whole audit exists for: **which of these failures
     would still leave the feature working when I click it?** Those are the ones running it won't
     find.
-17. **The comprehension check.** Pick the three least obvious lines in the diff and explain each
+20. **The comprehension check.** Pick the three least obvious lines in the diff and explain each
     one out loud — not *"it filters the products"*, but why that hook, why that dependency array,
     why that guard. If you can't, you have two honest options: read until you can, or delete those
     lines and write them yourself.
-18. **Now run it.** The definition of done hasn't changed: verified in the browser, and in
+21. **Now run it.** The definition of done hasn't changed: verified in the browser, and in
     Insomnia if an endpoint changed. Work your issue's acceptance criteria one at a time,
     including the one your row above says gets skipped.
-19. **Consider throwing it away.** Three signals, from
+22. **Consider throwing it away.** Three signals, from
     [guide §9](lesson-03-guide-supervising-an-agent-in-a-worktree.md#9-when-to-throw-it-away) — the diff is bigger than the
     ticket and you can't account for the difference; you're spending longer editing its code than
     writing your own would have taken; you can't explain it and re-reading isn't helping. If two
@@ -178,7 +191,7 @@ the acceptance criteria are met in the running app.
 
 ## Part 5 — The pull request, and a teammate's
 
-20. Push and open the pull request. All three sections, and here the third one carries the weight:
+23. Push and open the pull request. All three sections, and here the third one carries the weight:
 
     - **What this changes** — and `Closes #N`
     - **How I verified it** — specifically, including the edge case from your table row
@@ -187,7 +200,7 @@ the acceptance criteria are met in the running app.
       has a worked example. "Used agent mode, accepted everything" gets sent back, because it's
       indistinguishable from not having looked.
 
-21. **Review a teammate's**, and rotate. Their diff was generated too, so add five checks to your
+24. **Review a teammate's**, and rotate. Their diff was generated too, so add five checks to your
     normal review:
 
     | Check | Pass |
@@ -200,10 +213,10 @@ the acceptance criteria are met in the running app.
 
     That last one is a real finding. If it's too big to read properly, say so rather than
     approving it anyway.
-22. Then the twenty seconds that make the gate real: **ask the author why one specific line is the
+25. Then the twenty seconds that make the gate real: **ask the author why one specific line is the
     way it is.** Not to catch anyone out — it's what separates a diff someone owns from a diff
     someone accepted.
-23. Once yours is approved and squash-merged, clean up. From your **original** folder:
+26. Once yours is approved and squash-merged, clean up. From your **original** folder:
 
     ```bash
     git worktree remove ../prs-agent-<slug>
