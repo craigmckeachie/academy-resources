@@ -374,7 +374,71 @@ it picks the same answer — because the next person can see the decision was ma
 
 ---
 
-## 9. Writing the fix pull request
+## 9. When the answer is to take the merge back out
+
+Everything so far assumes the feature is basically right and one thing inside it is wrong.
+Sometimes testing says otherwise: the branch merged, and then three, five, eight reports arrive
+against it, and each fix uncovers another. At that point you are not working a defect any more —
+you are propping up a change that shouldn't be on `main` yet.
+
+The move then is to **revert the merge**, get `main` back to known-good, and redo the work on a
+fresh branch without the clock running.
+
+**A merged branch is never reopened.** Its commits are already in `main` and its pull request is
+closed; pushing more to it produces a second merge from a branch whose name claims work that
+already shipped, on a base that has since moved. Every fix branches from current `main`:
+
+```sh
+git switch main && git pull origin main && git switch -c fix/<issue>-<short-slug>
+```
+
+And every bug report gets **its own** branch and pull request — the charter's *one issue, one
+branch, one pull request* applies to follow-up defects exactly as it does to tickets. Bundling
+four fixes into one pull request means that when one of them is wrong, the other three come out
+with it.
+
+### Reverting the merge
+
+A merge commit has two parents, so `git revert` has to be told which side to keep. `-m 1` means
+*keep the first parent* — `main`'s side — and undo everything the branch brought in:
+
+```sh
+git switch main && git pull origin main
+git switch -c revert/42-vendor-detail-page
+git revert -m 1 <merge-commit-sha>
+```
+
+That produces one ordinary commit whose diff is the feature, backwards. It goes through review
+like anything else — `main` is protected, so a revert is a pull request too, and its description
+should say what broke and what the plan is, not just *"revert #42."*
+
+!!! warning "Re-landing the same branch later needs one more step"
+
+    A revert doesn't erase history, it adds a commit that undoes it. Git still believes the
+    branch's commits are in `main`, so merging that branch again brings in **nothing** — you get
+    an empty merge and a feature that's still missing.
+
+    To re-land the work you revert the revert (`git revert <revert-sha>`) and then continue on
+    top of it, or you rebuild the feature on a new branch. This is the part nobody guesses, and
+    it's usually discovered at the worst moment.
+
+### Choosing between them
+
+| Fix forward | Revert the merge |
+|---|---|
+| A handful of independent defects | Each fix reveals the next one |
+| The feature's shape is right | The design is wrong, not the code |
+| `main` is usable meanwhile | `main` is broken for everyone else |
+| Fixes are small and reviewable | The honest fix is "write it again" |
+
+The tie-breaker is **who else is blocked**. A defect that only affects the feature's own screen
+can be fixed forward at a normal pace. One that breaks a shared page, a shared helper, or the
+build comes out now and gets redone properly — reverting is not an admission of failure, it's
+choosing a two-minute known-good state over an afternoon of speculative patches.
+
+---
+
+## 10. Writing the fix pull request
 
 Same template, three parts, and on a defect each one has a specific job:
 
@@ -425,6 +489,9 @@ description, and it's exactly what the charter is asking for.
 - **If the root cause is a function you could call from a test, write the failing test first.**
   A test that was never red proves nothing.
 - **Root cause, not change.** Stating it properly is what tells you where else the same bug is.
+- **A merged branch is never reopened**, and every report gets its own branch and pull request.
+  When each fix uncovers the next one, stop fixing forward and **revert the merge** — a known-good
+  `main` beats an afternoon of speculative patches.
 
 ---
 
@@ -447,9 +514,12 @@ description, and it's exactly what the charter is asking for.
     helper — and say in the pull request what you found clean.
 10. If the report turns out to be a design question, **state the options and recommend one**
     rather than silently picking.
-11. Open the pull request: **root cause in plain language**, specific verification steps, and an
+11. If reports keep arriving against the same recent merge and each fix uncovers another, stop
+    and **revert the merge** (`git revert -m 1 <merge-sha>`) on its own branch, then redo the work
+    fresh. Branch from current `main` every time; never reopen a branch that's already merged.
+12. Open the pull request: **root cause in plain language**, specific verification steps, and an
     AI-use section that says where the assistant was wrong.
-12. Review a teammate's fix by **reproducing the original bug on their branch** — then confirming
+13. Review a teammate's fix by **reproducing the original bug on their branch** — then confirming
     it's gone.
 
 There's no lab for this lesson — the bug bash is the lab, and there are more defects filed than

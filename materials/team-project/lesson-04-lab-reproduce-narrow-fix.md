@@ -150,6 +150,11 @@ a request, a query, a network response — not a theory.
     recommend one, and escalate rather than quietly picking if your choice changes behaviour
     others depend on.
     [Guide §8](lesson-04-guide-working-a-bug-ticket.md#8-when-the-report-is-a-design-question-not-a-defect).
+20. **If reports keep arriving against the same recent merge** and each fix uncovers the next
+    one, stop fixing forward: revert the merge on its own branch (`git revert -m 1 <merge-sha>`),
+    open it as a pull request like any other change, and redo the work fresh. Branch from current
+    `main` every time — a branch that's already merged is never reopened.
+    [Guide §9](lesson-04-guide-working-a-bug-ticket.md#9-when-the-answer-is-to-take-the-merge-back-out).
 
 ✅ **Checkpoint:** the thing that proved the bug now proves the fix — and you saw it fail first.
 
@@ -157,7 +162,7 @@ a request, a query, a network response — not a theory.
 
 ## Part 4 — The pull request states the root cause
 
-20. **What this changes** is the root cause in plain language, not the edit you made:
+21. **What this changes** is the root cause in plain language, not the edit you made:
 
     | Not a root cause | A root cause |
     |---|---|
@@ -165,11 +170,11 @@ a request, a query, a network response — not a theory.
 
     Then `Closes #N`, and the sentence about siblings: *"I checked `Create` and `Delete`; both
     save correctly."*
-21. **How I verified it** — the reproduction *and* the proof, in that order. If a test applies,
+22. **How I verified it** — the reproduction *and* the proof, in that order. If a test applies,
     say you saw it red before the fix existed. Your reviewer is going to check this by hand.
-22. **AI use** — including whether its diagnosis held up. *"It blamed the form component; the
+23. **AI use** — including whether its diagnosis held up. *"It blamed the form component; the
     Insomnia PUT disproved that in a minute"* is worth more than anything else in the section.
-    [Guide §9](lesson-04-guide-working-a-bug-ticket.md#9-writing-the-fix-pull-request) has a
+    [Guide §10](lesson-04-guide-working-a-bug-ticket.md#10-writing-the-fix-pull-request) has a
     worked example of all three.
 
 ✅ **Checkpoint:** someone who never saw the bug could read your description and explain to a
@@ -182,7 +187,7 @@ third person why it happened.
 **This is the gate for the whole sprint.** Several of these defects are one character; a reviewer
 who only reads the diff cannot tell a fix from a plausible-looking change.
 
-23. **Reproduce the original bug first, on `main`** — where it still exists:
+24. **Reproduce the original bug first, on `main`** — where it still exists:
 
     ```bash
     git fetch origin
@@ -196,20 +201,20 @@ who only reads the diff cannot tell a fix from a plausible-looking change.
     If reproducing it changed your data — a deleted record, a broken login — **re-seed before
     step 24**, same as the author had to. Otherwise you'll be testing their fix against a
     database you just damaged.
-24. **Now switch to their branch and run the same steps:**
+25. **Now switch to their branch and run the same steps:**
 
     ```bash
     git switch fix/<their-issue>-<their-slug>
     ```
 
     Restart the API again. The bug should be gone, and nothing beside it should be broken.
-25. Then read the diff and check three things the description claims:
+26. Then read the diff and check three things the description claims:
 
     - Is a **root cause** stated, or just the change?
     - Did they say which **sibling paths** they checked and found clean?
     - If a test came with it — **ask whether they saw it red first.** Run `npm test` yourself.
 
-26. Approve, or request changes and say specifically what. Then, once yours is approved and
+27. Approve, or request changes and say specifically what. Then, once yours is approved and
     squash-merged:
 
     ```bash
@@ -218,7 +223,7 @@ who only reads the diff cannot tell a fix from a plausible-looking change.
     git branch -d fix/<issue>-<short-slug>
     ```
 
-27. Take the next defect.
+28. Take the next defect.
 
 ✅ **Checkpoint:** you reproduced a teammate's bug on `main`, watched it not happen on their
 branch, and your own fix is merged with its root cause on the record.
