@@ -38,8 +38,16 @@ that's honest, and it tells the author what they did and didn't get.
 - How you verified it — specifically
 - Where you used AI, and what you changed or rejected in what it gave you
 
-**A fix states the root cause.** "Fixed the total" is not a description. "`Delete` never
-called `RecalculateRequestTotal`, which `Create` and `Update` both do" is.
+**A fix states the root cause.** "Fixed the total" is not a description — it says what you
+touched, not what was wrong. *"The date was parsed in the browser's time zone and rendered
+in UTC, so anything after 7pm displayed as the next day"* is.
+
+<!-- Authoring note (not student-facing): keep this example OUT of the PRS codebase. An
+     earlier version used "`Delete` never called `RecalculateRequestTotal`, which `Create`
+     and `Update` both do" — which is verbatim the answer to a planted defect students are
+     asked to diagnose in the team block. The defect surface covers most of PRS, so a
+     deliberately unrelated example is the safe shape here. -->
+
 
 **Fix what you were assigned, not what you happen to notice.** You will spot things that look
 wrong — an odd colour, a clumsy label, a typo — in code no ticket sent you to. Don't quietly
