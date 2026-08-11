@@ -60,14 +60,32 @@ character or a mangled quote is easy to miss — put them in a script file and r
 
 1. **Save the file.**
 
-1. Open **Git Bash** in the folder you saved it in — right-click the folder in File
-    Explorer and choose **Open Git Bash here**, or open the folder in VS Code and pick
-    **Git Bash** from the terminal's dropdown.
+1. Open **Git Bash** in the folder you saved it in. Two ways, and the first is the one
+    you'll use constantly from here on:
 
-    !!! warning "Git Bash, not PowerShell"
+    - **From File Explorer:** right-click the folder → **Show more options** → **Open Git
+      Bash here**. On Windows 11 the short context menu you get first *doesn't* list Git
+      Bash — **Show more options** is what opens the full menu that does. That extra click
+      catches everyone once.
+    - **From VS Code:** open the folder, then <kbd>Ctrl</kbd> + <kbd>`</kbd> for the
+      terminal and pick **Git Bash** from the dropdown on the right of the terminal panel.
+      You can make it the default: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> →
+      *Terminal: Select Default Profile* → **Git Bash**. Worth doing now.
 
-        `chmod` is a Unix command. It exists in Git Bash (which ships with Git for Windows)
-        but not in PowerShell or Command Prompt. Check the terminal dropdown says **bash**.
+    !!! warning "Git Bash, not PowerShell — for this whole block, not just this page"
+
+        **Every terminal command in the team development block assumes Git Bash**, which
+        ships with Git for Windows. Use it for all of it: this script, cloning, branching,
+        the worktrees in Lesson 3, everything.
+
+        It isn't fussiness. `chmod` on this page and `rm -rf` in Lesson 1 are Unix commands
+        that don't exist in PowerShell or Command Prompt at all. And the `&&` that chains
+        `git switch main && git pull origin main` — which you'll type dozens of times —
+        fails in Windows PowerShell, which is what Windows 11 gives you by default.
+
+        **Check before you type:** the terminal's tab or dropdown should say **bash**, and
+        the prompt looks like `craig@LAPTOP MINGW64 ~/dev/prs-team-1 (main)` — with the
+        branch name in parentheses. A `PS C:\Users\craig>` prompt is the wrong shell.
 
 1. Give the file permission to run, then run it:
 

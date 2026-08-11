@@ -109,7 +109,7 @@ Everyone else: wait for their invitation, then skip to *Clone your team's reposi
         `origin` is pointing at your **instructor's** repository — push right now and you'd
         be pushing at them. That's what you're about to remove.
 
-    3. Delete the entire history and its remote. In **Git Bash**:
+    3. Delete the entire history and its remote:
 
         ```bash
         rm -rf .git
@@ -117,6 +117,17 @@ Everyone else: wait for their invitation, then skip to *Clone your team's reposi
 
         Everything Git knew about this folder lived in `.git` — every commit, and the
         `origin` remote. The files stay; the history is gone.
+
+        !!! warning "This is the command that proves you're in Git Bash"
+
+            `rm -rf` is a Unix command. PowerShell doesn't have it and will refuse — and
+            so will everything else in this block that uses `&&`.
+
+            Right-click the `prs-team-<n>` folder in File Explorer → **Show more options**
+            → **Open Git Bash here**. On Windows 11 the first context menu you get is the
+            short one, and it *doesn't* list Git Bash; **Show more options** opens the full
+            menu that does. You want a prompt ending in `MINGW64 ~/… (main)`, not
+            `PS C:\Users\…>`. See [Configuring Git](configuring-git.md).
 
     4. Start a fresh repository and make your own first commit:
 
@@ -130,6 +141,47 @@ Everyone else: wait for their invitation, then skip to *Clone your team's reposi
         configured Git.
 
     **Publish it as yours**
+
+    There are two routes to the same result. **Pick one and don't mix them** — the manual
+    route starts by creating an empty repository on github.com, and the VS Code route
+    creates that repository for you. Do both and you'll end up with two.
+
+    !!! tip "The VS Code way — three clicks instead of two commands"
+
+        With the folder open in VS Code, go to **Source Control**
+        (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>) and click **Publish Branch**.
+        The button only appears when a repository has no remote, which is exactly where
+        `rm -rf .git` and `git init` just left you. Then:
+
+        1. Sign in to GitHub if it asks — it opens a browser and comes back.
+        2. Choose **Publish to GitHub public repository**. **Public, not private** — the
+           private option is usually listed first, and this block needs public.
+        3. Accept or edit the repository name. It defaults to your folder name.
+
+        That one action does **all of steps 5, 6 and 7**: it creates the repository on
+        github.com, adds `origin` pointing at it, pushes `main`, and sets the upstream. So
+        **don't create the repository on github.com first** — there'd be nothing for the
+        button to make.
+
+        Confirm it landed the same way step 6 does:
+
+        ```bash
+        git remote -v
+        ```
+
+        Then skip to *Now lock it down*.
+
+    !!! warning "Do the manual version at least once — steps 5–7"
+
+        This is the **only** place in the whole course you wire up a remote by hand, and
+        it's deliberate. `git remote add origin <url>` is the entire concept: `origin` is a
+        nickname for a URL, nothing more. The button does the same three things, but it does
+        them invisibly — and when a remote is wrong later (pointing at the wrong repository,
+        or still at your instructor's starter), the fix is always `git remote`, never a
+        button.
+
+        Type it once here so you know what the button is doing. Use the button for the rest
+        of your career.
 
     5. On github.com, create a **new, empty** repository — no README, no `.gitignore`, no
        license. Anything it adds becomes a conflict on your first push. Name it something
@@ -150,7 +202,7 @@ Everyone else: wait for their invitation, then skip to *Clone your team's reposi
 
     **Now lock it down** — in this order, or your own push above would have been blocked.
 
-    8. **Invite your teammates.** *Settings → Collaborators → **Add people***, entering each
+    8. **Invite your teammates.** **Settings → Collaborators → Add people**, entering each
        GitHub username, with **Write** access.
 
         **Tell them to go accept it.** Each teammate gets an email invitation and is not a
@@ -158,23 +210,65 @@ Everyone else: wait for their invitation, then skip to *Clone your team's reposi
         the first morning, and the symptom is a confusing permissions error that never
         mentions an invitation.
 
-    9. **Protect `main`.** *Settings → Branches → Add branch protection rule* (or
-       *Settings → Rules → Rulesets*). Branch name pattern: `main`. Turn on:
+    9. **Protect `main`.** **Settings → Rules → Rulesets → New ruleset → New branch
+       ruleset**. Four things on this page, top to bottom:
 
-        - **Require a pull request before merging**
-        - **Require approvals** → set it to **1**
-        - **Do not allow bypassing the above settings** — the one people miss. Without it the
-          rule binds your two teammates and not you, which defeats the point. You are not
-          exempt from review.
+        - **Ruleset Name** — call it `Protect main`.
+        - **Enforcement status** — change it from **Disabled** to **Active**. It defaults to
+          Disabled, and a disabled ruleset does *nothing*. This is the single easiest way to
+          spend a day thinking `main` is protected when it isn't.
+        - **Bypass list** — **leave it empty.** This is where the old branch-protection
+          checkbox *"Do not allow bypassing"* went, and the logic is now inverted: instead of
+          ticking a box to include yourself, you protect yourself by adding **nobody**. If
+          **Repository admin** or **Organization admin** appears in the list, delete it — as
+          the repo owner that role is *you*, and leaving it there means the rule binds your
+          two teammates and not you, which defeats the point.
+        - **Target branches** — **Add target → Include default branch**. `main` is your
+          default branch, and targeting it this way survives a rename. (*Include by pattern*
+          → `main` works too.)
 
-    10. **Settings → General → Pull Requests:** allow **Squash merging** only, and tick
-        **Automatically delete head branches**.
+    10. **Scroll down to Rules.** A couple are already ticked for you — **Restrict
+        deletions** and **Block force pushes**. **Leave them on.** They stop anyone deleting
+        `main` or rewriting its history, and neither interferes with normal work: your
+        ruleset targets `main` only, so deleting a merged feature branch is unaffected.
 
-    11. **Test it.** Change a file, commit straight to `main`, and try to push. It must be
-        **rejected**. If it goes through, the rule isn't on — fix that before your team
-        starts working.
+        Add one more:
 
-    12. Give your teammates the repository URL.
+        - **Require a pull request before merging** — then, in the options that appear under
+          it, set **Required approvals** to **1**. GitHub never lets you approve your own
+          pull request, so 1 approval already means *someone else read it*.
+
+        Leave the rest alone. *Require status checks* needs CI you don't have, and *Require
+        review from Code Owners* needs a `CODEOWNERS` file. Click **Create**.
+
+    11. **Settings → General → Pull Requests.** All three merge methods are ticked by
+        default. You want exactly one:
+
+        - **Allow merge commits** — **untick**
+        - **Allow squash merging** — **leave ticked**
+        - **Allow rebase merging** — **untick**
+
+        Then tick **Automatically delete head branches** further down.
+
+        GitHub won't let you untick all three, so leave squash alone and clear the other
+        two. Squash-only is what makes the charter's rule true — one pull request becomes
+        **one** commit on `main`, and the pull request *title* becomes its message. That's
+        why a vague title matters and a messy branch history doesn't.
+
+    12. **Test it.** Change a file, commit straight to `main`, and try to push. It must be
+        **rejected**, and the error names your ruleset:
+
+        ```
+        remote: error: GH013: Repository rule violations found for refs/heads/main.
+        remote: - Changes must be made through a pull request.
+        ```
+
+        If the push **succeeds**, the rule isn't doing anything — nine times out of ten the
+        Enforcement status is still **Disabled**, or the bypass list isn't empty. Fix it
+        before your team starts working, then undo your commit:
+        `git reset --hard origin/main`.
+
+    13. Give your teammates the repository URL.
 
 **Clone your team's repository.** Once the owner has published and invited you, accept the
 invitation, then clone **their** repository — not the instructor's starter:
@@ -522,9 +616,18 @@ backlog, and the gap between the two is not a problem to be solved.
 
 Once per sprint, one person does this for the team:
 
-1. Open the repository's **Actions** tab on github.com.
-2. Choose **Create sprint issues**, click **Run workflow**, pick the sprint number, and run it.
-3. Refresh **Issues**. One issue per ticket, with the full description, the acceptance
+1. Open the repository's **Actions** tab on github.com — the row of tabs across the top,
+   between **Pull requests** and **Projects**.
+2. In the **left sidebar**, under the heading **All workflows**, click **Create sprint
+   issues**. It's easy to miss: the middle of the page is a list of past *runs*, and the
+   workflow you want is the small link on the left, not anything in that list. (On a
+   narrow window the sidebar collapses — widen the browser or scroll down for it.)
+3. On the right-hand side of the blue *"This workflow has a workflow_dispatch event
+   trigger"* bar, click **Run workflow**. Pick the sprint number from the dropdown, then
+   click the green **Run workflow** button.
+4. Wait for the run to finish — refresh, and it should show a green tick rather than a
+   spinning amber dot. A red **✗** means it failed; open the run to read why.
+5. Refresh **Issues**. One issue per ticket, with the full description, the acceptance
    criteria, and any mockup.
 
 They arrive **unassigned**, on purpose. Deciding who takes what is the planning, and it's
@@ -554,10 +657,10 @@ Five minutes, standing at a screen, all three of you:
 you didn't create is an issue nobody's tracking, and a branch with two tickets on it is a
 review nobody can give properly.
 
-    Everything above assumes one folder on one branch, which is all you need for a ticket you
-    build by hand. When you hand a ticket to an AI agent you'll want **two** branches checked
-    out at the same time, in two folders, so it can't write to the files you're working in.
-    Git does that with a **worktree**, and it's where Lesson 3 starts.
+> Everything above assumes one folder on one branch, which is all you need for a ticket you
+> build by hand. When you hand a ticket to an AI agent you'll want **two** branches checked
+> out at the same time, in two folders, so it can't write to the files you're working in.
+> Git does that with a **worktree**, and it's where Lesson 3 starts.
 
 ---
 
@@ -586,16 +689,19 @@ review nobody can give properly.
 ## Build Steps
 
 1. Work through [Configuring Git](configuring-git.md) on this machine, if you haven't
-    already.
+    already. **Open Git Bash, not PowerShell**, for this and every command below — File
+    Explorer → right-click the folder → **Show more options** → **Open Git Bash here**.
 2. **Repo owner only — make the starter yours:** clone the instructor's starter, run
     `git remote -v` and `git log --oneline` to see what you inherited, then `rm -rf .git`,
     `git init`, `git add .`, `git commit -m "Initial commit"`.
 3. **Repo owner only — publish it:** create a **new, empty, public** repo on your GitHub,
-    then `git remote add origin <url>` and `git push -u origin main`.
+    then `git remote add origin <url>` and `git push -u origin main`. (VS Code's **Publish
+    Branch** button does all of that in one action — but do it by hand this once, and
+    *don't* pre-create the repo if you use the button.)
 4. **Repo owner only — lock it down, in this order:** invite your teammates with **Write**
-    access, protect `main` (require a pull request, 1 approval, **do not allow bypassing**),
-    set **squash merging** only, prove a direct push to `main` is rejected, then share the
-    URL.
+    access; add a **branch ruleset** on `main` — Enforcement **Active**, **bypass list
+    empty**, *Require a pull request* with **1** approval, *Block force pushes*; set
+    **squash merging** only; prove a direct push to `main` is rejected; then share the URL.
 5. Accept the collaborator invitation — from the email or your GitHub notifications.
 6. Clone **your team's** repository (not the instructor's starter); `git branch -vv` should
     show you on `main` tracking `origin/main`.
@@ -613,7 +719,8 @@ review nobody can give properly.
     `git switch main && git pull origin main`, `git fetch --prune`, `git branch -d <branch>`.
 15. On a branch that's fallen behind, run `git pull origin main`; resolve any conflict in
     the merge editor, commit, push, then re-run the app.
-16. **Once per sprint:** Actions → **Create sprint issues** → Run workflow → the sprint
+16. **Once per sprint:** Actions → **Create sprint issues** *(left sidebar, under All
+    workflows — not the run list in the middle)* → **Run workflow** → the sprint
     number. Then plan as a team — read every ticket, respect the dependencies, assign one
     each, leave the rest unassigned, and check with your instructor before anyone branches.
 

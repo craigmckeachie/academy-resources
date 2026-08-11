@@ -371,13 +371,26 @@ function, rather than retrofitting a test onto a fix already made. The starter r
 needs Vitest installed with one finished reference test committed — see the backlog's seed-contents
 table.
 
+**The terminal for this whole block is Git Bash, never PowerShell — state it, don't assume it.**
+Students are on Windows 11, where the default shell is Windows PowerShell and the File Explorer
+context menu **doesn't list Git Bash until you click "Show more options"** — an extra step that
+catches every cohort once. Two things in the materials genuinely break in PowerShell: `rm -rf .git`
+(L1's repo-owner setup) and the `&&` in `git switch main && git pull origin main`, which appears
+in every lesson and lab in the block. The convention is stated in three places on purpose and all
+three should survive a regeneration: the **full first-time walkthrough** in `configuring-git.md`
+(both the File Explorer route and setting VS Code's default profile, plus how to tell you're in
+the right shell — a `MINGW64 … (branch)` prompt, not `PS C:\…>`); a **one-bullet reminder** at the
+top of `team-project/README.md`'s Tips; and an **in-place warning** on the `rm -rf .git` step in
+the L1 guide, which is where a student first hits a command that fails outright. Don't repeat the
+walkthrough anywhere else — new team-project material should point at `configuring-git.md`.
+
 ### Instructor-side companions — never publish these
 
 Everything instructor-side lives in **`planning/team-project/`** — start at its `README.md`, which
 maps the four sprints and links every file. The pieces: `sprint-1-the-loop.md` …
 `sprint-4-bugs.md` (the tickets), `defects.md` (the seventeen planted defects with plant
 instructions and answers), `tests.md`, `alternates.md`, `starter-repo.md` (the one-time build),
-`running-the-block.md` (assignment grid, merge order, auditing), and `proposal.md` (management
+`instructor-guide.md` (assignment grid, merge order, auditing), and `proposal.md` (management
 summary). The whole folder lives outside `materials/` precisely so a publish step can't sweep it up.
 
 **The block is four sprints**, renamed from an earlier scheme where the last two were called the

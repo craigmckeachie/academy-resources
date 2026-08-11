@@ -55,6 +55,12 @@ Your instructor assigns the tickets themselves as issues.
 
 ## Tips
 
+- **Every terminal command in this block is Git Bash**, not PowerShell or Command Prompt.
+  Right-click the folder in File Explorer → **Show more options** → **Open Git Bash here**
+  (on Windows 11 the short menu doesn't list it), or pick **Git Bash** from VS Code's
+  terminal dropdown. Some of what you'll type — `rm -rf`, and the `&&` in
+  `git switch main && git pull origin main` — simply doesn't work in PowerShell.
+  [Configuring Git](configuring-git.md) sets it up.
 - **You're working in PRS** (Users, Vendors, Products, Requests, RequestLines) — the same
   app you built in the capstone, but from a shared copy rather than yours.
 - **You share a repository, not a database.** Each of you runs your own local SQL Server
