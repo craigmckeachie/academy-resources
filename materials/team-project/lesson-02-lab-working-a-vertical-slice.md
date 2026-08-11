@@ -14,10 +14,12 @@ Read your issue first. Then work the parts in order.
      students hold different tickets and the backlog is instructor-only, so it must never
      restate acceptance criteria or branch per ticket. Part 3's table sorts by the SHAPE of a
      change, not by ticket ID — keep it that way.
-     Part 4 must NOT name a file, a ticket pair, or a specific line. Sprint 2's S2-C/S2-D
-     argument-list collision is engineered and has to be DISCOVERED; naming the file tells the
-     two students holding those tickets they're on a collision course. A generic warning is the
-     whole point. See planning/team-project/sprint-2-depth.md and planning/team-project/README.md.
+     Part 4 must NOT name a file, a ticket pair, or a specific line. This sprint's collision is
+     engineered and has to be DISCOVERED; naming the file tells the two students holding those
+     tickets they're on a collision course. A generic warning is the whole point.
+     Which tickets collide, and where, is instructor-only — it lives in the private planning
+     notes and must never be restated here, not even in a comment. Comments ship in the
+     published page source.
      No stretch-challenge section anywhere in this block — the backlog is the stretch work. -->
 
 Keep the [Lesson 2 guide](lesson-02-guide-depth-in-a-shared-codebase.md), the

@@ -30,10 +30,10 @@ an assertion instead of hoping.
      MOCKING fetch (vi.mock / MSW) is out of scope for the whole course. checkStatus is
      testable precisely because you can hand it a real Response you built yourself — that is
      the point of §4, not a workaround.
-     TableServe's translateStatusToErrorMessage says "Please sign in again." — spelled
-     CORRECTLY. PRS's says "Please sigin again." — the typo, and it is the payoff for the team
-     block's TEST-04. DO NOT sync these two files in either direction, and do not mention the
-     typo here. See planning/team-project/tests.md. -->
+     TableServe's and PRS's fetchUtilities.ts differ ON PURPOSE. DO NOT sync them in either
+     direction, and do not draw attention to any difference between them anywhere in the React
+     materials. The reason is instructor-only and is recorded in the private planning notes —
+     it must not be restated here, including in a comment. -->
 
 ---
 

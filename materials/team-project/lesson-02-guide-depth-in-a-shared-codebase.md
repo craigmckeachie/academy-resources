@@ -22,14 +22,15 @@ below is one version of that question.
 <!-- Authoring note (not student-facing): near-concept-only by design. The ONLY ▶ Code along is
      §2's, and it is deliberately read-and-inspect (plus one empty Add-Migration that is
      immediately removed) — NOT building a table.
-     Do NOT walk the Comment entity here: S2-A is an ASSIGNED ticket (student 1, the schema
-     owner), so walking it hands them their first acceptance criterion. Walked items in this
-     block are planted-but-never-filed only — AG-0, BUG-05, BUG-14.
+     Do NOT walk the Comment entity here: it is an ASSIGNED ticket, so walking it hands a
+     student their first acceptance criterion. Anything walked in this block must be an item
+     no student is separately assigned — check the private planning notes before choosing one.
      Also note two of three students must NOT run Add-Migration in Sprint 2 at all, so a
      create-a-table walkthrough would teach the opposite of the rule §2 exists to establish.
-     Do NOT walk the S2-C/S2-D argument-list conflict on the real files: it is Sprint 2's
-     engineered conflict and must be discovered. §4's snippet is deliberately generic.
-     See planning/team-project/sprint-2-depth.md. -->
+     Do NOT walk this sprint's merge conflict on the real files — it has to be discovered, so
+     §4's snippet is deliberately generic and names nothing.
+     Which tickets and defects those are is instructor-only: never restate them here, not even
+     in a comment. Comments ship in the published page source. -->
 
 Keep the [team charter](team-charter.md) and the
 [Git collaboration quick-start](../reference/git-collaboration-quickstart.md) open, and have

@@ -42,11 +42,12 @@ that's honest, and it tells the author what they did and didn't get.
 touched, not what was wrong. *"The date was parsed in the browser's time zone and rendered
 in UTC, so anything after 7pm displayed as the next day"* is.
 
-<!-- Authoring note (not student-facing): keep this example OUT of the PRS codebase. An
-     earlier version used "`Delete` never called `RecalculateRequestTotal`, which `Create`
-     and `Update` both do" — which is verbatim the answer to a planted defect students are
-     asked to diagnose in the team block. The defect surface covers most of PRS, so a
-     deliberately unrelated example is the safe shape here. -->
+<!-- Authoring note (not student-facing): this example must stay generic and outside the PRS
+     domain entirely. An earlier version named specific PRS code, which risks matching work
+     students are asked to reason about later in the block. Don't "improve" it by making it
+     app-specific — the vague-vs-specific contrast is the whole point and it works better on
+     something unrelated. This comment ships in the published page source, so it must not
+     restate what the earlier example said. -->
 
 
 **Fix what you were assigned, not what you happen to notice.** You will spot things that look

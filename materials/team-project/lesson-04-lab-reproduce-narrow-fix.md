@@ -13,11 +13,12 @@ branches is the failure mode here.
 <!-- Authoring note (not student-facing): TICKET-AGNOSTIC, same as the L2 and L3 labs. Students
      get different defects and the bug reports are instructor-only, so never name a defect, a
      file, or a cause — Part 3's table is keyed on the SHAPE of the root cause, not on BUG IDs.
-     Do NOT walk BUG-05 or BUG-14 here; they are the L4 guide's reserved worked examples.
+     Do NOT walk any defect here; the guide's worked examples are reserved and are named only
+     in the private planning notes. Which defects those are is instructor-only and must never
+     be restated here, not even in a comment — comments ship in the published page source.
      The test-first step is CONDITIONAL by design — only a minority of the filed defects have a
      pure-function root cause. For the rest the Insomnia request or the browser IS the regression
-     check, and saying so is what stops "no test" reading as a gap. See planning/team-project/
-     sprint-4-bugs.md and tests.md.
+     check, and saying so is what stops "no test" reading as a gap.
      Part 5's reviewer gate (reproduce on main, then confirm gone on the branch) is the whole
      definition of done for this sprint — don't soften it to "read the diff".
      No stretch-challenge section anywhere in this block — the backlog is the stretch work. -->
@@ -32,15 +33,15 @@ browser and DevTools, Insomnia, SQL Server Management Studio, and the terminal.
 
 Once, at the beginning. Same routine as Lesson 1, section 7, with one difference.
 
-1. **Actions → Create sprint issues → Run workflow → `4`.** Twenty issues appear — fifteen bug
-   reports and five test tickets — all unassigned.
+1. **Actions → Create sprint issues → Run workflow → `4`.** Nineteen issues appear — fourteen
+   bug reports and five test tickets — all unassigned.
 2. **Leave them that way.** This sprint isn't planned up front: **your instructor hands out one
    defect at a time**, so you finish and verify a fix rather than carrying three half-done
    branches. Nobody self-assigns from the pile.
 3. **Skim the titles anyway.** Knowing the shape of what's in there is useful; picking your
    favourite isn't the exercise.
 
-✅ **Checkpoint:** twenty issues exist, all unassigned, and you have exactly one of them.
+✅ **Checkpoint:** nineteen issues exist, all unassigned, and you have exactly one of them.
 
 ---
 

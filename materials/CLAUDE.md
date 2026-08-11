@@ -1001,13 +1001,14 @@ Conventions specific to these — carry them through on any regeneration:
   *executed ≠ verified* — and §7 calls back to it. The concrete finding is real and verified:
   after L17 + L18, `fetchUtilities.ts` is short of 100% because **`delay` is exported, used by
   `MenuItemAPI` and `CategoryAPI`, and never tested**. Re-check that if those files change.
-- **🔒 `translateStatusToErrorMessage` differs between the two apps ON PURPOSE.** TableServe
-  says `"Please sign in again."` (**correct**); PRS says `"Please sigin again."` (**the
-  typo**). L18 teaches this function on TableServe, so the typo stays undiscovered until the
-  team block's **TEST-04**, where a student writing the obvious assertion finds a real bug
-  nobody knew about. **Never sync these two `fetchUtilities.ts` files in either direction**,
-  and never mention the typo in React materials. L18's authoring comment repeats this
-  warning in-file. See `planning/team-project/tests.md`.
+- **🔒 TableServe's and PRS's `fetchUtilities.ts` differ ON PURPOSE, and the difference is
+  instructor-only.** L18 teaches from TableServe's copy. **Never sync the two files in either
+  direction, and never draw attention to any difference between them in React materials** —
+  including in an authoring comment, which ships in the published page source. What the
+  difference is and why it matters is recorded **only** in `planning/team-project/tests.md`
+  and `starter-repo.md` — a folder that is never published. Read it there before touching
+  either file. This file is excluded from the built site but **is copied to the public
+  `academy-resources` repo**, so it can't carry the detail either.
 - **No C# tests anywhere in the program.** There's no pure C# logic in PRS or TableServe to
   unit test — every behaviour lives in a controller with an injected `DbContext`. Deliberate;
   don't add an xUnit project.

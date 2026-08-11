@@ -139,6 +139,10 @@ yet. **Do this part together, at one screen.** Guide section 7 has the reasoning
 
 20. **One of you creates the issues.** On github.com, open the repository's **Actions** tab →
     **Create sprint issues** → **Run workflow** → sprint **1** → **Run workflow**.
+
+    *`Create sprint issues` is a link in the **left sidebar**, under *All workflows*. The list
+    filling the middle of the page is past **runs**, not workflows — that's where everyone
+    looks first.*
 21. Refresh the **Issues** tab. **Four issues**, each with a description, acceptance criteria,
     and — for three of them — a mockup. They're **unassigned**; that's deliberate.
 

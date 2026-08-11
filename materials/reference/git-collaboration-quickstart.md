@@ -188,19 +188,26 @@ Add requester filter to the requests list
 | Good | Not good |
 |---|---|
 | `Add comment count badge to request detail header` | `update` |
-| `Recalculate request total when a line is deleted` | `fixed bug` |
+| `Show a skeleton while menu items load` | `fixed bug` |
 | `Extract money() helper from OrderDetailPage` | `changes` |
-| `Block vendor delete when products reference it` | `wip` |
+| `Disable the submit button while a form is saving` | `wip` |
 
 The shape, when a commit needs more than one line:
 
 ```
-Recalculate request total when a line is deleted
+Show a skeleton while menu items load
 
-Delete was the only write path that didn't call RecalculateRequestTotal,
-so removing a line left a stale total on the requests list. Create and
-Update already did this.
+On a cold start the grid rendered empty for about a second, which reads
+as "no menu items" rather than "still loading". The skeleton holds the
+grid's shape while the fetch is in flight.
 ```
+
+<!-- Authoring note (not student-facing): keep every example here on TableServe, or on
+     generic UI behaviour. Earlier versions used PRS commit messages that happened to state
+     the root cause and the expected fix for work students are asked to diagnose themselves
+     later in the course. This page is linked from the team charter and students are told to
+     keep it open, so it is the worst possible place for that. Don't restate what those
+     examples said — this comment ships in the published page source. -->
 
 Summary line **under about 50 characters**, capitalised, **no full stop** — it's a title, not
 a sentence. Then a blank line, then the body wrapped at around 72 characters.
