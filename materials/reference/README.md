@@ -40,6 +40,19 @@ here is a step-by-step build — these are lookups.
   the **three flips from C#** (methods and properties go camelCase; interfaces keep `I`).
   Pairs with Anatomy of TypeScript Code; useful from **React Lesson 3** and the capstone.
 
+## Assessment reviews
+
+Study guides for the multiple-choice assessments: a checklist to work through first, then an
+example and a reference link for every item. They revise material you've already built with
+— nothing here is new.
+
+- [HTML, CSS & JavaScript](html-css-js-assessment-review.md) — global vs. element-specific
+  attributes, void elements, `display` and the ways to put elements side-by-side, `==` vs.
+  `===`, the four kinds of loop, anonymous functions, and reading an `<input>` with `.value`.
+- [React](react-assessment-review.md) — what a component is and why it's PascalCase, props,
+  the `useState` shape, `useEffect`'s dependency array, conditional rendering, `key`,
+  controlled vs. uncontrolled inputs, and what React Hook Form's `useForm` returns.
+
 ## images/
 
 Diagrams and infographics embedded by the cheat sheets and lesson guides. See
