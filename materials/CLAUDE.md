@@ -950,6 +950,24 @@ Conventions specific to these — carry them through on any regeneration:
   `environment: "jsdom"`** — L18's tests build real `new Response(...)` objects, which are
   Node's, and a global switch puts that at risk. The guide teaches the per-file choice as
   *pay for what you use*, which also keeps the utility tests fast.
+- **L19's setup file registers `afterEach(cleanup)`, and `globals` stays OFF** — found in a live
+  run. React Testing Library auto-registers its own cleanup *only* when a global `afterEach`
+  exists, i.e. only with `test: { globals: true }`. With globals off (the default), nothing
+  clears the DOM between tests, so the guide's second `render` in the same file leaves two cards
+  in the document and `getByRole("button")` fails with **"found multiple elements"** — on
+  correct-looking test code. Globals stay off so L17–L18's explicit
+  `import { describe, it, expect } from "vitest"` remains the one convention; the cleanup is
+  registered by hand in the setup file instead. §2 states both options and names the trap.
+  Don't drop the `afterEach` and don't switch globals on to "simplify".
+- **L19's setup file is `src/vitest.setup.ts`, NOT the project root** — verified against a real
+  cohort run. `tsconfig` has `"include": ["src"]`, so a root-level setup file is outside the
+  TS program and `@testing-library/jest-dom/vitest`'s augmentation of `expect` never applies:
+  tests pass while the editor underlines `.toBeInTheDocument()`. Don't "correct" the path back
+  to the root convention most online examples use. The guide's `!!! warning` in §2 explains it
+  and names both fallbacks (add it to `include`, or import jest-dom per test file).
+- **L19 imports `defineConfig` from `vitest/config`**, not from `vite` plus a
+  `/// <reference types="vitest" />` line. The triple-slash form is the pre-Vitest-3 way; the
+  guide notes it in one parenthetical because Copilot still suggests it. Don't reinstate it.
 - **L19's two components both render a `<Link>`**, so every `render()` is wrapped in
   `MemoryRouter`. The guide makes the general point from it — *a component that throws in a
   test but works in the app is usually missing context it normally gets from a parent.*

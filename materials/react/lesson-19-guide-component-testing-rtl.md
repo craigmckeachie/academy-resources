@@ -104,32 +104,82 @@ npm i -D jsdom @testing-library/react @testing-library/user-event @testing-libra
 | `@testing-library/user-event` | Clicks and typing that behave like a real user's |
 | `@testing-library/jest-dom` | Readable DOM matchers — `toBeInTheDocument()` |
 
-That last one has to be registered before your tests run, so create a setup file at the root of
-`TableServe.Web`:
+Two of those need registering before your tests run, so create a setup file — **inside `src`**,
+which matters for a reason two paragraphs down:
 
-```ts title="TableServe.Web/vitest.setup.ts"
+```ts title="TableServe.Web/src/vitest.setup.ts"
 import "@testing-library/jest-dom/vitest";
+import { afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+
+afterEach(() => {
+  cleanup();
+});
 ```
+
+Two jobs, and you do them here so no test file has to repeat them:
+
+- **The import adds the matchers** — `toBeInTheDocument()` and the rest — to `expect`.
+- **`cleanup()` empties the fake DOM between tests.** Skip it and the second test in a file
+  renders a *second* card into the same document alongside the first one, so
+  `screen.getByRole("button")` finds two toggles and fails with **"found multiple elements"** —
+  on a test whose code is perfectly correct. Every `render` in a file piles up until something
+  clears them.
+
+!!! note "Testing Library can do that cleanup itself — but not the way this project is set up"
+
+    It registers an automatic `afterEach(cleanup)` **only if a global `afterEach` exists**,
+    which means only when Vitest's `globals` option is on. It's off by default and we're
+    leaving it off, because Lessons 17 and 18 import `describe`, `it` and `expect` explicitly
+    and one convention beats two.
+
+    So `test: { globals: true }` in the config is the other way to get exactly this behaviour,
+    and it's what most examples online do — the trade is that your test files then use
+    `describe`/`it`/`expect` as globals with no import line. Either is fine. **Doing neither
+    is the trap**, and it fails in a way that points at your query rather than at your config.
 
 And point Vitest at it:
 
 ```diff title="TableServe.Web/vite.config.ts"
-+ /// <reference types="vitest" />
-  import { defineConfig } from "vite";
+- import { defineConfig } from "vite";
++ import { defineConfig } from "vitest/config";
   import react from "@vitejs/plugin-react";
 
   // https://vitejs.dev/config/
   export default defineConfig({
     plugins: [react()],
 +   test: {
-+     setupFiles: "./vitest.setup.ts",
++     setupFiles: "./src/vitest.setup.ts",
 +   },
   });
 ```
 
-Two insertions, and the first one is easy to miss: the `/// <reference types="vitest" />` line
-goes **above the imports**. Without it TypeScript doesn't know `defineConfig` accepts a `test`
-key and will flag it, even though the config works.
+One changed import and one added key, and the changed import is the easy one to miss:
+**`defineConfig` now comes from `vitest/config`, not `vite`.** It's Vite's own `defineConfig`
+re-exported with the `test` key added to its type — import it from `vite` and TypeScript flags
+`test` as not belonging there, even though the config works. Nothing Vite does with this file
+changes.
+
+*(Older examples — and Copilot — add a `/// <reference types="vitest" />` line above the imports
+instead. That was the same idea before Vitest 3; the `vitest/config` import replaces it.)*
+
+!!! warning "Why the setup file goes in `src`, and not at the project root"
+
+    Most examples online put `vitest.setup.ts` beside `package.json`. Vitest runs it fine from
+    there — but **TypeScript never reads it**, because your `tsconfig` says
+    `"include": ["src"]`. The `jest-dom` import works by *augmenting the type of `expect`*, and
+    a file outside the include list isn't part of the program, so the augmentation never
+    happens.
+
+    The symptom is specific and confusing: your tests **pass**, while your editor underlines
+    `.toBeInTheDocument()` and says it doesn't exist. Green terminal, red squiggle.
+
+    Keeping the file in `src` puts it in the program and the matchers type correctly. (Adding
+    `"vitest.setup.ts"` to the `include` array works too — one more config edit for the same
+    result.)
+
+    If you ever see that error anyway, `import "@testing-library/jest-dom/vitest";` at the top
+    of the test file fixes it on the spot — that's the same line, just not shared.
 
 **Save and check**
 
@@ -348,23 +398,40 @@ screen.logTestingPlaygroundURL(screen.getByRole("button"));
 The card's Edit and Delete live inside a dropdown that starts closed. So: check they're absent,
 click the toggle, check they appeared.
 
-```tsx title="src/menuItems/MenuItemCard.test.tsx"
-import userEvent from "@testing-library/user-event";
+You're adding a **second test to the file you already have** — one new import at the top, and a
+second `it` inside the same `describe`, using the same `menuItem` object:
 
-  it("reveals Edit and Delete when the ⋮ menu is opened", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter>
-        <MenuItemCard menuItem={menuItem} onRemove={() => {}} />
-      </MemoryRouter>
-    );
+```diff title="src/menuItems/MenuItemCard.test.tsx"
+  /**
+   * @vitest-environment jsdom
+   */
+  import { describe, it, expect } from "vitest";
+  import { render, screen } from "@testing-library/react";
++ import userEvent from "@testing-library/user-event";
+  import { MemoryRouter } from "react-router-dom";
+  import MenuItemCard from "./MenuItemCard";
+  import { IMenuItem } from "./IMenuItem";
 
-    expect(screen.queryByText("Edit")).not.toBeInTheDocument();
+  ...  // the menuItem object from section 3
 
-    await user.click(screen.getByRole("button"));
+  describe("MenuItemCard", () => {
+    ...  // the "shows the menu item's name, price, and category" test
 
-    expect(screen.getByText("Edit")).toBeInTheDocument();
-    expect(screen.getByText("Delete")).toBeInTheDocument();
++   it("reveals Edit and Delete when the ⋮ menu is opened", async () => {
++     const user = userEvent.setup();
++     render(
++       <MemoryRouter>
++         <MenuItemCard menuItem={menuItem} onRemove={() => {}} />
++       </MemoryRouter>
++     );
++
++     expect(screen.queryByText("Edit")).not.toBeInTheDocument();
++
++     await user.click(screen.getByRole("button"));
++
++     expect(screen.getByText("Edit")).toBeInTheDocument();
++     expect(screen.getByText("Delete")).toBeInTheDocument();
++   });
   });
 ```
 
@@ -403,10 +470,6 @@ To cross it you need a fake API, which is one more library and one more idea:
 **[Lesson 20](lesson-20-guide-testing-pages-that-fetch.md)** does exactly that, and finishes
 the Delete flow you just stopped short of.
 
-That's not a small category. Cards, rows, badges, headers, form fields, empty states, anything
-conditional on a prop — those are most of the components in this app, they're where the visual
-bugs live, and they need nothing you haven't got.
-
 ---
 
 ## The General Pattern (what to take away)
@@ -437,9 +500,10 @@ bugs live, and they need nothing you haven't got.
 ## Build Steps
 
 1. `npm i -D jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom`
-2. Create `vitest.setup.ts` importing `@testing-library/jest-dom/vitest`.
-3. Add `test: { setupFiles: "./vitest.setup.ts" }` to `vite.config.ts`, with the
-   `/// <reference types="vitest" />` line above the imports.
+2. Create `src/vitest.setup.ts` — in `src`, not the project root — importing
+   `@testing-library/jest-dom/vitest` and registering `afterEach(() => cleanup())`.
+3. In `vite.config.ts`, change the `defineConfig` import to come from `vitest/config`, then add
+   `test: { setupFiles: "./vitest.setup.ts" }`.
 4. Run `npm test` and confirm **Lessons 17–18 still pass**.
 5. Create `src/menuItems/MenuItemCard.test.tsx` — `.tsx`, with the
    `@vitest-environment jsdom` docblock at the top.
@@ -450,6 +514,7 @@ bugs live, and they need nothing you haven't got.
 9. Add `screen.logTestingPlaygroundURL()` after `render(...)`, run that one test, and open the
    URL. Click the category badge and then the ⋮ button, and compare their suggestion panels —
    one has a role *and* a name, the other doesn't. Delete the line afterwards.
-10. Add the interaction test: assert Edit is **absent**, `await user.click` the toggle found by
-    `getByRole("button")`, then assert Edit and Delete are present.
-10. Delete an `await` to see it fail, and put it back.
+10. Add the interaction test to the **same file**: add the `userEvent` import at the top, then a
+    second `it` inside the existing `describe` — assert Edit is **absent**, `await user.click`
+    the toggle found by `getByRole("button")`, then assert Edit and Delete are present.
+11. Delete an `await` to see it fail, and put it back.

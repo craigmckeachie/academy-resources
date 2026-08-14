@@ -5,7 +5,7 @@ an avatar, four fields, and **two badges that only appear for some staff** — s
 real conditional rendering to pin down.
 
 > **Prerequisite:** the guide's setup — `jsdom`, the three `@testing-library` packages,
-> `vitest.setup.ts`, and the `setupFiles` line in `vite.config.ts`.
+> `src/vitest.setup.ts`, and the `setupFiles` line in `vite.config.ts`.
 
 Here's what it puts on screen:
 
