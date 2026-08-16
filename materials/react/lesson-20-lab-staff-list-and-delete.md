@@ -68,9 +68,12 @@ of its state, so the card disappears.
     204 No Content is what the API really returns for a delete — check the HTTP conventions
     table from the API pass if you want to confirm it.
 
-8. In the test, stub the dialog so the code proceeds past it:
+8. In the test, stub the dialog so the code proceeds past it — adding `vi` to your `vitest`
+   import:
 
     ```ts
+    import { vi } from "vitest";
+
     vi.spyOn(window, "confirm").mockReturnValue(true);
     ```
 

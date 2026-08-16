@@ -16,6 +16,73 @@ survive you rewriting how it works.**
 
 > **Prerequisite:** Lessons 17 and 18 — Vitest installed and both utility test files green.
 
+??? warning "Part 0 — starting this lesson over? Reset to a known-good state first (10 minutes)"
+
+    Only for a second attempt. If your project has half-finished pieces of this lesson in it —
+    a setup file somewhere, a `test` key in the config, a test file that never passed — **undo
+    them before you start.** The instructions below are written as a change to an untouched
+    project, and patching them onto a half-changed one is what goes wrong.
+
+    Almost nothing here comes from Lessons 17 and 18. This lesson needs one thing from them:
+    **Vitest installed and `npm test` running.** Keep your `formatUtilities.test.ts` and
+    `fetchUtilities.test.ts` — nothing below touches them, and neither lab needs redoing.
+
+    **1. Remove anything this lesson already added.**
+
+    - [ ] Delete `MenuItemCard.test.tsx` (and `StaffCard.test.tsx` if you started the lab).
+    - [ ] Delete `vitest.setup.ts` — **look in the project root *and* in `src`**. It's common to
+          end up with one in each.
+    - [ ] Put `vite.config.ts` back to the way it was before this lesson — the whole file
+          should read exactly this much:
+
+    ```ts title="TableServe.Web/vite.config.ts"
+    import { defineConfig } from "vite";
+    import react from "@vitejs/plugin-react";
+
+    // https://vitejs.dev/config/
+    export default defineConfig({
+      plugins: [react()],
+    });
+    ```
+
+    No `test` key, no `/// <reference types="vitest" />` line, and `defineConfig` imported from
+    `vite`. Section 2 is written as an edit to *that* file, which is why getting back to it
+    matters. (Quote style and semicolons are whatever your project already uses — only the
+    imports and the keys matter.)
+
+    **2. Reinstall the packages.** Safe to run even if some are already there — it repairs a
+    partial install:
+
+    ```bash
+    npm i -D jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom
+    ```
+
+    **3. Run `npm test`.** Your Lessons 17–18 tests are green and there are no component tests
+    yet — that's the state everything below assumes. Worth doing *now* rather than earlier:
+    with the leftovers gone, a failure here is genuinely about your base setup and not about
+    the pieces you just deleted.
+
+    **4. Start at section 2** and type it through. Don't paste from your previous attempt.
+
+    !!! note "If your project is beyond repairing"
+
+        Start from the
+        [reference repository](https://github.com/craigmckeachie/tableserve/tree/main/TableServe.Web):
+        clone it, then in `TableServe.Web` run `npm install` followed by `npm test`.
+
+        - If that runs Vitest, you're set — go to section 2.
+        - If it says there's no `test` script, run `npm i -D vitest`, add `"test": "vitest"` to
+          the `scripts` block in `package.json`, and then go to section 2.
+
+        You do **not** need to redo the Lesson 17 and 18 labs. The trade is that you lose your
+        own copies of those tests and any changes you'd made to the app, which is why this is
+        the last resort rather than the first move.
+
+<!-- Authoring note (not student-facing): Part 0 is collapsed by default and written for a
+     cohort repeating the lesson; it is deliberately generic (no dates, no cohort reference) so
+     it stays usable. Don't expand it into the main flow, and don't delete it — a botched
+     jsdom/testing-library setup is the failure mode this lesson actually has. -->
+
 !!! note "This lesson is optional, and it carries its own setup"
 
     Lesson 17 installed one package and needed no configuration; Lesson 18 added one more for
@@ -104,41 +171,17 @@ npm i -D jsdom @testing-library/react @testing-library/user-event @testing-libra
 | `@testing-library/user-event` | Clicks and typing that behave like a real user's |
 | `@testing-library/jest-dom` | Readable DOM matchers — `toBeInTheDocument()` |
 
-Two of those need registering before your tests run, so create a setup file — **inside `src`**,
-which matters for a reason two paragraphs down:
+That last one has to be registered before your tests run, so create a setup file — **inside
+`src`**, which matters for a reason two paragraphs down:
 
 ```ts title="TableServe.Web/src/vitest.setup.ts"
 import "@testing-library/jest-dom/vitest";
-import { afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
-
-afterEach(() => {
-  cleanup();
-});
 ```
 
-Two jobs, and you do them here so no test file has to repeat them:
+One line, imported for its side effect: it adds `toBeInTheDocument()` and the other DOM matchers
+to `expect`. Doing it here means no test file has to repeat it.
 
-- **The import adds the matchers** — `toBeInTheDocument()` and the rest — to `expect`.
-- **`cleanup()` empties the fake DOM between tests.** Skip it and the second test in a file
-  renders a *second* card into the same document alongside the first one, so
-  `screen.getByRole("button")` finds two toggles and fails with **"found multiple elements"** —
-  on a test whose code is perfectly correct. Every `render` in a file piles up until something
-  clears them.
-
-!!! note "Testing Library can do that cleanup itself — but not the way this project is set up"
-
-    It registers an automatic `afterEach(cleanup)` **only if a global `afterEach` exists**,
-    which means only when Vitest's `globals` option is on. It's off by default and we're
-    leaving it off, because Lessons 17 and 18 import `describe`, `it` and `expect` explicitly
-    and one convention beats two.
-
-    So `test: { globals: true }` in the config is the other way to get exactly this behaviour,
-    and it's what most examples online do — the trade is that your test files then use
-    `describe`/`it`/`expect` as globals with no import line. Either is fine. **Doing neither
-    is the trap**, and it fails in a way that points at your query rather than at your config.
-
-And point Vitest at it:
+Then point Vitest at it, and switch one option on:
 
 ```diff title="TableServe.Web/vite.config.ts"
 - import { defineConfig } from "vite";
@@ -149,6 +192,7 @@ And point Vitest at it:
   export default defineConfig({
     plugins: [react()],
 +   test: {
++     globals: true,
 +     setupFiles: "./src/vitest.setup.ts",
 +   },
   });
@@ -159,6 +203,25 @@ One changed import and one added key, and the changed import is the easy one to 
 re-exported with the `test` key added to its type — import it from `vite` and TypeScript flags
 `test` as not belonging there, even though the config works. Nothing Vite does with this file
 changes.
+
+!!! warning "`globals: true` is doing something specific — don't leave it out"
+
+    It isn't about saving import lines. **React Testing Library empties the fake DOM between
+    tests for you, but only registers that cleanup if a global `afterEach` exists** — which is
+    what this option provides.
+
+    Without it, every `render` in a file piles up: the second test in section 5 puts a *second*
+    card into the same document, `screen.getByRole("button")` finds two toggles, and the test
+    fails with **"found multiple elements"** — on test code that is perfectly correct. It's an
+    hour of debugging that points at your query instead of your config.
+
+    Note what this option does **not** change: **you still import `describe`, `it` and `expect`
+    from `vitest`**, exactly as in Lessons 17 and 18. Globals make those names *available*
+    without an import; they don't stop you importing them, and this course keeps importing them
+    so every test file reads the same way.
+
+    (The alternative, if you ever work on a project with globals off, is to call
+    `cleanup()` yourself in an `afterEach` — same effect, three more lines per project.)
 
 *(Older examples — and Copilot — add a `/// <reference types="vitest" />` line above the imports
 instead. That was the same idea before Vitest 3; the `vitest/config` import replaces it.)*
@@ -199,15 +262,19 @@ instead. That was the same idea before Vitest 3; the `vitest/config` import repl
 
 ## 3. ▶ Code along — render it and look at it
 
-Here's what you're testing, trimmed to what it puts on screen:
+Here's what you're testing, trimmed to what it puts on screen — **read this one, don't type it;
+it's already in your project**:
 
 ```tsx title="src/menuItems/MenuItemCard.tsx"
 <span className="fs-4 lh-l fw-medium">{menuItem.name}</span>
 <span className="fs-5 fw-light">${menuItem.price}</span>
-<div className="badge …">{menuItem.category?.name}</div>
 ```
 
-Three things a user reads. Test those three things.
+Two things a user reads. Test those two things.
+
+**Create a new file, `MenuItemCard.test.tsx`, in `src/menuItems` — beside the component**, the
+same way Lesson 17's test file sat beside `formatUtilities.ts`. Note the extension: **`.tsx`,
+not `.ts`**, because this file contains JSX. Type this into it:
 
 ```tsx title="src/menuItems/MenuItemCard.test.tsx"
 /**
@@ -224,11 +291,10 @@ const menuItem: IMenuItem = {
   name: "Loaded Fries",
   price: 8.5,
   categoryId: 2,
-  category: { id: 2, name: "Sides", sortOrder: 1 },
 };
 
 describe("MenuItemCard", () => {
-  it("shows the menu item's name, price, and category", () => {
+  it("shows the menu item's name and price", () => {
     render(
       <MemoryRouter>
         <MenuItemCard menuItem={menuItem} onRemove={() => {}} />
@@ -237,17 +303,14 @@ describe("MenuItemCard", () => {
 
     expect(screen.getByText("Loaded Fries")).toBeInTheDocument();
     expect(screen.getByText("$8.5")).toBeInTheDocument();
-    expect(screen.getByText("Sides")).toBeInTheDocument();
   });
 });
 ```
 
-Four things worth stopping on:
+Three things worth stopping on:
 
 **The docblock at the top** is what switches jsdom on for this file only. It has to be a `/** */`
 comment, and it has to be at the top.
-
-**The file is `.tsx`, not `.ts`** — it contains JSX now.
 
 **`MemoryRouter` is not optional.** `MenuItemCard` renders a `<Link>`, and a `Link` outside a
 router throws. In the app there's always a router above it; in a test you have to supply one.
@@ -343,7 +406,7 @@ commit. Try the second one now — add it to your first test, right after `rende
 You get four panes: your **markup** top-left, the **rendered result** top-right, a **query
 editor** bottom-left, and **suggestions** bottom-right.
 
-3. **Click an element in the rendered pane** — the item name, the badge, the ⋮ button.
+3. **Click an element in the rendered pane** — the item name, the price, the ⋮ button.
 4. Read the green **suggested query** box, which has a copy button:
 
     ```js
@@ -415,7 +478,7 @@ second `it` inside the same `describe`, using the same `menuItem` object:
   ...  // the menuItem object from section 3
 
   describe("MenuItemCard", () => {
-    ...  // the "shows the menu item's name, price, and category" test
+    ...  // the "shows the menu item's name and price" test
 
 +   it("reveals Edit and Delete when the ⋮ menu is opened", async () => {
 +     const user = userEvent.setup();
@@ -501,19 +564,19 @@ the Delete flow you just stopped short of.
 
 1. `npm i -D jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom`
 2. Create `src/vitest.setup.ts` — in `src`, not the project root — importing
-   `@testing-library/jest-dom/vitest` and registering `afterEach(() => cleanup())`.
+   `@testing-library/jest-dom/vitest`.
 3. In `vite.config.ts`, change the `defineConfig` import to come from `vitest/config`, then add
-   `test: { setupFiles: "./vitest.setup.ts" }`.
+   `test: { globals: true, setupFiles: "./src/vitest.setup.ts" }`.
 4. Run `npm test` and confirm **Lessons 17–18 still pass**.
 5. Create `src/menuItems/MenuItemCard.test.tsx` — `.tsx`, with the
    `@vitest-environment jsdom` docblock at the top.
 6. Build a `menuItem` object at module level; render inside `<MemoryRouter>` with a no-op
    `onRemove`.
-7. Assert the name, price, and category are on screen.
+7. Assert the name and price are on screen.
 8. Break one assertion, read the printed DOM, and restore it.
 9. Add `screen.logTestingPlaygroundURL()` after `render(...)`, run that one test, and open the
-   URL. Click the category badge and then the ⋮ button, and compare their suggestion panels —
-   one has a role *and* a name, the other doesn't. Delete the line afterwards.
+   URL. Click the item name and then the ⋮ button, and compare their suggestion panels — one is
+   findable by its text, the other only by its role, with no name. Delete the line afterwards.
 10. Add the interaction test to the **same file**: add the `userEvent` import at the top, then a
     second `it` inside the existing `describe` — assert Edit is **absent**, `await user.click`
     the toggle found by `getByRole("button")`, then assert Edit and Delete are present.

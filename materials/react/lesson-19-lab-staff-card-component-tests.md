@@ -7,6 +7,14 @@ real conditional rendering to pin down.
 > **Prerequisite:** the guide's setup — `jsdom`, the three `@testing-library` packages,
 > `src/vitest.setup.ts`, and the `setupFiles` line in `vite.config.ts`.
 
+!!! warning "Check `globals: true` is in your `vite.config.ts` before you start"
+
+    This lab renders `StaffCard` in **six** separate tests, so it depends on Testing Library
+    clearing the DOM between them — which it only does when that option is on (guide §2).
+    Without it every render stays in the document, the next test sees two cards and then three,
+    and `getByRole("button")` fails with *"found multiple elements"*. The tests you're about to
+    write would be correct and would still go red.
+
 Here's what it puts on screen:
 
 ```tsx title="src/staff/StaffCard.tsx"
@@ -57,7 +65,11 @@ Here's what it puts on screen:
 
 ---
 
-## Part 2 — An old friend returns
+## Part 2 — The phone number, and Lesson 17's trailing space
+
+`StaffCard` renders `formatPhoneNumber(staff.phone)` — the function whose **trailing space** made
+your first assertion fail in the Lesson 17 lab. It still returns that space. Assert the phone
+number here anyway, and watch what happens.
 
 4. Assert the phone number. Write it the way it looks on screen:
 

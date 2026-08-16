@@ -557,6 +557,25 @@ real patterns; never invent plausible-but-wrong code, markup, or class names.
     reference **inlines** that call everywhere. The helper is a deliberate DRY teaching step
     (the Order Item form teaches the inline call first in §4; §6 refactors it into `money`) —
     keep it; don't "correct" it back to inline to match the reference.
+- **⚠️ The reference app contains markup the lessons never hand out. Before a guide or lab
+  asserts that something is on screen, grep the MATERIALS for the code that renders it — the
+  reference app is not evidence that a student built it.** The reference implementation is the
+  finished app; a student's app is only what the guides and labs actually walked them through,
+  and the two are not the same set of markup. Being *ahead* is fine for the reference; it is a
+  bug the moment a lesson asserts on the difference.
+  - **Confirmed instance:** React L19 §3 asserted `getByText("Sides")` — the category badge on
+    `MenuItemCard`. That badge exists **only** in `tableserve/TableServe.Web`;
+    `menuItem.category?.name` appeared nowhere else in `materials/react/`, so no lesson ever
+    builds it and the guide's opening test failed for every student. L20 §4 had the same
+    assertion. Both removed. **Don't reintroduce a category assertion** unless a lesson is also
+    changed to build the badge.
+  - **Watch the stretch challenges too.** `StaffCard`'s avatar-circle-with-initials is a
+    `[Reach]` item on the **L6 lab** (and a named exception left for self-discovery), yet the
+    L19 lab asserts the initials `"AL"`. That one stands — the cohort had all done the stretch —
+    but it is an *assumption*, not a guarantee. Anything asserted on that came from a stretch
+    should be flagged as such, not treated as core markup.
+  - The check is cheap: `grep -rn '<the markup>' academy-resources/materials/react/`. If the
+    only hit is the lesson you're writing, students don't have it.
 
 ### HTML/CSS by-hand lessons (Lessons 1–2) — workflow conventions
 
@@ -950,15 +969,19 @@ Conventions specific to these — carry them through on any regeneration:
   `environment: "jsdom"`** — L18's tests build real `new Response(...)` objects, which are
   Node's, and a global switch puts that at risk. The guide teaches the per-file choice as
   *pay for what you use*, which also keeps the utility tests fast.
-- **L19's setup file registers `afterEach(cleanup)`, and `globals` stays OFF** — found in a live
-  run. React Testing Library auto-registers its own cleanup *only* when a global `afterEach`
-  exists, i.e. only with `test: { globals: true }`. With globals off (the default), nothing
-  clears the DOM between tests, so the guide's second `render` in the same file leaves two cards
-  in the document and `getByRole("button")` fails with **"found multiple elements"** — on
-  correct-looking test code. Globals stay off so L17–L18's explicit
-  `import { describe, it, expect } from "vitest"` remains the one convention; the cleanup is
-  registered by hand in the setup file instead. §2 states both options and names the trap.
-  Don't drop the `afterEach` and don't switch globals on to "simplify".
+- **L19 sets `test: { globals: true }`, and that is load-bearing — never remove it as
+  "unnecessary".** React Testing Library empties the DOM between tests *only* if a global
+  `afterEach` exists, which this option provides. Without it the guide's second `render` in the
+  same file leaves two cards in the document and `getByRole("button")` fails with **"found
+  multiple elements"** — on correct-looking test code. Verified both ways in a scratch project
+  (fails without, passes with) and confirmed in Craig's QA copy on Vitest 4 / RTL 16 / React 19.
+  The alternative (globals off, `afterEach(cleanup)` by hand in the setup file) also works and
+  the guide names it in one line, but the materials teach the globals version.
+- **Globals being on does NOT mean the test files stop importing.** Every test file still does
+  `import { describe, it, expect } from "vitest"` (and `vi` in L20), matching L17–L18. Globals
+  make the names available without an import; they don't forbid the import. Don't "simplify" the
+  test files by deleting their import lines, and don't argue the two are in conflict — they
+  aren't.
 - **L19's setup file is `src/vitest.setup.ts`, NOT the project root** — verified against a real
   cohort run. `tsconfig` has `"include": ["src"]`, so a root-level setup file is outside the
   TS program and `@testing-library/jest-dom/vitest`'s augmentation of `expect` never applies:
@@ -1027,6 +1050,10 @@ Conventions specific to these — carry them through on any regeneration:
   and `starter-repo.md` — a folder that is never published. Read it there before touching
   either file. This file is excluded from the built site but **is copied to the public
   `academy-resources` repo**, so it can't carry the detail either.
+- **A component test may only assert markup the LESSONS build** — not everything the reference
+  app renders. This bit L19 and L20 (the `MenuItemCard` category badge, asserted in both,
+  built by no lesson). Full rule and the grep check: *Reference implementations and
+  verification* → "The reference app contains markup the lessons never hand out".
 - **No C# tests anywhere in the program.** There's no pure C# logic in PRS or TableServe to
   unit test — every behaviour lives in a controller with an injected `DbContext`. Deliberate;
   don't add an xUnit project.

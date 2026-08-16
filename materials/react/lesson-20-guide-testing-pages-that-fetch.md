@@ -14,7 +14,7 @@ to **replace the network** and let all of your code run.
 > project (each ends with a quick **Save and check**); unmarked sections are concept.
 
 > **Prerequisite:** **Lesson 19** — this builds directly on its setup (jsdom, React Testing
-> Library, `vitest.setup.ts`). If you skipped 19, skip this too.
+> Library, `src/vitest.setup.ts`, and `globals: true`). If you skipped 19, skip this too.
 
 !!! note "Also optional, and also self-contained"
 
@@ -182,20 +182,23 @@ for anything, because props arrive instantly and data doesn't.
 That's what `findBy…` is for. It's the same query, but it **returns a promise and retries until
 the element turns up**:
 
-```tsx title="src/menuItems/MenuItemList.test.tsx"
-describe("MenuItemList", () => {
-  it("renders a card for each menu item the API returns", async () => {
-    render(
-      <MemoryRouter>
-        <MenuItemList />
-      </MemoryRouter>
-    );
+Add it below the lifecycle lines you just wrote — no new imports needed:
 
-    expect(await screen.findByText("Loaded Fries")).toBeInTheDocument();
-    expect(await screen.findByText("House Burger")).toBeInTheDocument();
-    expect(await screen.findByText("Sides")).toBeInTheDocument();
-  });
-});
+```diff title="src/menuItems/MenuItemList.test.tsx"
+  ...  // the imports and the three lifecycle lines from section 3
+
++ describe("MenuItemList", () => {
++   it("renders a card for each menu item the API returns", async () => {
++     render(
++       <MemoryRouter>
++         <MenuItemList />
++       </MemoryRouter>
++     );
++
++     expect(await screen.findByText("Loaded Fries")).toBeInTheDocument();
++     expect(await screen.findByText("House Burger")).toBeInTheDocument();
++   });
++ });
 ```
 
 **The three query families, now complete:**
@@ -223,18 +226,22 @@ that, the data is on screen and `getBy` works fine for everything else.
 are visible in the browser. That pause is real in tests too, which makes the loading state
 something you can actually assert:
 
-```tsx title="src/menuItems/MenuItemList.test.tsx"
-  it("shows skeletons while the menu items are loading", async () => {
-    const { container } = render(
-      <MemoryRouter>
-        <MenuItemList />
-      </MemoryRouter>
-    );
+```diff title="src/menuItems/MenuItemList.test.tsx"
+  describe("MenuItemList", () => {
+    ...  // the "renders a card for each menu item" test
 
-    expect(container.querySelectorAll(".skeleton").length).toBeGreaterThan(0);
-
-    await screen.findByText("Loaded Fries");
-    expect(container.querySelectorAll(".skeleton")).toHaveLength(0);
++   it("shows skeletons while the menu items are loading", async () => {
++     const { container } = render(
++       <MemoryRouter>
++         <MenuItemList />
++       </MemoryRouter>
++     );
++
++     expect(container.querySelectorAll(".skeleton").length).toBeGreaterThan(0);
++
++     await screen.findByText("Loaded Fries");
++     expect(container.querySelectorAll(".skeleton")).toHaveLength(0);
++   });
   });
 ```
 
@@ -242,29 +249,41 @@ something you can actually assert:
 `container.querySelector`. Reach for it when there's genuinely nothing a user could perceive to
 query by, not when a role would have worked.)*
 
-Now the half nobody tests. Override the handler **for this test only**:
+Now the half nobody tests. Override the handler **for this test only** — and this one does need
+two new imports at the top of the file:
 
-```tsx title="src/menuItems/MenuItemList.test.tsx"
-import { http, HttpResponse } from "msw";
-import { Toaster } from "react-hot-toast";
+```diff title="src/menuItems/MenuItemList.test.tsx"
+  import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
+  import { render, screen } from "@testing-library/react";
+  import { MemoryRouter } from "react-router-dom";
++ import { http, HttpResponse } from "msw";
++ import { Toaster } from "react-hot-toast";
+  import { server } from "../mocks/server";
+  import MenuItemList from "./MenuItemList";
 
-  it("shows an error toast when the API fails", async () => {
-    server.use(
-      http.get("http://localhost:5556/api/menuitems", () => {
-        return new HttpResponse(null, { status: 500 });
-      })
-    );
+  ...  // the three lifecycle lines
 
-    render(
-      <MemoryRouter>
-        <MenuItemList />
-        <Toaster />
-      </MemoryRouter>
-    );
+  describe("MenuItemList", () => {
+    ...  // the two tests you've already written
 
-    expect(
-      await screen.findByText("There was an error saving or retrieving data.")
-    ).toBeInTheDocument();
++   it("shows an error toast when the API fails", async () => {
++     server.use(
++       http.get("http://localhost:5556/api/menuitems", () => {
++         return new HttpResponse(null, { status: 500 });
++       })
++     );
++
++     render(
++       <MemoryRouter>
++         <MenuItemList />
++         <Toaster />
++       </MemoryRouter>
++     );
++
++     expect(
++       await screen.findByText("There was an error saving or retrieving data.")
++     ).toBeInTheDocument();
++   });
   });
 ```
 
@@ -300,8 +319,14 @@ network request — it's a browser dialog, and jsdom doesn't implement one. MSW 
 is the `vi.mock` family's job:
 
 ```tsx
+import { vi } from "vitest";
+
 vi.spyOn(window, "confirm").mockReturnValue(true);
 ```
+
+**`vi` gets imported like `describe` and `expect` before it.** `globals: true` means it would
+work without the import — but every test file in this course names what it uses, so keep it
+consistent.
 
 Now the code under test gets `true` and carries on to the DELETE, which **MSW** handles. Two
 tools, one flow, each doing the part it's suited to — and that's the lab.
