@@ -159,7 +159,7 @@ research.
   and renders placeholder markup. What's even worth asserting about it? Work out the answer
   before you write anything; *"nothing useful"* is a legitimate conclusion and knowing why is
   the point.
-- **Past the boundary** — [Reach] — `MenuItemList` fetches its data, so testing it means faking
+- **Past the boundary** — [Reach] — `MenuItemsPage` fetches its data, so testing it means faking
   the network. Try it before you're shown how: research **MSW**, and get one test passing that
   renders the list from a fake response. Then compare what you came up with against
   [Lesson 20](lesson-20-guide-testing-pages-that-fetch.md).

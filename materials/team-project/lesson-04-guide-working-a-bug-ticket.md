@@ -500,25 +500,34 @@ description, and it's exactly what the charter is asking for.
 1. Read the issue twice. Note every line that says what *also* happens or what *isn't* broken.
 2. **Reproduce it**, following the reporter's steps literally — including which page they were
     on. If you can't, write down what you tried and ask them, rather than closing it.
+
 3. Ask the layer question and pick the **cheapest test that splits the layers in half** — usually
     an Insomnia GET, or the Network tab.
+
 4. Narrow to one layer, then one file, then one function. **Read the code last.**
 5. If the report handed you a working path (*"products save fine"*), **diff the two paths**
     instead of reading either one in the abstract.
+
 6. Use an assistant to explain unfamiliar code — then **confirm its diagnosis against the
     running app** before acting on it.
+
 7. **If the cause is a pure function, write the failing test now** — watch it go red before you
     fix anything.
+
 8. Fix it. Watch the test go green, or re-run the Insomnia request that proved the bug.
 9. **Check the siblings** — the other actions on that controller, the other callers of that
     helper — and say in the pull request what you found clean.
+
 10. If the report turns out to be a design question, **state the options and recommend one**
     rather than silently picking.
+
 11. If reports keep arriving against the same recent merge and each fix uncovers another, stop
     and **revert the merge** (`git revert -m 1 <merge-sha>`) on its own branch, then redo the work
     fresh. Branch from current `main` every time; never reopen a branch that's already merged.
+
 12. Open the pull request: **root cause in plain language**, specific verification steps, and an
     AI-use section that says where the assistant was wrong.
+
 13. Review a teammate's fix by **reproducing the original bug on their branch** — then confirming
     it's gone.
 

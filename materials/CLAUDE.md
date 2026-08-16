@@ -150,7 +150,8 @@ source — you only see it on the built site. Always leave a blank line between 
 sentence (or a bold `**Label**`) and the list under it. This had silently broken eight lists
 across the API, HTML/CSS, and reference pages before it was caught.
 
-**Gotcha 2 — see the wrapped-list rule below.**
+**Gotcha 2 — see the wrapped-list rule below.** (And **Gotcha 4**, further down, is Gotcha 1's
+sibling: the blank line is needed *after* indented content too.)
 
 **Gotcha 3 — inside a list item, indent EVERYTHING 4 spaces, not 3.** A numbered item's
 marker (`1. `) is three characters wide, so it's natural to indent its continuation content
@@ -170,10 +171,41 @@ fenced code block, and admonition inside a list item sits at **4 spaces**, and a
 bodies at **8**. `team-project/configuring-git.md` is the pattern to copy — it has six
 admonitions inside one numbered list.
 
-To check a page actually rendered, build and grep the output rather than trusting the
-source: `grep -c '<div class="admonition' <built-page>` should match
-`grep -c '^ *!!! ' <source>`. A literal `<p>!!!` in the built HTML means it failed loudly;
-equal counts of neither means it failed silently.
+**Gotcha 4 — after indented content, the NEXT numbered step needs a blank line before it.**
+Gotcha 1's rule applies *between siblings*, not just before a list. When a step carries
+indented continuation content — a paragraph, a fenced block, an admonition — the following
+`N. ` at column 0 is read as **more text in that same paragraph** unless a blank line
+separates them:
+
+```markdown
+3. Create the test file …
+
+    **The lifecycle lines sit outside `describe`.** …
+4. Write the happy path …          ← swallowed: renders as literal "4. Write the happy path"
+```
+
+The result is several steps fused into the tail of one item, with visible `4.` `5.` `6.`
+mid-sentence, and a list that renders 3 items where the source has 6. **Nothing warns you** —
+the build succeeds and the source looks right. Found live in the L20 lab, then across
+**five more files: the L18 lab and all four team-project labs** (plus their guides' Build
+Steps), 89 occurrences in total. All fixed; the fix is one blank line each.
+
+To check a page actually rendered, build and inspect the output rather than trusting the
+source:
+
+- **Admonitions:** `grep -c '<div class="admonition' <built-page>` should match
+  `grep -c '^ *!!! ' <source>`. A literal `<p>!!!` in the built HTML means it failed loudly;
+  equal counts of neither means it failed silently.
+- **Swallowed steps:** strip the tags from the built page and search the plain text for a
+  step's own `"N. "` prefix. If `"4. Write the happy path"` appears *as text*, that number was
+  never turned into list markup. Ignore hits inside the nav sidebar — MkDocs repeats page
+  titles there, which is a false positive. Cross-check by counting `<li>` inside the
+  section's `<ol>` against the numbered lines in the source.
+- **Numbering restarts at every heading.** Each `## Part N` starts a fresh `<ol>` with no
+  `start` attribute, so a lab whose source numbers run 1–13 across three Parts displays as
+  1–6, 1–2, 1–5. **Number each Part from 1** in the source so it matches what students see,
+  and never cross-reference a step by number across a Part boundary — say "Part 2's error
+  test", or put positional markers (`// next`, `// then`) in a code skeleton instead.
 
 ---
 
@@ -789,8 +821,11 @@ Two section-level checks belong here too:
      `export const orderAPI = {` — so "what am I inside of?" is never a guess (for a
      module-scope addition like an `interface`, show the neighbouring `...  // imports` and the
      component instead, since it isn't inside a function);
-   - **elides untouched code with `...`** — a short `// what's here` note is fine in JS/TS
-     statement positions; use a bare `...` inside JSX;
+   - **elides untouched code with `...`** — in JS/TS statement positions the whole elision line
+     is a **comment with the ellipsis inside it**: `// ... the three lifecycle lines`, never
+     `...  // the three lifecycle lines`. A bare `...` outside a comment isn't valid TS, so it
+     breaks anyone who copies the block and it reads as code they must type. Inside JSX a bare
+     `...` is fine (it's just text);
    - marks **added lines with `+`** (removed with `-`), indented to their real nesting.
 
    Two clarifications that keep getting missed. **(a) A file is "existing" — modify it with a
@@ -1010,9 +1045,38 @@ Conventions specific to these — carry them through on any regeneration:
   everything else → `vi.mock`/`vi.spyOn`.** Don't swap L20 to module mocking.
 - **MSW v2 API only** — `http` + `HttpResponse` from `msw`, `setupServer` from `msw/node`.
   Never `rest.get` / `res(ctx.json())`, which is v1.
-- **L20's handler URLs use `http://localhost:5556/api`** — TableServe's `BASE_URL`. 5555 is
-  PRS. And `menuItemAPI.list()`'s `.then(delay(200))` is what makes the loading-state
-  assertion possible; don't remove it from the reference app.
+- **L20's handler URLs use `http://localhost:5556/api`** — TableServe's `BASE_URL`. 5555 is PRS.
+- **L20 targets `MenuItemsPage` (guide) and `StaffPage` (lab) — the components the LESSONS
+  build.** The reference app also has a `MenuItemList` and a `StaffList` that **students never
+  create**; the L20 guide was originally written against `MenuItemList` and the lab against
+  `StaffList`, so both failed for everyone. What the lessons actually produce, traced through
+  the labs: `MenuItemsPage.tsx`, and `StaffPage.tsx` created in the **L3 lab**, given a fetch in
+  **L4**, `StaffCard` extracted in **L5**, and a `loading` flag + `StaffCardSkeleton` +
+  `removeStaff` added in the **L6 lab**. So `StaffPage` has the same shape as `MenuItemsPage`
+  and every test transfers.
+- **⚠️ Do not use a local working copy to decide what students have.** Craig's QA copy
+  ([[tableserve-qa-working-copy]] — `source\repos\TableServe.Web`) contains files copied in from
+  the reference app, so it "confirmed" `StaffList` that no lesson builds. **The materials are
+  the only authority**: `grep -rn 'ComponentName' academy-resources/materials/react/` and find
+  the lab that *creates* the file.
+- **The L16 lab's Part C premise needs re-checking against this.** It names `#MenuItemList.tsx`
+  as the reference file (students don't have it) and asks students to generate "a
+  `StaffCardSkeleton`, and `StaffList` showing a grid of them while loading" — but the **L6 lab
+  already has them build `StaffCardSkeleton` and the `loading` grid on `StaffPage`**. Not fixed;
+  L16 is already taught. Verify before regenerating it.
+- **L20 §5 must add a `matchMedia` stub to `src/vitest.setup.ts` before the error-toast test.**
+  jsdom doesn't implement `matchMedia`; `react-hot-toast`'s `<Toaster />` calls it while
+  rendering, so without the stub the test fails *and* Vitest reports an unhandled error
+  (`TypeError: matchMedia is not a function`). Hit in a real QA run. The stub **must** be
+  wrapped in `typeof window !== "undefined"` — the setup file also runs for L17–L18 in the node
+  environment, where `window` doesn't exist. Don't move the stub into L19 (nothing there renders
+  a toast) and don't drop the guard.
+- **L20 §5's loading assertion must not depend on an artificial `delay`.** `render()` returns
+  after the effect has set `loading` true and before MSW answers, so the skeletons are there on
+  the next line. The reference app's `list()` has `.then(delay(200))`; the student build has
+  that line **commented out**, and no lesson ever teaches `delay` (it appears only in L18's
+  coverage finding). The guide carries a note: leave it commented, and if you enable it keep it
+  under ~1000ms or `findBy…` times out.
 - **Use the targets' real quirks rather than tidying them.** TableServe's `formatPhoneNumber`
   returns a **trailing space** (`` `…-${last3Digits} ` ``), so a student's first assertion
   fails on whitespace — a genuine lesson in asserting exactly. Its `last3Digits` variable

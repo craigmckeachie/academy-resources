@@ -338,16 +338,21 @@ diff, say so in your review.
 1. Read `Prs.Api/Migrations/…_Init.cs` and `PrsDbContextModelSnapshot.cs`. Run
     `Add-Migration Scratch` on unchanged models, confirm it's **empty**, then `Remove-Migration`
     and check `git status` is clean.
+
 2. Find out **who the database schema owner is** this sprint, and confirm it isn't you before you
     consider running `Add-Migration` again.
+
 3. When the migration merges, **pull `main` and run `Update-Database`** — then, not later.
 4. Read your ticket and work out **which layers it touches** — database, controller, API module,
     component — before you write anything.
+
 5. If you're adding a parameter to an existing endpoint: **optional with a default**, filter inside
     an `if`, `Include` before the filter, and verify the **no-parameter** call is unchanged.
+
 6. **Keep the branch short.** Push and open the pull request while it's still small.
 7. On a conflict: **read the other ticket first**, resolve for both intents, then **run both
     features** and say in the pull request what you merged.
+
 8. Reviewing: send the endpoint's **old** request in Insomnia, load the page, change the filter and
     watch the network tab, and check no unexpected migration file is in the diff.
 

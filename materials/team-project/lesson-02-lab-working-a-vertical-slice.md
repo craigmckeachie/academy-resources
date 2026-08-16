@@ -55,6 +55,7 @@ Together, at one screen, before anyone branches. Same routine as Lesson 1, secti
     check something.
     [Guide §2](lesson-02-guide-depth-in-a-shared-codebase.md#2-migrations-in-a-team-the-database-schema-owner)
     has the half-day mess this prevents.
+
 6. Read your issue and write down **which layers it touches**, in this order:
 
     ```
@@ -64,8 +65,10 @@ Together, at one screen, before anyone branches. Same routine as Lesson 1, secti
 
     Some tickets touch all four; some touch only the last one. Knowing which before you start is
     what stops a "small" ticket becoming three days.
+
 7. If your ticket has a **dependency** on a teammate's — it says so on the issue — find out where
     theirs stands before you plan your day.
+
 8. **When the database schema owner's migration merges**, stop what you're doing and take it:
 
     ```bash
@@ -89,9 +92,11 @@ anything you're waiting on.
     ```
 
     e.g. `git switch -c feature/21-duplicate-request`. The number is **your** issue.
+
 10. Work outside-in or inside-out, but **finish one layer before you start the next** — an endpoint
     you've verified in Insomnia is a fixed point you can build the page against. Half of each is
     the slowest way to do this.
+
 11. **If you're adding a parameter to an endpoint that already has callers** —
     [guide §3](lesson-02-guide-depth-in-a-shared-codebase.md#3-extending-an-endpoint-without-breaking-it),
     all four at once:
@@ -105,6 +110,7 @@ anything you're waiting on.
     schema change and `Add-Migration` isn't yours to run —
     [guide §2](lesson-02-guide-depth-in-a-shared-codebase.md#2-migrations-in-a-team-the-database-schema-owner)
     on why an **empty** migration is the correct outcome there.
+
 13. **Push and open the pull request early** — while it's still small, even if it's a draft. A
     branch open for a few hours rarely collides; one open for three days collides with everything.
 
@@ -131,15 +137,18 @@ change, not on which ticket you drew:
     way in the controller and another way in the API module produces no error anywhere — the
     value just never arrives. Read the request URL that actually goes out; don't infer it from
     the code.
+
 16. **If you touched a query**, the quiet one from
     [guide §3](lesson-02-guide-depth-in-a-shared-codebase.md#3-extending-an-endpoint-without-breaking-it):
     look at every column the page was already showing. A dropped `Include` doesn't throw. It
     empties a column.
+
 17. **If your ticket is front end only**, there's no wire to watch and no query to break — so
     the equivalent is to **exercise everything that page could already do.** You've changed a
     component other features render through; the risk isn't a missing column, it's a control
     that worked yesterday and quietly doesn't now. Click all of them, including the ones your
     ticket never mentions.
+
 18. Run through your issue's acceptance criteria one at a time and tick them off. The charter's
     [definition of done](team-charter.md#definition-of-done) is the bar, not "it works on my
     machine."
@@ -156,11 +165,14 @@ one works that way.
 
 19. **Before you open the merge editor, find out what the other change was for.** The issue number
     is in the branch name and on the pull request. Read the issue.
+
 20. Resolve for **both intents** — not for whichever side looks tidier, and not by accepting one
     side because the result compiles.
+
 21. Confirm no markers survived — search the project for `<<<<<<<`.
 22. **Run the app and exercise both features.** Yours *and* theirs, together, in one session. This
     is the step that catches a wrong resolution, and nothing else does.
+
 23. Say in the pull request **what you merged and why**. Your reviewer is about to approve a
     resolution they didn't make and can't see the reasoning for.
 
@@ -217,6 +229,7 @@ one works that way.
 26. Leave at least one line comment, then submit **Approve** or **Request changes** with a summary
     of what you actually did. If you only read the diff, say so — the charter requires it, and on
     a vertical slice it tells the author exactly how much their approval is worth.
+
 27. Once yours is approved: squash-merge, then
 
     ```bash

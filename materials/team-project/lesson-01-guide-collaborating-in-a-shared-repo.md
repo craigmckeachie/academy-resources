@@ -691,34 +691,44 @@ review nobody can give properly.
 1. Work through [Configuring Git](configuring-git.md) on this machine, if you haven't
     already. **Open Git Bash, not PowerShell**, for this and every command below — File
     Explorer → right-click the folder → **Show more options** → **Open Git Bash here**.
+
 2. **Repo owner only — make the starter yours:** clone the instructor's starter, run
     `git remote -v` and `git log --oneline` to see what you inherited, then `rm -rf .git`,
     `git init`, `git add .`, `git commit -m "Initial commit"`.
+
 3. **Repo owner only — publish it:** create a **new, empty, public** repo on your GitHub,
     then `git remote add origin <url>` and `git push -u origin main`. (VS Code's **Publish
     Branch** button does all of that in one action — but do it by hand this once, and
     *don't* pre-create the repo if you use the button.)
+
 4. **Repo owner only — lock it down, in this order:** invite your teammates with **Write**
     access; add a **branch ruleset** on `main` — Enforcement **Active**, **bypass list
     empty**, *Require a pull request* with **1** approval, *Block force pushes*; set
     **squash merging** only; prove a direct push to `main` is rejected; then share the URL.
+
 5. Accept the collaborator invitation — from the email or your GitHub notifications.
 6. Clone **your team's** repository (not the instructor's starter); `git branch -vv` should
     show you on `main` tracking `origin/main`.
+
 7. Open `Prs.Api/Prs.Api.sln`, point `appsettings.json` at **your own** database, run
     `Update-Database`, and seed with `populate-prs.sql`.
+
 8. Start the API on the http profile; `npm install` and `npm run dev` in `Prs.Web`.
 9. Verify: sign in to the React app, and run the **Requests** folder in Insomnia.
 10. `git switch main && git pull origin main`, then branch:
     `git switch -c chore/1-add-<yourname>-to-roster`.
+
 11. Add your name to the README's **Team roster** and commit with a real message.
 12. `git push -u origin <branch>` and open the pull request, filling in all three sections
     of the template.
+
 13. Review a teammate's pull request — leave at least one **line comment**, then Approve.
 14. Squash-merge yours once approved (GitHub deletes the branch on its side), then locally:
     `git switch main && git pull origin main`, `git fetch --prune`, `git branch -d <branch>`.
+
 15. On a branch that's fallen behind, run `git pull origin main`; resolve any conflict in
     the merge editor, commit, push, then re-run the app.
+
 16. **Once per sprint:** Actions → **Create sprint issues** *(left sidebar, under All
     workflows — not the run list in the middle)* → **Run workflow** → the sprint
     number. Then plan as a team — read every ticket, respect the dependencies, assign one

@@ -37,6 +37,7 @@ One line, and it can still fail in a way your users would see.
     `.json()` builds a fresh one. `toEqual` asks *"does it have the same contents?"*, which is
     what you meant. Try it with `toBe` once and read the failure; it's a message worth
     recognising later.
+
 3. **The empty body.** A `204 No Content`, a proxy returning nothing, a crashed endpoint — the
    body is `""` and there's nothing to parse:
 
@@ -51,6 +52,7 @@ One line, and it can still fail in a way your users would see.
     the test fail on someone else's machine for no reason. This is exactly the guide's
     section 5 call: assert the message when the message *is* the behaviour, and don't when it
     isn't.
+
 4. Add one more malformed case, and make it a realistic one: **an HTML error page.** When a
    proxy or a crashed server answers a request meant for your API, this is what comes back
    instead of JSON:
@@ -146,6 +148,7 @@ across both files.
 
 10. Take its list and cross off everything you've already covered. For whatever's left, decide
     **yourself** what the correct output is, then write the test.
+
 11. Now the check that matters: pick one test you kept and **make it fail on purpose** by
     changing the source, then change it back. A generated suggestion you've never seen red is
     unverified, no matter how sensible it reads.

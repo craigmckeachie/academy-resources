@@ -3,7 +3,7 @@
 **Goal:** by the end of this lesson you can test a page that loads its own data — run a fake API
 in front of your component with **MSW**, assert the rows that come back, catch the loading state
 on the way past, and force a **500** to prove the error handling works. You'll do it on
-`MenuItemList`; the lab does `StaffList` and the delete flow.
+`MenuItemsPage`; the lab does `StaffPage` and the delete flow.
 
 **The general pattern you're learning:** Lesson 19 stopped at components you hand props to.
 Every interesting page in this app doesn't take props — it goes and gets its own data, and
@@ -27,8 +27,13 @@ to **replace the network** and let all of your code run.
      MSW v2 API: `http` + `HttpResponse` from "msw", `setupServer` from "msw/node". Do not
      write v1 syntax (`rest.get`, `res(ctx.json())`).
      Handler URLs must match TableServe's real BASE_URL — http://localhost:5556/api — which is
-     5556, NOT 5555 (that's PRS). menuItemAPI.list() also calls delay(200), which is what makes
-     the loading assertion in §5 possible; don't remove it from the reference app.
+     5556, NOT 5555 (that's PRS).
+     TARGET IS MenuItemsPage, the component the LESSONS build — the reference app additionally
+     has a MenuItemList that students never create. Don't retarget this at MenuItemList.
+     §5's loading assertion does NOT depend on an artificial delay: render() returns after the
+     effect sets loading=true and before MSW answers. The reference app's list() has
+     .then(delay(200)) but the student build has it commented out, so the guide must not
+     require it.
      Lifecycle (listen/resetHandlers/close) is deliberately IN THE TEST FILE rather than in
      vitest.setup.ts, so L17–L18's node-environment tests are unaffected. §3 says why. -->
 
@@ -36,7 +41,7 @@ to **replace the network** and let all of your code run.
 
 ## 1. Two ways to fake a server, and why we're picking one
 
-`MenuItemList` calls `menuItemAPI.list()`, which calls `fetch`. In a test there's no API
+`MenuItemsPage` calls `menuItemAPI.list()`, which calls `fetch`. In a test there's no API
 running, so something has to stand in. You have two options and they are **not** equivalent.
 
 **Mock the module** — Vitest can replace `MenuItemAPI.ts` with a fake:
@@ -48,7 +53,7 @@ vi.mock("./MenuItemAPI");   // menuItemAPI.list() now returns whatever you say
 Cheap, built in, and it cuts out more than you'd like. Look at what `list()` actually does:
 
 ```ts
-return fetch(url).then(delay(200)).then(checkStatus).then(parseJSON);
+return fetch(url).then(checkStatus).then(parseJSON);
 ```
 
 Mock the module and **none of that runs** — not `checkStatus`, not `parseJSON`, not the URL it
@@ -132,7 +137,7 @@ Two things worth noticing:
 
 MSW has to be switched on before tests run and off afterwards. Create the test file:
 
-```tsx title="src/menuItems/MenuItemList.test.tsx"
+```tsx title="src/menuItems/MenuItemsPage.test.tsx"
 /**
  * @vitest-environment jsdom
  */
@@ -140,7 +145,7 @@ import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { server } from "../mocks/server";
-import MenuItemList from "./MenuItemList";
+import MenuItemsPage from "./MenuItemsPage";
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -170,12 +175,12 @@ Here's the test you'd expect to write, and it fails:
 
 ```tsx
 it("shows the menu items", () => {
-  render(<MemoryRouter><MenuItemList /></MemoryRouter>);
+  render(<MemoryRouter><MenuItemsPage /></MemoryRouter>);
   expect(screen.getByText("Loaded Fries")).toBeInTheDocument();   // ❌
 });
 ```
 
-`getByText` looks **right now**, and right now the fetch hasn't come back — `MenuItemList`
+`getByText` looks **right now**, and right now the fetch hasn't come back — `MenuItemsPage`
 renders empty, then fills in when the promise resolves. Nothing you learned in Lesson 19 waits
 for anything, because props arrive instantly and data doesn't.
 
@@ -184,14 +189,14 @@ the element turns up**:
 
 Add it below the lifecycle lines you just wrote — no new imports needed:
 
-```diff title="src/menuItems/MenuItemList.test.tsx"
-  ...  // the imports and the three lifecycle lines from section 3
+```diff title="src/menuItems/MenuItemsPage.test.tsx"
+  // ... the imports and the three lifecycle lines from section 3
 
-+ describe("MenuItemList", () => {
++ describe("MenuItemsPage", () => {
 +   it("renders a card for each menu item the API returns", async () => {
 +     render(
 +       <MemoryRouter>
-+         <MenuItemList />
++         <MenuItemsPage />
 +       </MemoryRouter>
 +     );
 +
@@ -222,18 +227,20 @@ that, the data is on screen and `getBy` works fine for everything else.
 
 ## 5. ▶ Code along — the loading state, and the error path
 
-`menuItemAPI.list()` has `.then(delay(200))` in it — a deliberate 200ms pause so the skeletons
-are visible in the browser. That pause is real in tests too, which makes the loading state
-something you can actually assert:
+`MenuItemsPage` sets `loading` to `true` before it awaits the API, so for the instant between
+mounting and the response arriving, the page is a grid of `MenuItemCardSkeleton`s. In the browser
+that flash is over before you can look at it. In a test you get to stop time: `render()` returns
+**after** the effect has run and **before** the fake server has answered, so the skeletons are
+sitting right there on the next line.
 
-```diff title="src/menuItems/MenuItemList.test.tsx"
-  describe("MenuItemList", () => {
-    ...  // the "renders a card for each menu item" test
+```diff title="src/menuItems/MenuItemsPage.test.tsx"
+  describe("MenuItemsPage", () => {
+    // ... the "renders a card for each menu item" test
 
 +   it("shows skeletons while the menu items are loading", async () => {
 +     const { container } = render(
 +       <MemoryRouter>
-+         <MenuItemList />
++         <MenuItemsPage />
 +       </MemoryRouter>
 +     );
 +
@@ -249,22 +256,67 @@ something you can actually assert:
 `container.querySelector`. Reach for it when there's genuinely nothing a user could perceive to
 query by, not when a role would have worked.)*
 
-Now the half nobody tests. Override the handler **for this test only** — and this one does need
-two new imports at the top of the file:
+!!! note "If you have a commented-out `delay` in `MenuItemAPI.list()`"
 
-```diff title="src/menuItems/MenuItemList.test.tsx"
+    `fetchUtilities.ts` exports a `delay` helper — the one Lesson 18's coverage run found
+    untested — and `MenuItemAPI.list()` may have a commented-out `.then(delay(…))` line from
+    when the skeletons were being built. **Leave it commented.** The test above doesn't need it;
+    the assertion runs before the response either way.
+
+    If you do switch it on to watch the skeletons in the browser, keep the value well under a
+    second. `findBy…` gives up after about 1000ms, so a `delay(2000)` turns your passing tests
+    into timeouts.
+
+Now the half nobody tests. This one needs a **one-time addition to your setup file** first.
+
+The error test renders `<Toaster />`, and `react-hot-toast` asks the browser whether the user
+prefers reduced motion — `matchMedia("(prefers-reduced-motion: reduce)")`. **jsdom doesn't
+implement `matchMedia`**, so that call throws while React is rendering, and you get a test
+failure plus a separate *"Vitest caught 1 unhandled error"* report. Give jsdom an answer:
+
+```diff title="src/vitest.setup.ts"
+  import "@testing-library/jest-dom/vitest";
++
++ // jsdom implements most of the browser, but not matchMedia — and react-hot-toast's
++ // Toaster calls it. Answer "no reduced-motion preference" and move on.
++ if (typeof window !== "undefined" && !window.matchMedia) {
++   window.matchMedia = ((query: string) => ({
++     matches: false,
++     media: query,
++     addEventListener() {},
++     removeEventListener() {},
++   })) as unknown as typeof window.matchMedia;
++ }
+```
+
+**The `typeof window !== "undefined"` guard is doing real work.** This setup file runs for
+*every* test file, including Lessons 17 and 18, which run in plain Node where there is no
+`window` at all — without the guard you'd fix this lesson and break those.
+
+!!! note "\"jsdom is a browser-shaped implementation\" — this is where the shape runs out"
+
+    It's a very good fake, not a browser. `matchMedia`, `IntersectionObserver`,
+    `ResizeObserver` and `scrollTo` are the ones you'll meet most often, and the symptom is
+    always the same: *X is not a function*, thrown from inside a library rather than from your
+    code. The fix is always the same too — stub the missing API in your setup file. Recognising
+    the shape of this error is worth more than memorising the stub.
+
+With that in place, override the handler **for this test only** — and this one does need two new
+imports at the top of the test file:
+
+```diff title="src/menuItems/MenuItemsPage.test.tsx"
   import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
   import { render, screen } from "@testing-library/react";
   import { MemoryRouter } from "react-router-dom";
 + import { http, HttpResponse } from "msw";
 + import { Toaster } from "react-hot-toast";
   import { server } from "../mocks/server";
-  import MenuItemList from "./MenuItemList";
+  import MenuItemsPage from "./MenuItemsPage";
 
-  ...  // the three lifecycle lines
+  // ... the three lifecycle lines
 
-  describe("MenuItemList", () => {
-    ...  // the two tests you've already written
+  describe("MenuItemsPage", () => {
+    // ... the two tests you've already written
 
 +   it("shows an error toast when the API fails", async () => {
 +     server.use(
@@ -275,7 +327,7 @@ two new imports at the top of the file:
 +
 +     render(
 +       <MemoryRouter>
-+         <MenuItemList />
++         <MenuItemsPage />
 +         <Toaster />
 +       </MemoryRouter>
 +     );
@@ -294,7 +346,7 @@ Read what just happened, because it's the payoff for two lessons:
   Lesson 18**, now running inside a component.
 - The message came from your real `translateStatusToErrorMessage`, which is why the assertion
   is that exact sentence.
-- `MenuItemList`'s `catch` called `toast.error`, and `<Toaster />` rendered it.
+- `MenuItemsPage`'s `catch` called `toast.error`, and `<Toaster />` rendered it.
 
 **`<Toaster />` has to be in the render.** In the app it lives in `App.tsx`; a toast with
 nothing to display it is queued and invisible. If you assert a toast and get nothing, that's
@@ -356,13 +408,15 @@ tools, one flow, each doing the part it's suited to — and that's the lab.
 2. Create `src/mocks/handlers.ts` with sample menu items and a `http.get` handler for
    `http://localhost:5556/api/menuitems`.
 3. Create `src/mocks/server.ts` exporting `setupServer(...handlers)` from `msw/node`.
-4. Create `src/menuItems/MenuItemList.test.tsx` with the `@vitest-environment jsdom` docblock
+4. Create `src/menuItems/MenuItemsPage.test.tsx` with the `@vitest-environment jsdom` docblock
    and the `listen` / `resetHandlers` / `close` lifecycle.
 5. Write the happy-path test using **`await screen.findByText(...)`**, and confirm it passes
    with your API stopped.
 6. Try it with `getByText` instead, watch it fail, and put `findBy` back.
 7. Add the loading test — assert `.skeleton` elements exist, then that they're gone once the
    data arrives.
-8. Add the error test: `server.use(...)` returning a 500, render `<Toaster />`, and assert the
+8. Add the `matchMedia` stub to `src/vitest.setup.ts`, behind a
+   `typeof window !== "undefined"` guard — `<Toaster />` can't render in jsdom without it.
+9. Add the error test: `server.use(...)` returning a 500, render `<Toaster />`, and assert the
    message your `translateStatusToErrorMessage` produces.
-9. Comment out `resetHandlers()`, watch tests interfere with each other, and restore it.
+10. Comment out `resetHandlers()`, watch tests interfere with each other, and restore it.

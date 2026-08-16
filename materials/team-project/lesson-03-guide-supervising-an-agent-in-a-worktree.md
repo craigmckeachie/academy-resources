@@ -533,28 +533,37 @@ starts from it.
 
 1. Read your assigned agentic ticket, then **write down the files you expect to change** —
     before opening the agent.
+
 2. Find the **precedent** in the codebase: the place that already solves a similar problem. For
     a filter above a list, that's `src/requests/RequestTable.tsx` **and**
     `RequestsController.GetAll` — read both halves, and decide where the work belongs before you
     prompt anything.
+
 3. **From the repository root:** `git switch main && git pull origin main`, then
     `git worktree add ../prs-agent-<slug> -b feature/<issue>-<slug>`, then `git worktree list`
     to confirm the folder is a **sibling** of your repo.
+
 4. In the worktree: `npm install` in `Prs.Web`, and copy in any gitignored local config
     (`appsettings.Development.json`). Confirm the app runs from there.
+
 5. Open the worktree as its own VS Code window (`code ../prs-agent-<slug>`) and start Copilot
     **agent mode** in that window.
+
 6. Prompt it with the ticket, your file list, the precedent, and the conventions. No
     open-ended invitations to improve things.
+
 7. While it works: `git diff --stat main...HEAD` periodically against your file list, and commit
     checkpoints as it goes. `git restore <file>` anything out of scope.
+
 8. **Audit in two passes** — the conventions table, then consistency with the existing app.
 9. **Explain the three least obvious lines out loud.** If you can't, read or rewrite them
     before going further.
+
 10. Run it: the browser, plus Insomnia if an endpoint changed.
 11. Push, open the pull request, and write an **AI-use section that says what you rejected**.
 12. Review a teammate's generated pull request against the five checks, and **ask them why one
     specific line is the way it is**.
+
 13. Once it merges: `git worktree remove ../prs-agent-<slug>`, then
     `git switch main && git pull origin main` and `git fetch --prune`.
 

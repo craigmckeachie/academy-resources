@@ -42,7 +42,7 @@ guide and what you built alongside it as your model.
 | 17 *(after the capstone)* | [Your first unit tests](lesson-17-guide-first-unit-tests.md) — Vitest, pure functions, red before green | [Testing `formatPhoneNumber`](lesson-17-lab-format-phone-number-tests.md) |
 | 18 *(after the capstone)* | [Edge cases, errors, and async tests](lesson-18-guide-edge-cases-async-tests.md) — throwing, `rejects.toThrow`, fake responses, generating tests | [Testing `parseJSON` and the edge cases](lesson-18-lab-parsejson-edge-cases.md) |
 | 19 *(**optional**)* | [Component testing with React Testing Library](lesson-19-guide-component-testing-rtl.md) | [Testing `StaffCard`](lesson-19-lab-staff-card-component-tests.md) |
-| 20 *(**optional**)* | [Testing a page that fetches](lesson-20-guide-testing-pages-that-fetch.md) — a fake API with MSW | [`StaffList`, and deleting a card](lesson-20-lab-staff-list-and-delete.md) |
+| 20 *(**optional**)* | [Testing a page that fetches](lesson-20-guide-testing-pages-that-fetch.md) — a fake API with MSW | [`StaffPage`, and deleting a card](lesson-20-lab-staff-list-and-delete.md) |
 
 **Lessons 1–2 are JavaScript/TypeScript intro lessons** for students coming straight from
 the C# API pass — the language mapped onto what they already know, run and verified by

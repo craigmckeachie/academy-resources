@@ -53,10 +53,12 @@ Once, at the beginning. Same routine as Lesson 1, section 7, with one difference
     [Guide §2](lesson-04-guide-working-a-bug-ticket.md#2-the-report-is-evidence-read-it-twice)
     has what each of them buys you. A working path to compare against is the best gift a report
     can give you.
+
 5. **Reproduce it on your machine**, following the reporter's steps literally — **including which
     page they were on**. Some values in this app are computed twice, on the server and again in
     the browser, so the same number can be wrong on one screen and right on another. Checking a
     different screen is not the same test.
+
 6. **Do not open the code yet.** Not the file you suspect, not an assistant.
 7. **If you genuinely can't reproduce it**, don't close it. Write down which user you signed in
     as, which record, and what you saw instead — then ask the reporter. Nine times in ten it's a
@@ -100,8 +102,10 @@ named — and if that changed any data, you've re-seeded.
     look at the Network tab. One request can eliminate an entire half of the application.
     [Guide §3](lesson-04-guide-working-a-bug-ticket.md#3-code-along-narrow-before-you-fix) walks
     a full narrowing.
+
 10. **If the report handed you a working path**, diff the two paths instead of reading either in
     the abstract. You don't need to understand both — only to find the difference.
+
 11. **Now read the code**, and only the twenty lines narrowing pointed you at.
 12. **Using an assistant here is comprehension, not diagnosis** — the opposite of last sprint.
     *"Explain what this method does"* and *"where is the total calculated?"* are what it's good
@@ -109,6 +113,7 @@ named — and if that changed any data, you've re-seeded.
     and a confident wrong diagnosis is worse than none because you stop looking. Confirm anything
     it claims against the running app before you change a line —
     [guide §5](lesson-04-guide-working-a-bug-ticket.md#5-using-ai-on-code-you-didnt-write).
+
 13. **If its diagnosis was wrong, write that down now** — you'll want it for the pull request, and
     it's the most useful sentence you'll put in there.
 
@@ -136,21 +141,26 @@ a request, a query, a network response — not a theory.
     Only a minority of these defects fall in the first row, and that's the boundary, not a gap —
     there's no C# test project in this course by design. For an API defect the **Insomnia request
     is** the regression check, which is why the definition of done asks for it.
+
 16. **If you're writing a test, write it before you touch the source.** Run `npm test` and watch
     it fail. A test that was never red proves nothing about whether it would have caught anything
     — it's the most common way a suite ends up worthless.
     [Guide §6](lesson-04-guide-working-a-bug-ticket.md#6-code-along-the-failing-test-first).
+
 17. **Fix it.** Then re-run whatever proved the bug in step 15 — the test goes green, or the
     Insomnia request now agrees with the database, or the screen shows the right thing.
+
 18. **Check the siblings.** Other actions on the same controller, other callers of the same
     helper, the other screens rendering the same value. A defect in one of four sibling paths is
     very often in two of them. Note what you checked **and found clean**.
+
 19. **If it turned out not to be a defect** — the code does exactly what it was told and the
     disagreement is about what it should have been told — stop and handle it as a design question
     instead: state the current behaviour and its mechanism, name the options with what each costs,
     recommend one, and escalate rather than quietly picking if your choice changes behaviour
     others depend on.
     [Guide §8](lesson-04-guide-working-a-bug-ticket.md#8-when-the-report-is-a-design-question-not-a-defect).
+
 20. **If reports keep arriving against the same recent merge** and each fix uncovers the next
     one, stop fixing forward: revert the merge on its own branch (`git revert -m 1 <merge-sha>`),
     open it as a pull request like any other change, and redo the work fresh. Branch from current
@@ -171,8 +181,10 @@ a request, a query, a network response — not a theory.
 
     Then `Closes #N`, and the sentence about siblings: *"I checked `Create` and `Delete`; both
     save correctly."*
+
 22. **How I verified it** — the reproduction *and* the proof, in that order. If a test applies,
     say you saw it red before the fix existed. Your reviewer is going to check this by hand.
+
 23. **AI use** — including whether its diagnosis held up. *"It blamed the form component; the
     Insomnia PUT disproved that in a minute"* is worth more than anything else in the section.
     [Guide §10](lesson-04-guide-working-a-bug-ticket.md#10-writing-the-fix-pull-request) has a
@@ -202,6 +214,7 @@ who only reads the diff cannot tell a fix from a plausible-looking change.
     If reproducing it changed your data — a deleted record, a broken login — **re-seed before
     step 24**, same as the author had to. Otherwise you'll be testing their fix against a
     database you just damaged.
+
 25. **Now switch to their branch and run the same steps:**
 
     ```bash
@@ -209,6 +222,7 @@ who only reads the diff cannot tell a fix from a plausible-looking change.
     ```
 
     Restart the API again. The bug should be gone, and nothing beside it should be broken.
+
 26. Then read the diff and check three things the description claims:
 
     - Is a **root cause** stated, or just the change?

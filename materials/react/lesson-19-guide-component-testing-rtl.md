@@ -475,10 +475,10 @@ second `it` inside the same `describe`, using the same `menuItem` object:
   import MenuItemCard from "./MenuItemCard";
   import { IMenuItem } from "./IMenuItem";
 
-  ...  // the menuItem object from section 3
+  // ... the menuItem object from section 3
 
   describe("MenuItemCard", () => {
-    ...  // the "shows the menu item's name and price" test
+    // ... the "shows the menu item's name and price" test
 
 +   it("reveals Edit and Delete when the ⋮ menu is opened", async () => {
 +     const user = userEvent.setup();
@@ -521,7 +521,7 @@ Click **Delete** on that card and it calls `confirm()`, then `menuItemAPI.delete
 a real `fetch` at a real API. There isn't one running, so that test would hang or blow up.
 
 **So this lesson stops at components you hand props to, plus interactions that stay inside the
-component.** That's `MenuItemCard`'s dropdown opening. It isn't `MenuItemList` fetching its
+component.** That's `MenuItemCard`'s dropdown opening. It isn't `MenuItemsPage` fetching its
 data, and it isn't Delete.
 
 That's a real boundary, and it's a narrower one than it sounds — cards, rows, badges, headers,

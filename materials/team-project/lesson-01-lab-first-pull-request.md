@@ -29,8 +29,10 @@ under it. All three of you are about to add a row to it, in the same place, at t
 
     `chore/` because adding a row to a README isn't user-facing behaviour, and the number is
     **your** issue, not someone else's.
+
 3. In `README.md`, add **one row** to the Sprint 1 assignments table: your name, the ticket
     ID you're taking, and one thing you want to get better at this block.
+
 4. Commit in your editor's Git panel, with an imperative message:
 
     ```
@@ -39,6 +41,7 @@ under it. All three of you are about to add a row to it, in the same place, at t
 
 5. `git push -u origin <your-branch>` — e.g.
     `git push -u origin chore/3-sprint1-assignment-craig`
+
 6. Open the pull request on github.com. **Title it the same way you titled the commit** —
     it's what lands on `main` when this squash-merges. Then fill in all three template
     sections:
@@ -90,6 +93,7 @@ lines of the same file. GitHub shows **Review required** on each.
 
 10. When yours is approved, **Squash and merge** it. GitHub deletes the branch on its side
     automatically.
+
 11. **Still only once yours is approved and merged** — bring your local `main` up to date and
     tidy your machine:
 
@@ -114,6 +118,7 @@ other is showing a conflict.
 14. Open the file from VS Code's **Source Control** panel → **Resolve in Merge Editor**
 15. Decide: mine, theirs, or both. Here it's **both** — every teammate's row belongs in the
     table. Order them however reads best.
+
 16. `git add .`, then `git commit`, then `git push`
 17. Search the whole project for `<<<<<<<` and confirm there are no hits
 18. Reload the repo page on GitHub — the pull request now says **no conflicts**
@@ -143,6 +148,7 @@ yet. **Do this part together, at one screen.** Guide section 7 has the reasoning
     *`Create sprint issues` is a link in the **left sidebar**, under *All workflows*. The list
     filling the middle of the page is past **runs**, not workflows — that's where everyone
     looks first.*
+
 21. Refresh the **Issues** tab. **Four issues**, each with a description, acceptance criteria,
     and — for three of them — a mockup. They're **unassigned**; that's deliberate.
 
@@ -152,6 +158,7 @@ yet. **Do this part together, at one screen.** Guide section 7 has the reasoning
 22. **Read all four**, not just the one you expect to take.
 23. **Assign three of them, one each**, on GitHub. Leave the fourth — **S1-D** — unassigned:
     it belongs to whoever finishes first. That's not a spare, it's the next thing.
+
 24. **Check the plan with your instructor** before anyone branches.
 
 ✅ **Checkpoint:** four issues exist, three are assigned to three different people, one is
@@ -166,6 +173,7 @@ rather than lesson-driven.
 
 25. **Open your issue** and read it again, including every acceptance criterion, before you
     write anything.
+
 26. Branch from a fresh `main` — `feature/` now, not `chore/`, because this one changes behaviour
     a user can see:
 
@@ -176,14 +184,18 @@ rather than lesson-driven.
 
 27. Build it. **Keep the branch short** — push and open the pull request while it's still small,
     even as a draft.
+
 28. **"How I verified it" now means you ran it.** A README row could only be read; this can be
     used. Say which page you loaded, what you clicked, and what you saw — and check every
     acceptance criterion on the issue against the running app. The bar is the charter's
     [definition of done](team-charter.md#definition-of-done).
+
 29. **Review a teammate's**, and **run it before you approve it**. If you only read the diff, say
     so in your review — that's honest, and it tells the author what they did and didn't get.
+
 30. Squash-merge, then the three commands from Part 2 to bring your local `main` up to date and
     tidy up.
+
 31. **If you finish early, take S1-D** — the unassigned one. Assign it to yourself on GitHub
     first, so the board stays true.
 
