@@ -12,7 +12,8 @@ each item.
 - [ ] What **React** is (and what it isn't — not a CSS framework, not a language)
 - [ ] What a **component** is — a function that returns JSX
 - [ ] **Naming a component** — the casing React requires
-- [ ] How a React app gets **rendered to the DOM**
+- [ ] How a React app gets **rendered to the DOM** — the current `createRoot` style, and the
+  older `ReactDOM.render` style you'll still meet in tutorials
 
 **Props and rendering**
 
@@ -69,23 +70,48 @@ function MenuItemCard({ menuItem }: IMenuItemCardProps) {
 🔗 [react.dev — Your first component](https://react.dev/learn/your-first-component)
 · first built in [React Lesson 3](../react/lesson-03-guide-components-jsx-typescript.md)
 
-**4. Rendering a React component to the DOM**
-**`ReactDOM.createRoot(container).render(<App />)`** — you've written this exact line once,
-in `main.tsx`, and never again. It's two steps: `createRoot` takes the **DOM element** your
-app mounts into (not a CSS selector — `document.getElementById("root")`, not `"#root"`), and
-`.render()` puts your component tree inside it.
+**4. Rendering a React app to the DOM — the old style and the new**
+Every React app has exactly **one** line that puts the whole component tree on the page, and
+it lives in the entry file. Which line it is depends on the React version — and you'll meet
+both, because most tutorials and Stack Overflow answers predate React 18.
+
+**The old style (React 17 and earlier)**, in a file usually called `index.js` — one call,
+two arguments: *what* to render and *where*.
 
 ```tsx
+import ReactDOM from "react-dom";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+**The current style (React 18+)**, in your `main.tsx` — two steps: create a **root** for a DOM
+element, then render into it. Note the import path picks up `/client`.
+
+```tsx
+import ReactDOM from "react-dom/client";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
 ```
 
-Two of the other options — `React.renderComponent()` and `React.renderDOM()` — don't exist.
-`React.createElement()` *is* real, and it's what JSX compiles down to, but it only **creates**
-an element; it doesn't put it on the page.
+| | React 17 and earlier | React 18+ |
+|---|---|---|
+| Import from | `react-dom` | `react-dom/client` |
+| The call | `ReactDOM.render(element, container)` | `ReactDOM.createRoot(container).render(element)` |
+| The container | the second argument | the argument to `createRoot` |
 
-If you meet **`ReactDOM.render(<App />, container)`** in an older tutorial, that's the same
-job in one call — the pre-React-18 API. It was deprecated in React 18 and removed in 19, so
-recognize it, don't write it.
+`ReactDOM.render` was **deprecated in React 18 and removed in React 19** — so recognize it,
+don't write it.
+
+Two details worth carrying into the exam:
+
+- The container is a **DOM element, not a CSS selector** —
+  `document.getElementById("root")`, not `"#root"`.
+- react.dev writes it as a named import — `import { createRoot } from "react-dom/client"`,
+  then `createRoot(container).render(...)`. Same function; either style is correct.
+
+And on the wrong answers: `React.renderComponent()` and `React.renderDOM()` don't exist at
+all. `React.createElement()` *is* real — it's what JSX compiles down to — but it only
+**creates** an element; it doesn't put it on the page.
 🔗 [react.dev — `createRoot`](https://react.dev/reference/react-dom/client/createRoot)
 · [legacy `render`](https://react.dev/reference/react-dom/render)
 
