@@ -12,8 +12,8 @@ each item.
 - [ ] What **React** is (and what it isn't — not a CSS framework, not a language)
 - [ ] What a **component** is — a function that returns JSX
 - [ ] **Naming a component** — the casing React requires
-- [ ] How a React app gets **rendered to the DOM** — the current `createRoot` style, and the
-  older `ReactDOM.render` style you'll still meet in tutorials
+- [ ] How a React app gets **rendered to the DOM** — both the older `ReactDOM.render` style
+  the assessment asks about and the current `createRoot` style you wrote
 
 **Props and rendering**
 
@@ -72,11 +72,12 @@ function MenuItemCard({ menuItem }: IMenuItemCardProps) {
 
 **4. Rendering a React app to the DOM — the old style and the new**
 Every React app has exactly **one** line that puts the whole component tree on the page, and
-it lives in the entry file. Which line it is depends on the React version — and you'll meet
-both, because most tutorials and Stack Overflow answers predate React 18.
+it lives in the entry file. Which line it is depends on the React version, and **you need
+both**: the assessment's answer is the older `ReactDOM.render()`, while the line you actually
+wrote in `main.tsx` is the newer `createRoot`. Know them as a pair.
 
-**The old style (React 17 and earlier)**, in a file usually called `index.js` — one call,
-two arguments: *what* to render and *where*.
+**The old style (React 17 and earlier)** — the assessment's answer. In a file usually called
+`index.js`; one call, two arguments: *what* to render and *where*.
 
 ```tsx
 import ReactDOM from "react-dom";
@@ -84,8 +85,8 @@ import ReactDOM from "react-dom";
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
-**The current style (React 18+)**, in your `main.tsx` — two steps: create a **root** for a DOM
-element, then render into it. Note the import path picks up `/client`.
+**The current style (React 18+)** — what's in your `main.tsx`. Two steps: create a **root**
+for a DOM element, then render into it. Note the import path picks up `/client`.
 
 ```tsx
 import ReactDOM from "react-dom/client";
@@ -99,10 +100,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
 | The call | `ReactDOM.render(element, container)` | `ReactDOM.createRoot(container).render(element)` |
 | The container | the second argument | the argument to `createRoot` |
 
-`ReactDOM.render` was **deprecated in React 18 and removed in React 19** — so recognize it,
-don't write it.
+So: **`ReactDOM.render()` is the answer to pick on the assessment**, and it's what you'll see
+in older tutorials — but it was **deprecated in React 18 and removed in React 19**, so never
+write it in your own code. Recognize the old one; use the new one.
 
-Two details worth carrying into the exam:
+Two more details:
 
 - The container is a **DOM element, not a CSS selector** —
   `document.getElementById("root")`, not `"#root"`.
