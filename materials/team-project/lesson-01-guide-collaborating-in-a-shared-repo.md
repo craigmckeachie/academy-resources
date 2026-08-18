@@ -298,16 +298,78 @@ cd <repo-folder>
 
     Both halves still run exactly as they did in the capstone. Only the folder layout changed.
 
-Get both halves running, exactly as you did in the capstone:
+Get both halves running. Almost all of this is the capstone again — **step 2 is the one new
+thing**, and nothing runs until you've done it.
 
 1. Open `Prs.Api/Prs.Api.sln` in Visual Studio — the solution file lives inside the API folder,
-   same as in the capstone. Point the connection string in `Prs.Api/appsettings.json` at your SQL
-   Server and a **new** database name — your team shares a repository, not a database. Each of
-   you runs your own.
-2. In the Package Manager Console: `Update-Database`.
-3. Run `Prs.Db/populate-prs.sql` in SSMS to seed it.
-4. Start the API on the **http** profile.
-5. In `Prs.Web`: `npm install`, then `npm run dev`.
+   same as in the capstone.
+
+2. **Create `Prs.Api/appsettings.Development.json`.** It is **not** in the repository: it holds
+   a connection string, so it's listed in `.gitignore` and each of you makes your own.
+
+    This is the step people lose time on, because `appsettings.json` **is** there and looks
+    like the file you're meant to edit. It isn't. `Program.cs` asks for the connection string
+    named **`DevDb`**, and `DevDb` only ever lives in the `.Development` file — so editing
+    `appsettings.json` leaves the API dead no matter what you put in it.
+
+    **In Visual Studio:** right-click the **`Prs.Api` project** in Solution Explorer →
+    **Add** → **New Item…** → type `json` in the search box → choose **JSON File** → change
+    the name to `appsettings.Development.json` → **Add**.
+
+    **In VS Code:** in the Explorer, right-click the **`Prs.Api` folder** → **New File…** →
+    type `appsettings.Development.json` and press Enter. Use the folder's right-click menu,
+    not the New File button at the top of the Explorer — that one creates the file at the
+    repository root, where nothing will read it.
+
+    Paste this in:
+
+    ```json title="Prs.Api/appsettings.Development.json"
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "ConnectionStrings": {
+        "DevDb": "server=localhost\\sqlexpress;database=PrsTeamProject;trusted_connection=true;trustServerCertificate=true;"
+      }
+    }
+    ```
+
+    Change `localhost\\sqlexpress` if your SQL Server instance is named something else. The
+    doubled backslash is required — a single one is an invalid escape in JSON and the API
+    won't start.
+
+    !!! warning "Where did the file go? Visual Studio hides it"
+
+        Solution Explorer **nests** `appsettings.Development.json` underneath
+        `appsettings.json`, so the moment you create it, it disappears from where you were
+        looking. Click the **▶ arrow** beside `appsettings.json` to expand it. Nothing has
+        gone wrong — this is also why it's easy to believe the file doesn't exist when it does.
+
+3. **`PrsTeamProject` is a different database from your capstone's — deliberately.** Don't
+   point this at `PrsDbC40`. Some tickets in this block have you reproduce defects that
+   destroy data, a couple of them cascade, and you'll re-seed regularly. You want that
+   happening to a database you can throw away, not to your capstone work.
+
+    All three of you can use the same **name**, because it's a database on your own machine.
+    You share a repository, not a database. If you do pick a different name, change the
+    `USE [PrsTeamProject]` line at the top of `Prs.Db/populate-prs.sql` to match, or the seed
+    lands in a database you didn't intend.
+
+4. In the Package Manager Console, with `Prs.Api` as the default project: `Update-Database`.
+   It creates the database for you — you don't have to make it first.
+
+5. Run `Prs.Db/populate-prs.sql` in SSMS to seed it.
+
+6. Start the API on the **http** profile — not `https`. It listens on
+   **http://localhost:5555**, which is the URL the React app calls, and it skips the
+   development certificate entirely.
+
+7. In `Prs.Web`: `npm install`, then `npm run dev`.
+
+The repository's own `README.md` carries these same steps, so you have them after this lesson.
 
 **Save and check**
 
@@ -316,9 +378,21 @@ Get both halves running, exactly as you did in the capstone:
 - Open Insomnia, import `prs-insomnia.json`, set `baseUrl` to your API's address, and run
   **Get All Requests** — **green in the Tests tab**
 - Run `git branch -vv` — you're on **`main`, tracking `origin/main`**
+- Run `git status` — `appsettings.Development.json` is **not** listed. It's ignored, which is
+  the point; if you see it, you're about to commit a connection string
 
 If the app doesn't run, stop here and fix it. Everything after this assumes a working
 checkout.
+
+!!! tip "If sign-in fails, read the status code before you go looking at the route"
+
+    A rejected sign-in on this API comes back as **404**, not 401 — the endpoint returns
+    *not found* both when the username doesn't exist and when the password doesn't match. So a
+    mistyped username produces a 404 that looks exactly like a missing endpoint, and the error
+    toast is the generic *"There was an error saving or retrieving data."*
+
+    Check the username and password first. `torrey.schoen` / `test1234`, and every seeded
+    account uses that same password.
 
 ---
 
@@ -710,8 +784,9 @@ review nobody can give properly.
 6. Clone **your team's** repository (not the instructor's starter); `git branch -vv` should
     show you on `main` tracking `origin/main`.
 
-7. Open `Prs.Api/Prs.Api.sln`, point `appsettings.json` at **your own** database, run
-    `Update-Database`, and seed with `populate-prs.sql`.
+7. Open `Prs.Api/Prs.Api.sln`. **Create** `Prs.Api/appsettings.Development.json` — it isn't in
+    the repository — with a `DevDb` connection string pointing at **`PrsTeamProject`**, not at
+    your capstone's `PrsDbC40`. Then run `Update-Database` and seed with `populate-prs.sql`.
 
 8. Start the API on the http profile; `npm install` and `npm run dev` in `Prs.Web`.
 9. Verify: sign in to the React app, and run the **Requests** folder in Insomnia.

@@ -251,9 +251,10 @@ materials/
     lesson-01-lab-...
     ...
     lesson-16-guide-building-with-copilot.md            # post-capstone (see AI section)
-    lesson-17-guide-*.md / lesson-17-lab-*.md           # PLANNED — first unit tests (Vitest, pure functions)
-    lesson-18-guide-*.md / lesson-18-lab-*.md           # PLANNED — edge cases, throw, async
-    lesson-19-guide-*.md / lesson-19-lab-*.md           # PLANNED — React Testing Library (OPTIONAL lesson)
+    lesson-17-guide-first-unit-tests.md / -lab-*        # post-capstone — Vitest, pure functions
+    lesson-18-guide-edge-cases-async-tests.md / -lab-*  # post-capstone — edge cases, throw, async
+    lesson-19-guide-component-testing-rtl.md / -lab-*   # post-capstone — React Testing Library (OPTIONAL)
+    lesson-20-guide-testing-pages-that-fetch.md / -lab-*  # post-capstone — a fake API with MSW (OPTIONAL)
     stretch-react-challenges.md
   team-project/                        # post-capstone team development block (see below)
     README.md
@@ -977,10 +978,11 @@ example, not a convention correction to adopt.
 
 ---
 
-## Testing lessons — React 17–19 (planned)
+## Testing lessons — React 17–20 (all four built)
 
-Three lessons at the **end of the React pass, after the capstone**, alongside Lesson 16.
-Added at the end deliberately: purely additive, so no existing lesson number moves.
+Four lessons at the **end of the React pass, after the capstone**, alongside Lesson 16 —
+**17–18 required, 19–20 optional**, guide + lab each. Added at the end deliberately: purely
+additive, so no existing lesson number moves.
 
 | Lesson | Topic | I do (TableServe) | Lab |
 |---|---|---|---|
