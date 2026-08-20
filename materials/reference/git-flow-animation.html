@@ -57,7 +57,13 @@
     flex: 1; min-height: 0; background: var(--paper); border-radius: 6px; padding: 6px;
     box-shadow: 0 18px 50px rgba(0,0,0,.45); position: relative;
   }
-  .board { position: absolute; inset: 6px; width: auto; height: auto; }
+  /* An <svg> is a replaced element: with width/height auto it takes its intrinsic
+     size (full width, height from the viewBox aspect) and ignores the space left
+     over, so a tall board overflows under the footer. Sizing it to the inset box
+     on BOTH axes lets preserveAspectRatio="meet" letterbox it instead.
+     The 12px is twice .paper's 6px padding — keep them in step. */
+  .board { position: absolute; inset: 6px;
+           width: calc(100% - 12px); height: calc(100% - 12px); }
   .board[hidden] { display: none; }
 
   footer {
