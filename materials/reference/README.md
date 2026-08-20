@@ -33,6 +33,11 @@ here is a step-by-step build — these are lookups.
   property, type, object, method, function, hook, parameter, argument, and the distinctions
   students trip on. Has a blank [quiz version](anatomy-of-typescript-code-quiz.md). Useful from
   **React Lesson 3–4** and throughout the capstone.
+- [Unit testing and mocking in C#](csharp-testing-examples.md) — **optional.** A small
+  clone-and-read example (xUnit + Moq) showing test doubles on C# code that has real
+  decisions and real external collaborators. The C# counterpart to the Vitest testing in
+  **React Lessons 17–20**, with a Vitest-to-xUnit translation table. Two branches: the
+  library alone, and the same code inside a Web API.
 - [C# naming conventions](csharp-naming-conventions.md) — the PascalCase / camelCase /
   `_field` rules, and how casing hints at what a token is. Pairs with Anatomy of C# Code.
 - [TypeScript / React naming conventions](typescript-naming-conventions.md) — the
