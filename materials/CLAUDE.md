@@ -1120,9 +1120,22 @@ Conventions specific to these — carry them through on any regeneration:
   app renders. This bit L19 and L20 (the `MenuItemCard` category badge, asserted in both,
   built by no lesson). Full rule and the grep check: *Reference implementations and
   verification* → "The reference app contains markup the lessons never hand out".
-- **No C# tests anywhere in the program.** There's no pure C# logic in PRS or TableServe to
-  unit test — every behaviour lives in a controller with an injected `DbContext`. Deliberate;
-  don't add an xUnit project.
+- **No C# tests against TableServe or PRS, and no xUnit project in either.** There's no pure
+  C# logic in them to unit test — every behaviour lives in a controller with an injected
+  `DbContext`, which an Insomnia request already covers end to end. **Do not refactor either
+  app to a repository pattern to make its controllers mockable**; that trades a real
+  convention (see *Known intentional simplifications*) for tests that assert the pass-through
+  and skip the query, and it would contradict API Lesson 7, where students are taught to
+  reject exactly that suggestion from Copilot.
+- **C# testing is shown instead in a separate example repo**, linked from
+  `reference/csharp-testing-examples.md`: `Storefront`, a purpose-built class library whose
+  logic has collaborators worth faking (a payment gateway, an email sender, a clock). It is
+  **reference material, not a lesson** — no guide, no lab, nothing in a capstone depends on
+  it. Authored in `code-academy/csharp-testing/` (library + tests) and
+  `code-academy/csharp-testing-layered/` (the same plus a Web API and EF), published as one
+  public repo with a `main` and a `layered` branch. The two authoring folders share
+  `Storefront/` and `Storefront.Tests/` **byte for byte** — that's what makes
+  `git diff main..layered` read as "only the layers changed," so keep them identical.
 
 These feed the **team-project** block: its TEST tickets assume this skill and don't teach it.
 

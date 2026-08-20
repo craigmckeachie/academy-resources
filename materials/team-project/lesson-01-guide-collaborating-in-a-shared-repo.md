@@ -449,12 +449,17 @@ have to make sense to a reviewer.
 ```
 feature/12-vendor-detail-page
 fix/31-line-delete-total
-chore/1-add-craig-to-roster
+chore/add-craig-to-roster
 ```
 
 The prefix is `feature/`, `fix/`, `chore/`, or `refactor/`. The **issue number** matters
 most — it's what connects the branch to the pull request to the ticket, so anyone can find
 out *why* this work exists. `craig-branch-2` tells a reviewer nothing.
+
+The third example has no number because it has no ticket, which is the exception rather than
+the rule: from Sprint 1 onwards every branch you make answers an issue, and carries its
+number. The warm-up in the next section is the one piece of work in this whole block that
+doesn't.
 
 **Commits:** write the message as an instruction, not a report. The test is whether it
 completes *"If applied, this commit will ___."*
@@ -487,34 +492,62 @@ Fuller guidance, including a table of what makes a bad name bad:
 We'll do the whole loop on something that can't break: adding your name to the repository
 README.
 
-All three of you are about to edit **the same section of the same file**. That's on purpose —
-it's what produces the conflict in section 6.
+All three of you are about to add a line in **the same place in the same file**. That's on
+purpose — it's what produces the conflict in section 6, and it only works if you all put it in
+the same place, so follow the position below exactly.
 
 ```bash
 git switch main && git pull origin main
-git switch -c chore/1-add-<yourname>-to-roster
+git switch -c chore/add-<yourname>-to-roster
 ```
 
-That branch name follows the pattern from the last section — `chore/` because adding your
-name to a README isn't user-facing behaviour, and `1` because that's the issue number.
+That branch name follows the pattern from the last section — `chore/` because adding your name
+to a README isn't user-facing behaviour, and **no number, because this one has no ticket.**
+It's a warm-up, and it's the only work in this block that doesn't answer an issue. Your first
+real ticket comes in the lab, and that branch *will* carry its issue number.
 
-Open `README.md`, find the **Team roster** section, and add your name.
+Open `README.md` and find the **Team roster** section. **Add your name on the line immediately
+below the comment**, in this form:
+
+```markdown title="README.md"
+## Team roster
+
+<!-- Lesson 1 guide: each student adds their name here on their first pull request. -->
+- Craig McKeachie
+```
+
+**All three of you put it in that same spot, directly under the comment.** That's what makes
+section 6 work — if you scatter your names across the blank lines around it, Git has enough
+untouched text between them to reconcile all three on its own, and nobody sees the conflict
+you're about to learn to resolve.
 
 Commit it in your editor's Git panel. Apply the imperative test to your message:
 `Add Craig to team roster` — *if applied, this commit will add Craig to team roster.* Not
 `update`. Then:
 
 ```bash
-git push -u origin chore/1-add-<yourname>-to-roster
+git push -u origin chore/add-<yourname>-to-roster
 ```
 
 Go to the repository on github.com. There's a banner offering to open a pull request from
 your branch — click **Compare & pull request**. The description template is already there;
 fill in all three parts:
 
-- **What this changes** — one sentence, and `Closes #1`
+- **What this changes** — one sentence. Normally this is also where `Closes #12` goes, which
+  is what makes GitHub close the ticket automatically when the pull request merges. **This one
+  has no ticket**, so write *"no ticket — warm-up"* instead, and you'll use the real thing on
+  your first assigned ticket
 - **How I verified it** — for this one, "read the rendered README on the branch"
 - **AI use** — "none"
+
+!!! note "Issues and pull requests share one set of numbers"
+
+    They're numbered from the same sequence, per repository — so these three pull requests
+    take **#1, #2 and #3**, and the sprint tickets you create in section 7 start at **#4**.
+    Nothing is missing when the first issue isn't #1; the pull requests got there first.
+
+    It also means a `#1` written before any issue exists doesn't point at nothing — it points
+    at somebody's *pull request*, which is worse. Closing keywords only ever close issues.
 
 **Give the title the same care as a commit message** — it's the one that lands on `main`
 when this is squash-merged. `Add Craig to team roster`, not `readme`.
@@ -570,7 +603,7 @@ force it. Resolving it is section 6.
 ```bash
 git switch main && git pull origin main
 git fetch --prune
-git branch -d chore/1-add-<yourname>-to-roster
+git branch -d chore/add-<yourname>-to-roster
 ```
 
 The first line is the one that matters — it brings the merged work into your local `main` so
@@ -791,11 +824,14 @@ review nobody can give properly.
 8. Start the API on the http profile; `npm install` and `npm run dev` in `Prs.Web`.
 9. Verify: sign in to the React app, and run the **Requests** folder in Insomnia.
 10. `git switch main && git pull origin main`, then branch:
-    `git switch -c chore/1-add-<yourname>-to-roster`.
+    `git switch -c chore/add-<yourname>-to-roster`.
 
-11. Add your name to the README's **Team roster** and commit with a real message.
+11. Add your name to the README's **Team roster**, on the line immediately below the comment —
+    **all three of you in that same spot**, or Git will merge them without a conflict. Commit
+    with a real message.
+
 12. `git push -u origin <branch>` and open the pull request, filling in all three sections
-    of the template.
+    of the template. No `Closes #N` on this one — it has no ticket.
 
 13. Review a teammate's pull request — leave at least one **line comment**, then Approve.
 14. Squash-merge yours once approved (GitHub deletes the branch on its side), then locally:
