@@ -15,6 +15,13 @@ worktrees. Keep it open during the team development block.
 > code can't sneak in unexamined. If you find yourself about to commit straight to `main`,
 > you're about to break someone else's afternoon.
 
+!!! tip "See it move first"
+
+    [**Git flow — animated walkthrough**](git-flow-animation.html){ target="_blank" rel="noopener" }
+    steps through this whole workflow — two developers, two features, one merge conflict — in
+    18 stops. It opens full screen in a new tab. If any part of the loop below is hard to
+    picture, watch it there first, then come back here for the commands.
+
 ---
 
 ## How often you do each thing

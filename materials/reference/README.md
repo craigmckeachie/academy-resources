@@ -20,6 +20,11 @@ here is a step-by-step build — these are lookups.
   repository: the branch → pull request → review → merge loop, staying current with `main`,
   resolving conflicts, and Git **worktrees** (including why an autonomous agent needs its
   own). Used throughout the **team development block**.
+- [Git flow — animated walkthrough](git-flow-animation.html){ target="_blank" rel="noopener" } —
+  an 18-step animation of the same workflow: two developers take features from `git clone`
+  through branches, pull requests, a merge conflict, and back into `main`. **Opens full screen
+  in a new tab.** Arrow keys or click to step, `1`/`2` jump between phases, `F` for fullscreen.
+  Pairs with the quick-start above; used throughout the **team development block**.
 - [GitHub Copilot quick-start](copilot-quickstart.md) — TQL's preferred AI assistant:
   the three surfaces (autocomplete, Chat, agent), set-up per editor, the verify-don't-trust
   discipline, and the conventions watch-list. Backs the Copilot lessons and stretch
